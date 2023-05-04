@@ -17,7 +17,12 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "overrides": [],
+  "overrides": [
+    {
+      "files": ["src/**/store/**/*.ts"],
+      "rules": { "no-param-reassign": ["error", { "props": false }] }
+    }
+  ],
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/prop-types": "off",
@@ -38,6 +43,16 @@
       }
     ],
     "linebreak-style": 0,
-    "jsx-a11y/label-has-associated-control": ["error", { "assert": "either" }]
+    "jsx-a11y/label-has-associated-control": ["error", { "assert": "either" }],
+    "no-restricted-imports": "off",
+    "@typescript-eslint/no-restricted-imports": [
+      "warn",
+      {
+        "name": "react-redux",
+        "importNames": ["useSelector", "useDispatch"],
+        "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
+      }
+    ],
+    "import/prefer-default-export": "off"
   }
 }
