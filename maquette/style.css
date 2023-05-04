@@ -1,0 +1,54 @@
+/*==================== FONT ========================*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/*==================== STYLE ========================*/
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+section {
+  padding: 1rem;
+}
+
+.header__nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid black;
+}
+
+.header__title {
+  font-size: 2rem;
+}
+
+.section1 {
+  border-bottom: 1px solid black;
+}
+
+.section1__title {
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.section2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.section2__title {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.section2__card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  border-radius: 15px 15px 0;
+  height: 20vh;
+  width: 80vw;
+}
