@@ -8,6 +8,7 @@
   --primary-light-color: #3f7caf;
   --main-secondary-color: #fc9100;
   --secondary-light-color: #ffb116;
+  --secondary-light2-color: #ffebc4;
   --main-third-color: #dd5751;
   --valid-answer-color: #3ea951;
   --wrong-answer-color: #eb3c33;
@@ -16,19 +17,38 @@
 /*==================== STYLE ========================*/
 * {
   box-sizing: border-box;
+
 }
 
 body {
   font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/*LINK*/
+/* unvisited link */
+a {
+  color: white;
+}
+
+/* mouse over link */
+a:hover {
+  color: var(--main-secondary-color);
 }
 
 section {
   padding: 1rem;
+  margin: 1rem 1.5rem;
 }
 
 .header {
   background-color: var(--main-primary-color);
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  width: 100vw;
 }
 
 .header__nav {
@@ -43,11 +63,11 @@ section {
   color: white;
 }
 
-.section1 {
-  border-bottom: 1px solid black;
-}
-
 .section1__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   font-size: 1.5rem;
   padding-bottom: 1rem;
 }
@@ -57,7 +77,10 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: var(--secondary-light2-color);
+  border-radius: 1rem;
 }
+
 
 .section__title {
   text-align: center;
@@ -74,6 +97,7 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 3rem;
 }
 
 .section3__title {
@@ -81,12 +105,21 @@ section {
   font-size: 1.5rem;
 }
 
+.quiz__card-day {
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  margin: 1rem 0;
+  transition: 0.2s ease-in-out;
+}
+
 .quiz__card {
   background-color: white;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  margin: 1rem 0;
   transition: 0.2s ease-in-out;
 }
 
@@ -152,12 +185,84 @@ section {
 
 .footer {
   background-color: var(--main-primary-color);
-  padding: 1rem;
+  padding-top: 1rem;
+  width: 100vw;
+  color: white; 
+  height: 20vh;
 }
 
-.footer__text {
+.footer__contact {
   display: flex;
   justify-content: space-around;
+  margin: 1rem;
   align-items: center;
-  color: white;
+
+}
+
+.footer__site-map{
+  background-color: var(--primary-dark-color);
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 0.8rem;
+  padding-top: 0.5rem;
+  justify-content: center
+
+}
+
+.footer__contact{
+
+}
+
+.site-map__about{
+  padding-top: 0.5rem;
+}
+
+.site-map__about ul{
+  padding: 0.5rem;
+}
+
+
+
+
+
+/*==================== MEDIA QUERIES ========================*/
+
+
+
+@media screen and (min-width: 768px) {
+  .quiz__card-day {
+    max-width: 70%;
+
+  }
+}
+@media screen and (min-width: 1024px) {
+  .quiz__card-day {
+    max-width: 70%;
+
+  }
+  .quiz__card {
+    max-width: 40%;
+  }
+
+  .section3__list-quiz {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+@media screen and (min-width: 1600px) {
+  .quiz__card-day {
+    max-width: 100%;
+  }
+  .quiz__card {
+    max-width: 30%;
+  }
+  section {
+    display: flex;
+    flex-direction: column;
+    margin: 0 15rem 0 15rem;
+  }
+
 }
