@@ -1,6 +1,18 @@
 /*==================== FONT ========================*/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+/*==================== COLORS ========================*/
+:root {
+  --main-primary-color: #0d72da;
+  --primary-dark-color: #003051;
+  --primary-light-color: #3f7caf;
+  --main-secondary-color: #fc9100;
+  --secondary-light-color: #ffb116;
+  --main-third-color: #dd5751;
+  --valid-answer-color: #3ea951;
+  --wrong-answer-color: #eb3c33;
+}
+
 /*==================== STYLE ========================*/
 * {
   box-sizing: border-box;
@@ -15,7 +27,7 @@ section {
 }
 
 .header {
-  background-color: #1098f7;
+  background-color: var(--main-primary-color);
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
@@ -24,7 +36,6 @@ section {
   justify-content: space-around;
   align-items: center;
   padding: 1rem 0;
-  border-bottom: 1px solid black;
 }
 
 .header__title {
@@ -51,7 +62,7 @@ section {
 .section__title {
   text-align: center;
   font-size: 1.5rem;
-  background-color: #69bcf6;
+  background-color: var(--main-primary-color);
   color: white;
   padding: 1rem;
   border-radius: 1rem;
@@ -107,14 +118,22 @@ section {
 }
 
 .card-body__categorie {
-  background: linear-gradient(to bottom, #ef473a, #cb2d3e);
+  background: linear-gradient(
+    to bottom,
+    var(--secondary-light-color),
+    var(--main-secondary-color)
+  );
   color: white;
   border-radius: 1rem;
   padding: 0.5rem;
 }
 
 .card-body__difficulty {
-  background: linear-gradient(to bottom, #2f80ed, #56ccf2);
+  background: linear-gradient(
+    to bottom,
+    var(--secondary-light-color),
+    var(--main-secondary-color)
+  );
   color: white;
   border-radius: 1rem;
   padding: 0.5rem;
@@ -132,6 +151,13 @@ section {
 }
 
 .footer {
-  background-color: #1098f7;
+  background-color: var(--main-primary-color);
   padding: 1rem;
+}
+
+.footer__text {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
 }
