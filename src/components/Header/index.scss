@@ -6,44 +6,88 @@
   background-color: vars.$main-primary-color;
   color: #fff;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  padding: 1rem;
   width: 100vw;
+  height: 4rem;
   position: fixed;
   top: 0;
-  height: 4rem;
+
+
+  &__nav{
+    position: fixed;
+    width: 100%;
+    height: 4rem;
 
 
 
+    &-list {
+      z-index: auto;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      background-color: vars.$main-primary-color;
 
-  &__content {
-
-
-    &__logo{
-
-    }
-
-    &__nav{
-
-
-
-
-      @include mixin.breakpoint(mobile) {
-     
+      @include mixin.breakpoint(desktop) {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;   
       }
 
-      &-list{
-        height: 100vh;
-        flex-direction: column;
-        height: auto;
-    
+      &__items {
+        font-size: 1.25rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.555);
+        text-align: center;
+        margin-right: 0px;
+        padding: 20px 0;  
 
+        @include mixin.breakpoint(desktop) {
+          margin-right: 1.25rem;
+          border-top:none;
+          width: auto;
+        }
       }
 
+      &__items a{
+        color: #f1f1f1;  
+      }
 
+      &__items:nth-child(1){
+        margin-top: 4rem;
+
+        @include mixin.breakpoint(desktop) {
+          margin-top: 0; 
+        }
+      }
+
+      &__items:hover{
+        background-color: vars.$primary-dark-color;
+      }
     }
 
+    &__toggle{
+      display: block;
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      outline: none;	
+      border: none;
+      background-color: vars.$main-primary-color;
+      color: #fff;
+
+      @include mixin.breakpoint(desktop) {
+        display: none;
+      }
+    }    
   }
+
+  
 }
+
+
 
 
 
