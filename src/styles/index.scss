@@ -6,29 +6,16 @@
 /*==================== STYLE ========================*/
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
   
   body {
     font-family: 'Poppins', sans-serif;
-/*     display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center; */
     overflow-x: hidden;
   }
   
-/*==================== LINK ========================*/
-/*LINK TEXT*/
-/* unvisited link */
-.a__text {
-    color: #fff;
-  }
-  /* mouse over link */
-.a__text:hover {
-color: vars.$main-secondary-color;
-font-weight: 600;
-}
-  
+/*==================== SECTION ========================*/
   
 section {
 padding: 1rem;
