@@ -4,71 +4,77 @@
 /*==================== FOOTER ========================*/
 
 .footer {
-    background-color: vars.$main-primary-color;
-    width: 100vw;
-    color: white; 
+  background-color: vars.$main-primary-color;
+  color: #fff;
 
-/*     margin: 1rem 1.5rem 0 1.5rem; */
-  }
-  
-  .footer__contact {
+  &__contact {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 1rem
+    padding: 1rem;
   }
-  .footer__contact-logo {
-  
+
+  &__contact-title {
+    padding-bottom: 0.2rem;
+    font-weight: bold;
   }
-  .footer__contact-mail {
+
+  &__contact-mail {
     display: flex;
     flex-flow: row;
-    align-items: center
-  
+    align-items: center;
   }
-  
-  
-  
-  /* FOOTER DARK: SITEMAP + MENTIONS */
-  .footer-dark {
-    background-color: vars.$primary-dark-color;
-    padding: 1rem 1rem 0.5rem 1rem;
-    font-size: 0.7rem;
-    text-align: center;
-  }
-  
-  .footer-dark__site-map{
-    font-size: 1rem;
-    padding-top: 0.5rem;
-    display: flex;
-    flex-flow: column;
-    justify-content: center
-  }
-  
-  .site-map__nav-list {
+}
+
+/* FOOTER DARK: SITEMAP + MENTIONS */
+.footer-dark {
+  background-color: vars.$primary-dark-color;
+  padding: 1rem 1rem 0.5rem 1rem;
+  text-align: center;
+
+  &__nav-list {
     display: flex;
     flex-flow: column;
     align-items: center;
-    padding: 0.5rem;
-    width: 100vw;
+    gap: 0.7rem;
 
-    @include mixin.breakpoint(desktop) {     
+    @include mixin.breakpoint(desktop) {
       flex-flow: row wrap;
-      justify-content: center; 
+      justify-content: center;
+      gap: 5rem;
     }
   }
-  
-  .site-map__nav-list li {
-    width: 8rem;
-    padding-right: 0.3rem;
-    padding-bottom: 0.5rem;;
-  
+
+  &__nav-item {
+    color: #fff;
+
+    &:hover {
+      color: vars.$main-secondary-color;
+      font-weight: 600;
+    }
   }
-  
-  .footer-dark__mentions a::after{
-    content: " | ";
-    margin: 0 2px;
+
+  &__mentions {
+    font-size: 0.7rem;
   }
-  .footer-dark__mentions-copyright {
-  padding-top: 0.5rem;
+
+  &__mention-list {
+    padding: 1.5rem;
   }
+
+  &__mention-item {
+    border-right: 1px solid #cfcfcf;
+    color: #cfcfcf;
+    padding: 0 5px;
+    text-decoration: underline;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      color: vars.$main-secondary-color;
+      font-weight: 600;
+    }
+  }
+}
