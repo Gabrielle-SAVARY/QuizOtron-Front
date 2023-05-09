@@ -1,9 +1,15 @@
 import './index.scss';
+
 import Footer from '../Footer';
+import Header from '../Header';
 
 function App() {
   return (
-    <Footer />
+    <>
+      <Header />
+      {/*       <div>CONTENT</div>
+      <Footer /> */}
+    </>
   );
 }
 
