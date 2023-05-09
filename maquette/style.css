@@ -29,16 +29,18 @@ body {
   overflow-x: hidden;
 }
 
-/*LINK*/
+/*==================== LINK ========================*/
+/*LINK TEXT*/
 /* unvisited link */
-a {
-  color: white;
+.a__text {
+  color: #fff;
+}
+/* mouse over link */
+.a__text:hover {
+  color: var(--main-secondary-color);
+  font-weight: 600;
 }
 
-/* mouse over link */
-a:hover {
-  color: var(--main-secondary-color);
-}
 
 section {
   padding: 1rem;
@@ -72,6 +74,8 @@ section {
   padding-bottom: 1rem;
 }
 
+/*==================== SECTION TODAY'S QUIZ ========================*/
+
 .section2 {
   display: flex;
   justify-content: center;
@@ -92,6 +96,26 @@ section {
   margin-bottom: 1rem;
 }
 
+/*==================== TODAY'S QUIZ CARD ========================*/
+/* media queries' differences between TODAY'S QUIZ CARD Dand  QUIZ CARD*/
+.quiz__card-day {
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  margin: 1rem 0;
+  transition: 0.2s ease-in-out;
+
+}
+
+.quiz__card-day:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 10px 20px 2px var(--secondary-light-color);
+}
+
+
+/*==================== SECTION POLULAR QUIZ ========================*/
+
 .section3 {
   display: flex;
   justify-content: center;
@@ -105,15 +129,9 @@ section {
   font-size: 1.5rem;
 }
 
-.quiz__card-day {
-  background-color: white;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
-  margin: 1rem 0;
-  transition: 0.2s ease-in-out;
-}
 
+/*==================== QUIZ CARD ========================*/
+/* media queries' differences between TODAY'S QUIZ CARD Dand  QUIZ CARD*/
 .quiz__card {
   background-color: white;
   border-radius: 1rem;
@@ -125,6 +143,7 @@ section {
 
 .quiz__card:hover {
   transform: scale(1.01);
+  box-shadow: 0px 10px 20px 2px var(--main-primary-color);
 }
 
 .card-header__img {
@@ -183,46 +202,72 @@ section {
   align-items: center;
 }
 
+
+/*==================== FOOTER ========================*/
+
 .footer {
   background-color: var(--main-primary-color);
-  padding-top: 1rem;
   width: 100vw;
   color: white; 
-  height: 20vh;
+  padding-top: 1rem;
+  margin: 1rem 1.5rem 0 1.5rem;
 }
 
 .footer__contact {
   display: flex;
   justify-content: space-around;
-  margin: 1rem;
   align-items: center;
-
-}
-
-.footer__site-map{
-  background-color: var(--primary-dark-color);
-  display: flex;
-  flex-flow: row wrap;
-  font-size: 0.8rem;
-  padding-top: 0.5rem;
-  justify-content: center
-
-}
-
-.footer__contact{
-
-}
-
-.site-map__about{
-  padding-top: 0.5rem;
-}
-
-.site-map__about ul{
   padding: 0.5rem;
 }
+.footer__contact-logo {
+
+}
+.footer__contact-mail {
+  display: flex;
+  flex-flow: row;
+  align-items: center
+
+}
 
 
 
+/* FOOTER DARK: SITEMAP + MENTIONS */
+.footer-dark {
+  background-color: var(--primary-dark-color);
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.footer-dark__site-map{
+  font-size: 1rem;
+  padding-top: 0.5rem;
+  display: flex;
+  flex-flow: column;
+  justify-content: center
+}
+
+.site-map__nav-list {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100vw;
+}
+.site-map__nav-list li {
+  width: 8rem;
+  padding-right: 0.3rem;
+  padding-bottom: 0.5rem;;
+
+}
+
+.footer-dark__mentions a::after{
+  content: " | ";
+  margin: 0 2px;
+}
+.footer-dark__mentions-copyright {
+padding-top: 0.5rem;
+}
 
 
 /*==================== MEDIA QUERIES ========================*/
@@ -232,18 +277,16 @@ section {
 @media screen and (min-width: 768px) {
   .quiz__card-day {
     max-width: 70%;
-
   }
 }
+
 @media screen and (min-width: 1024px) {
   .quiz__card-day {
     max-width: 70%;
-
   }
   .quiz__card {
     max-width: 40%;
   }
-
   .section3__list-quiz {
     display: flex;
     justify-content: space-evenly;
@@ -251,7 +294,12 @@ section {
     flex-wrap: wrap;
     gap: 1rem;
   }
+ .site-map__nav-list {
+  flex-flow: row wrap;
+  justify-content: center;
+  } 
 }
+
 @media screen and (min-width: 1600px) {
   .quiz__card-day {
     max-width: 100%;
@@ -264,5 +312,9 @@ section {
     flex-direction: column;
     margin: 0 15rem 0 15rem;
   }
+  .site-map__nav-list {
+    flex-flow: row wrap;
+    justify-content: center;
+    } 
 
 }
