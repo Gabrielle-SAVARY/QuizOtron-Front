@@ -1,0 +1,84 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+/*==================== CARD ========================*/
+
+.card {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: white;
+  max-width: 300px;
+  margin: 1rem auto;
+  border-radius: 1rem;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 10px 20px 2px vars.$main-primary-color;
+  }
+}
+
+.card-header__img {
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 0 0.5rem;
+
+  &__title {
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  &__tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  &__categorie {
+    background: linear-gradient(
+      to bottom,
+      vars.$main-primary-color,
+      vars.$primary-light-color
+    );
+    color: white;
+    border-radius: 1rem;
+    padding: 0.5rem;
+  }
+
+  &__difficulty {
+    background: linear-gradient(
+      to bottom,
+      vars.$main-secondary-color,
+      vars.$secondary-light-color
+    );
+    color: white;
+    border-radius: 1rem;
+    padding: 0.5rem;
+  }
+
+  &__tag2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  &__autor {
+    display: flex;
+    align-items: center;
+  }
+
+  &__favoris {
+    background: none;
+    border: none;
+  }
+}
