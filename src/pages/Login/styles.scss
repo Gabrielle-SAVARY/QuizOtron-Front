@@ -2,34 +2,34 @@
 @use '../../styles/vars';
 
 .login{
+		padding: 4rem 1rem;    
+		.login-form {
 
-    .login-form {
+		.__field__container{
 
-        .__field__container{
+		}
+		.__button {
+				margin-top: 50px;
+				width: 100%;
+				background-color: vars.$main-primary-color;
+				color: #080710;
+				padding: 15px 0;
+				font-size: 18px;
+				font-weight: 600;
+				border-radius: 5px;
+				cursor: pointer;
 
-        }
-        .__button {
-            margin-top: 50px;
-            width: 100%;
-            background-color: vars.$main-primary-color;
-            color: #080710;
-            padding: 15px 0;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 5px;
-            cursor: pointer;
-
-        }
+		}
 
 
-    }
+	}
 
-    .register-redirect {
+	.register-redirect {
 
-        .button-register  {
+		.button-register  {
 
-        }
+		}
 
-    }
+	}
 
 }
