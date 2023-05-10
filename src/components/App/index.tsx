@@ -13,8 +13,8 @@ function App() {
   return (
 
     <div className="app">
-      {/*       <Header />
-      <div>CONTENT</div> */}
+      <Header />
+      <div>CONTENT</div>
 
       <Routes>
         <Route
@@ -39,7 +39,7 @@ function App() {
         />
 
       </Routes>
-      {/*       <Footer /> */}
+      <Footer />
     </div>
 
   );
