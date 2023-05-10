@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './index.scss';
+import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 
 function Card() {

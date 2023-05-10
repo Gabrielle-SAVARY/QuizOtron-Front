@@ -1,21 +1,17 @@
 import { Route, Routes } from 'react-router-dom';
-import Footer from '../Footer';
-import Header from '../Header';
+import Layout from '../Layout';
 import Home from '../../pages/Home';
 import Quiz from '../../pages/Quiz';
 import Login from '../../pages/Login';
 import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
 
-import './index.scss';
+import './styles.scss';
 
 function App() {
   return (
 
-    <div className="app">
-      <Header />
-      <div>CONTENT</div>
-
+    <Layout>
       <Routes>
         <Route
           path="/home"
@@ -39,8 +35,7 @@ function App() {
         />
 
       </Routes>
-      <Footer />
-    </div>
+    </Layout>
 
   );
 }
