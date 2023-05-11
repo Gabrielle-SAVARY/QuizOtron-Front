@@ -3,6 +3,7 @@ import { FiAlignJustify } from 'react-icons/fi';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import './index.scss';
+import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setScreenWidth, setToggleMenu } from '../../store/reducers/header';
 
@@ -30,17 +31,17 @@ function Header() {
 
   return (
     <header className="header">
-      <h1 className="header__logo"><a href="/#">Quiz&apos;O&apos;Tron</a></h1>
+      <h1 className="header__logo"><NavLink to="/">Quiz&apos;O&apos;Tron</NavLink></h1>
       <nav className="header__nav">
         { /* affiche la liste: en mobile si menu hamburger est ouvert et desktop */}
         {(toggleMenu || screenWidth >= 992) && (
         <ul className="header__nav-list">
-          <li className="header__nav-list__items"><a href="/#">Accueil</a></li>
-          <li className="header__nav-list__items"><a href="/#">Liste des quiz</a></li>
+          <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
+          <li className="header__nav-list__items"><NavLink to="/quiz">Liste des quiz</NavLink></li>
         </ul>
         )}
         <button type="button" className="header__login">
-          <FaRegUserCircle size={24} />
+          <NavLink to="/profile"><FaRegUserCircle size={24} /></NavLink>
         </button>
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>

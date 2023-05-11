@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import './index.scss';
 import { MdEmail } from 'react-icons/md';
 
@@ -20,38 +21,38 @@ function Footer() {
         <div className="footer-dark__site-map">
           <ul className="footer-dark__nav-list">
             <li>
-              <a href="/#" className="footer-dark__nav-item">
+              <NavLink to="/about" className="footer-dark__nav-item">
                 À propos
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/#" className="footer-dark__nav-item">
+              <NavLink to="/" className="footer-dark__nav-item">
                 Accueil
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/#" className="footer-dark__nav-item">
+              <NavLink to="/quiz" className="footer-dark__nav-item">
                 Liste des quiz
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/#" className="footer-dark__nav-item">
+              <NavLink to="/connexion" className="footer-dark__nav-item">
                 Connexion
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
         <div className="footer-dark__mentions">
           <div className="footer-dark__mention-list">
-            <a href="/#" className="footer-dark__mention-item">
+            <NavLink to="/mentions-legales" className="footer-dark__mention-item">
               Mentions Légales
-            </a>
-            <a href="/#" className="footer-dark__mention-item">
+            </NavLink>
+            <NavLink to="/donnees-personnelles" className="footer-dark__mention-item">
               Données personnelles
-            </a>
-            <a href="/#" className="footer-dark__mention-item">
+            </NavLink>
+            <NavLink to="/cookie" className="footer-dark__mention-item">
               Cookie
-            </a>
+            </NavLink>
           </div>
           <div className="footer-dark__mentions-copyright">
             Quiz&apos;O&apos;Tron 2023 &copy;
