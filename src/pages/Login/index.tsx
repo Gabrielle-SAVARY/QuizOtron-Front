@@ -8,7 +8,7 @@ function Login() {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
-  const pseudo = useAppSelector((state) => state.user.pseudo);
+  const logged = useAppSelector((state) => state.user.logged);
 
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -23,18 +23,23 @@ function Login() {
 
   const handleLogin = () => {
     dispatch(login());
-    console.log('test');
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('test2');
     handleLogin();
   };
 
   return (
 
     <div className="login-page">
+      {logged && (
+        <div className="login-page__logged">
+          <p>Vous êtes connecté.</p>
+          <button type="button">Déconnexion</button>
+        </div>
+      )}
+      {!logged && (
       <div className="login-page__wrapper">
 
         <form action="submit" className="form form-login" onSubmit={handleSubmit}>
@@ -51,6 +56,7 @@ function Login() {
           </p>
         </form>
       </div>
+      )}
     </div>
 
   );

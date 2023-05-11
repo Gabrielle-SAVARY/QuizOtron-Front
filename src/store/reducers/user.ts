@@ -1,21 +1,26 @@
 import axios from 'axios';
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
+import { ILogin } from '../../@types/user';
 
 interface UserState {
+  logged: boolean;
+  pseudo: string;
+  token: string;
   credentials: {
     email: string;
     password: string;
   }
-  pseudo: string;
 }
 
 export const initialState: UserState = {
+  logged: false,
+  token: '',
+  pseudo: '',
   credentials: {
     email: 'elon@gmail.com',
     password: 'test',
   },
-  pseudo: '',
 };
 
 export const login = createAppAsyncThunk(
@@ -29,7 +34,7 @@ export const login = createAppAsyncThunk(
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
-    return data as { email: string };
+    return data as ILogin;
   },
 );
 
@@ -52,7 +57,14 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials[action.payload.propertyKey] = action.payload.value;
     })
     .addCase(login.fulfilled, (state, action) => {
+      // J'enregistre les informations retourner par mon API
+      state.logged = true;
       state.pseudo = action.payload.pseudo;
+      state.token = action.payload.token;
+
+      // Je réinitialise les credentials
+      state.credentials.email = '';
+      state.credentials.password = '';
     });
 });
 
