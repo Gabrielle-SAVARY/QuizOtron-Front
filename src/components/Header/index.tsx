@@ -1,45 +1,32 @@
 import { useState, useEffect } from 'react';
-import './index.scss';
 import { FiAlignJustify } from 'react-icons/fi';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import './index.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setScreenWidth, setToggleMenu } from '../../store/reducers/header';
 
 function Header() {
-  const [toggleMenu, setToggleMenu] = useState(false);
-  console.log('toggleMenu', toggleMenu);
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+/*   const [toggleMenu, setToggleMenu] = useState(false); */
+  const dispatch = useAppDispatch();
+  const toggleMenu = useAppSelector((state) => state.header.toggleMenu);
+  const screenWidth = useAppSelector((state) => state.header.screenWidth);
+  console.log('screenWidth', screenWidth);
 
   // Met à jour le state de toggleMenu si le menu hamburger est ouvert
   // au click sur button header__nav__toggle (toogle ouverture/fermeture)
   const changeToggleMenu = () => {
-    setToggleMenu(!toggleMenu);
-    console.log('setToggleMenu', toggleMenu);
+    dispatch(setToggleMenu(!toggleMenu));
   };
 
-  // Met à jour le state de toggleMenu à false: si screen en mobile et menu hamburger ouvert
-  // En cas de passage d'une screen large vers mobile: toggleMenu sera fermé par defaut
-  useEffect(() => {
+  const handleScreenWidth = () => {
+    dispatch(setScreenWidth(window.innerWidth));
     if (screenWidth > 992 && toggleMenu) {
-      setToggleMenu(false);
+      dispatch(setToggleMenu(false));
     }
-  }, [screenWidth, toggleMenu]);
-
-  // Met à jour le state de screenWidth si la largeur de la fenêtre se modifie
-  useEffect(() => {
-    const changeWidth = () => {
-      setScreenWidth(window.innerWidth);
-      console.log('setScreenWidth window.innerWidth', window.innerWidth);
-    };
-      // écouteur d'évenement sur la fenêtre qui déclenche fonction callback pour MAJ du state
-    window.addEventListener('resize', changeWidth);
-
-    // cleanup function: supprimer écouteur d'évenement
-    // permet de ne pas mettre à jour le state si composant non existant ou non disponible
-    return () => {
-      window.removeEventListener('resize', changeWidth);
-    };
-  }, []);
+  };
+  // écouteur d'évenement sur la fenêtre: permet de fermer le menu si fenetre redimensionnée
+  window.addEventListener('resize', handleScreenWidth);
 
   return (
     <header className="header">

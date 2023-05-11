@@ -1,13 +1,11 @@
-import Card from '../../components/Card';
-
-function Quiz() {
+function Profil() {
   return (
 
-    <div className="quiz">
-      <Card />
+    <div className="profil">
+      Profile
     </div>
 
   );
 }
 
-export default Quiz;
+export default Profil;
