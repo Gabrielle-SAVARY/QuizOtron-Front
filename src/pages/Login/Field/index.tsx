@@ -2,11 +2,10 @@ import { ChangeEvent, useId } from 'react';
 import './styles.scss';
 
 interface FieldProps {
-  placeholderLabel: string;
   value: string;
   type: string;
   placeholder: string;
-  onChange: (value: string) => void;
+  onChangeField: (value: string) => void;
 
 }
 
@@ -14,31 +13,25 @@ function Field({
   value,
   type,
   placeholder,
-  placeholderLabel,
-  onChange,
+  onChangeField,
 }: FieldProps) {
   const inputId = useId();
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    onChange(event.target.value);
+  function handleChangeField(event: ChangeEvent<HTMLInputElement>): void {
+    onChangeField(event.target.value);
   }
 
   return (
 
     <div className="field">
-      <label
-        htmlFor={inputId}
-        className="field-label"
-      >
-        {placeholderLabel}
-      </label>
-
+      <label htmlFor={inputId} className="field__label" />
       <input
         id={inputId}
         type={type}
         value={value}
+        onChangeField={handleChangeField}
         placeholder={placeholder}
-        className="field-input"
+        className="field__input"
       />
     </div>
 
