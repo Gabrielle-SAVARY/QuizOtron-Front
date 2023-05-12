@@ -36,6 +36,8 @@ export const login = createAppAsyncThunk(
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+
     return data as ILogin;
   },
 );
