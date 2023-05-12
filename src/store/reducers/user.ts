@@ -2,7 +2,7 @@ import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { ILogin } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
-import { getUserDataFromLocalStorage } from '../../utils/user';
+import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from '../../utils/user';
 
 interface UserState {
   logged: boolean;
@@ -79,6 +79,9 @@ const userReducer = createReducer(initialState, (builder) => {
       state.logged = false;
       state.pseudo = '';
       state.token = '';
+
+      // Quand l'utilisateur se déconnecte je supprime les données du localStorage
+      removeUserDataFromLocalStorage();
     });
 });
 

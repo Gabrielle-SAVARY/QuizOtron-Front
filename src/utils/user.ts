@@ -5,3 +5,7 @@ export const getUserDataFromLocalStorage = () => {
   const userData = userDataString ? JSON.parse(userDataString) as ILogin : null;
   return userData;
 };
+
+export const removeUserDataFromLocalStorage = () => {
+  localStorage.removeItem('user');
+};

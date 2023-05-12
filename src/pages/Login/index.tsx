@@ -51,7 +51,7 @@ function Login() {
         <div className="login-page__logged">
           <p>Vous êtes connecté.</p>
           <NavLink to="/connexion">
-            <button type="button" onClick={handleLogout}>
+            <button type="button" className="login-page__button" onClick={handleLogout}>
               Déconnexion
             </button>
           </NavLink>
