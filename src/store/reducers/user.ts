@@ -1,9 +1,8 @@
-import axios from 'axios';
-
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { ILogin } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
+import { getUserDataFromLocalStorage } from '../../utils/user';
 
 interface UserState {
   logged: boolean;
@@ -14,6 +13,8 @@ interface UserState {
     password: string;
   }
 }
+// récupération des données du user dans le localStorage
+const userData = getUserDataFromLocalStorage();
 
 export const initialState: UserState = {
   logged: false,
@@ -23,6 +24,7 @@ export const initialState: UserState = {
     email: 'elon@gmail.com',
     password: 'test',
   },
+  ...userData,
 };
 
 export const login = createAppAsyncThunk(
@@ -36,7 +38,8 @@ export const login = createAppAsyncThunk(
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
-    axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+    // Stockage des data de  user (en chaine de caractères) dans le localStorage
+    localStorage.setItem('user', JSON.stringify(data));
 
     return data as ILogin;
   },

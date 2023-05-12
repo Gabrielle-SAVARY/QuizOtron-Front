@@ -8,11 +8,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setScreenWidth, setToggleMenu } from '../../store/reducers/header';
 
 function Header() {
-/*   const [toggleMenu, setToggleMenu] = useState(false); */
+  /*   const [toggleMenu, setToggleMenu] = useState(false); */
   const dispatch = useAppDispatch();
   const toggleMenu = useAppSelector((state) => state.header.toggleMenu);
   const screenWidth = useAppSelector((state) => state.header.screenWidth);
-  console.log('screenWidth', screenWidth);
+
+  const logged = useAppSelector((state) => state.user.logged);
 
   // Met à jour le state de toggleMenu si le menu hamburger est ouvert
   // au click sur button header__nav__toggle (toogle ouverture/fermeture)
@@ -32,16 +33,20 @@ function Header() {
   return (
     <header className="header">
       <h1 className="header__logo"><NavLink to="/">Quiz&apos;O&apos;Tron</NavLink></h1>
+
       <nav className="header__nav">
         { /* affiche la liste: en mobile si menu hamburger est ouvert et desktop */}
         {(toggleMenu || screenWidth >= 992) && (
-        <ul className="header__nav-list">
-          <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
-          <li className="header__nav-list__items"><NavLink to="/quiz">Liste des quiz</NavLink></li>
-        </ul>
+          <ul className="header__nav-list">
+            <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
+            <li className="header__nav-list__items"><NavLink to="/quiz">Liste des quiz</NavLink></li>
+          </ul>
         )}
         <button type="button" className="header__login">
-          <NavLink to="/profile"><FaRegUserCircle size={24} /></NavLink>
+          <NavLink to="/profile">
+            <FaRegUserCircle size={24} />
+            {logged ? <p>Mon Profile</p> : ('')}
+          </NavLink>
         </button>
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
