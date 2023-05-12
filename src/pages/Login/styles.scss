@@ -1,0 +1,87 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.login-page {
+  padding: 7%;
+  margin: 2rem auto auto;
+
+  &__wrapper {
+    max-width: 22.5rem;
+    margin: 0 auto;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 12px;
+  }
+
+  &__logged {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__button {
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: vars.$main-primary-color;
+    border-radius: 0.5rem;
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+.form {
+  max-width: 22.5rem;
+  margin: 0 auto 4rem;
+  text-align: center;
+
+  &__logo {
+    padding: 2rem;
+    font-size: 2rem;
+    color: vars.$main-primary-color;
+  }
+
+  &__input {
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    font-size: 0.9rem;
+    border-radius: 0.7rem;
+  }
+
+  &__button {
+    text-transform: uppercase;
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    background: vars.$main-primary-color;
+    border-radius: 0.5rem;
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      background: vars.$main-secondary-color;
+    }
+  }
+
+  &__message {
+    margin: 0.9rem 0 0;
+    color: #a1a1a1;
+    font-size: 0.9rem;
+  }
+
+  &__inscription {
+    color: vars.$main-primary-color;
+    padding: 0.5rem;
+  }
+}

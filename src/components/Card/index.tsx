@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 function Card() {
   const [favorite, setFavorite] = useState(false);
@@ -12,7 +13,7 @@ function Card() {
 
   return (
     <article className="card">
-      <a href="/#">
+      <Link to="/quiz/:id">
         <div className="card-header">
           <img
             className="card-header__img"
@@ -46,7 +47,7 @@ function Card() {
             </button>
           </div>
         </div>
-      </a>
+      </Link>
     </article>
   );
 }
