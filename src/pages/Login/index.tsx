@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { ChangeEvent, FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { KeysOfCredentials, changeCredentialsField, login } from '../../store/reducers/user';
+import {
+  KeysOfCredentials,
+  changeCredentialsField,
+  login,
+  logout,
+} from '../../store/reducers/user';
 import './styles.scss';
 
 function Login() {
@@ -10,55 +15,88 @@ function Login() {
   const password = useAppSelector((state) => state.user.credentials.password);
   const logged = useAppSelector((state) => state.user.logged);
 
+  // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     // récupère name de l'input et le type la donnée
     const fieldName = event.target.name as KeysOfCredentials;
 
-    dispatch(changeCredentialsField({
-      propertyKey: fieldName,
-      value: newValue,
-    }));
+    dispatch(
+      changeCredentialsField({
+        propertyKey: fieldName,
+        value: newValue,
+      }),
+    );
   };
 
+  // Appel API pour demande de connexion utilisateur
   const handleLogin = () => {
     dispatch(login());
   };
 
+  // Soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleLogin();
   };
 
-  return (
+  // Déconnexion utilisateur
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
+  return (
     <div className="login-page">
       {logged && (
         <div className="login-page__logged">
           <p>Vous êtes connecté.</p>
-          <button type="button">Déconnexion</button>
+          <NavLink to="/connexion">
+            <button type="button" onClick={handleLogout}>
+              Déconnexion
+            </button>
+          </NavLink>
         </div>
       )}
       {!logged && (
-      <div className="login-page__wrapper">
+        <div className="login-page__wrapper">
+          <form
+            action="submit"
+            className="form form-login"
+            onSubmit={handleSubmit}
+          >
+            <div className="form__logo">Quiz&apos;O&apos;tron</div>
 
-        <form action="submit" className="form form-login" onSubmit={handleSubmit}>
-          <div className="form__logo">Quiz&apos;O&apos;tron</div>
+            <input
+              type="text"
+              placeholder="Email"
+              className="form__input"
+              value={email}
+              onChange={handleChangeField}
+              name="email"
+            />
+            <input
+              type="password"
+              placeholder="Mot de passe"
+              className="form__input"
+              value={password}
+              onChange={handleChangeField}
+              name="password"
+            />
 
-          <input type="text" placeholder="Email" className="form__input" value={email} onChange={handleChangeField} name="email" />
-          <input type="password" placeholder="Mot de passe" className="form__input" value={password} onChange={handleChangeField} name="password" />
+            <button type="submit" className="form__button">
+              Connexion
+            </button>
 
-          <button type="submit" className="form__button">Connexion</button>
-
-          <p className="form__message">
-            Pas encore de compte?
-            <NavLink to="/inscription" className="form__inscription">Inscription</NavLink>
-          </p>
-        </form>
-      </div>
+            <p className="form__message">
+              Pas encore de compte?
+              <NavLink to="/inscription" className="form__inscription">
+                Inscription
+              </NavLink>
+            </p>
+          </form>
+        </div>
       )}
     </div>
-
   );
 }
 

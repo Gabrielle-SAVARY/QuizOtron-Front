@@ -44,6 +44,8 @@ export const login = createAppAsyncThunk(
 // MONINTERFACE['propriété'] récupère le type d'une propriété
 export type KeysOfCredentials = keyof UserState['credentials'];
 
+export const logout = createAction('user/LOGOUT');
+
 // Action: changer le champ de l'input d'un formulaire
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
@@ -57,14 +59,19 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials[action.payload.propertyKey] = action.payload.value;
     })
     .addCase(login.fulfilled, (state, action) => {
-      // J'enregistre les informations retourner par mon API
-      state.logged = true;
+      // J'enregistre les informations retournées par mon API
+      state.logged = action.payload.logged;
       state.pseudo = action.payload.pseudo;
       state.token = action.payload.token;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
       state.credentials.password = '';
+    })
+    .addCase(logout, (state) => {
+      state.logged = false;
+      state.pseudo = '';
+      state.token = '';
     });
 });
 

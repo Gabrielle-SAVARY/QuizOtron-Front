@@ -1,5 +1,5 @@
 export interface ILogin {
-  isLogged: boolean
+  logged: boolean
   pseudo: string
   token: string
 }
