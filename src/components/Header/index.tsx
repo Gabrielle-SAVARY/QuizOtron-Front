@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './styles.scss';
 import { FiAlignJustify } from 'react-icons/fi';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
