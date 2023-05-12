@@ -1,6 +1,12 @@
 export interface ILogin {
   logged: boolean
-  pseudo: string
+  firstName: string
+  lastName: string
+  pseudo: string;
+  credentials: {
+    email: string;
+    password: string;
+  },
   token: string
 }
 

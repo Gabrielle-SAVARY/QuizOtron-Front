@@ -3,7 +3,6 @@ import './styles.scss';
 import { FiAlignJustify } from 'react-icons/fi';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import './index.scss';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setScreenWidth, setToggleMenu } from '../../store/reducers/header';

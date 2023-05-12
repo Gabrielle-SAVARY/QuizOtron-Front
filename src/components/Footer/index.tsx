@@ -1,4 +1,6 @@
+import { NavLink } from 'react-router-dom';
 import './styles.scss';
+
 import { MdEmail } from 'react-icons/md';
 
 function Footer() {

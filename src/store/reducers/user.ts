@@ -6,8 +6,10 @@ import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from '../
 
 interface UserState {
   logged: boolean;
-  pseudo: string;
   token: string;
+  firstName: string
+  lastName: string
+  pseudo: string;
   credentials: {
     email: string;
     password: string;
@@ -19,6 +21,8 @@ const userData = getUserDataFromLocalStorage();
 export const initialState: UserState = {
   logged: false,
   token: '',
+  firstName: '',
+  lastName: '',
   pseudo: '',
   credentials: {
     email: 'elon@gmail.com',
@@ -26,6 +30,32 @@ export const initialState: UserState = {
   },
   ...userData,
 };
+
+export const register = createAppAsyncThunk(
+  'user/REGISTER',
+  async (_, thunkAPI) => {
+    // on récupère l'intégralité du state depuis le store
+    const state = thunkAPI.getState();
+
+    // Appel API
+    const { data } = await axiosInstance.post('/signup', state.user);
+    // on passe en paramètre de la requête les credentials du store
+    console.log('data', data);
+
+    // Stockage des data de  user (en chaine de caractères) dans le localStorage
+    localStorage.setItem('user', JSON.stringify(data));
+
+    return data as {
+      firstName: string
+      lastName: string
+      pseudo: string;
+      credentials: {
+        email: string;
+        password: string;
+      }
+    };
+  },
+);
 
 export const login = createAppAsyncThunk(
   'user/LOGIN',
@@ -82,6 +112,22 @@ const userReducer = createReducer(initialState, (builder) => {
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
       removeUserDataFromLocalStorage();
+    })
+    .addCase(register.fulfilled, (state, action) => {
+      // J'enregistre les informations retournées par mon API
+
+      state.firstName = action.payload.firstName;
+      state.lastName = action.payload.lastName;
+      state.credentials.email = action.payload.credentials.email;
+      state.credentials.password = action.payload.credentials.password;
+      state.pseudo = action.payload.pseudo;
+
+      // Je réinitialise les credentials
+      state.firstName = '';
+      state.lastName = '';
+      state.pseudo = '';
+      state.credentials.email = '';
+      state.credentials.password = '';
     });
 });
 
