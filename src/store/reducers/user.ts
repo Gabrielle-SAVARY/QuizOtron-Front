@@ -1,7 +1,9 @@
 import axios from 'axios';
+
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { ILogin } from '../../@types/user';
+import { axiosInstance } from '../../utils/axios';
 
 interface UserState {
   logged: boolean;
@@ -30,7 +32,7 @@ export const login = createAppAsyncThunk(
     const state = thunkAPI.getState();
 
     // Appel API
-    const { data } = await axios.post('http://localhost:3000/login', state.user.credentials);
+    const { data } = await axiosInstance.post('/login', state.user.credentials);
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
