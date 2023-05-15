@@ -13,7 +13,8 @@ function Register() {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
-  const pseudo = useAppSelector((state) => state.user.pseudo);
+  const passwordConfirm = useAppSelector((state) => state.user.credentials.passwordConfirm);
+  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const logged = useAppSelector((state) => state.user.logged);
@@ -113,9 +114,9 @@ function Register() {
             type="password"
             placeholder="Confirmation mot de passe"
             className="form__input"
-            value={password}
+            value={passwordConfirm}
             onChange={handleChangeField}
-            name="confirm password"
+            name="passwordConfirm"
           />
 
           <button type="submit" className="form__button">

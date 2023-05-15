@@ -41,7 +41,7 @@ export const register = createAppAsyncThunk(
     const state = thunkAPI.getState();
 
     // Appel API
-    const { data } = await axiosInstance.post('/signup', state.user);
+    const { data } = await axiosInstance.post('/signup', state.user.credentials);
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
@@ -96,7 +96,7 @@ const userReducer = createReducer(initialState, (builder) => {
       // J'enregistre les informations retournées par mon API
       state.logged = action.payload.logged;
       state.token = action.payload.token;
-      // state.credentials.pseudo = action.payload.credentials.pseudo;
+      state.credentials.pseudo = action.payload.credentials.pseudo;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
@@ -117,6 +117,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = action.payload.credentials.lastname;
       state.credentials.email = action.payload.credentials.email;
       state.credentials.password = action.payload.credentials.password;
+      state.credentials.passwordConfirm = action.payload.credentials.passwordConfirm;
       state.credentials.pseudo = action.payload.credentials.pseudo;
 
       // Je réinitialise les credentials
