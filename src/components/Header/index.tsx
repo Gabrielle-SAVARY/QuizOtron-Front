@@ -43,10 +43,17 @@ function Header() {
           </ul>
         )}
         <button type="button" className="header__login">
-          <NavLink to="/profile">
-            <FaRegUserCircle size={24} />
-            {logged ? <p>Mon Profile</p> : ('')}
-          </NavLink>
+          { logged
+            ? (
+              <NavLink to="/profile">
+                <FaRegUserCircle size={24} />
+              </NavLink>
+            )
+            : (
+              <NavLink to="/connexion" className="header__button-connexion">
+                Connexion
+              </NavLink>
+            )}
         </button>
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>

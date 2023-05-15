@@ -23,6 +23,8 @@
   color:#fff;
   }
 
+
+
 /*==================== NAVBAR ========================*/
   &__nav{
     position: fixed;
@@ -72,6 +74,8 @@
       &__items:hover{
         background-color: vars.$primary-dark-color;
       }
+
+
     }
 
   /*==================== BOUTON TOOGLE: menu hamburger ========================*/
@@ -96,6 +100,7 @@
   &__login {
     display: block;
     position: absolute;
+    font-family: 'Poppins', sans-serif;
     top: 0.9rem;
     right: 80px;
     outline: none;	
