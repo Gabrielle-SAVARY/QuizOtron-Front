@@ -36,6 +36,24 @@ export const initialState: UserState = {
   ...userData,
 };
 
+export const deleteUser = createAppAsyncThunk(
+  'user/DELETE',
+  async (_, thunkAPI) => {
+    // on récupère l'intégralité du state depuis le store
+    const state = thunkAPI.getState();
+
+    // Appel API
+    const { data } = await axiosInstance.delete('/profile/settings/delete');
+
+    // on passe en paramètre de la requête les credentials du store
+    console.log('data', data);
+
+    localStorage.removeItem('user');
+
+    return data as IAuthentification;
+  },
+);
+
 export const register = createAppAsyncThunk(
   'user/REGISTER',
   async (_, thunkAPI) => {
@@ -132,6 +150,13 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(register.rejected, (state) => {
       state.registered = false;
+    })
+    .addCase(deleteUser.fulfilled, (state) => {
+      state.logged = false;
+      state.token = '';
+      state.credentials.pseudo = '';
+
+      removeUserDataFromLocalStorage();
     });
 });
 
