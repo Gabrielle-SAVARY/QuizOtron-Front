@@ -1,15 +1,13 @@
-export interface ILogin {
+export interface IAuthentification {
   logged: boolean
   token: string
-
-  credentials: {
-    firstname: string
-    lastname: string
-    pseudo: string;
-    email: string;
-    password: string;
-    passwordConfirm: string;
-  },
+  registered: boolean
+  firstname: string
+  lastname: string
+  pseudo: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
 
 }
 

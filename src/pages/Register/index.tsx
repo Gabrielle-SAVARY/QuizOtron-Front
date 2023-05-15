@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
   changeCredentialsField,
-  login,
-  logout,
+  register,
 } from '../../store/reducers/user';
 import './styles.scss';
 
@@ -17,7 +16,7 @@ function Register() {
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
-  const logged = useAppSelector((state) => state.user.logged);
+  const registered = useAppSelector((state) => state.user.registered);
 
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -34,34 +33,30 @@ function Register() {
   };
 
   // Appel API pour demande de connexion utilisateur
-  const handleLogin = () => {
-    dispatch(login());
+  const handleRegister = () => {
+    dispatch(register());
   };
 
   // Soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleLogin();
-  };
-
-  // Déconnexion utilisateur
-  const handleLogout = () => {
-    dispatch(logout());
+    handleRegister();
   };
 
   return (
     <div className="login-page">
-      {logged && (
+      {registered && (
       <div className="login-page__logged">
-        <p>Vous êtes connecté.</p>
-        <NavLink to="/connexion">
-          <button type="button" className="login-page__button" onClick={handleLogout}>
-            Déconnexion
-          </button>
-        </NavLink>
+        <p>Vous êtes inscrit, veuillez vous connecter.</p>
+        <p className="form__message">
+          Déjà un compte?
+          <NavLink to="/connexion" className="form__inscription">
+            Connexion
+          </NavLink>
+        </p>
       </div>
       )}
-      {!logged && (
+      {!registered && (
       <div className="login-page__wrapper">
         <form
           action="submit"
@@ -76,7 +71,7 @@ function Register() {
             className="form__input"
             value={firstname}
             onChange={handleChangeField}
-            name="firstName"
+            name="firstname"
           />
           <input
             type="text"
@@ -84,7 +79,7 @@ function Register() {
             className="form__input"
             value={lastname}
             onChange={handleChangeField}
-            name="lastName"
+            name="lastname"
           />
           <input
             type="text"

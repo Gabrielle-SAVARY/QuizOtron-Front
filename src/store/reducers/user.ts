@@ -1,12 +1,13 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
-import { ILogin } from '../../@types/user';
+import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
 import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from '../../utils/user';
 
 interface UserState {
   logged: boolean;
   token: string;
+  registered: boolean
 
   credentials: {
     firstname: string
@@ -23,10 +24,11 @@ const userData = getUserDataFromLocalStorage();
 export const initialState: UserState = {
   logged: false,
   token: '',
+  registered: false,
   credentials: {
-    firstname: '',
-    lastname: '',
-    pseudo: '',
+    firstname: 'Elon',
+    lastname: 'Musk',
+    pseudo: 'elon-musk',
     email: 'elon@gmail.com',
     password: 'test',
     passwordConfirm: 'test',
@@ -45,10 +47,7 @@ export const register = createAppAsyncThunk(
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
-    // Stockage des data de user (en chaine de caractères) dans le localStorage
-    localStorage.setItem('user', JSON.stringify(data));
-
-    return data as ILogin;
+    return data as IAuthentification;
   },
 );
 
@@ -67,7 +66,7 @@ export const login = createAppAsyncThunk(
     // Stockage des data de  user (en chaine de caractères) dans le localStorage
     localStorage.setItem('user', JSON.stringify(data));
 
-    return data as ILogin;
+    return data as IAuthentification;
   },
 );
 
@@ -96,7 +95,7 @@ const userReducer = createReducer(initialState, (builder) => {
       // J'enregistre les informations retournées par mon API
       state.logged = action.payload.logged;
       state.token = action.payload.token;
-      state.credentials.pseudo = action.payload.credentials.pseudo;
+      state.credentials.pseudo = action.payload.pseudo;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
@@ -112,13 +111,14 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(register.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
+      state.credentials.firstname = action.payload.firstname;
+      state.credentials.lastname = action.payload.lastname;
+      state.credentials.email = action.payload.email;
+      state.credentials.password = action.payload.password;
+      state.credentials.passwordConfirm = action.payload.passwordConfirm;
+      state.credentials.pseudo = action.payload.pseudo;
 
-      state.credentials.firstname = action.payload.credentials.firstname;
-      state.credentials.lastname = action.payload.credentials.lastname;
-      state.credentials.email = action.payload.credentials.email;
-      state.credentials.password = action.payload.credentials.password;
-      state.credentials.passwordConfirm = action.payload.credentials.passwordConfirm;
-      state.credentials.pseudo = action.payload.credentials.pseudo;
+      state.registered = action.payload.registered;
 
       // Je réinitialise les credentials
       state.credentials.firstname = '';
@@ -126,6 +126,12 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.pseudo = '';
       state.credentials.email = '';
       state.credentials.password = '';
+    })
+    .addCase(register.pending, (state) => {
+      state.registered = false;
+    })
+    .addCase(register.rejected, (state) => {
+      state.registered = false;
     });
 });
 

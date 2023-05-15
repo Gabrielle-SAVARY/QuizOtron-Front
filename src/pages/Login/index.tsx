@@ -8,7 +8,6 @@ import {
   logout,
 } from '../../store/reducers/user';
 import './styles.scss';
-import { getUserDataFromLocalStorage } from '../../utils/user';
 
 function Login() {
   const dispatch = useAppDispatch();
