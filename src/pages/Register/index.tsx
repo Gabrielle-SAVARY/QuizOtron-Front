@@ -14,8 +14,8 @@ function Register() {
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const pseudo = useAppSelector((state) => state.user.pseudo);
-  const firstName = useAppSelector((state) => state.user.firstName);
-  const lastName = useAppSelector((state) => state.user.lastName);
+  const firstname = useAppSelector((state) => state.user.credentials.firstname);
+  const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const logged = useAppSelector((state) => state.user.logged);
 
   // Met à jour le state avec la valur des inputs du formulaire
@@ -49,89 +49,89 @@ function Register() {
   };
 
   return (
-    {/* <div className="login-page">
+    <div className="login-page">
       {logged && (
-        <div className="login-page__logged">
-          <p>Vous êtes connecté.</p>
-          <NavLink to="/connexion">
-            <button type="button" className="login-page__button" onClick={handleLogout}>
-              Déconnexion
-            </button>
-          </NavLink>
-        </div>
+      <div className="login-page__logged">
+        <p>Vous êtes connecté.</p>
+        <NavLink to="/connexion">
+          <button type="button" className="login-page__button" onClick={handleLogout}>
+            Déconnexion
+          </button>
+        </NavLink>
+      </div>
       )}
       {!logged && (
-        <div className="login-page__wrapper">
-          <form
-            action="submit"
-            className="form form-login"
-            onSubmit={handleSubmit}
-          >
-            <div className="form__logo">Quiz&apos;O&apos;tron</div>
+      <div className="login-page__wrapper">
+        <form
+          action="submit"
+          className="form form-login"
+          onSubmit={handleSubmit}
+        >
+          <div className="form__logo">Quiz&apos;O&apos;tron</div>
 
-            <input
-              type="text"
-              placeholder="Prénom"
-              className="form__input"
-              value={firstName}
-              onChange={handleChangeField}
-              name="firstName"
-            />
-            <input
-              type="text"
-              placeholder="Nom"
-              className="form__input"
-              value={lastName}
-              onChange={handleChangeField}
-              name="lastName"
-            />
-            <input
-              type="text"
-              placeholder="Pseudo"
-              className="form__input"
-              value={pseudo}
-              onChange={handleChangeField}
-              name="pseudo"
-            />
-            <input
-              type="text"
-              placeholder="Email"
-              className="form__input"
-              value={email}
-              onChange={handleChangeField}
-              name="email"
-            />
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              className="form__input"
-              value={password}
-              onChange={handleChangeField}
-              name="password"
-            />
-            <input
-              type="password"
-              placeholder="Confirmation mot de passe"
-              className="form__input"
-              value={password}
-              onChange={handleChangeField}
-              name="confirm password"
-            />
+          <input
+            type="text"
+            placeholder="Prénom"
+            className="form__input"
+            value={firstname}
+            onChange={handleChangeField}
+            name="firstName"
+          />
+          <input
+            type="text"
+            placeholder="Nom"
+            className="form__input"
+            value={lastname}
+            onChange={handleChangeField}
+            name="lastName"
+          />
+          <input
+            type="text"
+            placeholder="Pseudo"
+            className="form__input"
+            value={pseudo}
+            onChange={handleChangeField}
+            name="pseudo"
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            className="form__input"
+            value={email}
+            onChange={handleChangeField}
+            name="email"
+          />
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            className="form__input"
+            value={password}
+            onChange={handleChangeField}
+            name="password"
+          />
+          <input
+            type="password"
+            placeholder="Confirmation mot de passe"
+            className="form__input"
+            value={password}
+            onChange={handleChangeField}
+            name="confirm password"
+          />
 
-            <button type="submit" className="form__button">
-              Inscription
-            </button>
+          <button type="submit" className="form__button">
+            Inscription
+          </button>
 
-            <p className="form__message">
-              Déjà un compte?
-              <NavLink to="/connexion" className="form__inscription">
-                Connexion
-              </NavLink>
-            </p>
-          </form>
-        </div>
+          <p className="form__message">
+            Déjà un compte?
+            <NavLink to="/connexion" className="form__inscription">
+              Connexion
+            </NavLink>
+          </p>
+        </form>
+      </div>
       )}
-    </div> */}
+    </div>
   );
 }
 

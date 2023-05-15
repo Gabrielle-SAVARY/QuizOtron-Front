@@ -8,6 +8,7 @@ import {
   logout,
 } from '../../store/reducers/user';
 import './styles.scss';
+import { getUserDataFromLocalStorage } from '../../utils/user';
 
 function Login() {
   const dispatch = useAppDispatch();
@@ -49,7 +50,9 @@ function Login() {
     <div className="login-page">
       {logged && (
         <div className="login-page__logged">
-          <p>Vous êtes connecté.</p>
+          <p>
+            Vous êtes connecté
+          </p>
           <NavLink to="/connexion">
             <button type="button" className="login-page__button" onClick={handleLogout}>
               Déconnexion

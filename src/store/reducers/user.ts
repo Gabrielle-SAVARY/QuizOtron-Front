@@ -7,12 +7,14 @@ import { getUserDataFromLocalStorage, removeUserDataFromLocalStorage } from '../
 interface UserState {
   logged: boolean;
   token: string;
-  firstName: string
-  lastName: string
-  pseudo: string;
+
   credentials: {
+    firstname: string
+    lastname: string
+    pseudo: string;
     email: string;
     password: string;
+    passwordConfirm: string;
   }
 }
 // récupération des données du user dans le localStorage
@@ -21,12 +23,13 @@ const userData = getUserDataFromLocalStorage();
 export const initialState: UserState = {
   logged: false,
   token: '',
-  firstName: '',
-  lastName: '',
-  pseudo: '',
   credentials: {
+    firstname: '',
+    lastname: '',
+    pseudo: '',
     email: 'elon@gmail.com',
     password: 'test',
+    passwordConfirm: 'test',
   },
   ...userData,
 };
@@ -42,18 +45,10 @@ export const register = createAppAsyncThunk(
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
-    // Stockage des data de  user (en chaine de caractères) dans le localStorage
+    // Stockage des data de user (en chaine de caractères) dans le localStorage
     localStorage.setItem('user', JSON.stringify(data));
 
-    return data as {
-      firstName: string
-      lastName: string
-      pseudo: string;
-      credentials: {
-        email: string;
-        password: string;
-      }
-    };
+    return data as ILogin;
   },
 );
 
@@ -63,6 +58,7 @@ export const login = createAppAsyncThunk(
     // on récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
 
+    /*     const { email, password } = state.user.credentials; */
     // Appel API
     const { data } = await axiosInstance.post('/login', state.user.credentials);
     // on passe en paramètre de la requête les credentials du store
@@ -81,8 +77,6 @@ export const login = createAppAsyncThunk(
 // MONINTERFACE['propriété'] récupère le type d'une propriété
 export type KeysOfCredentials = keyof UserState['credentials'];
 
-export const logout = createAction('user/LOGOUT');
-
 // Action: changer le champ de l'input d'un formulaire
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
@@ -90,16 +84,19 @@ export const changeCredentialsField = createAction<{
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
 
+export const logout = createAction('user/LOGOUT');
+
 const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCredentialsField, (state, action) => {
-      state.credentials[action.payload.propertyKey] = action.payload.value;
+      const { propertyKey, value } = action.payload;
+      state.credentials[propertyKey] = value;
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
       state.logged = action.payload.logged;
-      state.pseudo = action.payload.pseudo;
       state.token = action.payload.token;
+      // state.credentials.pseudo = action.payload.credentials.pseudo;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
@@ -107,7 +104,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(logout, (state) => {
       state.logged = false;
-      state.pseudo = '';
+      state.credentials.pseudo = '';
       state.token = '';
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
@@ -116,16 +113,16 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(register.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
 
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
+      state.credentials.firstname = action.payload.credentials.firstname;
+      state.credentials.lastname = action.payload.credentials.lastname;
       state.credentials.email = action.payload.credentials.email;
       state.credentials.password = action.payload.credentials.password;
-      state.pseudo = action.payload.pseudo;
+      state.credentials.pseudo = action.payload.credentials.pseudo;
 
       // Je réinitialise les credentials
-      state.firstName = '';
-      state.lastName = '';
-      state.pseudo = '';
+      state.credentials.firstname = '';
+      state.credentials.lastname = '';
+      state.credentials.pseudo = '';
       state.credentials.email = '';
       state.credentials.password = '';
     });

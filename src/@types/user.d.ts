@@ -1,13 +1,16 @@
 export interface ILogin {
   logged: boolean
-  firstName: string
-  lastName: string
-  pseudo: string;
+  token: string
+
   credentials: {
+    firstname: string
+    lastname: string
+    pseudo: string;
     email: string;
     password: string;
+    passwordConfirm: string;
   },
-  token: string
+
 }
 
 // typage data retournée par requête axios: login
