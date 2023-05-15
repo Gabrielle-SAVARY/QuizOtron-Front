@@ -1,8 +1,8 @@
-import { ILogin } from '../@types/user';
+import { IAuthentification } from '../@types/user';
 
 export const getUserDataFromLocalStorage = () => {
   const userDataString = localStorage.getItem('user');
-  const userData = userDataString ? JSON.parse(userDataString) as ILogin : null;
+  const userData = userDataString ? JSON.parse(userDataString) as IAuthentification : null;
   return userData;
 };
 

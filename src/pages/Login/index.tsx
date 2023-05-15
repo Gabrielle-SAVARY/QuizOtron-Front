@@ -14,6 +14,7 @@ function Login() {
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const logged = useAppSelector((state) => state.user.logged);
+  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -49,7 +50,9 @@ function Login() {
     <div className="login-page">
       {logged && (
         <div className="login-page__logged">
-          <p>Vous êtes connecté.</p>
+          <p>
+            {`Vous êtes connecté ${pseudo}`}
+          </p>
           <NavLink to="/connexion">
             <button type="button" className="login-page__button" onClick={handleLogout}>
               Déconnexion
