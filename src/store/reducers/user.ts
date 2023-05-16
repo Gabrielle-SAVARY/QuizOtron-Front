@@ -76,9 +76,9 @@ export const update = createAppAsyncThunk(
   async (_, thunkAPI) => {
     // on récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-
+    const { email, pseudo } = state.user.credentials;
     // Appel API
-    const { data } = await axiosInstance.patch('/profile/settings/update', state.user.credentials);
+    const { data } = await axiosInstance.patch('/profile/settings/update', { email, pseudo });
     // on passe en paramètre de la requête les credentials du store
     console.log('data', data);
 
@@ -183,7 +183,6 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(update.fulfilled, (state, action) => {
       state.credentials.email = action.payload.email;
       state.credentials.pseudo = action.payload.pseudo;
-      state.credentials.password = action.payload.password;
     });
 });
 

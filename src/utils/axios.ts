@@ -15,12 +15,10 @@ export const axiosInstance = axios.create({
 
 // ajout du token dans le header (champs Authorization) de chaque requête
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  console.log('axios userInfo TOKEN', token);
-  /*   if (token) {
-    // eslint-disable-next-line no-param-reassign
-    config.headers.Authorization = `Bearer ${token}`;
-  } */
+  const tokenStorage = localStorage.getItem('token');
+  const token = JSON.parse(tokenStorage);
+  console.log('axios tokenStorage', tokenStorage);
+  console.log('axios TOKEN', token);
 
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = token ? `Bearer ${token}` : null;

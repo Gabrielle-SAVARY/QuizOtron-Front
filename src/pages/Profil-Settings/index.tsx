@@ -72,7 +72,7 @@ function ProfilSettings() {
           Modifier mon profil
         </button>
       </form>
-      <form
+      {/* <form
         action="submit"
         className="form"
         onSubmit={handleSubmit}
@@ -108,7 +108,7 @@ function ProfilSettings() {
         <button type="submit" className="profil__update-user">
           Modifier mon mot de passe
         </button>
-      </form>
+      </form> */}
     </div>
   );
 }
