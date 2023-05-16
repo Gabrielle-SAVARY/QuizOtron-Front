@@ -115,6 +115,8 @@ const userReducer = createReducer(initialState, (builder) => {
       state.logged = action.payload.logged;
       state.token = action.payload.token;
       state.credentials.pseudo = action.payload.pseudo;
+      state.credentials.firstname = action.payload.firstname;
+      state.credentials.lastname = action.payload.lastname;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
@@ -158,7 +160,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.token = '';
       state.credentials.pseudo = '';
 
-      /*       removeUserDataFromLocalStorage(); */
+      removeUserDataFromLocalStorage();
     });
 });
 
