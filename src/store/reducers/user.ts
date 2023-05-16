@@ -19,7 +19,7 @@ interface UserState {
   }
 }
 // récupération des données du user dans le localStorage
-const userData = getUserDataFromLocalStorage();
+/* const userData = getUserDataFromLocalStorage(); */
 
 export const initialState: UserState = {
   logged: false,
@@ -33,21 +33,22 @@ export const initialState: UserState = {
     password: 'test',
     passwordConfirm: 'test',
   },
-  ...userData,
+/*   ...userData, */
 };
 
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async (_, thunkAPI) => {
     // on récupère l'intégralité du state depuis le store
-    /*     const state = thunkAPI.getState();
-    const { pseudo } = state.user.credentials; */
+    const state = thunkAPI.getState();
+    const { pseudo } = state.user.credentials;
+    console.log('pseudo', pseudo);
 
     // Appel API
-    const { data } = await axiosInstance.delete('/profile/settings/delete');
+    const { data } = await axiosInstance.delete('/profile/settings/delete', pseudo);
 
     // on passe en paramètre de la requête les credentials du store
-    console.log('data', data);
+    console.log('user', data);
 
     localStorage.removeItem('user');
 
@@ -70,11 +71,27 @@ export const register = createAppAsyncThunk(
   },
 );
 
+export const update = createAppAsyncThunk(
+  'user/UPDATE',
+  async (_, thunkAPI) => {
+    // on récupère l'intégralité du state depuis le store
+    const state = thunkAPI.getState();
+
+    // Appel API
+    const { data } = await axiosInstance.patch('/profile/settings/update', state.user.credentials);
+    // on passe en paramètre de la requête les credentials du store
+    console.log('data', data);
+
+    return data as IAuthentification;
+  },
+);
+
 export const login = createAppAsyncThunk(
   'user/LOGIN',
   async (_, thunkAPI) => {
     // on récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
+    console.log('state', state);
 
     const { email, password } = state.user.credentials;
     // Appel API
@@ -83,7 +100,7 @@ export const login = createAppAsyncThunk(
     console.log('data LOGIN', data);
 
     // Stockage des data de  user (en chaine de caractères) dans le localStorage
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('token', JSON.stringify(data.token));
 
     return data as IAuthentification;
   },
@@ -119,7 +136,6 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = action.payload.lastname;
 
       // Je réinitialise les credentials
-      state.credentials.email = '';
       state.credentials.password = '';
     })
     .addCase(logout, (state) => {
@@ -142,11 +158,11 @@ const userReducer = createReducer(initialState, (builder) => {
       state.registered = action.payload.registered;
 
       // Je réinitialise les credentials
-      state.credentials.firstname = '';
+      /*       state.credentials.firstname = '';
       state.credentials.lastname = '';
       state.credentials.pseudo = '';
       state.credentials.email = '';
-      state.credentials.password = '';
+      state.credentials.password = ''; */
     })
     .addCase(register.pending, (state) => {
       state.registered = false;
@@ -155,12 +171,19 @@ const userReducer = createReducer(initialState, (builder) => {
       state.registered = false;
     })
     .addCase(deleteUser.fulfilled, (state) => {
-      console.log('req.userData', userData);
+      /*      console.log('req.userData', userData); */
       state.logged = false;
       state.token = '';
+      state.credentials.firstname = '';
+      state.credentials.lastname = '';
+      state.credentials.email = '';
       state.credentials.pseudo = '';
-
       removeUserDataFromLocalStorage();
+    })
+    .addCase(update.fulfilled, (state, action) => {
+      state.credentials.email = action.payload.email;
+      state.credentials.pseudo = action.payload.pseudo;
+      state.credentials.password = action.payload.password;
     });
 });
 

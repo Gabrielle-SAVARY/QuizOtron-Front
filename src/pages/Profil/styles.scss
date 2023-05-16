@@ -7,6 +7,18 @@
   align-items: center;
   flex-direction: column;
 
+  &__update {
+    font-family: 'Poppins', sans-serif;
+    outline: none;	
+    border: none;
+    border-radius: 8px;
+    background-color: vars.$main-primary-color;
+    color: #fff;
+    padding: 0.7rem;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+
   &__delete {
     font-family: 'Poppins', sans-serif;
     outline: none;	
