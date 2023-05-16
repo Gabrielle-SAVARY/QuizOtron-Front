@@ -5,12 +5,12 @@ import Quiz from '../../pages/Quiz';
 import Login from '../../pages/Login';
 import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
+import ProtectedRoute from '../ProtectedRoute';
 
 import './styles.scss';
 
 function App() {
   return (
-
     <Layout>
       <Routes>
         <Route
@@ -31,9 +31,12 @@ function App() {
         />
         <Route
           path="/profile"
-          element={<Profil />}
+          element={(
+            <ProtectedRoute>
+              <Profil />
+            </ProtectedRoute>
+          )}
         />
-
       </Routes>
     </Layout>
 
