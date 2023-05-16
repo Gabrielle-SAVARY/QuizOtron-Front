@@ -36,6 +36,25 @@ export const initialState: UserState = {
   ...userData,
 };
 
+export const deleteUser = createAppAsyncThunk(
+  'user/DELETE',
+  async (_, thunkAPI) => {
+    // on récupère l'intégralité du state depuis le store
+    /*     const state = thunkAPI.getState();
+    const { pseudo } = state.user.credentials; */
+
+    // Appel API
+    const { data } = await axiosInstance.delete('/profile/settings/delete');
+
+    // on passe en paramètre de la requête les credentials du store
+    console.log('data', data);
+
+    localStorage.removeItem('user');
+
+    return data as IAuthentification;
+  },
+);
+
 export const register = createAppAsyncThunk(
   'user/REGISTER',
   async (_, thunkAPI) => {
@@ -57,11 +76,11 @@ export const login = createAppAsyncThunk(
     // on récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
 
-    /*     const { email, password } = state.user.credentials; */
+    const { email, password } = state.user.credentials;
     // Appel API
-    const { data } = await axiosInstance.post('/login', state.user.credentials);
+    const { data } = await axiosInstance.post('/login', { email, password });
     // on passe en paramètre de la requête les credentials du store
-    console.log('data', data);
+    console.log('data LOGIN', data);
 
     // Stockage des data de  user (en chaine de caractères) dans le localStorage
     localStorage.setItem('user', JSON.stringify(data));
@@ -96,6 +115,8 @@ const userReducer = createReducer(initialState, (builder) => {
       state.logged = action.payload.logged;
       state.token = action.payload.token;
       state.credentials.pseudo = action.payload.pseudo;
+      state.credentials.firstname = action.payload.firstname;
+      state.credentials.lastname = action.payload.lastname;
 
       // Je réinitialise les credentials
       state.credentials.email = '';
@@ -132,6 +153,14 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(register.rejected, (state) => {
       state.registered = false;
+    })
+    .addCase(deleteUser.fulfilled, (state) => {
+      console.log('req.userData', userData);
+      state.logged = false;
+      state.token = '';
+      state.credentials.pseudo = '';
+
+      removeUserDataFromLocalStorage();
     });
 });
 
