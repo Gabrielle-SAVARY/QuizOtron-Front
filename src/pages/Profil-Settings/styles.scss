@@ -1,0 +1,50 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+
+.profil-settings__update {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form {
+  max-width: 22.5rem;
+  margin: 0 auto 4rem;
+  text-align: center;
+
+  &__input {
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    font-size: 0.9rem;
+    border-radius: 0.7rem;
+  }
+}
+
+.profil__update-user {
+  outline: 0;
+  border: 0;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background: vars.$main-primary-color;
+  border-radius: 0.5rem;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.form__password {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  font-size: 0.9rem;
+  border-radius: 0.7rem;
+}

@@ -1,29 +1,36 @@
-import { ChangeEvent, FormEvent } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import './styles.scss';
-import { deleteUser } from '../../store/reducers/user';
-import { getUserDataFromLocalStorage } from '../../utils/user';
+import { deleteUser, logout } from '../../store/reducers/user';
 
 function Profil() {
   const dispatch = useAppDispatch();
-  /*   const dataStorage = getUserDataFromLocalStorage(); */
-  /*   console.log('dataStorage', dataStorage); */
-  /*   const pseudo = dataStorage?.pseudo; */
-  /*   console.log('pseudo', pseudo); */
-  /*   const pseudo = useAppSelector((state) => state.user.credentials.pseudo); */
+  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
   const handleDeleteUser = () => {
     dispatch(deleteUser());
   };
-  /*   ${pseudo} */
+
+  // Déconnexion utilisateur
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <div className="profil">
       <p>
-        {'Bienvenue sur ton profile '}
+        {`Bienvenue sur ton profile  ${pseudo}`}
       </p>
-      <button type="submit" className="profil__update">
-        Modifier mon compte
-      </button>
+      <NavLink to="/profile/parametres">
+        <button type="submit" className="profil__update">
+          Modifier mon compte
+        </button>
+      </NavLink>
+      <NavLink to="/connexion">
+        <button type="button" className="login-page__button" onClick={handleLogout}>
+          Déconnexion
+        </button>
+      </NavLink>
       <button type="submit" className="profil__delete" onClick={handleDeleteUser}>
         Supprimer mon compte
       </button>

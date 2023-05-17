@@ -6,6 +6,7 @@ import Login from '../../pages/Login';
 import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
 import ProtectedRoute from '../ProtectedRoute';
+import ProfilSettings from '../../pages/Profil-Settings';
 
 import './styles.scss';
 
@@ -28,6 +29,14 @@ function App() {
         <Route
           path="/inscription"
           element={<Register />}
+        />
+        <Route
+          path="/profile/parametres"
+          element={(
+            <ProtectedRoute>
+              <ProfilSettings />
+            </ProtectedRoute>
+          )}
         />
         <Route
           path="/profile"
