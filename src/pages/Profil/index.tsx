@@ -7,20 +7,16 @@ import { getUserDataFromLocalStorage } from '../../utils/user';
 
 function Profil() {
   const dispatch = useAppDispatch();
-  /*   const dataStorage = getUserDataFromLocalStorage(); */
-  /*   console.log('dataStorage', dataStorage); */
-  /*   const pseudo = dataStorage?.pseudo; */
-  /*   console.log('pseudo', pseudo); */
-  // const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
+  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
   const handleDeleteUser = () => {
     dispatch(deleteUser());
   };
-  /*   ${pseudo} */
+
   return (
     <div className="profil">
       <p>
-        {'Bienvenue sur ton profile '}
+        {`Bienvenue sur ton profile  ${pseudo}`}
       </p>
       <NavLink to="/profile/parametres">
         <button type="submit" className="profil__update">

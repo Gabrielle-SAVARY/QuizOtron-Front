@@ -8,6 +8,8 @@ export interface IAuthentification {
   email: string;
   password: string;
   passwordConfirm: string;
+  oldPassword: string;
+  newPassword: string;
 
 }
 

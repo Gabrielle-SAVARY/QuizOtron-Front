@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
   changeCredentialsField,
+  changePasswordField,
   update,
 } from '../../store/reducers/user';
 import './styles.scss';
@@ -16,6 +17,8 @@ function ProfilSettings() {
 
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.user.credentials.email);
+  const oldPassword = useAppSelector((state) => state.user.oldPassword);
+  const newPassword = useAppSelector((state) => state.user.newPassword);
   const password = useAppSelector((state) => state.user.credentials.password);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
@@ -33,6 +36,19 @@ function ProfilSettings() {
     );
   };
 
+  const handleChangePasswordField = (event: ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    // récupère name de l'input et le type la donnée
+    const fieldName = event.target.name as 'oldPassword' | 'newPassword';
+
+    dispatch(
+      changePasswordField({
+        propertyName: fieldName,
+        value: newValue,
+      }),
+    );
+  };
+
   // Appel API pour demande de connexion utilisateur
   const handleUpdate = () => {
     dispatch(update());
@@ -40,6 +56,10 @@ function ProfilSettings() {
 
   // Soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleUpdate();
+  };
+  const handleSubmitPassword = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleUpdate();
   };
@@ -72,10 +92,10 @@ function ProfilSettings() {
           Modifier mon profil
         </button>
       </form>
-      {/* <form
+      <form
         action="submit"
         className="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitPassword}
       >
         <button type="button" className="profil__update-user" onClick={toggleVisibility}>
           Changer de mot de passe
@@ -86,21 +106,17 @@ function ProfilSettings() {
             type="password"
             placeholder="Ancien mot de passe"
             className="form__password"
-            value={password}
-            onChange={handleChangeField}
-            name="password"
+            value={oldPassword}
+            onChange={handleChangePasswordField}
+            name="oldPassword"
           />
           <input
             type="password"
             placeholder="Nouveau mot de passe"
             className="form__password"
-            name="password"
-          />
-          <input
-            type="password"
-            placeholder="Confirmation nouveau mot de passe"
-            className="form__password"
-            name="passwordConfirm"
+            value={newPassword}
+            onChange={handleChangePasswordField}
+            name="newPassword"
           />
         </div>
         )}
@@ -108,7 +124,7 @@ function ProfilSettings() {
         <button type="submit" className="profil__update-user">
           Modifier mon mot de passe
         </button>
-      </form> */}
+      </form>
     </div>
   );
 }

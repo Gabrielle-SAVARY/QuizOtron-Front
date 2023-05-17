@@ -8,6 +8,8 @@ interface UserState {
   logged: boolean;
   token: string;
   registered: boolean
+  oldPassword: string,
+  newPassword: string,
 
   credentials: {
     firstname: string
@@ -25,6 +27,8 @@ export const initialState: UserState = {
   logged: false,
   token: '',
   registered: false,
+  oldPassword: '',
+  newPassword: '',
   credentials: {
     firstname: 'Elon',
     lastname: 'Musk',
@@ -32,6 +36,7 @@ export const initialState: UserState = {
     email: 'elon@gmail.com',
     password: 'test',
     passwordConfirm: 'test',
+
   },
 /*   ...userData, */
 };
@@ -76,11 +81,13 @@ export const update = createAppAsyncThunk(
   async (_, thunkAPI) => {
     // on récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-    const { email, pseudo } = state.user.credentials;
+    const { email, pseudo, password } = state.user.credentials;
+    const { oldPassword, newPassword } = state.user;
     // Appel API
-    const { data } = await axiosInstance.patch('/profile/settings/update', { email, pseudo });
+    const { data } = await axiosInstance.patch('/profile/settings/update', {
+      email, pseudo, password, oldPassword, newPassword,
+    });
     // on passe en paramètre de la requête les credentials du store
-    console.log('data', data);
 
     return data as IAuthentification;
   },
@@ -119,6 +126,11 @@ export const changeCredentialsField = createAction<{
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
 
+export const changePasswordField = createAction<{
+  propertyName: 'oldPassword' | 'newPassword'
+  value: string
+}>('user/CHANGE_PASSWORD_FIELD');
+
 export const logout = createAction('user/LOGOUT');
 
 const userReducer = createReducer(initialState, (builder) => {
@@ -126,6 +138,10 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(changeCredentialsField, (state, action) => {
       const { propertyKey, value } = action.payload;
       state.credentials[propertyKey] = value;
+    })
+    .addCase(changePasswordField, (state, action) => {
+      const { propertyName, value } = action.payload;
+      state[propertyName] = value;
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
@@ -144,17 +160,9 @@ const userReducer = createReducer(initialState, (builder) => {
       state.token = '';
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
-      removeUserDataFromLocalStorage();
+      localStorage.removeItem('token');
     })
     .addCase(register.fulfilled, (state, action) => {
-      // J'enregistre les informations retournées par mon API
-      state.credentials.firstname = action.payload.firstname;
-      state.credentials.lastname = action.payload.lastname;
-      state.credentials.email = action.payload.email;
-      state.credentials.password = action.payload.password;
-      state.credentials.passwordConfirm = action.payload.passwordConfirm;
-      state.credentials.pseudo = action.payload.pseudo;
-
       state.registered = action.payload.registered;
 
       // Je réinitialise les credentials
@@ -178,11 +186,11 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = '';
       state.credentials.email = '';
       state.credentials.pseudo = '';
-      removeUserDataFromLocalStorage();
+      localStorage.removeItem('token');
     })
-    .addCase(update.fulfilled, (state, action) => {
-      state.credentials.email = action.payload.email;
-      state.credentials.pseudo = action.payload.pseudo;
+    .addCase(update.fulfilled, (state) => {
+      state.oldPassword = state.credentials.password;
+      state.newPassword = '';
     });
 });
 
