@@ -9,6 +9,8 @@ import ProtectedRoute from '../ProtectedRoute';
 import ProfilSettings from '../../pages/Profil-Settings';
 
 import './styles.scss';
+import ProfilQuiz from '../../pages/Profil-Quiz';
+import CreateQuiz from '../../pages/Create-Quiz';
 
 function App() {
   return (
@@ -35,6 +37,22 @@ function App() {
           element={(
             <ProtectedRoute>
               <ProfilSettings />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/quiz"
+          element={(
+            <ProtectedRoute>
+              <ProfilQuiz />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/quiz/creer-quiz"
+          element={(
+            <ProtectedRoute>
+              <CreateQuiz />
             </ProtectedRoute>
           )}
         />

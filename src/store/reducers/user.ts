@@ -41,7 +41,6 @@ export const initialState: UserState = {
 // MONINTERFACE['propriété'] récupère le type d'une propriété
 export type KeysOfCredentials = keyof UserState['credentials'];
 
-
 // ACTION: met à jour la  valeur des champs des inputs de formulaire
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
@@ -57,10 +56,14 @@ export const register = createAppAsyncThunk(
     const state = thunkAPI.getState();
 
     // récupère les states qui correspondent aux inputs du formulaire register
-    const { email, pseudo, firstname, lastname, password, passwordConfirm } = state.user.credentials;
+    const {
+      email, pseudo, firstname, lastname, password, passwordConfirm,
+    } = state.user.credentials;
 
     // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.post('/signup', { email, pseudo, firstname, lastname, password, passwordConfirm });
+    const { data } = await axiosInstance.post('/signup', {
+      email, pseudo, firstname, lastname, password, passwordConfirm,
+    });
 
     return data as IAuthentification;
   },
@@ -136,7 +139,6 @@ export const deleteUser = createAppAsyncThunk(
   },
 );
 
-
 const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCredentialsField, (state, action) => {
@@ -190,7 +192,6 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.email = '';
       state.credentials.pseudo = '';
     });
-
 });
 
 export default userReducer;

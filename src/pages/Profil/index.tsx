@@ -26,6 +26,11 @@ function Profil() {
           Modifier mon compte
         </button>
       </NavLink>
+      <NavLink to="/profile/quiz">
+        <button type="submit" className="profil__quiz">
+          Gérer mes quiz
+        </button>
+      </NavLink>
       <NavLink to="/connexion">
         <button type="button" className="login-page__button" onClick={handleLogout}>
           Déconnexion
