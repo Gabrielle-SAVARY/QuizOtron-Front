@@ -1,17 +1,33 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { ICreateQuiz, KeysOfICreateQuiz } from '../../@types/quiz';
+import { ITag } from '../../@types/tag';
 
 import './styles.scss';
+import { axiosInstance } from '../../utils/axios';
 
 interface CreateQuizProps {
   quizTitle: string;
   quizDescription: string;
+  quizQuestion: string;
+  question1Answer1: string;
+  question1Answer2: string;
+  question1Answer3: string;
+  question1Answer4: string;
+  question1Answer: string;
 }
 
 function CreateQuiz() {
+  const [tag, setTag] = useState<[]>();
+
   const [quiz, setQuiz] = useState<CreateQuizProps>({
     quizTitle: '',
     quizDescription: '',
+    quizQuestion: '',
+    question1Answer1: '',
+    question1Answer2: '',
+    question1Answer3: '',
+    question1Answer4: '',
+    question1Answer: '',
   });
 
   // Met à jour le state avec la valur des inputs du formulaire
@@ -23,6 +39,21 @@ function CreateQuiz() {
     console.log('newValue', newValue);
     setQuiz((prevQuiz) => ({ ...prevQuiz, [fieldName]: newValue }));
   };
+
+  // récupère la liste des catégories de quiz
+  const getTags = async () => {
+    try {
+      const response = await axiosInstance.get('/tag');
+      console.log('response', response);
+      if (response.status !== 200) {
+        throw new Error();
+      }
+      setTag(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <form action="submit">
       <div className="quiz__creation">
@@ -63,18 +94,25 @@ function CreateQuiz() {
           {/* question 1 */}
           <div className="question1_container">
             <p className="question__number">Question n°1</p>
-            <p className="question__title">Intitulé de la question</p>
+            <input
+              type="text"
+              placeholder="Question"
+              className="question__title"
+              name="quizQuestion"
+              value={quiz.quizQuestion}
+              onChange={handleChangeField}
+            />
             <fieldset>
               <div className="question-choice">
                 {/* réponse 1 */}
                 <div className="answer_container">
                   <span className="answer_radio-button">
-                    <input type="radio" id="question1-radio1" name="question1-radio" />
+                    <input type="radio" id="question1-radio1" name="question1-radio" value={quiz.question1Answer} onChange={handleChangeField} />
                     <label htmlFor="question1-radio1" />
                   </span>
                   <span className="answer_input-text">
                     <label htmlFor="question1-answer1" />
-                    <input type="text" id="question1-answer1" />
+                    <input type="text" id="question1-answer1" name="question1Answer1" value={quiz.question1Answer1} onChange={handleChangeField} />
                   </span>
                 </div>
                 {/* réponse 2 */}
@@ -85,7 +123,7 @@ function CreateQuiz() {
                   </span>
                   <span className="answer_input-text">
                     <label htmlFor="question1-answer2" />
-                    <input type="text" id="question1-answer2" />
+                    <input type="text" id="question1-answer2" name="question1Answer2" value={quiz.question1Answer2} onChange={handleChangeField} />
                   </span>
                 </div>
                 {/* réponse 3 */}
@@ -96,7 +134,7 @@ function CreateQuiz() {
                   </span>
                   <span className="answer_input-text">
                     <label htmlFor="question1-answer3" />
-                    <input type="text" id="question1-answer3" />
+                    <input type="text" id="question1-answer3" name="question1Answer3" value={quiz.question1Answer3} onChange={handleChangeField} />
                   </span>
                 </div>
                 {/* réponse 4 */}
@@ -107,7 +145,7 @@ function CreateQuiz() {
                   </span>
                   <span className="answer_input-text">
                     <label htmlFor="question1-answer4" />
-                    <input type="text" id="question1-answer4" />
+                    <input type="text" id="question1-answer4" name="question1Answer4" value={quiz.question1Answer4} onChange={handleChangeField} />
                   </span>
                 </div>
               </div>
