@@ -1,0 +1,16 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 3.5rem;
+
+  &__title {
+    font-size: 2rem;
+    padding-bottom: 5rem;
+  }
+}
