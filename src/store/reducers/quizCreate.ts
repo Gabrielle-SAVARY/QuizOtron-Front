@@ -5,6 +5,7 @@ import {
   IAllQuiz, Tag, Level, Author,
 } from '../../@types/quiz';
 import { axiosInstance } from '../../utils/axios';
+import { KeysOfInput } from '../../@types/inputCreateQuiz';
 
 interface QuizCreateState {
   quiz: {
@@ -16,6 +17,26 @@ interface QuizCreateState {
     tag_id: number
   }
   questions: Question[]
+
+  // autre states
+  question1: {
+    question:string
+    answers: [
+      {
+        answer: string
+        is_valid: boolean
+      },
+    ]
+  }
+  question2: {
+    question:string
+    answers: [
+      {
+        answer: string
+        is_valid: boolean
+      },
+    ]
+  }
   allTags: Tag[],
   selectedTagName: string
   allLevels: Level[],
@@ -32,10 +53,31 @@ export const initialState: QuizCreateState = {
     tag_id: 0,
   },
   questions: [],
+
+  //
+  question1: {
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  },
+  question2: {
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  },
   allTags: [],
   selectedTagName: '',
   allLevels: [],
   selectedLevelName: '',
+
 };
 // ---- TAG/CATEGOERIE DU QUIZ ----
 // Appel API: récupère la liste des catégories/tags
@@ -76,6 +118,13 @@ export const changeQuizFieldTitle = createAction<string>('quizCreate/CHANGE_QUIZ
 export const changeQuizFieldThumbnail = createAction<string>('quizCreate/CHANGE_QUIZ_FIELD_THUMBNAIL');
 export const changeQuizFieldDescription = createAction<string>('quizCreate/CHANGE_QUIZ_FIELD_DESCRIPTION');
 
+// Question 1
+// Action: récupère la catégorie sélectionné par le menu déroulant
+export const setQuestion1 = createAction<{
+  fieldName: KeysOfInput
+  value: string
+}>('quizCreate/SET_QUESTION1');
+
 const quizCreateReducer = createReducer(initialState, (builder) => {
   builder
     // CATEGORIE
@@ -107,7 +156,11 @@ const quizCreateReducer = createReducer(initialState, (builder) => {
     })
     .addCase(changeQuizFieldDescription, (state, action) => {
       state.quiz.description = action.payload;
-    });
+    })
+  /*     .addCase(setQuestion1, (state, action) => {
+      const { fieldName, value } = action.payload;
+      state[fieldName] = value;
+    }) */;
 });
 
 export default quizCreateReducer;

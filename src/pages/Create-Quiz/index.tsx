@@ -16,6 +16,7 @@ import {
   changeQuizFieldTitle,
   getLevels, getTags, setQuizLevel, setQuizLevelId, setQuizTag, setQuizTagId,
 } from '../../store/reducers/quizCreate';
+import CreateQuestion from './CreateQuestions';
 
 interface CreateQuizProps {
   quizQuestion: string;
@@ -109,6 +110,8 @@ function CreateQuiz() {
     dispatch(changeQuizFieldDescription(newValue));
   };
 
+  // question 1
+
   return (
     <form action="submit">
       <div className="quiz__creation">
@@ -155,9 +158,12 @@ function CreateQuiz() {
           <label htmlFor="description">Choisissez votre description de quiz</label>
           <textarea className="quiz__selector" name={description} id="" cols={30} rows={10} placeholder="Votre description de quiz..." onChange={handleChangeFieldDescription} />
         </div>
-        <div className="question__container">
+        <div className="questions__container">
 
-          {/* question 1 */}
+          <CreateQuestion questionNumber={1} />
+          <CreateQuestion questionNumber={2} />
+
+          {/*
           <div className="question1_container">
             <p className="question__number">Question n°1</p>
             <input
@@ -169,7 +175,7 @@ function CreateQuiz() {
             />
             <fieldset>
               <div className="question-choice">
-                {/* réponse 1 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio1" name="question1-radio" />
@@ -180,7 +186,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer1" name="question1Answer1" />
                   </span>
                 </div>
-                {/* réponse 2 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio2" name="question1-radio" />
@@ -191,7 +197,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer2" name="question1Answer2" />
                   </span>
                 </div>
-                {/* réponse 3 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio3" name="question1-radio" />
@@ -202,7 +208,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer3" name="question1Answer3" />
                   </span>
                 </div>
-                {/* réponse 4 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio4" name="question1-radio" />
@@ -217,13 +223,12 @@ function CreateQuiz() {
             </fieldset>
           </div>
 
-          {/* question 2 */}
           <div className="question1_container">
             <p className="question__number">Question n°2</p>
             <p className="question__title">Intitulé de la question</p>
             <fieldset>
               <div className="question-choice">
-                {/* réponse 1 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio1" name="question2-radio" />
@@ -234,7 +239,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer1" />
                   </span>
                 </div>
-                {/* réponse 2 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio2" name="question2-radio" />
@@ -245,7 +250,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer2" />
                   </span>
                 </div>
-                {/* réponse 3 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio3" name="question2-radio" />
@@ -256,7 +261,7 @@ function CreateQuiz() {
                     <input type="text" id="question1-answer3" />
                   </span>
                 </div>
-                {/* réponse 4 */}
+
                 <div className="answer_container">
                   <span className="answer_radio-button">
                     <input type="radio" id="question1-radio4" name="question2-radio" />
@@ -269,7 +274,7 @@ function CreateQuiz() {
                 </div>
               </div>
             </fieldset>
-          </div>
+          </div> */}
 
         </div>
 
