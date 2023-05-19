@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './reducers/user';
 import headerReducer from './reducers/header';
+import quizCreateReducer from './reducers/quizCreate';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     header: headerReducer,
+    quizCreate: quizCreateReducer,
   },
 });
 
