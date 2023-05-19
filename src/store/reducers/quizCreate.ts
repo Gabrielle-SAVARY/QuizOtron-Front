@@ -40,20 +40,36 @@ export const initialState: QuizCreateState = {
 // ---- TAG/CATEGOERIE DU QUIZ ----
 // Appel API: récupère la liste des catégories/tags
 export const getTags = createAppAsyncThunk(
-  'createQuiz/GET_ALL_TAGS',
+  'createQuiz/GET_TAGS',
   async () => {
     const { data } = await axiosInstance.get('/tag');
-    console.log('DATA TAGS', data);
-
+    console.log('GET TAGS', data);
     return data as Tag[];
   },
 );
 
 // Action: récupère la catégorie sélectionné par le menu déroulant
-export const setQuizTag = createAction<string>('createQuiz/SET_QUIZ_TAG');
+export const setQuizTag = createAction<string>('quizCreate/SET_QUIZ_TAG');
 
 // Action: récupère l'id de la catégorie sélectionné par le menu déroulant
-export const setQuizTagId = createAction<number>('createQuiz/SET_QUIZ_TAG_ID');
+export const setQuizTagId = createAction<number>('quizCreate/SET_QUIZ_TAG_ID');
+
+// ---- LEVEL/NIVEAU DE DIFFICULTE DU QUIZ ----
+// Appel API: récupère la liste des niveaux/levels
+export const getLevels = createAppAsyncThunk(
+  'quizCreate/GET_LEVELS',
+  async () => {
+    const { data } = await axiosInstance.get('/level');
+    console.log('GET LEVELS', data);
+    return data as Level[];
+  },
+);
+
+// Action: récupère le niveau sélectionné par le menu déroulant
+export const setQuizLevel = createAction<string>('quizCreate/SET_QUIZ_LEVEL');
+
+// Action: récupère l'id du niveau sélectionné par le menu déroulant
+export const setQuizLevelId = createAction<number>('quizCreate/SET_QUIZ_LEVEL_ID');
 
 const quizCreateReducer = createReducer(initialState, (builder) => {
   builder
@@ -66,6 +82,16 @@ const quizCreateReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setQuizTagId, (state, action) => {
       state.quiz.tag_id = action.payload;
+    })
+  // NIVEAU
+    .addCase(getLevels.fulfilled, (state, action) => {
+      state.allLevels = action.payload;
+    })
+    .addCase(setQuizLevel, (state, action) => {
+      state.selectedLevelName = action.payload;
+    })
+    .addCase(setQuizLevelId, (state, action) => {
+      state.quiz.level_id = action.payload;
     });
 });
 

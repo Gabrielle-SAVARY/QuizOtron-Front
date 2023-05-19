@@ -8,7 +8,9 @@ import './styles.scss';
 import { axiosInstance } from '../../utils/axios';
 import { ILevel } from '../../@types/level';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { getTags, setQuizTag, setQuizTagId } from '../../store/reducers/quizCreate';
+import {
+  getLevels, getTags, setQuizLevel, setQuizLevelId, setQuizTag, setQuizTagId,
+} from '../../store/reducers/quizCreate';
 
 interface CreateQuizProps {
   quizTitle: string;
@@ -57,6 +59,34 @@ function CreateQuiz() {
     dispatch(setQuizTag(newTag));
   };
 
+  // ---- LEVEL/NIVEAU DE DIFFICULTE DU QUIZ ----
+  const allLevels = useAppSelector((state) => state.quizCreate.allLevels);
+  console.log('allLevels', allLevels);
+  const selectedLevelName = useAppSelector((state) => state.quizCreate.selectedLevelName);
+
+  // récupère la liste des niveaux pour les afficher dans le menu déroulant
+  useEffect(() => {
+    dispatch(getLevels());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const findLevelId = () => {
+      const foundLevel = allLevels.find((level) => level.name === selectedLevelName);
+      if (foundLevel) {
+        console.log('foundLevel', foundLevel.id);
+        dispatch(setQuizLevelId(foundLevel.id));
+      }
+    };
+    findLevelId();
+  }, [allLevels, dispatch, selectedLevelName]);
+
+  // récupère le nom du niveau sélectionnée dans le menu déroulant
+  const handleChangeLevel = (event: ChangeEvent<HTMLSelectElement>) : void => {
+    const newLevel = event.target.value;
+    console.log('newLevel', newLevel);
+    dispatch(setQuizLevel(newLevel));
+  };
+
   return (
     <form action="submit">
       <div className="quiz__creation">
@@ -75,8 +105,13 @@ function CreateQuiz() {
             }
           </select>
           <label htmlFor="level-quiz">Choisissez une difficulté</label>
-          <select name="level" id="level-quiz" className="quiz__selector">
+          <select name="level" id="level-quiz" className="quiz__selector" onChange={handleChangeLevel}>
             <option value="">Merci de choisir une difficulté</option>
+            {
+                allLevels.map((level) => (
+                  <option key={level.name} value={level.name}>{level.name}</option>
+                ))
+            }
           </select>
           <label htmlFor="titre-quiz">Choisissez votre titre de quiz</label>
           <input
