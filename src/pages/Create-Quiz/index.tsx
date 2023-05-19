@@ -9,12 +9,15 @@ import { axiosInstance } from '../../utils/axios';
 import { ILevel } from '../../@types/level';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
+  FieldNameQuiz,
+  changeQuizField,
+  changeQuizFieldDescription,
+  changeQuizFieldThumbnail,
+  changeQuizFieldTitle,
   getLevels, getTags, setQuizLevel, setQuizLevelId, setQuizTag, setQuizTagId,
 } from '../../store/reducers/quizCreate';
 
 interface CreateQuizProps {
-  quizTitle: string;
-  quizDescription: string;
   quizQuestion: string;
   question1Answer1: string;
   question1Answer2: string;
@@ -87,6 +90,25 @@ function CreateQuiz() {
     dispatch(setQuizLevel(newLevel));
   };
 
+  // Titre, description et thumnail
+  const title = useAppSelector((state) => state.quizCreate.quiz.title);
+  const description = useAppSelector((state) => state.quizCreate.quiz.description);
+  const thumbnail = useAppSelector((state) => state.quizCreate.quiz.thumbnail);
+
+  // Met à jour le state quiz avec la valeur des inputs du formulaire
+  const handleChangeFieldTitle = (event: ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    dispatch(changeQuizFieldTitle(newValue));
+  };
+  const handleChangeFieldThumbnail = (event: ChangeEvent<HTMLInputElement>): void => {
+    const newValue = event.target.value;
+    dispatch(changeQuizFieldThumbnail(newValue));
+  };
+  const handleChangeFieldDescription = (event: ChangeEvent<HTMLTextAreaElement>): void => {
+    const newValue = event.target.value;
+    dispatch(changeQuizFieldDescription(newValue));
+  };
+
   return (
     <form action="submit">
       <div className="quiz__creation">
@@ -113,17 +135,25 @@ function CreateQuiz() {
                 ))
             }
           </select>
-          <label htmlFor="titre-quiz">Choisissez votre titre de quiz</label>
+          <label htmlFor="title">Choisissez votre titre de quiz</label>
           <input
             type="text"
             placeholder="Titre du quiz"
             className="quiz__selector"
-            name="quizTitle"
-
+            name={title}
+            onChange={handleChangeFieldTitle}
+          />
+          <label htmlFor="thumbnail">Copier l&apos; url d&apos;une image pour votre quiz</label>
+          <input
+            type="text"
+            placeholder="url image du quiz"
+            name={thumbnail}
+            className="quiz__selector"
+            onChange={handleChangeFieldThumbnail}
           />
 
-          <label htmlFor="description-quiz">Choisissez votre description de quiz</label>
-          <textarea className="quiz__selector" name="quizDescription" id="" cols={30} rows={10} placeholder="Votre description de quiz..." />
+          <label htmlFor="description">Choisissez votre description de quiz</label>
+          <textarea className="quiz__selector" name={description} id="" cols={30} rows={10} placeholder="Votre description de quiz..." onChange={handleChangeFieldDescription} />
         </div>
         <div className="question__container">
 

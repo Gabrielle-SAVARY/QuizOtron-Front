@@ -71,6 +71,11 @@ export const setQuizLevel = createAction<string>('quizCreate/SET_QUIZ_LEVEL');
 // Action: récupère l'id du niveau sélectionné par le menu déroulant
 export const setQuizLevelId = createAction<number>('quizCreate/SET_QUIZ_LEVEL_ID');
 
+//  Récupère les champs input du titre, description et thumnail
+export const changeQuizFieldTitle = createAction<string>('quizCreate/CHANGE_QUIZ_FIELD_TITLE');
+export const changeQuizFieldThumbnail = createAction<string>('quizCreate/CHANGE_QUIZ_FIELD_THUMBNAIL');
+export const changeQuizFieldDescription = createAction<string>('quizCreate/CHANGE_QUIZ_FIELD_DESCRIPTION');
+
 const quizCreateReducer = createReducer(initialState, (builder) => {
   builder
     // CATEGORIE
@@ -92,6 +97,16 @@ const quizCreateReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setQuizLevelId, (state, action) => {
       state.quiz.level_id = action.payload;
+    })
+    // QUIZ: title, description, thumbnail
+    .addCase(changeQuizFieldTitle, (state, action) => {
+      state.quiz.title = action.payload;
+    })
+    .addCase(changeQuizFieldThumbnail, (state, action) => {
+      state.quiz.thumbnail = action.payload;
+    })
+    .addCase(changeQuizFieldDescription, (state, action) => {
+      state.quiz.description = action.payload;
     });
 });
 
