@@ -111,6 +111,7 @@ function CreateQuiz() {
   };
 
   // question 1
+  const question1Question = useAppSelector((state) => state.quizCreate.question1.question);
 
   return (
     <form action="submit">
@@ -160,10 +161,6 @@ function CreateQuiz() {
         </div>
         <div className="questions__container">
 
-          <CreateQuestion questionNumber={1} />
-          <CreateQuestion questionNumber={2} />
-
-          {/*
           <div className="question1_container">
             <p className="question__number">Question n°1</p>
             <input
@@ -274,7 +271,7 @@ function CreateQuiz() {
                 </div>
               </div>
             </fieldset>
-          </div> */}
+          </div>
 
         </div>
 

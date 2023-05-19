@@ -1,8 +1,5 @@
 export interface InputCreateQuiz {
   input: {
-    title: string
-    thumbnail:string
-    description: string
     question1:string
     q1answer1: string
     q1answer2: string
