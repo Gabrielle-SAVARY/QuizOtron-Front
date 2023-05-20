@@ -17,22 +17,26 @@ import { ITag } from '../../@types/tag';
 import { axiosInstance } from '../../utils/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged } from '../../store/reducers/user';
+import { ILevel } from '../../@types/level';
 
 function App() {
   const dispatch = useAppDispatch();
+  // State: utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
-  console.log('isLogged', isLogged);
-  // State: liste des tags/catégories possibles pour un quiz
-  const [tags, setTags] = useState<ITag[]>([]);
 
-  // Maintient de la connexxion utilisateur
+  // State: liste des tags/catégories d'un quiz
+  const [tagsList, setTagsList] = useState<ITag[]>([]);
+
+  // State: liste des levels/niveaux d'un quiz
+  const [levelsList, setLevelsList] = useState<ILevel[]>([]);
+
+  //* Maintient de la connexion utilisateur
   // Au rechargement de la page on doit vérifier si un token éxiste déjà.
   // S'il existe on vérifie s'il est encore valide.
   useEffect(() => {
     // On recherche dans le local storage si un token existe
     const tokenDataStr = localStorage.getItem('token');
     const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
-    console.log('token de Gabi : ', tokenData);
 
     if (tokenData) {
       try {
@@ -57,8 +61,8 @@ function App() {
     }
   }, [dispatch, isLogged]);
 
-  // Appel API: récupère la liste des catégories/tags
-  // useCallback permet de mémoriser la fonction passer auxx composant enfants
+  //* Appel API: récupère la liste des catégories/tags
+  // useCallback permet de mémoriser la fonction passer aux composant enfants
   const fetchTags = async () => {
     try {
       const response = await axiosInstance.get('/tag');
@@ -67,7 +71,23 @@ function App() {
         throw new Error();
       }
       // met à jour le state avec les données envoyées par l'API
-      setTags(response.data);
+      setTagsList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //* Appel API: récupère la liste des levels/niveaux
+  // useCallback permet de mémoriser la fonction passer aux composant enfants
+  const fetchLevels = async () => {
+    try {
+      const response = await axiosInstance.get('/level');
+      // Si pas de réponse 200 envoi erreur
+      if (response.status !== 200) {
+        throw new Error();
+      }
+      // met à jour le state avec les données envoyées par l'API
+      setLevelsList(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -112,7 +132,12 @@ function App() {
           path="/profile/quiz/creer-quiz"
           element={(
             <ProtectedRoute>
-              <CreateQuiz tags={tags} setTags={setTags} fetchTags={fetchTags} />
+              <CreateQuiz
+                tagsList={tagsList}
+                fetchTags={fetchTags}
+                levelsList={levelsList}
+                fetchLevels={fetchLevels}
+              />
             </ProtectedRoute>
           )}
         />

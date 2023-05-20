@@ -5,13 +5,18 @@ import { ITag } from '../../@types/tag';
 import './styles.scss';
 import { Question, Quiz } from '../../@types/newQuiz';
 import CreateQuestion from './CreateQuestions';
+import { ILevel } from '../../@types/level';
 
 interface CreateQuizProps {
-  tags: ITag[]
+  tagsList: ITag[]
   fetchTags:() => void
+  levelsList: ILevel[]
+  fetchLevels:() => void
 }
 
-function CreateQuiz({ tags, fetchTags }:CreateQuizProps) {
+function CreateQuiz({
+  tagsList, fetchTags, levelsList, fetchLevels,
+}:CreateQuizProps) {
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
@@ -21,44 +26,59 @@ function CreateQuiz({ tags, fetchTags }:CreateQuizProps) {
     user_id: 0,
     tag_id: 0,
   });
+  //* -------- STATE --------
   // Stock les questions réponses du nouveau quiz
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
 
-  // ---- TAG/CATEGORIE DU QUIZ ----
-  // Récupère la liste des catégorie au chargemen de la page
+  //* -------- TAGS/CATEGORIES DU QUIZ --------
+  // Récupère la liste des catégorie au chargement de la page
+  // TODO ouvrir une issue pour cette erreur de eslint: déssactiver ou useCallback dans App ?
   useEffect(() => {
     fetchTags();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //* GESTION DE LA MISE A JOUR DES INPUTS
+  //* -------- LEVELS/NIVEAUX DU QUIZ --------
+  // Récupère la liste des niveaux au chargement de la page
+  // TODO ouvrir une issue pour cette erreur de eslint: déssactiver ou useCallback dans App ?
+  useEffect(() => {
+    fetchLevels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
-  const handleChangeQuizData = (e: ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleChangeQuizData = (
+    event: ChangeEvent<HTMLInputElement> |
+    ChangeEvent<HTMLSelectElement> |
+    ChangeEvent<HTMLTextAreaElement>,
+    field: string,
+  ) => {
+    console.log('event.target', event.target.id);
     const quizData = { ...newQuiz } as Quiz;
     // D'abord on vérifie s'il s'agit du field id ou tag
-    if (field === 'tag') {
-      // On cherche dans tags l'id correspondant
-      // on l'enregistre dans le state
-      quizData.tag_id = field;
-    } else if (field === 'level') {
-      // On cherche dans levels l'id correspondant
-      // on l'enregistre dans le state
-      quizData.level_id = field;
+    // Cherche dans tags/levels l'id correspond puis on l'enregistre dans le state
+    if (field === 'tag_id') {
+      const foundTag = tagsList.find((tag) => tag.name === event.target.value);
+      quizData.tag_id = foundTag?.id;
+    } else if (field === 'level_id') {
+      const foundLevel = levelsList.find((level) => level.name === event.target.value);
+      quizData.level_id = foundLevel?.id;
     } else {
-      quizData[field] = e.target.value;
+      quizData[field] = event.target.value;
     }
     setNewQuiz(quizData);
   };
 
   // MISE A JOUR DE newQuestion
-  const handleChangeQuestionsData = (e: ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleChangeQuestionsData = (event: ChangeEvent<HTMLInputElement>, field: string) => {
     const questionsData = { ...newQuestions };
-    questionsData[field] = e.target.value;
+    questionsData[field] = event.target.value;
     setNewQuestions(questionsData);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     // on envoie le state newQuiz et newQuestion a l'API
   };
 
@@ -68,7 +88,7 @@ function CreateQuiz({ tags, fetchTags }:CreateQuizProps) {
   }, [newQuiz]);
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form onSubmit={(event) => handleSubmit(event)}>
       <div className="quiz__creation">
         <div className="quiz__header">
           <h3>Créer un quiz</h3>
@@ -76,41 +96,44 @@ function CreateQuiz({ tags, fetchTags }:CreateQuizProps) {
         </div>
         <div className="quiz__parameter">
           <label htmlFor="category-quiz">Choisissez une catégorie</label>
-          <select name="Catégorie" id="category-quiz" className="quiz__selector" onChange={(e) => handleChangeQuizData(e, 'tag_id')}>
+          <select name="Catégorie" id="category-quiz" className="quiz__selector" onChange={(event) => handleChangeQuizData(event, 'tag_id')}>
             <option value="">Merci de choisir une catégorie</option>
             {
-                tags.map((tag) => (
-                  <option key={tag.id} value={tag.name}>{tag.name}</option>
+                tagsList.map((tag) => (
+                  <option key={tag.id} value={tag.name}>
+                    {tag.name}
+                  </option>
                 ))
             }
           </select>
           <label htmlFor="level-quiz">Choisissez une difficulté</label>
-          <select name="level" id="level-quiz" className="quiz__selector">
+          <select name="level" id="level-quiz" className="quiz__selector" onChange={(event) => handleChangeQuizData(event, 'level_id')}>
             <option value="">Merci de choisir une difficulté</option>
-            {/*             {
-                allLevels.map((level) => (
+            {
+                levelsList.map((level) => (
                   <option key={level.name} value={level.name}>{level.name}</option>
                 ))
-            } */}
+            }
           </select>
           <label htmlFor="title">Choisissez votre titre de quiz</label>
           <input
             type="text"
             placeholder="Titre du quiz"
             className="quiz__selector"
-            onChange={(e) => handleChangeQuizData(e, 'title')}
+            name="title"
+            onChange={(event) => handleChangeQuizData(event, 'title')}
           />
           <label htmlFor="thumbnail">Copier l&apos; url d&apos;une image pour votre quiz</label>
           <input
             type="text"
             placeholder="url image du quiz"
             className="quiz__selector"
-/*             name={thumbnail}
-            onChange={handleChangeFieldThumbnail} */
+            name="thumbnail"
+            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
           />
 
           <label htmlFor="description">Choisissez votre description de quiz</label>
-          <textarea className="quiz__selector" id="" cols={30} rows={10} placeholder="Votre description de quiz..." /* name={description} onChange={handleChangeFieldDescription} */ />
+          <textarea className="quiz__selector" id="" cols={30} rows={10} placeholder="Votre description de quiz..." name="description" onChange={(event) => handleChangeQuizData(event, 'description')} />
         </div>
 
         {/* QUESTIONS */}

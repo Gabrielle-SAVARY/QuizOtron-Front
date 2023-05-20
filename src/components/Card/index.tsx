@@ -4,9 +4,12 @@ import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 function Card() {
+  // STATE
+  // State: stocke les quiz favoris de l'utilisateur
+  // TODO(non fonctionnel pour l'ajout des favoris, à ce jour: change la couleur de l'icone)
   const [favorite, setFavorite] = useState(false);
 
-  // Fonction qui permet de changer l'icone de favoris
+  // Met à jour la couleur l'icone de favoris
   const toggleFavorite = () => {
     setFavorite(!favorite);
   };
