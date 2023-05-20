@@ -156,11 +156,11 @@ const quizCreateReducer = createReducer(initialState, (builder) => {
     })
     .addCase(changeQuizFieldDescription, (state, action) => {
       state.quiz.description = action.payload;
-    })
+    });
   /*     .addCase(setQuestion1, (state, action) => {
       const { fieldName, value } = action.payload;
       state[fieldName] = value;
-    }) */;
+    }) */
 });
 
 export default quizCreateReducer;

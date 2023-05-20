@@ -5,11 +5,10 @@ import './styles.scss';
 import { Question } from '../../@types/newQuiz';
 
 interface TestProps {
-  questionNumber: number
 
 }
 
-function Test({ questionNumber }:TestProps) {
+function Test() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const addEmptyQuestion = () => {
     setQuestions([
@@ -43,7 +42,6 @@ function Test({ questionNumber }:TestProps) {
 
   const setQuestion = (questionIndex: number, question:string) => {
     questions[questionIndex] = { question, answers: questions[questionIndex].answers };
-
     setQuestions(questions);
   };
 

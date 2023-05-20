@@ -10,7 +10,6 @@ export interface IAuthentification {
   passwordConfirm: string;
   oldPassword: string;
   newPassword: string;
-
 }
 
 // typage data retournée par requête axios: login

@@ -17,6 +17,7 @@ import {
   getLevels, getTags, setQuizLevel, setQuizLevelId, setQuizTag, setQuizTagId,
 } from '../../store/reducers/quizCreate';
 import CreateQuestion from './CreateQuestions';
+import { Question } from '../../@types/newQuiz';
 
 interface CreateQuizProps {
   quizQuestion: string;
@@ -110,8 +111,44 @@ function CreateQuiz() {
     dispatch(changeQuizFieldDescription(newValue));
   };
 
-  // question 1
-  const question1Question = useAppSelector((state) => state.quizCreate.question1.question);
+  // ----- QUESTIONS -----
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const addEmptyQuestion = () => {
+    setQuestions([
+      ...questions,
+      {
+        question: '',
+        answers: [],
+      },
+    ]);
+  };
+
+  const addEmptyAnswer = (index: number) => {
+    const question = questions[index];
+    question.answers.push(
+      {
+        answer: '',
+        is_valid: false,
+      },
+    );
+    setQuestions(questions);
+  };
+
+  const setAnswer = (questionIndex: number, answerIndex:number, answer:string, is_valid:boolean) => {
+    const question = questions[questionIndex];
+    console.log('setAnswer - question', question);
+    question.answers[answerIndex] = {
+      answer,
+      is_valid,
+    };
+    setQuestions(questions);
+  };
+
+  const setQuestion = (questionIndex: number, question:string) => {
+    questions[questionIndex] = { question, answers: questions[questionIndex].answers };
+    console.log('setQuestion - questions', questions);
+    setQuestions(questions);
+  };
 
   return (
     <form action="submit">
@@ -159,7 +196,47 @@ function CreateQuiz() {
           <label htmlFor="description">Choisissez votre description de quiz</label>
           <textarea className="quiz__selector" name={description} id="" cols={30} rows={10} placeholder="Votre description de quiz..." onChange={handleChangeFieldDescription} />
         </div>
-        <div className="questions__container">
+
+        {/* QUESTIONS */}
+        <button type="button" onClick={addEmptyQuestion}>Ajouter une question</button>
+        {questions.map((question, questionKey) => (
+          <div className="question_container" id={`question${questionKey + 1}`} key={`question-${questionKey}`}>
+            <p className="question__number">
+              Question n°
+              {questionKey + 1}
+            </p>
+            <input
+              type="text"
+              placeholder="Question"
+              className="question__title"
+              name="quizQuestion"
+              onChange={(
+                event:React.ChangeEvent<HTMLInputElement>,
+              ) => setQuestion(questionKey, event.target.value)}
+            />
+            <fieldset>
+              <div className="question-choice">
+                <button type="button" onClick={() => addEmptyAnswer(questionKey)}>Ajouter une réponse</button>
+                {question.answers.map((answer, answerKey) => (
+                  <div className="answer_container" key={`answer-${questionKey}-${answerKey}`}>
+                    <span className="answer_radio-button">
+                      <input type="radio" id="question1-radio1" name="question1-radio" />
+                      <label htmlFor="question1-radio1" />
+                    </span>
+                    <span className="answer_input-text">
+                      <label htmlFor="question1-answer1" />
+                      <input type="text" id="question1-answer1" name="question1Answer1" />
+                    </span>
+                  </div>
+                ))}
+
+              </div>
+            </fieldset>
+
+          </div>
+        ))}
+
+        {/*         <div className="questions__container">
 
           <div className="question1_container">
             <p className="question__number">Question n°1</p>
@@ -220,60 +297,7 @@ function CreateQuiz() {
             </fieldset>
           </div>
 
-          <div className="question1_container">
-            <p className="question__number">Question n°2</p>
-            <p className="question__title">Intitulé de la question</p>
-            <fieldset>
-              <div className="question-choice">
-
-                <div className="answer_container">
-                  <span className="answer_radio-button">
-                    <input type="radio" id="question1-radio1" name="question2-radio" />
-                    <label htmlFor="question1-radio1" />
-                  </span>
-                  <span className="answer_input-text">
-                    <label htmlFor="question1-answer1" />
-                    <input type="text" id="question1-answer1" />
-                  </span>
-                </div>
-
-                <div className="answer_container">
-                  <span className="answer_radio-button">
-                    <input type="radio" id="question1-radio2" name="question2-radio" />
-                    <label htmlFor="radio2" />
-                  </span>
-                  <span className="answer_input-text">
-                    <label htmlFor="question1-answer2" />
-                    <input type="text" id="question1-answer2" />
-                  </span>
-                </div>
-
-                <div className="answer_container">
-                  <span className="answer_radio-button">
-                    <input type="radio" id="question1-radio3" name="question2-radio" />
-                    <label htmlFor="question1-radio3" />
-                  </span>
-                  <span className="answer_input-text">
-                    <label htmlFor="question1-answer3" />
-                    <input type="text" id="question1-answer3" />
-                  </span>
-                </div>
-
-                <div className="answer_container">
-                  <span className="answer_radio-button">
-                    <input type="radio" id="question1-radio4" name="question2-radio" />
-                    <label htmlFor="question1-radio4" />
-                  </span>
-                  <span className="answer_input-text">
-                    <label htmlFor="question1-answer4" />
-                    <input type="text" id="question1-answer4" />
-                  </span>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-
-        </div>
+        </div> */}
 
       </div>
     </form>
