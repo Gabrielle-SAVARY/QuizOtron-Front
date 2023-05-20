@@ -5,26 +5,26 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setScreenWidth, setToggleMenu } from '../../store/reducers/header';
+import { setScreenWidth, setIsToggleMenu } from '../../store/reducers/header';
 
 function Header() {
-  /*   const [toggleMenu, setToggleMenu] = useState(false); */
+  /*   const [isToggleMenu, setIsToggleMenu] = useState(false); */
   const dispatch = useAppDispatch();
-  const toggleMenu = useAppSelector((state) => state.header.toggleMenu);
+  const isToggleMenu = useAppSelector((state) => state.header.isToggleMenu);
   const screenWidth = useAppSelector((state) => state.header.screenWidth);
 
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  // Met à jour le state de toggleMenu si le menu hamburger est ouvert
+  // Met à jour le state de isToggleMenu si le menu hamburger est ouvert
   // au click sur button header__nav__toggle (toogle ouverture/fermeture)
   const changeToggleMenu = () => {
-    dispatch(setToggleMenu(!toggleMenu));
+    dispatch(setIsToggleMenu(!isToggleMenu));
   };
 
   const handleScreenWidth = () => {
     dispatch(setScreenWidth(window.innerWidth));
-    if (screenWidth > 992 && toggleMenu) {
-      dispatch(setToggleMenu(false));
+    if (screenWidth > 992 && isToggleMenu) {
+      dispatch(setIsToggleMenu(false));
     }
   };
   // écouteur d'évenement sur la fenêtre: permet de fermer le menu si fenetre redimensionnée
@@ -36,7 +36,7 @@ function Header() {
 
       <nav className="header__nav">
         { /* affiche la liste: en mobile si menu hamburger est ouvert et desktop */}
-        {(toggleMenu || screenWidth >= 992) && (
+        {(isToggleMenu || screenWidth >= 992) && (
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
             <li className="header__nav-list__items"><NavLink to="/quiz">Liste des quiz</NavLink></li>
@@ -58,7 +58,7 @@ function Header() {
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
           {/* mobile: change icon si menu est ouvert ou fermé: hamburger */}
-          {!toggleMenu ? <FiAlignJustify size={48} stroke="#fff" strokeWidth="1" />
+          {!isToggleMenu ? <FiAlignJustify size={48} stroke="#fff" strokeWidth="1" />
             : (
               <AiFillCloseCircle size={48} stroke="#003051" strokeWidth="0.9" />
             )}

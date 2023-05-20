@@ -6,7 +6,7 @@ import { axiosInstance } from '../../utils/axios';
 interface UserState {
   isLogged: boolean;
   token: string;
-  registered: boolean
+  isRegistered: boolean
 
   credentials: {
     firstname: string
@@ -22,7 +22,7 @@ interface UserState {
 export const initialState: UserState = {
   isLogged: false,
   token: '',
-  registered: false,
+  isRegistered: false,
 
   credentials: {
     firstname: 'Elon',
@@ -149,17 +149,17 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials[propertyKey] = value;
     })
     .addCase(register.fulfilled, (state, action) => {
-      state.registered = action.payload.registered;
+      state.isRegistered = action.payload.isRegistered;
 
       // Je réinitialise les credentials
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
     })
     .addCase(register.pending, (state) => {
-      state.registered = false;
+      state.isRegistered = false;
     })
     .addCase(register.rejected, (state) => {
-      state.registered = false;
+      state.isRegistered = false;
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API

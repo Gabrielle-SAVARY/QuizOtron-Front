@@ -16,7 +16,7 @@ function Register() {
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
-  const registered = useAppSelector((state) => state.user.registered);
+  const isRegistered = useAppSelector((state) => state.user.isRegistered);
 
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -45,7 +45,7 @@ function Register() {
 
   return (
     <div className="login-page">
-      {registered && (
+      {isRegistered && (
       <div className="login-page__isLogged">
         <p>Vous êtes inscrit, veuillez vous connecter.</p>
         <p className="form__message">
@@ -56,7 +56,7 @@ function Register() {
         </p>
       </div>
       )}
-      {!registered && (
+      {!isRegistered && (
       <div className="login-page__wrapper">
         <form
           action="submit"

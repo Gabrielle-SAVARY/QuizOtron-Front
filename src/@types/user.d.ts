@@ -1,7 +1,7 @@
 export interface IAuthentification {
   isLogged: boolean
   token: string
-  registered: boolean
+  isRegistered: boolean
   firstname: string
   lastname: string
   pseudo: string;
