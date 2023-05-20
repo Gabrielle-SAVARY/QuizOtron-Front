@@ -63,19 +63,24 @@ function App() {
 
   //* Appel API: récupère la liste des catégories/tags
   // useCallback permet de mémoriser la fonction passer aux composant enfants
-  const fetchTags = async () => {
-    try {
-      const response = await axiosInstance.get('/tag');
-      // Si pas de réponse 200 envoi erreur
-      if (response.status !== 200) {
-        throw new Error();
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await axiosInstance.get('/tag');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // met à jour le state avec les données envoyées par l'API
+        setTagsList(response.data);
+      } catch (error) {
+        console.log(error);
       }
-      // met à jour le state avec les données envoyées par l'API
-      setTagsList(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
+    // Récupère la liste des catégorie au chargement de la page
+    fetchTags();
+    // rappelle de la fonction si le state est modifié
+  }, [tagsList]);
 
   //* Appel API: récupère la liste des levels/niveaux
   // useCallback permet de mémoriser la fonction passer aux composant enfants
@@ -134,7 +139,6 @@ function App() {
             <ProtectedRoute>
               <CreateQuiz
                 tagsList={tagsList}
-                fetchTags={fetchTags}
                 levelsList={levelsList}
                 fetchLevels={fetchLevels}
               />

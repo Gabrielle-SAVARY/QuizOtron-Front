@@ -9,13 +9,12 @@ import { ILevel } from '../../@types/level';
 
 interface CreateQuizProps {
   tagsList: ITag[]
-  fetchTags:() => void
   levelsList: ILevel[]
   fetchLevels:() => void
 }
 
 function CreateQuiz({
-  tagsList, fetchTags, levelsList, fetchLevels,
+  tagsList, levelsList, fetchLevels,
 }:CreateQuizProps) {
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
@@ -33,10 +32,10 @@ function CreateQuiz({
   //* -------- TAGS/CATEGORIES DU QUIZ --------
   // Récupère la liste des catégorie au chargement de la page
   // TODO ouvrir une issue pour cette erreur de eslint: déssactiver ou useCallback dans App ?
-  useEffect(() => {
+  /*   useEffect(() => {
     fetchTags();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); */
 
   //* -------- LEVELS/NIVEAUX DU QUIZ --------
   // Récupère la liste des niveaux au chargement de la page
