@@ -6,8 +6,8 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }:ProtectedRouteProps) {
-  const logged = useAppSelector((state) => state.user.logged);
-  return logged ? children : <Navigate to="/connexion" replace />;
+  const isLogged = useAppSelector((state) => state.user.isLogged);
+  return isLogged ? children : <Navigate to="/connexion" replace />;
 }
 
 export default ProtectedRoute;

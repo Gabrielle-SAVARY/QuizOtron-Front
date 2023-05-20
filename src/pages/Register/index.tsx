@@ -46,7 +46,7 @@ function Register() {
   return (
     <div className="login-page">
       {registered && (
-      <div className="login-page__logged">
+      <div className="login-page__isLogged">
         <p>Vous êtes inscrit, veuillez vous connecter.</p>
         <p className="form__message">
           Déjà un compte?

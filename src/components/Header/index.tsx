@@ -13,7 +13,7 @@ function Header() {
   const toggleMenu = useAppSelector((state) => state.header.toggleMenu);
   const screenWidth = useAppSelector((state) => state.header.screenWidth);
 
-  const logged = useAppSelector((state) => state.user.logged);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
 
   // Met à jour le state de toggleMenu si le menu hamburger est ouvert
   // au click sur button header__nav__toggle (toogle ouverture/fermeture)
@@ -43,7 +43,7 @@ function Header() {
           </ul>
         )}
         <button type="button" className="header__login">
-          { logged
+          { isLogged
             ? (
               <NavLink to="/profile">
                 <FaRegUserCircle size={24} />

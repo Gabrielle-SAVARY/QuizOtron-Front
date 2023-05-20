@@ -4,7 +4,7 @@ import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
 
 interface UserState {
-  logged: boolean;
+  isLogged: boolean;
   token: string;
   registered: boolean
 
@@ -20,7 +20,7 @@ interface UserState {
 }
 
 export const initialState: UserState = {
-  logged: false,
+  isLogged: false,
   token: '',
   registered: false,
 
@@ -28,8 +28,8 @@ export const initialState: UserState = {
     firstname: 'Elon',
     lastname: 'Musk',
     pseudo: 'elon-musk',
-    email: 'elon@gmail.com',
-    password: 'test',
+    email: 'elon2@gmail.com',
+    password: 'test22',
     passwordConfirm: '',
     oldPassword: '',
   },
@@ -88,6 +88,9 @@ export const login = createAppAsyncThunk(
     return data as IAuthentification;
   },
 );
+
+// ACTION: vérifier si le token existe
+export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 
 // ACTION: déconnexion utilisateur
 export const logout = createAction('user/LOGOUT');
@@ -160,7 +163,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
-      state.logged = action.payload.logged;
+      state.isLogged = action.payload.isLogged;
       state.token = action.payload.token;
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.firstname = action.payload.firstname;
@@ -169,8 +172,11 @@ const userReducer = createReducer(initialState, (builder) => {
       // Je réinitialise les credentials
       state.credentials.password = '';
     })
+    .addCase(checkIsLogged, (state, action) => {
+      state.isLogged = action.payload;
+    })
     .addCase(logout, (state) => {
-      state.logged = false;
+      state.isLogged = false;
       state.credentials.pseudo = '';
       state.token = '';
 
@@ -184,7 +190,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(deleteUser.fulfilled, (state) => {
       // on déconnecte l'utilisateur
-      state.logged = false;
+      state.isLogged = false;
       // on supprime les informations du state
       state.token = '';
       state.credentials.firstname = '';
