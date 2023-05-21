@@ -6,6 +6,10 @@ import './styles.scss';
 import { Question, Quiz } from '../../@types/newQuiz';
 import CreateQuestion from './CreateQuestions';
 import { ILevel } from '../../@types/level';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {
+  FormControl, InputLabel, MenuItem, TextField,
+} from '@mui/material';
 
 interface CreateQuizProps {
   tagsList: ITag[]
@@ -51,21 +55,15 @@ function CreateQuiz({
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
-    event: ChangeEvent<HTMLInputElement> |
-    ChangeEvent<HTMLSelectElement> |
-    ChangeEvent<HTMLTextAreaElement>,
+    event: SelectChangeEvent<number> | SelectChangeEvent<string>,
     field: string,
   ) => {
-    console.log('event.target', event.target.id);
     const quizData = { ...newQuiz } as Quiz;
     // D'abord on vérifie s'il s'agit du field id ou tag
-    // Cherche dans tags/levels l'id correspond puis on l'enregistre dans le state
     if (field === 'tag_id') {
-      const foundTag = tagsList.find((tag) => tag.name === event.target.value);
-      quizData.tag_id = foundTag?.id;
+      quizData.tag_id = event.target.value as number;
     } else if (field === 'level_id') {
-      const foundLevel = levelsList.find((level) => level.name === event.target.value);
-      quizData.level_id = foundLevel?.id;
+      quizData.level_id = event.target.value as number;
     } else {
       quizData[field] = event.target.value;
     }
@@ -106,33 +104,48 @@ function CreateQuiz({
   }, [newQuiz]);
 
   return (
-    <form onSubmit={(event) => handleSubmit(event)}>
-      <div className="quiz__creation">
-        <div className="quiz__header">
-          <h3>Créer un quiz</h3>
-          <button type="button" className="quiz__button">Quitter</button>
-        </div>
+    <div className="quiz__creation">
+      <div className="quiz__header">
+        <h3>Créer un quiz</h3>
+        <button type="button" className="quiz__button">Quitter</button>
+      </div>
+      <form onSubmit={(event) => handleSubmit(event)}>
         <div className="quiz__parameter">
-          <label htmlFor="category-quiz">Choisissez une catégorie</label>
-          <select name="Catégorie" id="category-quiz" className="quiz__selector" onChange={(event) => handleChangeQuizData(event, 'tag_id')}>
-            <option value="">Merci de choisir une catégorie</option>
-            {
-                tagsList.map((tag) => (
-                  <option key={tag.id} value={tag.id}>
-                    {tag.name}
-                  </option>
-                ))
-            }
-          </select>
-          <label htmlFor="level-quiz">Choisissez une difficulté</label>
-          <select name="level" id="level-quiz" className="quiz__selector" onChange={(event) => handleChangeQuizData(event, 'level_id')}>
-            <option value="">Merci de choisir une difficulté</option>
-            {
+          {/* //? ======= Choix de la catégorie========== */}
+          <FormControl fullWidth>
+            <InputLabel id="label-select-tag">Catégorie</InputLabel>
+            <Select
+              labelId="label-select-tag"
+              id="select-tag"
+              label="Catégorie"
+              defaultValue="choose option"
+              onChange={(event) => handleChangeQuizData(event, 'tag_id')}
+            >
+              <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
+              { tagsList.map((tag) => (
+                <MenuItem key={tag.id} value={tag.id}>{tag.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {/* //? ======= Choix de la difficulté========== */}
+          <FormControl fullWidth>
+            <InputLabel id="label-select-level">Difficulté</InputLabel>
+            <Select
+              labelId="label-select-level"
+              id="select-level"
+              label="Difficulté"
+              defaultValue="choose option"
+              onChange={(event) => handleChangeQuizData(event, 'level_id')}
+            >
+              <MenuItem disabled value="choose option">Sélectionner un niveau</MenuItem>
+              {
                 levelsList.map((level) => (
-                  <option key={level.name} value={level.name}>{level.name}</option>
+                  <MenuItem key={level.id} value={level.id}>{level.name}</MenuItem>
                 ))
             }
-          </select>
+            </Select>
+          </FormControl>
+
           <label htmlFor="title">Choisissez votre titre de quiz</label>
           <input
             type="text"
@@ -169,8 +182,8 @@ function CreateQuiz({
         <CreateQuestion questionNumber={9} />
         <CreateQuestion questionNumber={10} /> */}
 
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
 
