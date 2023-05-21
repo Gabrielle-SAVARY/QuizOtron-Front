@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
+import { axiosInstance } from '../../utils/axios';
 
 interface CreateQuizProps {
   tagsList: ITag[]
@@ -19,6 +20,8 @@ interface CreateQuizProps {
 function CreateQuiz({
   tagsList, levelsList,
 }:CreateQuizProps) {
+  // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
+  const [errorMessage, setErrorMessage] = useState('');
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
@@ -51,6 +54,27 @@ function CreateQuiz({
       },
     ],
   });
+  const [newQuestion2, setNewQuestion2] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
@@ -61,6 +85,7 @@ function CreateQuiz({
     HTMLTextAreaElement>,
     field: string,
   ) => {
+    setErrorMessage('');
     const quizData = { ...newQuiz } as Quiz;
     // D'abord on vérifie s'il s'agit du field id ou tag
     if (field === 'tag_id') {
@@ -73,38 +98,40 @@ function CreateQuiz({
     setNewQuiz(quizData);
   };
 
-  // MISE A JOUR DE newQuestions
-  // TODO: en test
-  // Quelle question  ? Quelle réponse ? Quel status
-  const handleChangeQuestions = (e: any, qNb: number, aNb = 0) => {
-    //* Etape 1 : On récupère le state de la question par rapport a son numéro : qNb
-    //* Etape 2 : On affecte la valeur e.target.value au bon endroit
-    switch (qNb) {
-      case 1:
-        const quizzQuestions = { ...newQuestion1 };
-        if (aNb === 0) {
-          quizzQuestions.question = e.target.value;
-        } else {
-          quizzQuestions.answers[aNb - 1].answer = e.target.value;
-          // TODO: a tester pour le status
-          quizzQuestions.answers[aNb - 1].is_valid = e.target.value;
-        }
-        setNewQuestion1(quizzQuestions);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  // TODO: récupérer userId avant
+  // ENVOIE DU FORMULAIRE A l'API
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // on envoie le state newQuiz et newQuestion a l'API
+    if (!newQuiz.title || newQuiz.title.length < 3) {
+      setErrorMessage('Vous devez ajouter un titre contenant au moins 3 caractères');
+    } else if (!newQuiz.description || newQuiz.description.length < 5) {
+      setErrorMessage('Vous devez ajouter une description contenant au moins 5 caractères');
+    } else {
+      try {
+        const response = await axiosInstance.post('/quiz/user/create', {
+          quiz: newQuiz,
+          questions: [newQuestion1, newQuestion2],
+        });
+        if (response.status !== 200) throw new Error();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   // pour le dev pour s'assurer du contenu des states
   useEffect(() => {
+    setErrorMessage('');
+  }, [newQuiz, newQuestion1, newQuestion2]);
+  useEffect(() => {
     console.log('newQuiz', newQuiz);
   }, [newQuiz]);
+  useEffect(() => {
+    console.log('new question 1', newQuestion1);
+  }, [newQuestion1]);
+  useEffect(() => {
+    console.log('new question 2', newQuestion2);
+  }, [newQuestion2]);
 
   return (
     <div className="quiz__creation">
@@ -114,6 +141,7 @@ function CreateQuiz({
       </div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
+
           {/* //? ======= Choix de la catégorie========== */}
           <FormControl fullWidth>
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
@@ -130,6 +158,7 @@ function CreateQuiz({
               ))}
             </Select>
           </FormControl>
+
           {/* //? ======= Choix de la difficulté========== */}
           <FormControl fullWidth>
             <InputLabel id="label-select-level">Difficulté</InputLabel>
@@ -148,6 +177,7 @@ function CreateQuiz({
                 }
             </Select>
           </FormControl>
+
           {/* //? ======= Choix du titre ========== */}
           <TextField
             id="input-title"
@@ -177,9 +207,19 @@ function CreateQuiz({
 
         <fieldset className="quiz__questions">
           {/* Question 1 */}
-          <CreateQuestion questionNumber={1} />
+          <CreateQuestion
+            questionNumber={1}
+            newQuestion={newQuestion1}
+            setNewQuestion={setNewQuestion1}
+          />
+          <CreateQuestion
+            questionNumber={2}
+            newQuestion={newQuestion2}
+            setNewQuestion={setNewQuestion2}
+          />
         </fieldset>
-
+        { errorMessage && <div className="error-message">{errorMessage}</div>}
+        <button type="submit">Envoyer</button>
       </form>
     </div>
   );
