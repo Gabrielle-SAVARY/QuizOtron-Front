@@ -10,11 +10,10 @@ import { ILevel } from '../../@types/level';
 interface CreateQuizProps {
   tagsList: ITag[]
   levelsList: ILevel[]
-  fetchLevels:() => void
 }
 
 function CreateQuiz({
-  tagsList, levelsList, fetchLevels,
+  tagsList, levelsList,
 }:CreateQuizProps) {
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
@@ -27,23 +26,27 @@ function CreateQuiz({
   });
   //* -------- STATE --------
   // Stock les questions réponses du nouveau quiz
-  const [newQuestions, setNewQuestions] = useState<Question[]>([]);
-
-  //* -------- TAGS/CATEGORIES DU QUIZ --------
-  // Récupère la liste des catégorie au chargement de la page
-  // TODO ouvrir une issue pour cette erreur de eslint: déssactiver ou useCallback dans App ?
-  /*   useEffect(() => {
-    fetchTags();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); */
-
-  //* -------- LEVELS/NIVEAUX DU QUIZ --------
-  // Récupère la liste des niveaux au chargement de la page
-  // TODO ouvrir une issue pour cette erreur de eslint: déssactiver ou useCallback dans App ?
-  useEffect(() => {
-    fetchLevels();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [newQuestion1, setNewQuestion1] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
@@ -69,11 +72,27 @@ function CreateQuiz({
     setNewQuiz(quizData);
   };
 
-  // MISE A JOUR DE newQuestion
-  const handleChangeQuestionsData = (event: ChangeEvent<HTMLInputElement>, field: string) => {
-    const questionsData = { ...newQuestions };
-    questionsData[field] = event.target.value;
-    setNewQuestions(questionsData);
+  // MISE A JOUR DE newQuestions
+  // TODO: en test
+  // Quelle question  ? Quelle réponse ? Quel status
+  const handleChangeQuestions = (e: any, qNb: number, aNb = 0) => {
+    //* Etape 1 : On récupère le state de la question par rapport a son numéro : qNb
+    //* Etape 2 : On affecte la valeur e.target.value au bon endroit
+    switch (qNb) {
+      case 1:
+        const quizzQuestions = { ...newQuestion1 };
+        if (aNb === 0) {
+          quizzQuestions.question = e.target.value;
+        } else {
+          quizzQuestions.answers[aNb - 1].answer = e.target.value;
+          // TODO: a tester pour le status
+          quizzQuestions.answers[aNb - 1].is_valid = e.target.value;
+        }
+        setNewQuestion1(quizzQuestions);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -99,7 +118,7 @@ function CreateQuiz({
             <option value="">Merci de choisir une catégorie</option>
             {
                 tagsList.map((tag) => (
-                  <option key={tag.id} value={tag.name}>
+                  <option key={tag.id} value={tag.id}>
                     {tag.name}
                   </option>
                 ))
@@ -134,6 +153,8 @@ function CreateQuiz({
           <label htmlFor="description">Choisissez votre description de quiz</label>
           <textarea className="quiz__selector" id="" cols={30} rows={10} placeholder="Votre description de quiz..." name="description" onChange={(event) => handleChangeQuizData(event, 'description')} />
         </div>
+
+        <input type="text" onChange={(e) => handleChangeQuestions(e, 1)} />
 
         {/* QUESTIONS */}
         {/* newQuestions, setNewQuestions */}

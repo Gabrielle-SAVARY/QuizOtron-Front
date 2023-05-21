@@ -50,6 +50,7 @@ function App() {
         // Si le token est expiré, on passe isLogged à false
         // et on supprime les données du LocalStorage avec
         // la fonction removeUserDataFromLocalStorage
+        console.log('token data isLogged', isLogged);
         if (now >= exp) {
           dispatch(checkIsLogged(false));
         } else {
@@ -61,9 +62,8 @@ function App() {
     }
   }, [dispatch, isLogged]);
 
-  //* Appel API: récupère la liste des catégories/tags
-  // useCallback permet de mémoriser la fonction passer aux composant enfants
   useEffect(() => {
+    //* Appel API: récupère la liste des catégories/tags
     const fetchTags = async () => {
       try {
         const response = await axiosInstance.get('/tag');
@@ -80,23 +80,23 @@ function App() {
     // Récupère la liste des catégorie au chargement de la page
     fetchTags();
     // rappelle de la fonction si le state est modifié
-  }, [tagsList]);
 
-  //* Appel API: récupère la liste des levels/niveaux
-  // useCallback permet de mémoriser la fonction passer aux composant enfants
-  const fetchLevels = async () => {
-    try {
-      const response = await axiosInstance.get('/level');
-      // Si pas de réponse 200 envoi erreur
-      if (response.status !== 200) {
-        throw new Error();
+    //* Appel API: récupère la liste des levels/niveaux
+    const fetchLevels = async () => {
+      try {
+        const response = await axiosInstance.get('/level');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // met à jour le state avec les données envoyées par l'API
+        setLevelsList(response.data);
+      } catch (error) {
+        console.log(error);
       }
-      // met à jour le state avec les données envoyées par l'API
-      setLevelsList(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
+    fetchLevels();
+  }, []);
 
   return (
     <Layout>
@@ -140,7 +140,6 @@ function App() {
               <CreateQuiz
                 tagsList={tagsList}
                 levelsList={levelsList}
-                fetchLevels={fetchLevels}
               />
             </ProtectedRoute>
           )}
