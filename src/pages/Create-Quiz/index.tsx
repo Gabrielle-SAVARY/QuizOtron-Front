@@ -55,7 +55,10 @@ function CreateQuiz({
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
-    event: SelectChangeEvent<number> | SelectChangeEvent<string>,
+    event: SelectChangeEvent<number> |
+    SelectChangeEvent<string> |
+    ChangeEvent<HTMLInputElement |
+    HTMLTextAreaElement>,
     field: string,
   ) => {
     const quizData = { ...newQuiz } as Quiz;
@@ -110,7 +113,7 @@ function CreateQuiz({
         <button type="button" className="quiz__button">Quitter</button>
       </div>
       <form onSubmit={(event) => handleSubmit(event)}>
-        <div className="quiz__parameter">
+        <fieldset className="quiz__parameter">
           {/* //? ======= Choix de la catégorie========== */}
           <FormControl fullWidth>
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
@@ -142,45 +145,40 @@ function CreateQuiz({
                 levelsList.map((level) => (
                   <MenuItem key={level.id} value={level.id}>{level.name}</MenuItem>
                 ))
-            }
+                }
             </Select>
           </FormControl>
-
-          <label htmlFor="title">Choisissez votre titre de quiz</label>
-          <input
-            type="text"
-            placeholder="Titre du quiz"
-            className="quiz__selector"
-            name="title"
+          {/* //? ======= Choix du titre ========== */}
+          <TextField
+            id="input-title"
+            label="Titre du quiz"
+            variant="outlined"
             onChange={(event) => handleChangeQuizData(event, 'title')}
           />
-          <label htmlFor="thumbnail">Copier l&apos; url d&apos;une image pour votre quiz</label>
-          <input
-            type="text"
-            placeholder="url image du quiz"
-            className="quiz__selector"
-            name="thumbnail"
-            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
+
+          {/* //? ======= Choix de la description ========== */}
+          <TextField
+            id="input-description"
+            label="Description du quiz"
+            variant="outlined"
+            onChange={(event) => handleChangeQuizData(event, 'description')}
           />
 
-          <label htmlFor="description">Choisissez votre description de quiz</label>
-          <textarea className="quiz__selector" id="" cols={30} rows={10} placeholder="Votre description de quiz..." name="description" onChange={(event) => handleChangeQuizData(event, 'description')} />
-        </div>
+          {/* //? ======= Choix de l'url de l'image ========== */}
+          <TextField
+            id="input-thumbnail"
+            label="Image du quiz"
+            variant="outlined"
+            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
+            helperText="Coller l'url de l'image"
+          />
 
-        <input type="text" onChange={(e) => handleChangeQuestions(e, 1)} />
+        </fieldset>
 
-        {/* QUESTIONS */}
-        {/* newQuestions, setNewQuestions */}
-        {/* <CreateQuestion questionNumber={1} newQuestions={newQuestions} setNewQuestions={setNewQuestions} />
-        <CreateQuestion questionNumber={2} />
-        <CreateQuestion questionNumber={3} />
-        <CreateQuestion questionNumber={4} />
-        <CreateQuestion questionNumber={5} />
-        <CreateQuestion questionNumber={6} />
-        <CreateQuestion questionNumber={7} />
-        <CreateQuestion questionNumber={8} />
-        <CreateQuestion questionNumber={9} />
-        <CreateQuestion questionNumber={10} /> */}
+        <fieldset className="quiz__questions">
+          {/* Question 1 */}
+          <CreateQuestion questionNumber={1} />
+        </fieldset>
 
       </form>
     </div>

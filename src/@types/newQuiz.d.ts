@@ -10,6 +10,7 @@ export interface Quiz {
   level_id: number
   user_id: number
   tag_id: number
+  [field: string]: string | number
 }
 
 export interface Question {
