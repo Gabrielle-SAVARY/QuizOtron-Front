@@ -45,6 +45,7 @@ function ProfilQuiz({ quizList }:ProfilQuizProps) {
               level={quiz.level.name}
               tags={quiz.tags}
             />
+
           ))}
         </div>
         )}

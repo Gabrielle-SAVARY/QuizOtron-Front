@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Tag } from '../../@types/quiz';
 
 interface CardProps {
@@ -16,7 +16,26 @@ interface CardProps {
 function Card({
   title, thumbnail, level, author, tags,
 }: CardProps) {
+  // State pour ajouter aux favoris de l'utilisateur
+  // TODO ajout des favoris utilisateurs: pour l'instant change uniquement la couleur de l'icone
   const [favorite, setFavorite] = useState(false);
+
+  // State pour vérifier si on se trouve sur la page du profil utilisateur: gestion de ses quiz
+  const [isProfileQuizRoute, setIsProfileQuizRoute] = useState(false);
+  // On cherche la localisation de la page
+  const location = useLocation();
+  // * Vérification si la page actuelle est bien "profile/quiz": gestion des quiz utilisateurs
+  // Si oui ajout de 2 boutons pour l'édition et la suppression du quiz
+  useEffect(() => {
+    const checkLocation = () => {
+      const locationPath = location.pathname;
+      console.log('location.pathname', locationPath);
+      if (locationPath === '/profile/quiz') {
+        setIsProfileQuizRoute(true);
+      }
+    };
+    checkLocation();
+  });
 
   // Met à jour la couleur l'icone de favoris
   const toggleFavorite = () => {
@@ -35,6 +54,16 @@ function Card({
             />
           </div>
           <div className="card-body">
+            {isProfileQuizRoute && (
+            <div className="card-buttons">
+              <button type="button" className="edit-button">
+                Edit
+              </button>
+              <button type="button" className="delete-button">
+                Delete
+              </button>
+            </div>
+            )}
             <h4 className="card-body__title">{title}</h4>
             <div className="card-body__tag">
               {tags && (

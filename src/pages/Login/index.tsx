@@ -30,15 +30,10 @@ function Login() {
     );
   };
 
-  // Appel API pour demande de connexion utilisateur
-  const handleLogin = () => {
-    dispatch(login());
-  };
-
   // Soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleLogin();
+    dispatch(login());
   };
 
   // Déconnexion utilisateur
