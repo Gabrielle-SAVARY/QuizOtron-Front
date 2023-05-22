@@ -1,15 +1,15 @@
 import {
   useState, useEffect, ChangeEvent, FormEvent,
 } from 'react';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {
+  FormControl, InputLabel, MenuItem, TextField,
+} from '@mui/material';
 import { ITag } from '../../@types/tag';
 import './styles.scss';
 import { Question, Quiz } from '../../@types/newQuiz';
 import CreateQuestion from './CreateQuestions';
 import { ILevel } from '../../@types/level';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {
-  FormControl, InputLabel, MenuItem, TextField,
-} from '@mui/material';
 import { axiosInstance } from '../../utils/axios';
 
 interface CreateQuizProps {
@@ -75,6 +75,174 @@ function CreateQuiz({
       },
     ],
   });
+  const [newQuestion3, setNewQuestion3] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion4, setNewQuestion4] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion5, setNewQuestion5] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion6, setNewQuestion6] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion7, setNewQuestion7] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion8, setNewQuestion8] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion9, setNewQuestion9] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  const [newQuestion10, setNewQuestion10] = useState<Question>({
+    question: '',
+    answers: [
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+      {
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
@@ -110,7 +278,18 @@ function CreateQuiz({
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
-          questions: [newQuestion1, newQuestion2],
+          questions: [
+            newQuestion1,
+            newQuestion2,
+            newQuestion3,
+            newQuestion4,
+            newQuestion5,
+            newQuestion6,
+            newQuestion7,
+            newQuestion8,
+            newQuestion9,
+            newQuestion10,
+          ],
         });
         if (response.status !== 200) throw new Error();
       } catch (error) {
@@ -217,9 +396,49 @@ function CreateQuiz({
             newQuestion={newQuestion2}
             setNewQuestion={setNewQuestion2}
           />
+          <CreateQuestion
+            questionNumber={3}
+            newQuestion={newQuestion3}
+            setNewQuestion={setNewQuestion3}
+          />
+          <CreateQuestion
+            questionNumber={4}
+            newQuestion={newQuestion4}
+            setNewQuestion={setNewQuestion4}
+          />
+          <CreateQuestion
+            questionNumber={5}
+            newQuestion={newQuestion5}
+            setNewQuestion={setNewQuestion5}
+          />
+          <CreateQuestion
+            questionNumber={6}
+            newQuestion={newQuestion6}
+            setNewQuestion={setNewQuestion6}
+          />
+          <CreateQuestion
+            questionNumber={7}
+            newQuestion={newQuestion7}
+            setNewQuestion={setNewQuestion7}
+          />
+          <CreateQuestion
+            questionNumber={8}
+            newQuestion={newQuestion8}
+            setNewQuestion={setNewQuestion8}
+          />
+          <CreateQuestion
+            questionNumber={9}
+            newQuestion={newQuestion9}
+            setNewQuestion={setNewQuestion9}
+          />
+          <CreateQuestion
+            questionNumber={10}
+            newQuestion={newQuestion10}
+            setNewQuestion={setNewQuestion10}
+          />
         </fieldset>
         { errorMessage && <div className="error-message">{errorMessage}</div>}
-        <button type="submit">Envoyer</button>
+        <button type="submit" className="quiz__button">Créer le Quiz</button>
       </form>
     </div>
   );

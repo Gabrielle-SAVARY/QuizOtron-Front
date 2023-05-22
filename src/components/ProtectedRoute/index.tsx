@@ -10,10 +10,10 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }:ProtectedRouteProps) {
-  const isLogged = useAppSelector((state) => state.user.isLogged);
+/*   const isLogged = useAppSelector((state) => state.user.isLogged); */
   // console.log(children);
   // return isLogged ? children : <Navigate to="/connexion" replace />;
-  return isLogged ? children : children;
+  return localStorage.getItem('token') ? children : <Navigate to="/connexion" replace />;
 }
 
 export default ProtectedRoute;

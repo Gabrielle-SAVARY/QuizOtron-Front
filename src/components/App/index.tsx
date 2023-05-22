@@ -16,7 +16,7 @@ import CreateQuiz from '../../pages/Create-Quiz';
 import { ITag } from '../../@types/tag';
 import { axiosInstance } from '../../utils/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { checkIsLogged } from '../../store/reducers/user';
+import { checkIsLogged, findUser } from '../../store/reducers/user';
 import { ILevel } from '../../@types/level';
 
 function App() {
@@ -41,20 +41,25 @@ function App() {
     if (tokenData) {
       try {
         // Si un token existe, on vérifie s'il n'est pas expiré
-        const { id, exp } = jwtDecode(tokenData) as {
+        const { id, exp, pseudo } = jwtDecode(tokenData) as {
           id: number;
           exp: number;
+          pseudo: string
         };
         // On calcule le timestamp de la date et heure actuelle
         const now = Math.floor(Date.now() / 1000);
         // Si le token est expiré, on passe isLogged à false
         // et on supprime les données du LocalStorage avec
         // la fonction removeUserDataFromLocalStorage
+        console.log('token data pseudo', pseudo);
+        console.log('token data EXP', exp);
+        console.log('token data NOW', now);
         console.log('token data isLogged', isLogged);
         if (now >= exp) {
           dispatch(checkIsLogged(false));
         } else {
           dispatch(checkIsLogged(true));
+          dispatch(findUser());
         }
       } catch (error) {
         console.error(error);

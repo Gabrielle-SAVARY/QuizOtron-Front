@@ -25,11 +25,11 @@ export const initialState: UserState = {
   isRegistered: false,
 
   credentials: {
-    firstname: 'Elon',
-    lastname: 'Musk',
-    pseudo: 'elon-musk',
-    email: 'elon2@gmail.com',
-    password: 'test22',
+    firstname: '',
+    lastname: '',
+    pseudo: '',
+    email: '',
+    password: '',
     passwordConfirm: '',
     oldPassword: '',
   },
@@ -41,14 +41,14 @@ export const initialState: UserState = {
 // MONINTERFACE['propriété'] récupère le type d'une propriété
 export type KeysOfCredentials = keyof UserState['credentials'];
 
-// ACTION: met à jour la  valeur des champs des inputs de formulaire
+//* ACTION: met à jour la  valeur des champs des inputs de formulaire
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
   propertyKey: KeysOfCredentials
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
 
-// ACTION: créer/inscription utilisateur
+//* ACTION: créer/inscription utilisateur
 export const register = createAppAsyncThunk(
   'user/REGISTER',
   async (_, thunkAPI) => {
@@ -69,7 +69,7 @@ export const register = createAppAsyncThunk(
   },
 );
 
-// ACTION: connexion utilisateur
+//* ACTION: connexion utilisateur
 export const login = createAppAsyncThunk(
   'user/LOGIN',
   async (_, thunkAPI) => {
@@ -89,13 +89,24 @@ export const login = createAppAsyncThunk(
   },
 );
 
-// ACTION: vérifier si le token existe
+//* ACTION: vérifier si le token existe
 export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 
-// ACTION: déconnexion utilisateur
+//* ACTION: trouver un utilisateur à partir de son pseudo
+export const findUser = createAppAsyncThunk(
+  'user/FIND_USER',
+  async () => {
+    const { data } = await axiosInstance.get('/profile');
+    console.log('user DATA', data);
+
+    return data as IAuthentification;
+  },
+);
+
+//* ACTION: déconnexion utilisateur
 export const logout = createAction('user/LOGOUT');
 
-// ACTION: mise à jour: email ou mot de passe utilisateur
+//* ACTION: mise à jour: email ou mot de passe utilisateur
 export const update = createAppAsyncThunk(
   'user/UPDATE',
   async (_, thunkAPI) => {
@@ -112,7 +123,7 @@ export const update = createAppAsyncThunk(
   },
 );
 
-// ACTION: mise à jour du mot de passe utilisateur
+//* ACTION: mise à jour du mot de passe utilisateur
 export const updatePassword = createAppAsyncThunk(
   'user/UPDATE_PASSWORD',
   async (_, thunkAPI) => {
@@ -129,7 +140,7 @@ export const updatePassword = createAppAsyncThunk(
   },
 );
 
-// ACTION: supprimer utilisateur
+//* ACTION: supprimer utilisateur
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {
@@ -175,6 +186,12 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(checkIsLogged, (state, action) => {
       state.isLogged = action.payload;
     })
+    .addCase(findUser.fulfilled, (state, action) => {
+      state.credentials.pseudo = action.payload.pseudo;
+      state.credentials.email = action.payload.email;
+      state.credentials.firstname = action.payload.firstname;
+      state.credentials.lastname = action.payload.lastname;
+    })
     .addCase(logout, (state) => {
       state.isLogged = false;
       state.credentials.pseudo = '';
@@ -182,6 +199,7 @@ const userReducer = createReducer(initialState, (builder) => {
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
       localStorage.removeItem('token');
+      /*       localStorage.removeItem('isLogged'); */
     })
     .addCase(updatePassword.fulfilled, (state) => {
       state.credentials.oldPassword = '';
