@@ -102,22 +102,11 @@ function App() {
   return (
     <Layout>
       <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/quiz/:id"
-          element={<Quiz />}
-        />
-        <Route
-          path="/connexion"
-          element={<Login />}
-        />
-        <Route
-          path="/inscription"
-          element={<Register />}
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/:id" element={<Quiz />} />
+        <Route path="/connexion" element={<Login />} />
+        <Route path="/inscription" element={<Register />} />
         <Route
           path="/profile/parametres"
           element={(
@@ -155,7 +144,6 @@ function App() {
         />
       </Routes>
     </Layout>
-
   );
 }
 
