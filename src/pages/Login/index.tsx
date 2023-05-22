@@ -13,7 +13,7 @@ function Login() {
   const dispatch = useAppDispatch();
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
-  const logged = useAppSelector((state) => state.user.logged);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
   // Met à jour le state avec la valur des inputs du formulaire
@@ -48,8 +48,8 @@ function Login() {
 
   return (
     <div className="login-page">
-      {logged && (
-        <div className="login-page__logged">
+      {isLogged && (
+        <div className="login-page__isLogged">
           <p>
             {`Vous êtes connecté ${pseudo}`}
           </p>
@@ -60,7 +60,7 @@ function Login() {
           </NavLink>
         </div>
       )}
-      {!logged && (
+      {!isLogged && (
         <div className="login-page__wrapper">
           <form
             action="submit"

@@ -4,9 +4,10 @@ import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
 
 interface UserState {
-  logged: boolean;
+  isLogged: boolean;
   token: string;
-  registered: boolean
+  isRegistered: boolean
+  userId: number
 
   credentials: {
     firstname: string
@@ -20,16 +21,17 @@ interface UserState {
 }
 
 export const initialState: UserState = {
-  logged: false,
+  isLogged: false,
   token: '',
-  registered: false,
+  isRegistered: false,
+  userId: 0,
 
   credentials: {
-    firstname: 'Elon',
-    lastname: 'Musk',
-    pseudo: 'elon-musk',
-    email: 'elon@gmail.com',
-    password: 'test',
+    firstname: '',
+    lastname: '',
+    pseudo: '',
+    email: '',
+    password: '',
     passwordConfirm: '',
     oldPassword: '',
   },
@@ -41,15 +43,14 @@ export const initialState: UserState = {
 // MONINTERFACE['propriété'] récupère le type d'une propriété
 export type KeysOfCredentials = keyof UserState['credentials'];
 
-
-// ACTION: met à jour la  valeur des champs des inputs de formulaire
+//* ACTION: met à jour la  valeur des champs des inputs de formulaire
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
   propertyKey: KeysOfCredentials
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
 
-// ACTION: créer/inscription utilisateur
+//* ACTION: créer/inscription utilisateur
 export const register = createAppAsyncThunk(
   'user/REGISTER',
   async (_, thunkAPI) => {
@@ -57,16 +58,20 @@ export const register = createAppAsyncThunk(
     const state = thunkAPI.getState();
 
     // récupère les states qui correspondent aux inputs du formulaire register
-    const { email, pseudo, firstname, lastname, password, passwordConfirm } = state.user.credentials;
+    const {
+      email, pseudo, firstname, lastname, password, passwordConfirm,
+    } = state.user.credentials;
 
     // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.post('/signup', { email, pseudo, firstname, lastname, password, passwordConfirm });
+    const { data } = await axiosInstance.post('/signup', {
+      email, pseudo, firstname, lastname, password, passwordConfirm,
+    });
 
     return data as IAuthentification;
   },
 );
 
-// ACTION: connexion utilisateur
+//* ACTION: connexion utilisateur
 export const login = createAppAsyncThunk(
   'user/LOGIN',
   async (_, thunkAPI) => {
@@ -86,10 +91,25 @@ export const login = createAppAsyncThunk(
   },
 );
 
-// ACTION: déconnexion utilisateur
+//* ACTION: vérifier si le token existe
+export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
+
+//* ACTION: trouver un utilisateur
+// Back verifie le pseudo stocké dans le token
+export const findUser = createAppAsyncThunk(
+  'user/FIND_USER',
+  async () => {
+    const { data } = await axiosInstance.get('/profile');
+    console.log('user DATA', data);
+
+    return data as IAuthentification;
+  },
+);
+
+//* ACTION: déconnexion utilisateur
 export const logout = createAction('user/LOGOUT');
 
-// ACTION: mise à jour: email ou mot de passe utilisateur
+//* ACTION: mise à jour: email ou mot de passe utilisateur
 export const update = createAppAsyncThunk(
   'user/UPDATE',
   async (_, thunkAPI) => {
@@ -106,7 +126,7 @@ export const update = createAppAsyncThunk(
   },
 );
 
-// ACTION: mise à jour du mot de passe utilisateur
+//* ACTION: mise à jour du mot de passe utilisateur
 export const updatePassword = createAppAsyncThunk(
   'user/UPDATE_PASSWORD',
   async (_, thunkAPI) => {
@@ -123,7 +143,7 @@ export const updatePassword = createAppAsyncThunk(
   },
 );
 
-// ACTION: supprimer utilisateur
+//* ACTION: supprimer utilisateur
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {
@@ -136,7 +156,6 @@ export const deleteUser = createAppAsyncThunk(
   },
 );
 
-
 const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCredentialsField, (state, action) => {
@@ -144,22 +163,23 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials[propertyKey] = value;
     })
     .addCase(register.fulfilled, (state, action) => {
-      state.registered = action.payload.registered;
+      state.isRegistered = action.payload.isRegistered;
 
       // Je réinitialise les credentials
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
     })
     .addCase(register.pending, (state) => {
-      state.registered = false;
+      state.isRegistered = false;
     })
     .addCase(register.rejected, (state) => {
-      state.registered = false;
+      state.isRegistered = false;
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
-      state.logged = action.payload.logged;
+      state.isLogged = action.payload.isLogged;
       state.token = action.payload.token;
+      state.userId = action.payload.id;
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.firstname = action.payload.firstname;
       state.credentials.lastname = action.payload.lastname;
@@ -167,10 +187,24 @@ const userReducer = createReducer(initialState, (builder) => {
       // Je réinitialise les credentials
       state.credentials.password = '';
     })
+    .addCase(checkIsLogged, (state, action) => {
+      state.isLogged = action.payload;
+    })
+    .addCase(findUser.fulfilled, (state, action) => {
+      state.userId = action.payload.id;
+      state.credentials.pseudo = action.payload.pseudo;
+      state.credentials.email = action.payload.email;
+      state.credentials.firstname = action.payload.firstname;
+      state.credentials.lastname = action.payload.lastname;
+    })
     .addCase(logout, (state) => {
-      state.logged = false;
+      state.isLogged = false;
       state.credentials.pseudo = '';
+      state.credentials.firstname = '';
+      state.credentials.lastname = '';
+      state.credentials.email = '';
       state.token = '';
+      state.userId = 0;
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
       localStorage.removeItem('token');
@@ -182,15 +216,15 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(deleteUser.fulfilled, (state) => {
       // on déconnecte l'utilisateur
-      state.logged = false;
+      state.isLogged = false;
       // on supprime les informations du state
       state.token = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';
       state.credentials.email = '';
       state.credentials.pseudo = '';
+      state.userId = 0;
     });
-
 });
 
 export default userReducer;

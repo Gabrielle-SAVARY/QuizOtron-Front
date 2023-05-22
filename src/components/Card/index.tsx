@@ -18,7 +18,7 @@ function Card({
 }: CardProps) {
   const [favorite, setFavorite] = useState(false);
 
-  // Fonction qui permet de changer l'icone de favoris
+  // Met à jour la couleur l'icone de favoris
   const toggleFavorite = () => {
     setFavorite(!favorite);
   };

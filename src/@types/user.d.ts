@@ -1,7 +1,8 @@
 export interface IAuthentification {
-  logged: boolean
+  isLogged: boolean
   token: string
-  registered: boolean
+  id: number
+  isRegistered: boolean
   firstname: string
   lastname: string
   pseudo: string;
@@ -10,7 +11,6 @@ export interface IAuthentification {
   passwordConfirm: string;
   oldPassword: string;
   newPassword: string;
-
 }
 
 // typage data retournée par requête axios: login

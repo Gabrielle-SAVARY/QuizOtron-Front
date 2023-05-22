@@ -4,10 +4,11 @@ import { useAppSelector } from '../../hooks/redux';
 interface ProtectedRouteProps {
   children: JSX.Element
 }
+// Vérifie si un token existe dans el localStorage, si oui accès aux pages
+// si non redirection vers formulaire de connexion
 
 function ProtectedRoute({ children }:ProtectedRouteProps) {
-  const logged = useAppSelector((state) => state.user.logged);
-  return logged ? children : <Navigate to="/connexion" replace />;
+  return localStorage.getItem('token') ? children : <Navigate to="/connexion" replace />;
 }
 
 export default ProtectedRoute;

@@ -17,8 +17,6 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
   const tokenStorage = localStorage.getItem('token');
   const token = JSON.parse(tokenStorage);
-  console.log('axios tokenStorage', tokenStorage);
-  console.log('axios TOKEN', token);
 
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = token ? `Bearer ${token}` : null;
