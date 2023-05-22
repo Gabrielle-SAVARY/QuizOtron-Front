@@ -2,9 +2,8 @@ import {
   FormControlLabel,
   FormLabel, Radio, RadioGroup, TextField,
 } from '@mui/material';
-import { ChangeEvent, SyntheticEvent, useEffect } from 'react';
+import { SyntheticEvent } from 'react';
 import { Question } from '../../../@types/newQuiz';
-import CreateAnswer from '../CreateAnswers';
 import './styles.scss';
 
 interface CreateQuestionsProps {
@@ -14,35 +13,41 @@ interface CreateQuestionsProps {
 }
 
 function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQuestionsProps) {
-  // Mise à jour du state au remplissage du formulaire
-  // TODO TYPE EVENT
+  //* Mise à jour du state au remplissage du formulaire
   const handleChangeQuestions = (
-    e: ChangeEvent<HTMLInputElement> | SyntheticEvent<Element, Event>,
-    aNb = 0,
-    isChangingStatus = false,
+    event: SyntheticEvent<Element, Event>,
+    answerNb = 0,
+    isCorrectAnswer = false,
   ) => {
-    //* Etape 1 : On récupère le contenu du state en question
-    const quizzQuestions = { ...newQuestion };
-    //* Etape 2 : on contrôle le numéro de réponse (aNb)
-    //* Cette valeur nous permet de savoir si on renseigne une question ou une réponse
-    if (aNb === 0) {
-      // Si aNb === 0 alors e.target.value est une question
-      quizzQuestions.question = e.target.value;
-    } else if (!isChangingStatus) {
-      quizzQuestions.answers[aNb - 1].answer = e.target.value;
+    // Etape 1 : On récupère le contenu du state newQuestion dans l'objet quizQuestions
+    const quizQuestions = { ...newQuestion };
+
+    // Etape 2 : on contrôle le numéro de réponse: answerNb
+    // answerNb: permet de savoir si on renseigne une question ou une réponse
+    // Si answerNb === 0 alors e.target.value est une question
+    if (answerNb === 0) {
+      // pour typer la value de l'évenement on type précisement event.target
+      const target = event.target as HTMLInputElement;
+      quizQuestions.question = target.value;
+    } else if (!isCorrectAnswer) {
+      const target = event.target as HTMLInputElement;
+      quizQuestions.answers[answerNb - 1].answer = target.value;
     } else {
-      // Si aNb !== 0 alors e.target.value est une réponse
-      // D'abord on réinitialise les status des réponses à false
-      // TODO! : trouver une solution pour l'erreur de la boucle ci dessous
-      // eslint-disable-next-line no-restricted-syntax
-      for (const anwser of quizzQuestions.answers) {
-        anwser.is_valid = false;
-      }
-      // Ensuite on passe la nouvelle réponse à true
-      quizzQuestions.answers[aNb - 1].is_valid = true;
+      // Si answerNb !== 0 alors e.target.value est une réponse
+      //* Correction de l'erreur eslint de la boucle for of avec un map
+      // on crée un nouveau tableau à partir de quizQuestions
+      // on met à jour tous les is_valid à false pour réinitialiser les boutons radios
+      const updatedAnswers = quizQuestions.answers.map((answer) => ({
+        ...answer,
+        is_valid: false,
+      }));
+      quizQuestions.answers = updatedAnswers;
+
+      // Ensuite on passe la nouvelle réponse à true (sélection bouton radio)
+      quizQuestions.answers[answerNb - 1].is_valid = true;
     }
     // Enfin, on met à jour le state
-    setNewQuestion(quizzQuestions);
+    setNewQuestion(quizQuestions);
   };
 
   return (
@@ -75,7 +80,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   value="answer1"
                   control={<Radio />}
                   label=""
-                  onChange={(e) => handleChangeQuestions(e, 1, true)}
+                  onChange={(event) => handleChangeQuestions(event, 1, true)}
                 />
               </span>
               <span className="answer_input-text">
@@ -83,7 +88,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   id={`answer1-q${questionNumber}`}
                   label="Réponse 1"
                   variant="outlined"
-                  onChange={(e) => handleChangeQuestions(e, 1)}
+                  onChange={(event) => handleChangeQuestions(event, 1)}
                   value={newQuestion.answers[0].answer}
                 />
               </span>
@@ -98,7 +103,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   value="answer2"
                   control={<Radio />}
                   label=""
-                  onChange={(e) => handleChangeQuestions(e, 2, true)}
+                  onChange={(event) => handleChangeQuestions(event, 2, true)}
                 />
               </span>
               <span className="answer_input-text">
@@ -106,7 +111,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   id={`answer2-q${questionNumber}`}
                   label="Réponse 2"
                   variant="outlined"
-                  onChange={(e) => handleChangeQuestions(e, 2)}
+                  onChange={(event) => handleChangeQuestions(event, 2)}
                   value={newQuestion.answers[1].answer}
                 />
               </span>
@@ -121,7 +126,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   value="answer3"
                   control={<Radio />}
                   label=""
-                  onChange={(e) => handleChangeQuestions(e, 3, true)}
+                  onChange={(event) => handleChangeQuestions(event, 3, true)}
                 />
               </span>
               <span className="answer_input-text">
@@ -129,7 +134,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   id={`answer3-q${questionNumber}`}
                   label="Réponse 3"
                   variant="outlined"
-                  onChange={(e) => handleChangeQuestions(e, 3)}
+                  onChange={(event) => handleChangeQuestions(event, 3)}
                   value={newQuestion.answers[2].answer}
                 />
               </span>
@@ -144,7 +149,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   value="answer4"
                   control={<Radio />}
                   label=""
-                  onChange={(e) => handleChangeQuestions(e, 4, true)}
+                  onChange={(event) => handleChangeQuestions(event, 4, true)}
                 />
               </span>
               <span className="answer_input-text">
@@ -152,7 +157,7 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
                   id={`answer4-q${questionNumber}`}
                   label="Réponse 4"
                   variant="outlined"
-                  onChange={(e) => handleChangeQuestions(e, 4)}
+                  onChange={(event) => handleChangeQuestions(event, 4)}
                   value={newQuestion.answers[3].answer}
                 />
               </span>

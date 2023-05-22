@@ -22,9 +22,12 @@ function CreateQuiz({
   tagsList, levelsList,
 }:CreateQuizProps) {
   const userId = useAppSelector((state) => state.user.userId);
+
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
+
   // Stock les informations générale du quiz
+  // on affecte l'id de l'utilsiateur dès le chargement de la page
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
     description: '',
@@ -35,7 +38,7 @@ function CreateQuiz({
   });
 
   //* -------- STATE --------
-  // Stock les questions réponses du nouveau quiz
+  // Stock chaques questions avec ses réponses pour le nouveau quiz
   const [newQuestion1, setNewQuestion1] = useState<Question>({
     question: '',
     answers: [
@@ -269,8 +272,8 @@ function CreateQuiz({
     setNewQuiz(quizData);
   };
 
-  // TODO: récupérer userId avant
   // ENVOIE DU FORMULAIRE A l'API
+  // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!newQuiz.title || newQuiz.title.length < 3) {
@@ -302,6 +305,7 @@ function CreateQuiz({
   };
 
   // pour le dev pour s'assurer du contenu des states
+  // TODO à supprimer en production
   useEffect(() => {
     setErrorMessage('');
   }, [newQuiz, newQuestion1, newQuestion2]);
