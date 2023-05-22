@@ -7,6 +7,7 @@ interface UserState {
   isLogged: boolean;
   token: string;
   isRegistered: boolean
+  userId: number
 
   credentials: {
     firstname: string
@@ -23,6 +24,7 @@ export const initialState: UserState = {
   isLogged: false,
   token: '',
   isRegistered: false,
+  userId: 0,
 
   credentials: {
     firstname: '',
@@ -92,7 +94,8 @@ export const login = createAppAsyncThunk(
 //* ACTION: vérifier si le token existe
 export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 
-//* ACTION: trouver un utilisateur à partir de son pseudo
+//* ACTION: trouver un utilisateur
+// Back verifie le pseudo stocké dans le token
 export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
   async () => {
@@ -176,6 +179,7 @@ const userReducer = createReducer(initialState, (builder) => {
       // J'enregistre les informations retournées par mon API
       state.isLogged = action.payload.isLogged;
       state.token = action.payload.token;
+      state.userId = action.payload.id;
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.firstname = action.payload.firstname;
       state.credentials.lastname = action.payload.lastname;
@@ -187,6 +191,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isLogged = action.payload;
     })
     .addCase(findUser.fulfilled, (state, action) => {
+      state.userId = action.payload.id;
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.email = action.payload.email;
       state.credentials.firstname = action.payload.firstname;
@@ -195,11 +200,14 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(logout, (state) => {
       state.isLogged = false;
       state.credentials.pseudo = '';
+      state.credentials.firstname = '';
+      state.credentials.lastname = '';
+      state.credentials.email = '';
       state.token = '';
+      state.userId = 0;
 
       // Quand l'utilisateur se déconnecte je supprime les données du localStorage
       localStorage.removeItem('token');
-      /*       localStorage.removeItem('isLogged'); */
     })
     .addCase(updatePassword.fulfilled, (state) => {
       state.credentials.oldPassword = '';
@@ -215,6 +223,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = '';
       state.credentials.email = '';
       state.credentials.pseudo = '';
+      state.userId = 0;
     });
 });
 

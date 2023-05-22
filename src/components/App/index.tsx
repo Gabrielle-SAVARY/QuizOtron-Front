@@ -31,8 +31,7 @@ function App() {
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
 
   //* Maintient de la connexion utilisateur
-  // Au rechargement de la page on doit vérifier si un token éxiste déjà.
-  // S'il existe on vérifie s'il est encore valide.
+  // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
   useEffect(() => {
     // On recherche dans le local storage si un token existe
     const tokenDataStr = localStorage.getItem('token');
@@ -41,23 +40,20 @@ function App() {
     if (tokenData) {
       try {
         // Si un token existe, on vérifie s'il n'est pas expiré
-        const { id, exp, pseudo } = jwtDecode(tokenData) as {
-          id: number;
+        const { exp, id } = jwtDecode(tokenData) as {
           exp: number;
-          pseudo: string
+          id: number;
         };
         // On calcule le timestamp de la date et heure actuelle
         const now = Math.floor(Date.now() / 1000);
-        // Si le token est expiré, on passe isLogged à false
-        // et on supprime les données du LocalStorage avec
-        // la fonction removeUserDataFromLocalStorage
-        console.log('token data pseudo', pseudo);
-        console.log('token data EXP', exp);
-        console.log('token data NOW', now);
-        console.log('token data isLogged', isLogged);
+
+        // Si le token est expiré: on passe isLogged à false + on supprime le token du localStorage
         if (now >= exp) {
           dispatch(checkIsLogged(false));
+          localStorage.removeItem('token');
         } else {
+          // Si le token est valide: on passe isLogged à true
+          // on cherche l'utilisateur et on met à jour les states de l'utilsiateur
           dispatch(checkIsLogged(true));
           dispatch(findUser());
         }

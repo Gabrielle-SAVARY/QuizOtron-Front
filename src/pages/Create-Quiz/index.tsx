@@ -11,6 +11,7 @@ import { Question, Quiz } from '../../@types/newQuiz';
 import CreateQuestion from './CreateQuestions';
 import { ILevel } from '../../@types/level';
 import { axiosInstance } from '../../utils/axios';
+import { useAppSelector } from '../../hooks/redux';
 
 interface CreateQuizProps {
   tagsList: ITag[]
@@ -20,6 +21,7 @@ interface CreateQuizProps {
 function CreateQuiz({
   tagsList, levelsList,
 }:CreateQuizProps) {
+  const userId = useAppSelector((state) => state.user.userId);
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
   // Stock les informations générale du quiz
@@ -28,9 +30,10 @@ function CreateQuiz({
     description: '',
     thumbnail: '',
     level_id: 0,
-    user_id: 0,
+    user_id: userId,
     tag_id: 0,
   });
+
   //* -------- STATE --------
   // Stock les questions réponses du nouveau quiz
   const [newQuestion1, setNewQuestion1] = useState<Question>({
