@@ -1,23 +1,17 @@
-import { useEffect } from 'react';
 import Card from '../../components/Card';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { fetchQuiz } from '../../store/reducers/quiz';
+import { IAllQuiz } from '../../@types/quiz';
 
-function Quiz() {
-  const dispatch = useAppDispatch();
-  const allQuiz = useAppSelector((state) => state.quiz.allQuiz);
-  console.log('allQuiz', allQuiz);
+interface QuizProps {
+  quizList: IAllQuiz[]
+}
 
-  useEffect(() => {
-    dispatch(fetchQuiz());
-  }, [dispatch]);
-
+function Quiz({ quizList }: QuizProps) {
   return (
     <div className="quiz">
       <h1>Liste des quiz</h1>
-      {allQuiz && (
+      {quizList && (
         <div className="content-list">
-          {allQuiz.map((quiz) => (
+          {quizList.map((quiz) => (
             <Card
               key={quiz.id}
               title={quiz.title}

@@ -1,2 +1,13 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
+
+.quiz__title {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.quiz__subtitle {
+  text-align: center;
+  font-size: 1.25rem;
+  padding-top: 2rem;
+}

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 import Layout from '../Layout';
 import Home from '../../pages/Home';
-import Quiz from '../../pages/Quiz';
+import Quiz from '../../pages/QuizList';
 import Login from '../../pages/Login';
 import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
@@ -14,6 +14,7 @@ import './styles.scss';
 import ProfilQuiz from '../../pages/Profil-Quiz';
 import CreateQuiz from '../../pages/Create-Quiz';
 import { ITag } from '../../@types/tag';
+import { IAllQuiz } from '../../@types/quiz';
 import { axiosInstance } from '../../utils/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
@@ -23,6 +24,9 @@ function App() {
   const dispatch = useAppDispatch();
   // State: utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
+
+  // State: liste des quiz
+  const [quizList, setQuizList] = useState<IAllQuiz[]>([]);
 
   // State: liste des tags/catégories d'un quiz
   const [tagsList, setTagsList] = useState<ITag[]>([]);
@@ -64,6 +68,25 @@ function App() {
   }, [dispatch, isLogged]);
 
   useEffect(() => {
+    //* Appel API: récupère la liste des quiz
+    const fetchQuizList = async () => {
+      try {
+        const response = await axiosInstance.get('/quiz');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        console.log('response', response);
+        console.log('response DATA', response.data);
+        // met à jour le state avec les données envoyées par l'API
+        setQuizList(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // Récupère la liste des quiz au chargement de la page
+    fetchQuizList();
+
     //* Appel API: récupère la liste des catégories/tags
     const fetchTags = async () => {
       try {
@@ -80,7 +103,6 @@ function App() {
     };
     // Récupère la liste des catégorie au chargement de la page
     fetchTags();
-    // rappelle de la fonction si le state est modifié
 
     //* Appel API: récupère la liste des levels/niveaux
     const fetchLevels = async () => {
@@ -102,11 +124,26 @@ function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/quiz" element={<Quiz />} />
-        <Route path="/quiz/:id" element={<Quiz />} />
-        <Route path="/connexion" element={<Login />} />
-        <Route path="/inscription" element={<Register />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
+        <Route
+          path="/quiz"
+          element={<Quiz quizList={quizList} />}
+        />
+        {/* <Route
+          path="/quiz/:id"
+          element={<Quiz />}
+        /> */}
+        <Route
+          path="/connexion"
+          element={<Login />}
+        />
+        <Route
+          path="/inscription"
+          element={<Register />}
+        />
         <Route
           path="/profile/parametres"
           element={(
@@ -119,7 +156,7 @@ function App() {
           path="/profile/quiz"
           element={(
             <ProtectedRoute>
-              <ProfilQuiz />
+              <ProfilQuiz quizList={quizList} />
             </ProtectedRoute>
           )}
         />
@@ -144,6 +181,7 @@ function App() {
         />
       </Routes>
     </Layout>
+
   );
 }
 

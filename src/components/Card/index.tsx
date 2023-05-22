@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { Tag } from '../../@types/quizlist';
+import { Tag } from '../../@types/quiz';
 
 interface CardProps {
   /*   id: number; */
