@@ -1,4 +1,4 @@
-export interface IOneQuiz {
+export interface IAllQuiz {
   id: number
   title: string
   description: string
@@ -10,12 +10,11 @@ export interface IOneQuiz {
   level: Level
   author: Author
   tags: Tag[]
-  questions: Question[]
-  answers: Answer[]
 }
 
 export interface Level {
   name: string
+  id: number
 }
 
 export interface Author {
@@ -25,6 +24,7 @@ export interface Author {
 export interface Tag {
   name: string
   quiz_has_tag: QuizHasTag
+  id: number
 }
 
 export interface QuizHasTag {
@@ -32,22 +32,4 @@ export interface QuizHasTag {
   updated_at: string
   tag_id: number
   quiz_id: number
-}
-
-export interface Question {
-  id: number
-  question: string
-  created_at: string
-  updated_at: string
-  quiz_id: number
-  answers: Answer[]
-}
-
-export interface Answer {
-  id: number
-  answer: string
-  is_valid: boolean
-  created_at: string
-  updated_at: string
-  question_id: number
 }
