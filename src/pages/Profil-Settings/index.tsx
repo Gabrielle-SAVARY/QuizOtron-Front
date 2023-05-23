@@ -25,7 +25,6 @@ function ProfilSettings() {
   const password = useAppSelector((state) => state.user.credentials.password);
   const passwordConfirm = useAppSelector((state) => state.user.credentials.passwordConfirm);
 
-
   // Met à jour le state avec la valeur des inputs pour les 2 formulaires
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -45,13 +44,13 @@ function ProfilSettings() {
     dispatch(update());
   };
 
-  // Soumission du formulaire: mise à jour email et pseudo 
+  // Soumission du formulaire: mise à jour email et pseudo
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleUpdate();
   };
 
-  // Action mise à jour du mot de passe 
+  // Action mise à jour du mot de passe
   const handleUpdatePassword = () => {
     dispatch(updatePassword());
   };

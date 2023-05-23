@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
+
 import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { Tag } from '../../@types/quiz';
 
 interface CardProps {
@@ -54,16 +58,7 @@ function Card({
             />
           </div>
           <div className="card-body">
-            {isProfileQuizRoute && (
-            <div className="card-buttons">
-              <button type="button" className="edit-button">
-                Edit
-              </button>
-              <button type="button" className="delete-button">
-                Delete
-              </button>
-            </div>
-            )}
+
             <h4 className="card-body__title">{title}</h4>
             <div className="card-body__tag">
               {tags && (
@@ -96,6 +91,17 @@ function Card({
                 )}
               </button>
             </div>
+            {isProfileQuizRoute && (
+            <div className="card-buttons">
+              <Button variant="contained" type="button" className="edit-button" color="success" startIcon={<ModeEditIcon />}>
+
+                Edit
+              </Button>
+              <Button variant="contained" type="button" className="delete-button" startIcon={<DeleteIcon />} color="error">
+                Supprimer
+              </Button>
+            </div>
+            )}
           </div>
         </Link>
       </article>
