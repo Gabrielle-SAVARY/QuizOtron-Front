@@ -14,6 +14,7 @@ function Quiz({ quizList }: QuizProps) {
           {quizList.map((quiz) => (
             <Card
               key={quiz.id}
+              id={quiz.id}
               title={quiz.title}
               thumbnail={quiz.thumbnail}
               author={quiz.author.pseudo}

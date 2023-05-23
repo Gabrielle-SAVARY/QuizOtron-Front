@@ -9,7 +9,7 @@ interface ProfilQuizProps {
   quizList: IAllQuiz[]
 }
 
-function ProfilQuiz({ quizList }:ProfilQuizProps) {
+function ProfilQuiz({ quizList }: ProfilQuizProps) {
   // State: récupère pseudo du reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   // State: stocke les quiz d'un utilisateur
@@ -35,19 +35,20 @@ function ProfilQuiz({ quizList }:ProfilQuizProps) {
       <div>
         <h2 className="quiz__subtitle">Liste des mes quiz</h2>
         {userQuiz && (
-        <div className="content-list">
-          {userQuiz.map((quiz) => (
-            <Card
-              key={quiz.id}
-              title={quiz.title}
-              thumbnail={quiz.thumbnail}
-              author={quiz.author.pseudo}
-              level={quiz.level.name}
-              tags={quiz.tags}
-            />
+          <div className="content-list">
+            {userQuiz.map((quiz) => (
+              <Card
+                key={quiz.id}
+                id={quiz.id}
+                title={quiz.title}
+                thumbnail={quiz.thumbnail}
+                author={quiz.author.pseudo}
+                level={quiz.level.name}
+                tags={quiz.tags}
+              />
 
-          ))}
-        </div>
+            ))}
+          </div>
         )}
 
       </div>
