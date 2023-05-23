@@ -45,6 +45,7 @@ function ProfilQuiz({ quizList }: ProfilQuizProps) {
                 author={quiz.author.pseudo}
                 level={quiz.level.name}
                 tags={quiz.tags}
+
               />
 
             ))}

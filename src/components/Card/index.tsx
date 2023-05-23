@@ -79,6 +79,9 @@ function Card({
     } catch (error) {
       console.log(error);
     }
+
+    handleCloseModal();
+    window.location.reload();
   };
 
   return (
