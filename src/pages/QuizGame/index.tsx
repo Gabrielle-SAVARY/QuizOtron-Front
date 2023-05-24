@@ -4,7 +4,7 @@ import {
   Button,
 } from '@mui/material';
 import { axiosInstance } from '../../utils/axios';
-import { IOneQuiz } from '../../@types/quiz';
+import { Answer, IOneQuiz } from '../../@types/quiz';
 import QuizQuestion from './QuizQuestion';
 
 interface QuizGameProps {
@@ -16,6 +16,10 @@ function QuizPage() {
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
   // Index de la question actuellement affichée (index de 0 à 9)
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  // Stock la réponse sélectionnée par l'utilisateur
+  const [selectedAnswerId, setSelectedAnswerId] = useState<number>(0);
+
+  const [score, setScore] = useState<number>(0);
 
   // Récupère l'id du quiz sur lequel on a cliqué
   const location = useLocation();
@@ -41,11 +45,36 @@ function QuizPage() {
 
   console.log('question index', currentQuiz?.questions[0]);
 
+  const handleAnswerClicked = (answerId: number) => {
+    setSelectedAnswerId(answerId);
+    console.log('selectedAnswer', selectedAnswerId);
+  };
+
+  useEffect(() => {
+    const checkAnswer = () => {
+      const selectedQuestion = currentQuiz?.questions[currentQuestion];
+      console.log('selectedQuestion', selectedQuestion);
+      console.log('selectedQuestion.answers', selectedQuestion?.answers);
+
+      const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === selectedAnswerId);
+      console.log('selectedAnswerId', selectedAnswerId);
+      console.log('userAnswer', userAnswer);
+
+      if (userAnswer?.is_valid) {
+        setScore(score + 1);
+      }
+    };
+    checkAnswer();
+  }, [currentQuestion, currentQuiz?.questions, selectedAnswerId]);
+
   return (
     <div>
       {currentQuiz && (
         <div className="quiz-container">
           <h1>{currentQuiz.title}</h1>
+          <h2>
+            {`Score ${score}`}
+          </h2>
 
           <section className="current-question">
             <h2>
@@ -57,15 +86,14 @@ function QuizPage() {
                 <Button
                   variant="contained"
                   key={answer.id}
+                  onClick={() => handleAnswerClicked(answer.id)}
                 >
                   {answer.answer}
                 </Button>
               ))}
             </div>
           </section>
-
         </div>
-
       )}
 
     </div>
