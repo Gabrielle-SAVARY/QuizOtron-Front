@@ -14,11 +14,12 @@ import './styles.scss';
 import ProfilQuiz from '../../pages/Profil-Quiz';
 import CreateQuiz from '../../pages/Create-Quiz';
 import { ITag } from '../../@types/tag';
-import { IAllQuiz } from '../../@types/quiz';
+import { IAllQuiz } from '../../@types/quizList';
 import { axiosInstance } from '../../utils/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
 import { ILevel } from '../../@types/level';
+import QuizGame from '../../pages/QuizGame';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -132,10 +133,7 @@ function App() {
           path="/quiz"
           element={<Quiz quizList={quizList} />}
         />
-        {/* <Route
-          path="/quiz/:id"
-          element={<Quiz />}
-        /> */}
+        <Route path="/quiz/:id" element={<QuizGame />} />
         <Route
           path="/connexion"
           element={<Login />}
@@ -156,7 +154,7 @@ function App() {
           path="/profile/quiz"
           element={(
             <ProtectedRoute>
-              <ProfilQuiz quizList={quizList} />
+              <ProfilQuiz quizList={quizList} setQuizList={setQuizList} />
             </ProtectedRoute>
           )}
         />

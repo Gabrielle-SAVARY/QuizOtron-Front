@@ -1,5 +1,5 @@
 import Card from '../../components/Card';
-import { IAllQuiz } from '../../@types/quiz';
+import { IAllQuiz } from '../../@types/quizList';
 
 interface QuizProps {
   quizList: IAllQuiz[]
