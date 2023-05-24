@@ -39,7 +39,7 @@ function App() {
   // State: liste des levels/niveaux d'un quiz
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
 
-  const [quizData, setQuizData] = useState<IOneQuiz>({
+  const [oneQuiz, setOneQuiz] = useState<IOneQuiz>({
     id: 0,
     title: '',
     description: '',
@@ -58,7 +58,7 @@ function App() {
     questions: [],
     answers: [],
   });
-  console.log('quizData APP', quizData);
+  console.log('oneQuiz APP', oneQuiz);
 
   //* Maintient de la connexion utilisateur
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -155,7 +155,7 @@ function App() {
       }
       const { data } = response;
       // Met à jour le state avec les données du quiz
-      setQuizData(data);
+      setOneQuiz(data);
       return data;
     } catch (error) {
       throw new Error('Failed to fetch quiz details');
@@ -173,7 +173,7 @@ function App() {
           path="/quiz"
           element={<Quiz quizList={quizList} />}
         />
-        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} quizData={quizData} />} />
+        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
         <Route
           path="/connexion"
           element={<Login />}
@@ -216,6 +216,8 @@ function App() {
               <UpdateQuiz
                 tagsList={tagsList}
                 levelsList={levelsList}
+                getQuizDetails={getQuizDetails}
+                oneQuiz={oneQuiz}
               />
             </ProtectedRoute>
           )}

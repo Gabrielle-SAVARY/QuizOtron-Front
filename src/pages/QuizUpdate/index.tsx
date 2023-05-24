@@ -6,32 +6,50 @@ import {
   FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { ITag } from '../../@types/tag';
-import './styles.scss';
-import { Question, Quiz } from '../../@types/newQuiz';
-import CreateQuestion from '../Create-Quiz/CreateQuestions';
-import { ILevel } from '../../@types/level';
-import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
+import { ILevel } from '../../@types/level';
+import { IOneQuiz } from '../../@types/quiz';
+import { ITag } from '../../@types/tag';
+import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
+import UpdateQuestion from './UpdateQuestions';
+import './styles.scss';
 
 interface CreateQuizProps {
   tagsList: ITag[];
   levelsList: ILevel[];
+  oneQuiz: IOneQuiz
+  getQuizDetails: (id: number) => void
 }
 
-function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
+function UpdateQuiz({
+  tagsList, levelsList, oneQuiz, getQuizDetails,
+}: CreateQuizProps) {
+  // Quiz en cours
+  const [updatedQuiz, setUpdatedQuiz] = useState<IOneQuiz>();
   const userId = useAppSelector((state) => state.user.userId);
 
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
-  console.log('useParams id', id);
+  const quizId = Number(id);
+
+  useEffect(() => {
+    getQuizDetails(quizId);
+  }, [quizId, getQuizDetails]);
+
+  useEffect(() => {
+    if (oneQuiz) {
+      setUpdatedQuiz(oneQuiz);
+    }
+  }, [oneQuiz]);
+  console.log('updatedQuiz', updatedQuiz);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
 
   // Stock les informations générale du quiz
   // on affecte l'id de l'utilsiateur dès le chargement de la page
-  const [newQuiz, setNewQuiz] = useState<Quiz>({
+  const [newQuiz, setNewQuiz] = useState<QuizUp>({
     title: '',
     description: '',
     thumbnail: '',
@@ -40,9 +58,41 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
     tag_id: 0,
   });
 
+  console.log('updatedQuiz?.questions[0]', updatedQuiz?.questions[0]);
+
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
-  const [newQuestion1, setNewQuestion1] = useState<Question>({
+  const [newQuestion1, setNewQuestion1] = useState<QuestionUp>({
+    id: 0,
+    question: '',
+    answers: [
+      {
+        id: 0,
+        answer: '',
+        is_valid: false,
+      },
+      {
+        id: 0,
+        answer: '',
+        is_valid: false,
+      },
+      {
+        id: 0,
+        answer: '',
+        is_valid: false,
+      },
+      {
+        id: 0,
+        answer: '',
+        is_valid: false,
+      },
+    ],
+  });
+  /*   if (updatedQuiz) {
+    setNewQuestion1(updatedQuiz?.questions[0]);
+  } */
+
+  const [newQuestion2, setNewQuestion2] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -63,7 +113,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion2, setNewQuestion2] = useState<Question>({
+  const [newQuestion3, setNewQuestion3] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -84,7 +134,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion3, setNewQuestion3] = useState<Question>({
+  const [newQuestion4, setNewQuestion4] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -105,7 +155,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion4, setNewQuestion4] = useState<Question>({
+  const [newQuestion5, setNewQuestion5] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -126,7 +176,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion5, setNewQuestion5] = useState<Question>({
+  const [newQuestion6, setNewQuestion6] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -147,7 +197,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion6, setNewQuestion6] = useState<Question>({
+  const [newQuestion7, setNewQuestion7] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -168,7 +218,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion7, setNewQuestion7] = useState<Question>({
+  const [newQuestion8, setNewQuestion8] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -189,7 +239,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion8, setNewQuestion8] = useState<Question>({
+  const [newQuestion9, setNewQuestion9] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -210,28 +260,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
       },
     ],
   });
-  const [newQuestion9, setNewQuestion9] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion10, setNewQuestion10] = useState<Question>({
+  const [newQuestion10, setNewQuestion10] = useState<QuestionUp>({
     question: '',
     answers: [
       {
@@ -253,17 +282,18 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
     ],
   });
 
+  console.log('oneQuiz UPDATE', oneQuiz);
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event:
-      | SelectChangeEvent<number>
-      | SelectChangeEvent<string>
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    | SelectChangeEvent<number>
+    | SelectChangeEvent<string>
+    | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
   ) => {
     setErrorMessage('');
-    const quizData = { ...newQuiz } as Quiz;
+    const quizData = { ...newQuiz } as QuizUp;
     // D'abord on vérifie s'il s'agit du field id ou tag
     if (field === 'tag_id') {
       quizData.tag_id = event.target.value as number;
@@ -317,7 +347,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
     setErrorMessage('');
   }, [newQuiz, newQuestion1, newQuestion2]);
   useEffect(() => {
-    console.log('newQuiz', newQuiz);
+    console.log('newQuizUpz', newQuiz);
   }, [newQuiz]);
   useEffect(() => {
     console.log('new question 1', newQuestion1);
@@ -329,7 +359,8 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
   return (
     <div className="quiz__creation">
       <div className="quiz__header">
-        <h3>Créer un quiz</h3>
+        <h3>{`Mise à jour du quiz ${updatedQuiz?.title}`}</h3>
+        <p />
 
         <button type="button" className="quiz__button">
           Quitter
@@ -384,6 +415,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
             id="input-title"
             label="Titre du quiz"
             variant="outlined"
+            value={oneQuiz.title}
             onChange={(event) => handleChangeQuizData(event, 'title')}
           />
 
@@ -392,6 +424,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
             id="input-description"
             label="Description du quiz"
             variant="outlined"
+            value={oneQuiz.description}
             onChange={(event) => handleChangeQuizData(event, 'description')}
           />
 
@@ -400,6 +433,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
             id="input-thumbnail"
             label="Image du quiz"
             variant="outlined"
+            value={oneQuiz.thumbnail}
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             helperText="Coller l'url de l'image"
           />
@@ -407,52 +441,52 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
 
         <fieldset className="quiz__questions">
           {/* Question 1 */}
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={1}
             newQuestion={newQuestion1}
             setNewQuestion={setNewQuestion1}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={2}
             newQuestion={newQuestion2}
             setNewQuestion={setNewQuestion2}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={3}
             newQuestion={newQuestion3}
             setNewQuestion={setNewQuestion3}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={4}
             newQuestion={newQuestion4}
             setNewQuestion={setNewQuestion4}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={5}
             newQuestion={newQuestion5}
             setNewQuestion={setNewQuestion5}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={6}
             newQuestion={newQuestion6}
             setNewQuestion={setNewQuestion6}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={7}
             newQuestion={newQuestion7}
             setNewQuestion={setNewQuestion7}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={8}
             newQuestion={newQuestion8}
             setNewQuestion={setNewQuestion8}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={9}
             newQuestion={newQuestion9}
             setNewQuestion={setNewQuestion9}
           />
-          <CreateQuestion
+          <UpdateQuestion
             questionNumber={10}
             newQuestion={newQuestion10}
             setNewQuestion={setNewQuestion10}
@@ -460,7 +494,7 @@ function UpdateQuiz({ tagsList, levelsList }: CreateQuizProps) {
         </fieldset>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">
-          Créer le Quiz
+          Enregistrer le Quiz
         </button>
       </form>
     </div>

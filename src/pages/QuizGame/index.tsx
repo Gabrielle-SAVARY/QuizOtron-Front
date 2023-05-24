@@ -6,12 +6,12 @@ import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 
 interface QuizGameProps {
-  quizData: IOneQuiz
+  oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
 
 }
 
-function QuizGame({ quizData, getQuizDetails }: QuizGameProps) {
+function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   //* STATE
   // Quiz en cours
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
@@ -29,10 +29,10 @@ function QuizGame({ quizData, getQuizDetails }: QuizGameProps) {
   }, [quizId, getQuizDetails]);
 
   useEffect(() => {
-    if (quizData) {
-      setCurrentQuiz(quizData);
+    if (oneQuiz) {
+      setCurrentQuiz(oneQuiz);
     }
-  }, [quizData]);
+  }, [oneQuiz]);
 
   //* Gère se lon réponse cliquée par le joueur
   const handleAnswerClicked = (answerId: number) => {
