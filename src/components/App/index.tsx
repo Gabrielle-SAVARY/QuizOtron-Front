@@ -19,7 +19,7 @@ import { axiosInstance } from '../../utils/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
 import { ILevel } from '../../@types/level';
-import QuizPage from '../../pages/QuizGame';
+import QuizGame from '../../pages/QuizGame';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -133,7 +133,7 @@ function App() {
           path="/quiz"
           element={<Quiz quizList={quizList} />}
         />
-        <Route path="/quiz/:id" element={<QuizPage />} />
+        <Route path="/quiz/:id" element={<QuizGame />} />
         <Route
           path="/connexion"
           element={<Login />}
