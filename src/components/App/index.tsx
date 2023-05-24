@@ -1,5 +1,7 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {
+  Route, Routes, useLocation, useParams,
+} from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
 import Layout from '../Layout';
 import Home from '../../pages/Home';
@@ -20,6 +22,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
 import { ILevel } from '../../@types/level';
 import QuizGame from '../../pages/QuizGame';
+import UpdateQuiz from '../../pages/QuizUpdate';
+import { IOneQuiz } from '../../@types/quiz';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -34,6 +38,27 @@ function App() {
 
   // State: liste des levels/niveaux d'un quiz
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
+
+  const [quizData, setQuizData] = useState<IOneQuiz>({
+    id: 0,
+    title: '',
+    description: '',
+    thumbnail: '',
+    created_at: '',
+    updated_at: '',
+    level_id: 0,
+    user_id: 0,
+    level: {
+      name: '',
+    },
+    author: {
+      pseudo: '',
+    },
+    tags: [],
+    questions: [],
+    answers: [],
+  });
+  console.log('quizData APP', quizData);
 
   //* Maintient de la connexion utilisateur
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -77,8 +102,6 @@ function App() {
         if (response.status !== 200) {
           throw new Error();
         }
-        console.log('response', response);
-        console.log('response DATA', response.data);
         // met à jour le state avec les données envoyées par l'API
         setQuizList(response.data);
       } catch (error) {
@@ -122,6 +145,23 @@ function App() {
     fetchLevels();
   }, []);
 
+  // Appel API: récupère toutes les informations du quiz affiché
+  // est rappelé selon l'id de l'url de la page
+  const getQuizDetails = useCallback(async (id: number) => {
+    try {
+      const response = await axiosInstance.get(`/quiz/${id}`);
+      if (response.status !== 200) {
+        throw new Error('Failed to fetch quiz details');
+      }
+      const { data } = response;
+      // Met à jour le state avec les données du quiz
+      setQuizData(data);
+      return data;
+    } catch (error) {
+      throw new Error('Failed to fetch quiz details');
+    }
+  }, []);
+
   return (
     <Layout>
       <Routes>
@@ -133,7 +173,7 @@ function App() {
           path="/quiz"
           element={<Quiz quizList={quizList} />}
         />
-        <Route path="/quiz/:id" element={<QuizGame />} />
+        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} quizData={quizData} />} />
         <Route
           path="/connexion"
           element={<Login />}
@@ -163,6 +203,17 @@ function App() {
           element={(
             <ProtectedRoute>
               <CreateQuiz
+                tagsList={tagsList}
+                levelsList={levelsList}
+              />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/quiz/modifier-quiz/:id"
+          element={(
+            <ProtectedRoute>
+              <UpdateQuiz
                 tagsList={tagsList}
                 levelsList={levelsList}
               />

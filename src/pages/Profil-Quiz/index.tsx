@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import './styles.scss';
 import {
   Button,
@@ -101,6 +101,8 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                       className="edit-button"
                       color="success"
                       endIcon={<ModeEditIcon />}
+                      component={Link}
+                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
                     >
                       Edit
                     </Button>

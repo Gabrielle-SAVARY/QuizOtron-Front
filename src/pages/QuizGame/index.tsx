@@ -5,7 +5,13 @@ import { axiosInstance } from '../../utils/axios';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 
-function QuizGame() {
+interface QuizGameProps {
+  quizData: IOneQuiz
+  getQuizDetails: (id: number) => void
+
+}
+
+function QuizGame({ quizData, getQuizDetails }: QuizGameProps) {
   //* STATE
   // Quiz en cours
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
@@ -16,25 +22,17 @@ function QuizGame() {
 
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
+  const quizId = Number(id);
 
   useEffect(() => {
-    // Appel API: récupère toutes les informations du quiz affiché
-    // est rappelé selon l'id de l'url de la page
-    const getQuizDetails = async () => {
-      try {
-        const response = await axiosInstance.get(`/quiz/${id}`);
-        if (response.status !== 200) {
-          throw new Error('Failed to fetch quiz details');
-        }
-        const quizData: IOneQuiz = response.data;
-        // Met à jour le state avec les données du quiz
-        setCurrentQuiz(quizData);
-      } catch (error) {
-        throw new Error('Failed to fetch quiz details');
-      }
-    };
-    getQuizDetails();
-  }, [id]);
+    getQuizDetails(quizId);
+  }, [quizId, getQuizDetails]);
+
+  useEffect(() => {
+    if (quizData) {
+      setCurrentQuiz(quizData);
+    }
+  }, [quizData]);
 
   //* Gère se lon réponse cliquée par le joueur
   const handleAnswerClicked = (answerId: number) => {
