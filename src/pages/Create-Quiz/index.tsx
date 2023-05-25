@@ -20,7 +20,7 @@ interface CreateQuizProps {
 
 function CreateQuiz({
   tagsList, levelsList,
-}:CreateQuizProps) {
+}: CreateQuizProps) {
   const userId = useAppSelector((state) => state.user.userId);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
@@ -254,9 +254,9 @@ function CreateQuiz({
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
-    SelectChangeEvent<string> |
-    ChangeEvent<HTMLInputElement |
-    HTMLTextAreaElement>,
+      SelectChangeEvent<string> |
+      ChangeEvent<HTMLInputElement |
+        HTMLTextAreaElement>,
     field: string,
   ) => {
     setErrorMessage('');
@@ -310,13 +310,10 @@ function CreateQuiz({
     setErrorMessage('');
   }, [newQuiz, newQuestion1, newQuestion2]);
   useEffect(() => {
-    console.log('newQuiz', newQuiz);
   }, [newQuiz]);
   useEffect(() => {
-    console.log('new question 1', newQuestion1);
   }, [newQuestion1]);
   useEffect(() => {
-    console.log('new question 2', newQuestion2);
   }, [newQuestion2]);
 
   return (
@@ -339,7 +336,7 @@ function CreateQuiz({
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
             >
               <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
-              { tagsList.map((tag) => (
+              {tagsList.map((tag) => (
                 <MenuItem key={tag.id} value={tag.id}>{tag.name}</MenuItem>
               ))}
             </Select>
@@ -360,7 +357,7 @@ function CreateQuiz({
                 levelsList.map((level) => (
                   <MenuItem key={level.id} value={level.id}>{level.name}</MenuItem>
                 ))
-                }
+              }
             </Select>
           </FormControl>
 
@@ -444,7 +441,7 @@ function CreateQuiz({
             setNewQuestion={setNewQuestion10}
           />
         </fieldset>
-        { errorMessage && <div className="error-message">{errorMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">Créer le Quiz</button>
       </form>
     </div>

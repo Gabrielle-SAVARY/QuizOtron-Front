@@ -58,7 +58,6 @@ function App() {
     questions: [],
     answers: [],
   });
-  console.log('oneQuiz APP', oneQuiz);
 
   //* Maintient de la connexion utilisateur
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -216,8 +215,7 @@ function App() {
               <UpdateQuiz
                 tagsList={tagsList}
                 levelsList={levelsList}
-                getQuizDetails={getQuizDetails}
-                oneQuiz={oneQuiz}
+                quizList={quizList}
               />
             </ProtectedRoute>
           )}

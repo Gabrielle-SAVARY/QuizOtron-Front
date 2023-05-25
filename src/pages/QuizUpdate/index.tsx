@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, ChangeEvent, FormEvent,
+  useState, useEffect, ChangeEvent, FormEvent, useCallback,
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
@@ -14,35 +14,42 @@ import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
 import UpdateQuestion from './UpdateQuestions';
 import './styles.scss';
+import { IAllQuiz } from '../../@types/quizList';
 
 interface CreateQuizProps {
   tagsList: ITag[];
   levelsList: ILevel[];
-  oneQuiz: IOneQuiz
-  getQuizDetails: (id: number) => void
+  quizList: IAllQuiz[];
 }
 
 function UpdateQuiz({
-  tagsList, levelsList, oneQuiz, getQuizDetails,
+  tagsList, levelsList, quizList,
 }: CreateQuizProps) {
+  // Récupère l'id du quiz sur lequel on a cliqué
+  const { id } = useParams();
+  const pageId = Number(id);
+  const [quizId, setQuizId] = useState<number>(pageId);
   // Quiz en cours
   const [updatedQuiz, setUpdatedQuiz] = useState<IOneQuiz>();
   const userId = useAppSelector((state) => state.user.userId);
 
-  // Récupère l'id du quiz sur lequel on a cliqué
-  const { id } = useParams();
-  const quizId = Number(id);
-
   useEffect(() => {
-    getQuizDetails(quizId);
-  }, [quizId, getQuizDetails]);
+    setQuizId(pageId);
+  }, [id, pageId]);
 
-  useEffect(() => {
-    if (oneQuiz) {
-      setUpdatedQuiz(oneQuiz);
+  const findUpdateQuiz = useCallback((foundId: number) => {
+    const foundQuiz = quizList?.find((quiz) => quiz.id === foundId);
+    console.log('foundQuiz', foundQuiz);
+    if (foundQuiz !== undefined) {
+      setUpdatedQuiz(foundQuiz);
     }
-  }, [oneQuiz]);
-  console.log('updatedQuiz', updatedQuiz);
+  }, [quizList]);
+
+  useEffect(() => {
+    findUpdateQuiz(quizId);
+  }, [quizId, findUpdateQuiz]);
+
+  // console.log('updatedQuiz', updatedQuiz);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
@@ -58,7 +65,7 @@ function UpdateQuiz({
     tag_id: 0,
   });
 
-  console.log('updatedQuiz?.questions[0]', updatedQuiz?.questions[0]);
+  /*   console.log('updatedQuiz?.questions[0]', updatedQuiz?.questions[0]); */
 
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
@@ -282,14 +289,13 @@ function UpdateQuiz({
     ],
   });
 
-  console.log('oneQuiz UPDATE', oneQuiz);
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event:
-    | SelectChangeEvent<number>
-    | SelectChangeEvent<string>
-    | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      | SelectChangeEvent<number>
+      | SelectChangeEvent<string>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
   ) => {
     setErrorMessage('');
@@ -319,7 +325,7 @@ function UpdateQuiz({
       );
     } else {
       try {
-        const response = await axiosInstance.post('/quiz/user/create', {
+        const response = await axiosInstance.patch('/quiz/user/update/:id', {
           quiz: newQuiz,
           questions: [
             newQuestion1,
@@ -359,7 +365,7 @@ function UpdateQuiz({
   return (
     <div className="quiz__creation">
       <div className="quiz__header">
-        <h3>{`Mise à jour du quiz ${updatedQuiz?.title}`}</h3>
+        {/*         <h3>{`Mise à jour du quiz ${updatedQuiz?.title}`}</h3> */}
         <p />
 
         <button type="button" className="quiz__button">
@@ -415,7 +421,7 @@ function UpdateQuiz({
             id="input-title"
             label="Titre du quiz"
             variant="outlined"
-            value={oneQuiz.title}
+            /*             value={oneQuiz.title} */
             onChange={(event) => handleChangeQuizData(event, 'title')}
           />
 
@@ -424,7 +430,7 @@ function UpdateQuiz({
             id="input-description"
             label="Description du quiz"
             variant="outlined"
-            value={oneQuiz.description}
+            /*             value={oneQuiz.description} */
             onChange={(event) => handleChangeQuizData(event, 'description')}
           />
 
@@ -433,7 +439,7 @@ function UpdateQuiz({
             id="input-thumbnail"
             label="Image du quiz"
             variant="outlined"
-            value={oneQuiz.thumbnail}
+            /*             value={oneQuiz.thumbnail} */
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             helperText="Coller l'url de l'image"
           />
@@ -494,7 +500,7 @@ function UpdateQuiz({
         </fieldset>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">
-          Enregistrer le Quiz
+          Modifier le Quiz
         </button>
       </form>
     </div>
