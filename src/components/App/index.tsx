@@ -24,6 +24,7 @@ import { ILevel } from '../../@types/level';
 import QuizGame from '../../pages/QuizGame';
 import UpdateQuiz from '../../pages/QuizUpdate';
 import { IOneQuiz } from '../../@types/quiz';
+import { QuizUp } from '../../@types/quizUpdate';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -215,7 +216,9 @@ function App() {
               <UpdateQuiz
                 tagsList={tagsList}
                 levelsList={levelsList}
-                quizList={quizList}
+                getQuizDetails={getQuizDetails}
+                oneQuiz={oneQuiz}
+                setOneQuiz={setOneQuiz}
               />
             </ProtectedRoute>
           )}

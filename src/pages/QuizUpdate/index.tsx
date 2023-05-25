@@ -19,53 +19,57 @@ import { IAllQuiz } from '../../@types/quizList';
 interface CreateQuizProps {
   tagsList: ITag[];
   levelsList: ILevel[];
-  quizList: IAllQuiz[];
+  oneQuiz: IOneQuiz
+  getQuizDetails: (id: number) => void
+  setOneQuiz: (quiz: IOneQuiz) => void
 }
 
 function UpdateQuiz({
-  tagsList, levelsList, quizList,
+  tagsList, levelsList, oneQuiz, getQuizDetails, setOneQuiz,
 }: CreateQuizProps) {
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
   const [quizId, setQuizId] = useState<number>(pageId);
+
   // Quiz en cours
-  const [updatedQuiz, setUpdatedQuiz] = useState<IOneQuiz>();
   const userId = useAppSelector((state) => state.user.userId);
 
   useEffect(() => {
     setQuizId(pageId);
   }, [id, pageId]);
 
-  const findUpdateQuiz = useCallback((foundId: number) => {
-    const foundQuiz = quizList?.find((quiz) => quiz.id === foundId);
-    console.log('foundQuiz', foundQuiz);
-    if (foundQuiz !== undefined) {
-      setUpdatedQuiz(foundQuiz);
-    }
-  }, [quizList]);
-
   useEffect(() => {
-    findUpdateQuiz(quizId);
-  }, [quizId, findUpdateQuiz]);
-
-  // console.log('updatedQuiz', updatedQuiz);
+    getQuizDetails(quizId);
+  }, [quizId, getQuizDetails]);
+  console.log('.quiz_has_tag', oneQuiz.tags[0]?.quiz_has_tag.tag_id);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
 
   // Stock les informations générale du quiz
   // on affecte l'id de l'utilsiateur dès le chargement de la page
-  const [newQuiz, setNewQuiz] = useState<QuizUp>({
+  const [updateQuiz, setUpdateQuiz] = useState<QuizUp>({
     title: '',
     description: '',
     thumbnail: '',
     level_id: 0,
-    user_id: userId,
+    user_id: 0,
     tag_id: 0,
   });
 
-  /*   console.log('updatedQuiz?.questions[0]', updatedQuiz?.questions[0]); */
+  useEffect(() => {
+    setUpdateQuiz((prevState) => ({
+      ...prevState,
+      title: oneQuiz.title,
+      description: oneQuiz.description,
+      thumbnail: oneQuiz.thumbnail,
+      level_id: oneQuiz.level_id,
+      user_id: userId,
+      tag_id: oneQuiz.tags[0]?.quiz_has_tag.tag_id,
+    }));
+  }, [oneQuiz.description,
+  oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId]);
 
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
@@ -299,7 +303,7 @@ function UpdateQuiz({
     field: string,
   ) => {
     setErrorMessage('');
-    const quizData = { ...newQuiz } as QuizUp;
+    const quizData = { ...updateQuiz } as QuizUp;
     // D'abord on vérifie s'il s'agit du field id ou tag
     if (field === 'tag_id') {
       quizData.tag_id = event.target.value as number;
@@ -307,26 +311,27 @@ function UpdateQuiz({
       quizData.level_id = event.target.value as number;
     } else {
       quizData[field] = event.target.value;
+      console.log(' event.target.value', event.target.value);
     }
-    setNewQuiz(quizData);
+    setUpdateQuiz(quizData);
   };
 
   // ENVOIE DU FORMULAIRE A l'API
   // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!newQuiz.title || newQuiz.title.length < 3) {
+    if (!updateQuiz.title || updateQuiz.title.length < 3) {
       setErrorMessage(
         'Vous devez ajouter un titre contenant au moins 3 caractères',
       );
-    } else if (!newQuiz.description || newQuiz.description.length < 5) {
+    } else if (!updateQuiz.description || updateQuiz.description.length < 5) {
       setErrorMessage(
         'Vous devez ajouter une description contenant au moins 5 caractères',
       );
     } else {
       try {
         const response = await axiosInstance.patch('/quiz/user/update/:id', {
-          quiz: newQuiz,
+          quiz: updateQuiz,
           questions: [
             newQuestion1,
             newQuestion2,
@@ -351,10 +356,10 @@ function UpdateQuiz({
   // TODO à supprimer en production
   useEffect(() => {
     setErrorMessage('');
-  }, [newQuiz, newQuestion1, newQuestion2]);
+  }, [updateQuiz, newQuestion1, newQuestion2]);
   useEffect(() => {
-    console.log('newQuizUpz', newQuiz);
-  }, [newQuiz]);
+    console.log('updateQuiz', updateQuiz);
+  }, [updateQuiz]);
   useEffect(() => {
     console.log('new question 1', newQuestion1);
   }, [newQuestion1]);
@@ -365,9 +370,7 @@ function UpdateQuiz({
   return (
     <div className="quiz__creation">
       <div className="quiz__header">
-        {/*         <h3>{`Mise à jour du quiz ${updatedQuiz?.title}`}</h3> */}
-        <p />
-
+        <h3>Mise à jour du quiz</h3>
         <button type="button" className="quiz__button">
           Quitter
         </button>
@@ -381,7 +384,7 @@ function UpdateQuiz({
               labelId="label-select-tag"
               id="select-tag"
               label="Catégorie"
-              defaultValue="choose option"
+              value={updateQuiz.tag_id}
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
             >
               <MenuItem disabled value="choose option">
@@ -402,12 +405,13 @@ function UpdateQuiz({
               labelId="label-select-level"
               id="select-level"
               label="Difficulté"
-              defaultValue="choose option"
+              value={updateQuiz.level_id}
               onChange={(event) => handleChangeQuizData(event, 'level_id')}
             >
               <MenuItem disabled value="choose option">
-                Sélectionner un niveau
+                Sélectionner
               </MenuItem>
+
               {levelsList.map((level) => (
                 <MenuItem key={level.id} value={level.id}>
                   {level.name}
@@ -421,7 +425,7 @@ function UpdateQuiz({
             id="input-title"
             label="Titre du quiz"
             variant="outlined"
-            /*             value={oneQuiz.title} */
+            value={updateQuiz.title}
             onChange={(event) => handleChangeQuizData(event, 'title')}
           />
 
@@ -430,7 +434,7 @@ function UpdateQuiz({
             id="input-description"
             label="Description du quiz"
             variant="outlined"
-            /*             value={oneQuiz.description} */
+            value={updateQuiz.description}
             onChange={(event) => handleChangeQuizData(event, 'description')}
           />
 
@@ -439,7 +443,7 @@ function UpdateQuiz({
             id="input-thumbnail"
             label="Image du quiz"
             variant="outlined"
-            /*             value={oneQuiz.thumbnail} */
+            value={updateQuiz.thumbnail}
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             helperText="Coller l'url de l'image"
           />

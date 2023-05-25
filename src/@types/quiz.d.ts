@@ -7,9 +7,19 @@ export interface IOneQuiz {
   updated_at: string
   level_id: number
   user_id: number
-  level: Level
+  level: {
+    name: string
+  }
   author: Author
-  tags: Tag[]
+  tags: [{
+    name: string,
+    quiz_has_tag: {
+      created_at: string,
+      updated_at: string,
+      tag_id: number,
+      quiz_id: number,
+    },
+  }]
   questions: Question[]
   answers: Answer[]
 }

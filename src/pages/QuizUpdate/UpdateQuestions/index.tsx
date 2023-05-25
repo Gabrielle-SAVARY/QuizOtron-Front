@@ -5,14 +5,20 @@ import {
 import { SyntheticEvent } from 'react';
 import { QuestionUp } from '../../../@types/quizUpdate';
 import './styles.scss';
+import { IOneQuiz } from '../../../@types/quiz';
 
 interface CreateQuestionsProps {
   questionNumber: number
   newQuestion: QuestionUp
   setNewQuestion: (question: QuestionUp) => void
+  oneQuiz: IOneQuiz
+  getQuizDetails: (id: number) => void
+  setOneQuiz: (quiz: IOneQuiz) => void
 }
 
-function UpdateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQuestionsProps) {
+function UpdateQuestion({
+  oneQuiz, questionNumber, newQuestion, setNewQuestion, getQuizDetails, setOneQuiz,
+}: CreateQuestionsProps) {
   //* Mise à jour du state au remplissage du formulaire
   const handleChangeQuestions = (
     event: SyntheticEvent<Element, Event>,
