@@ -42,7 +42,6 @@ function UpdateQuiz({
   useEffect(() => {
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
-  console.log('.quiz_has_tag', oneQuiz.tags[0]?.quiz_has_tag.tag_id);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
@@ -58,18 +57,20 @@ function UpdateQuiz({
     tag_id: 0,
   });
 
-  useEffect(() => {
-    setUpdateQuiz((prevState) => ({
-      ...prevState,
-      title: oneQuiz.title,
-      description: oneQuiz.description,
-      thumbnail: oneQuiz.thumbnail,
-      level_id: oneQuiz.level_id,
-      user_id: userId,
-      tag_id: oneQuiz.tags[0]?.quiz_has_tag.tag_id,
-    }));
-  }, [oneQuiz.description,
-  oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId]);
+  useEffect(
+    () => {
+      setUpdateQuiz((prevState) => ({
+        ...prevState,
+        title: oneQuiz.title,
+        description: oneQuiz.description,
+        thumbnail: oneQuiz.thumbnail,
+        level_id: oneQuiz.level_id,
+        user_id: userId,
+        tag_id: 1,
+      }));
+    },
+    [oneQuiz.description, oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId],
+  );
 
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
@@ -99,199 +100,289 @@ function UpdateQuiz({
       },
     ],
   });
-  /*   if (updatedQuiz) {
-    setNewQuestion1(updatedQuiz?.questions[0]);
-  } */
 
   const [newQuestion2, setNewQuestion2] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
+
   const [newQuestion3, setNewQuestion3] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
+
   const [newQuestion4, setNewQuestion4] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
+
   const [newQuestion5, setNewQuestion5] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
   const [newQuestion6, setNewQuestion6] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
   const [newQuestion7, setNewQuestion7] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
   const [newQuestion8, setNewQuestion8] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
   const [newQuestion9, setNewQuestion9] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
   const [newQuestion10, setNewQuestion10] = useState<QuestionUp>({
+    id: 0,
     question: '',
     answers: [
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
       {
+        id: 0,
         answer: '',
         is_valid: false,
       },
     ],
   });
+
+  useEffect(() => {
+    setNewQuestion1((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[0],
+    }));
+    setNewQuestion2((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[1],
+    }));
+    setNewQuestion3((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[2],
+    }));
+    setNewQuestion4((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[3],
+    }));
+    setNewQuestion5((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[4],
+    }));
+    setNewQuestion6((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[5],
+    }));
+    setNewQuestion7((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[6],
+    }));
+    setNewQuestion8((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[7],
+    }));
+
+    setNewQuestion9((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[8],
+    }));
+
+    setNewQuestion10((prevState) => ({
+      ...prevState,
+      ...oneQuiz.questions[9],
+    }));
+  }, [oneQuiz.questions]);
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
@@ -354,18 +445,18 @@ function UpdateQuiz({
 
   // pour le dev pour s'assurer du contenu des states
   // TODO à supprimer en production
-  useEffect(() => {
+  /* useEffect(() => {
     setErrorMessage('');
-  }, [updateQuiz, newQuestion1, newQuestion2]);
+  }, [updateQuiz, newQuestion1, newQuestion2]); */
   useEffect(() => {
     console.log('updateQuiz', updateQuiz);
   }, [updateQuiz]);
   useEffect(() => {
     console.log('new question 1', newQuestion1);
   }, [newQuestion1]);
-  useEffect(() => {
+  /*   useEffect(() => {
     console.log('new question 2', newQuestion2);
-  }, [newQuestion2]);
+  }, [newQuestion2]); */
 
   return (
     <div className="quiz__creation">

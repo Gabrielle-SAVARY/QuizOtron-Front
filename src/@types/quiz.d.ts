@@ -12,13 +12,10 @@ export interface IOneQuiz {
   }
   author: Author
   tags: [{
+    id: number
     name: string,
-    quiz_has_tag: {
-      created_at: string,
-      updated_at: string,
-      tag_id: number,
-      quiz_id: number,
-    },
+    created_at: string,
+    updated_at: string,
   }]
   questions: Question[]
   answers: Answer[]
@@ -33,24 +30,24 @@ export interface Author {
 }
 
 export interface Tag {
+  id: number,
   name: string
-  quiz_has_tag: QuizHasTag
-}
-
-export interface QuizHasTag {
   created_at: string
   updated_at: string
-  tag_id: number
-  quiz_id: number
 }
 
 export interface Question {
   id: number
   question: string
-  created_at: string
-  updated_at: string
+  answers: [
+    {
+      id: number
+      answer: string
+      is_valid: boolean
+    },
+  ]
   quiz_id: number
-  answers: Answer[]
+
 }
 
 export interface Answer {

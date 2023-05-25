@@ -16,7 +16,13 @@ export interface QuizUp {
 export interface QuestionUp {
   id: number
   question: string
-  answers: AnswerUp[]
+  answers: [
+    {
+      id: number
+      answer: string
+      is_valid: boolean
+    },
+  ]
 }
 
 export interface AnswerUp {

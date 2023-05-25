@@ -2,7 +2,7 @@ import {
   FormControlLabel,
   FormLabel, Radio, RadioGroup, TextField,
 } from '@mui/material';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState, useEffect } from 'react';
 import { QuestionUp } from '../../../@types/quizUpdate';
 import './styles.scss';
 import { IOneQuiz } from '../../../@types/quiz';
@@ -19,6 +19,18 @@ interface CreateQuestionsProps {
 function UpdateQuestion({
   oneQuiz, questionNumber, newQuestion, setNewQuestion, getQuizDetails, setOneQuiz,
 }: CreateQuestionsProps) {
+  const [defaultAnswer, setDefaultAnswer] = useState<number>(0);
+  useEffect(() => {
+    const findGoodAnswer = () => {
+      const foundAnswer = newQuestion.answers.find((answer) => answer.is_valid);
+      console.log('foundAnswer', foundAnswer);
+      const foundAnswerId = foundAnswer?.id;
+      setDefaultAnswer(foundAnswerId);
+      console.log('defaultAnswer', defaultAnswer);
+    };
+    findGoodAnswer();
+  }, [newQuestion.answers]);
+
   //* Mise à jour du state au remplissage du formulaire
   const handleChangeQuestions = (
     event: SyntheticEvent<Element, Event>,
@@ -56,6 +68,7 @@ function UpdateQuestion({
     setNewQuestion(quizQuestions);
   };
 
+  console.log('newQuestion', newQuestion);
   return (
     <div className="question_container" id={`question${questionNumber}`}>
       <h3 className="question__number">
@@ -73,14 +86,38 @@ function UpdateQuestion({
       <FormLabel id="demo-radio-buttons-group-label">Réponses</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="choose"
+        value={defaultAnswer}
         name={`radio-q${questionNumber}`}
       >
 
         <fieldset>
-          <div className="question-choice">
-            {/* //? ======= Réponse 1 ========== */}
-            <div className="answer_container" id={`q${questionNumber}Answer1`}>
+
+          {newQuestion.answers.map((answer, index) => (
+            <div key={`${answer.id}-${index}`} className="question-choice">
+              <div className="answer_container" id={`q${questionNumber}${answer.id}`}>
+                <span className="answer_radio-button">
+                  <FormControlLabel
+                    value={answer.id}
+                    control={<Radio />}
+                    label=""
+                    onChange={(event) => handleChangeQuestions(event, (index + 1), true)}
+                  />
+                </span>
+                <span className="answer_input-text">
+                  <TextField
+                    id={`answer${answer.id}-q${questionNumber}`}
+                    label={`Réponse ${index + 1}`}
+                    variant="outlined"
+                    onChange={(event) => handleChangeQuestions(event, (index + 1))}
+                    value={answer.answer}
+                  />
+                </span>
+              </div>
+
+            </div>
+          ))}
+
+          {/* <div className="answer_container" id={`q${questionNumber}Answer1`}>
               <span className="answer_radio-button">
                 <FormControlLabel
                   value="answer1"
@@ -99,10 +136,9 @@ function UpdateQuestion({
                 />
               </span>
             </div>
-          </div>
+          </div> */}
 
-          {/* //? ======= Réponse 2 ========== */}
-          <div className="question-choice">
+          {/* <div className="question-choice">
             <div className="answer_container" id={`q${questionNumber}Answer2`}>
               <span className="answer_radio-button">
                 <FormControlLabel
@@ -124,7 +160,6 @@ function UpdateQuestion({
             </div>
           </div>
 
-          {/* //? ======= Réponse 3 ========== */}
           <div className="question-choice">
             <div className="answer_container" id={`q${questionNumber}Answer3`}>
               <span className="answer_radio-button">
@@ -147,7 +182,6 @@ function UpdateQuestion({
             </div>
           </div>
 
-          {/* //? ======= Réponse 4 ========== */}
           <div className="question-choice">
             <div className="answer_container" id={`q${questionNumber}Answer4`}>
               <span className="answer_radio-button">
@@ -167,8 +201,8 @@ function UpdateQuestion({
                   value={newQuestion.answers[3].answer}
                 />
               </span>
-            </div>
-          </div>
+            </div> */}
+
         </fieldset>
       </RadioGroup>
     </div>
