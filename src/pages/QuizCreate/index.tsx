@@ -5,13 +5,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
-import { ITag } from '../../@types/tag';
-import './styles.scss';
-import { Question, Quiz } from '../../@types/newQuiz';
-import QuestionCreate from './QuestionCreate';
-import { ILevel } from '../../@types/level';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import { ILevel } from '../../@types/level';
+import { ITag } from '../../@types/tag';
+import { Question, Quiz } from '../../@types/newQuiz';
+import QuestionCreate from './QuestionCreate';
+import './styles.scss';
 
 interface QuizCreateProps {
   tagsList: ITag[]

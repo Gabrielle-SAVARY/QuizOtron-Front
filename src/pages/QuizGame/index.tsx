@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { axiosInstance } from '../../utils/axios';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 
