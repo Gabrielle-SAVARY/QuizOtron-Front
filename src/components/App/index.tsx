@@ -1,30 +1,26 @@
-import {
-  Route, Routes, useLocation, useParams,
-} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
-import Layout from '../Layout';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
+import { checkIsLogged, findUser } from '../../store/reducers/user';
+import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
-import Quiz from '../../pages/QuizList';
+import Layout from '../Layout';
 import Login from '../../pages/Login';
-import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
 import ProtectedRoute from '../ProtectedRoute';
 import ProfilSettings from '../../pages/Profil-Settings';
-
-import './styles.scss';
 import ProfilQuiz from '../../pages/Profil-Quiz';
-import CreateQuiz from '../../pages/Create-Quiz';
-import { ITag } from '../../@types/tag';
-import { IAllQuiz } from '../../@types/quizList';
-import { axiosInstance } from '../../utils/axios';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { checkIsLogged, findUser } from '../../store/reducers/user';
-import { ILevel } from '../../@types/level';
+import Register from '../../pages/Register';
+import Quiz from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';
-import UpdateQuiz from '../../pages/QuizUpdate';
+import QuizUpdate from '../../pages/QuizUpdate';
+import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
-import { QuizUp } from '../../@types/quizUpdate';
+import { ITag } from '../../@types/tag';
+import { IQuizList } from '../../@types/quizList';
+import './styles.scss';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -32,7 +28,7 @@ function App() {
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
   // State: liste des quiz
-  const [quizList, setQuizList] = useState<IAllQuiz[]>([]);
+  const [quizList, setQuizList] = useState<IQuizList[]>([]);
 
   // State: liste des tags/catégories d'un quiz
   const [tagsList, setTagsList] = useState<ITag[]>([]);
@@ -70,9 +66,8 @@ function App() {
     if (tokenData) {
       try {
         // Si un token existe, on vérifie s'il n'est pas expiré
-        const { exp, id } = jwtDecode(tokenData) as {
+        const { exp } = jwtDecode(tokenData) as {
           exp: number;
-          id: number;
         };
         // On calcule le timestamp de la date et heure actuelle
         const now = Math.floor(Date.now() / 1000);
@@ -145,7 +140,7 @@ function App() {
     fetchLevels();
   }, []);
 
-  // Appel API: récupère toutes les informations du quiz affiché
+  //* Appel API: récupère un quiz selon son id
   // est rappelé selon l'id de l'url de la page
   const getQuizDetails = useCallback(async (id: number) => {
     try {
@@ -202,7 +197,7 @@ function App() {
           path="/profile/quiz/creer-quiz"
           element={(
             <ProtectedRoute>
-              <CreateQuiz
+              <QuizCreate
                 tagsList={tagsList}
                 levelsList={levelsList}
               />
@@ -213,12 +208,11 @@ function App() {
           path="/profile/quiz/modifier-quiz/:id"
           element={(
             <ProtectedRoute>
-              <UpdateQuiz
+              <QuizUpdate
                 tagsList={tagsList}
                 levelsList={levelsList}
                 getQuizDetails={getQuizDetails}
                 oneQuiz={oneQuiz}
-                setOneQuiz={setOneQuiz}
               />
             </ProtectedRoute>
           )}

@@ -1,3 +1,4 @@
+// Type résultat requête: trouve un quiz selon son id "/quiz/:id"
 export interface IOneQuiz {
   id: number
   title: string
@@ -11,12 +12,12 @@ export interface IOneQuiz {
     name: string
   }
   author: Author
-  tags: [{
+  tags: {
     id: number
     name: string,
     created_at: string,
     updated_at: string,
-  }]
+  }[]
   questions: Question[]
   answers: Answer[]
 }

@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, ChangeEvent, FormEvent, useCallback,
+  useState, useEffect, ChangeEvent, FormEvent,
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
@@ -12,26 +12,26 @@ import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
-import UpdateQuestion from './UpdateQuestions';
+import UpdateQuestion from './QuestionUpdate';
 import './styles.scss';
 
-interface CreateQuizProps {
+interface QuizUpdateProps {
   tagsList: ITag[];
   levelsList: ILevel[];
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
-  setOneQuiz: (quiz: IOneQuiz) => void
 }
 
-function UpdateQuiz({
-  tagsList, levelsList, oneQuiz, getQuizDetails, setOneQuiz,
-}: CreateQuizProps) {
+function QuizUpdate({
+  tagsList, levelsList, oneQuiz, getQuizDetails,
+}: QuizUpdateProps) {
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
+  // STATE
   const [quizId, setQuizId] = useState<number>(pageId);
 
-  // Quiz en cours
+  // Récupère l'id du user du reducer user
   const userId = useAppSelector((state) => state.user.userId);
 
   useEffect(() => {
@@ -56,23 +56,19 @@ function UpdateQuiz({
     tag_id: 0,
   });
 
-  useEffect(
-    () => {
-      if (oneQuiz.id !== 0) {
-        setUpdateQuiz((prevState) => ({
-          ...prevState,
-          title: oneQuiz.title,
-          description: oneQuiz.description,
-          thumbnail: oneQuiz.thumbnail,
-          level_id: oneQuiz.level_id,
-          user_id: userId,
-          tag_id: oneQuiz.tags[0].id,
-        }));
-      }
-    },
-    // [oneQuiz.description, oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId],
-    [oneQuiz],
-  );
+  useEffect(() => {
+    if (oneQuiz.id !== 0) {
+      setUpdateQuiz((prevState) => ({
+        ...prevState,
+        title: oneQuiz.title,
+        description: oneQuiz.description,
+        thumbnail: oneQuiz.thumbnail,
+        level_id: oneQuiz.level_id,
+        user_id: userId,
+        tag_id: oneQuiz.tags[0].id,
+      }));
+    }
+  }, [oneQuiz, userId]);
 
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
@@ -404,7 +400,6 @@ function UpdateQuiz({
       quizData.level_id = event.target.value as number;
     } else {
       quizData[field] = event.target.value;
-      console.log(' event.target.value', event.target.value);
     }
     setUpdateQuiz(quizData);
   };
@@ -598,4 +593,4 @@ function UpdateQuiz({
   );
 }
 
-export default UpdateQuiz;
+export default QuizUpdate;

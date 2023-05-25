@@ -6,15 +6,15 @@ import { SyntheticEvent } from 'react';
 import { QuestionUp } from '../../../@types/quizUpdate';
 import './styles.scss';
 
-interface CreateQuestionsProps {
+interface QuestionUpdateProps {
   questionNumber: number
   newQuestion: QuestionUp
   setNewQuestion: (question: QuestionUp) => void
 }
 
-function UpdateQuestion({
+function QuestionUpdate({
   questionNumber, newQuestion, setNewQuestion,
-}: CreateQuestionsProps) {
+}: QuestionUpdateProps) {
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on rensigne une question ou une réponse
   // isCorrectAnswer: boolean / renseigné pour identifier les boutons radio
@@ -113,4 +113,4 @@ function UpdateQuestion({
   );
 }
 
-export default UpdateQuestion;
+export default QuestionUpdate;

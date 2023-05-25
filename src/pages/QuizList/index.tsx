@@ -1,8 +1,8 @@
 import Card from '../../components/Card';
-import { IAllQuiz } from '../../@types/quizList';
+import { IQuizList } from '../../@types/quizList';
 
 interface QuizProps {
-  quizList: IAllQuiz[]
+  quizList: IQuizList[]
 }
 
 function Quiz({ quizList }: QuizProps) {

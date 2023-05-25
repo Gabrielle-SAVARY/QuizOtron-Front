@@ -1,3 +1,5 @@
+// Type format attendu par le back pour la création d'un quiz
+
 export interface INewQuiz {
   quiz: Quiz
   questions: Question[]
@@ -10,6 +12,8 @@ export interface Quiz {
   level_id: number
   user_id: number
   tag_id: number
+
+  // champs non attendu par le back mais utilisé pour le formulaire
   [field: string]: string | number
 }
 

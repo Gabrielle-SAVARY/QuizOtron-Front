@@ -8,19 +8,19 @@ import {
 import { ITag } from '../../@types/tag';
 import './styles.scss';
 import { Question, Quiz } from '../../@types/newQuiz';
-import CreateQuestion from './CreateQuestions';
+import QuestionCreate from './QuestionCreate';
 import { ILevel } from '../../@types/level';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
 
-interface CreateQuizProps {
+interface QuizCreateProps {
   tagsList: ITag[]
   levelsList: ILevel[]
 }
 
-function CreateQuiz({
+function QuizCreate({
   tagsList, levelsList,
-}: CreateQuizProps) {
+}: QuizCreateProps) {
   const userId = useAppSelector((state) => state.user.userId);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
@@ -254,9 +254,9 @@ function CreateQuiz({
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
-      SelectChangeEvent<string> |
-      ChangeEvent<HTMLInputElement |
-        HTMLTextAreaElement>,
+    SelectChangeEvent<string> |
+    ChangeEvent<HTMLInputElement |
+    HTMLTextAreaElement>,
     field: string,
   ) => {
     setErrorMessage('');
@@ -390,52 +390,52 @@ function CreateQuiz({
 
         <fieldset className="quiz__questions">
           {/* Question 1 */}
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={1}
             newQuestion={newQuestion1}
             setNewQuestion={setNewQuestion1}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={2}
             newQuestion={newQuestion2}
             setNewQuestion={setNewQuestion2}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={3}
             newQuestion={newQuestion3}
             setNewQuestion={setNewQuestion3}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={4}
             newQuestion={newQuestion4}
             setNewQuestion={setNewQuestion4}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={5}
             newQuestion={newQuestion5}
             setNewQuestion={setNewQuestion5}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={6}
             newQuestion={newQuestion6}
             setNewQuestion={setNewQuestion6}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={7}
             newQuestion={newQuestion7}
             setNewQuestion={setNewQuestion7}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={8}
             newQuestion={newQuestion8}
             setNewQuestion={setNewQuestion8}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={9}
             newQuestion={newQuestion9}
             setNewQuestion={setNewQuestion9}
           />
-          <CreateQuestion
+          <QuestionCreate
             questionNumber={10}
             newQuestion={newQuestion10}
             setNewQuestion={setNewQuestion10}
@@ -448,4 +448,4 @@ function CreateQuiz({
   );
 }
 
-export default CreateQuiz;
+export default QuizCreate;
