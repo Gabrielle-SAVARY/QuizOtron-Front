@@ -14,7 +14,6 @@ import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
 import UpdateQuestion from './UpdateQuestions';
 import './styles.scss';
-import { IAllQuiz } from '../../@types/quizList';
 
 interface CreateQuizProps {
   tagsList: ITag[];
@@ -59,17 +58,20 @@ function UpdateQuiz({
 
   useEffect(
     () => {
-      setUpdateQuiz((prevState) => ({
-        ...prevState,
-        title: oneQuiz.title,
-        description: oneQuiz.description,
-        thumbnail: oneQuiz.thumbnail,
-        level_id: oneQuiz.level_id,
-        user_id: userId,
-        tag_id: 1,
-      }));
+      if (oneQuiz.id !== 0) {
+        setUpdateQuiz((prevState) => ({
+          ...prevState,
+          title: oneQuiz.title,
+          description: oneQuiz.description,
+          thumbnail: oneQuiz.thumbnail,
+          level_id: oneQuiz.level_id,
+          user_id: userId,
+          tag_id: oneQuiz.tags[0].id,
+        }));
+      }
     },
-    [oneQuiz.description, oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId],
+    // [oneQuiz.description, oneQuiz.level_id, oneQuiz.tags, oneQuiz.thumbnail, oneQuiz.title, userId],
+    [oneQuiz],
   );
 
   //* -------- STATE --------
@@ -388,9 +390,9 @@ function UpdateQuiz({
   // MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event:
-      | SelectChangeEvent<number>
-      | SelectChangeEvent<string>
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    | SelectChangeEvent<number>
+    | SelectChangeEvent<string>
+    | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
   ) => {
     setErrorMessage('');
@@ -451,12 +453,6 @@ function UpdateQuiz({
   useEffect(() => {
     console.log('updateQuiz', updateQuiz);
   }, [updateQuiz]);
-  useEffect(() => {
-    console.log('new question 1', newQuestion1);
-  }, [newQuestion1]);
-  /*   useEffect(() => {
-    console.log('new question 2', newQuestion2);
-  }, [newQuestion2]); */
 
   return (
     <div className="quiz__creation">
