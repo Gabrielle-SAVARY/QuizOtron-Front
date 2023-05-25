@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -21,6 +21,7 @@ import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
+import NotFound from '../NotFound';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -178,6 +179,14 @@ function App() {
           element={<Register />}
         />
         <Route
+          path="/profile"
+          element={(
+            <ProtectedRoute>
+              <Profil />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
           path="/profile/parametres"
           element={(
             <ProtectedRoute>
@@ -217,14 +226,8 @@ function App() {
             </ProtectedRoute>
           )}
         />
-        <Route
-          path="/profile"
-          element={(
-            <ProtectedRoute>
-              <Profil />
-            </ProtectedRoute>
-          )}
-        />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </Layout>
 
