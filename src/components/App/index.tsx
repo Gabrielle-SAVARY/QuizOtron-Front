@@ -86,21 +86,22 @@ function App() {
     }
   }, [dispatch, isLogged]);
 
-  useEffect(() => {
-    //* Appel API: récupère la liste des quiz
-    const fetchQuizList = async () => {
-      try {
-        const response = await axiosInstance.get('/quiz');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // met à jour le state avec les données envoyées par l'API
-        setQuizList(response.data);
-      } catch (error) {
-        console.log(error);
+  //* Appel API: récupère la liste des quiz
+  const fetchQuizList = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/quiz');
+      // Si pas de réponse 200 envoi erreur
+      if (response.status !== 200) {
+        throw new Error();
       }
-    };
+      // met à jour le state avec les données envoyées par l'API
+      setQuizList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
     // Récupère la liste des quiz au chargement de la page
     fetchQuizList();
 
@@ -136,7 +137,7 @@ function App() {
       }
     };
     fetchLevels();
-  }, []);
+  }, [fetchQuizList]);
 
   //* Appel API: récupère un quiz selon son id
   // est rappelé selon l'id de l'url de la page
@@ -154,6 +155,7 @@ function App() {
       throw new Error('Failed to fetch quiz details');
     }
   }, []);
+  console.log('quizList', quizList);
 
   return (
     <Layout>
@@ -219,6 +221,7 @@ function App() {
                 levelsList={levelsList}
                 getQuizDetails={getQuizDetails}
                 oneQuiz={oneQuiz}
+                fetchQuizList={fetchQuizList}
               />
             </ProtectedRoute>
           )}

@@ -5,7 +5,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
 import { ILevel } from '../../@types/level';
@@ -20,11 +20,14 @@ interface QuizUpdateProps {
   levelsList: ILevel[];
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
+  fetchQuizList: () => void
 }
 
 function QuizUpdate({
-  tagsList, levelsList, oneQuiz, getQuizDetails,
+  tagsList, levelsList, oneQuiz, getQuizDetails, fetchQuizList,
 }: QuizUpdateProps) {
+  const navigate = useNavigate();
+
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
@@ -460,6 +463,8 @@ function QuizUpdate({
           ],
         });
         if (response.status !== 200) throw new Error();
+        fetchQuizList();
+        navigate('/profile/quiz');
       } catch (error) {
         console.error(error);
       }
@@ -468,9 +473,7 @@ function QuizUpdate({
 
   // pour le dev pour s'assurer du contenu des states
   // TODO à supprimer en production
-  /* useEffect(() => {
-    setErrorMessage('');
-  }, [updateQuiz, newQuestion1, newQuestion2]); */
+
   useEffect(() => {
     console.log('updateQuiz', updateQuiz);
   }, [updateQuiz]);
@@ -479,9 +482,11 @@ function QuizUpdate({
     <div className="quiz__creation">
       <div className="quiz__header">
         <h3>Mise à jour du quiz</h3>
-        <button type="button" className="quiz__button">
-          Quitter
-        </button>
+        <Link to="/profile/quiz">
+          <button type="button" className="quiz__button">
+            Quitter
+          </button>
+        </Link>
       </div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
