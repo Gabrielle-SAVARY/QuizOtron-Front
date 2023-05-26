@@ -23,5 +23,36 @@ export interface QuestionUp {
     id: number
     answer: string
     is_valid: boolean
+
   }[],
+}
+
+// Type résultat requête converti (sans quiz_id  et question_id):
+// trouve un quiz selon son id "/quiz/:id"
+export interface IUpdatedOneQuiz {
+  id: number
+  title: string
+  description: string
+  thumbnail: string
+  level_id: number
+  user_id: number
+  level: {
+    name: string
+  }
+  author: Author
+  tags: {
+    id: number
+    name: string,
+  }[]
+  questions: {
+    id: number
+    question: string
+    answers:
+    {
+      id: number
+      answer: string
+      is_valid: boolean
+    } [],
+
+  } []
 }

@@ -4,8 +4,6 @@ export interface IOneQuiz {
   title: string
   description: string
   thumbnail: string
-  created_at: string
-  updated_at: string
   level_id: number
   user_id: number
   level: {
@@ -15,11 +13,24 @@ export interface IOneQuiz {
   tags: {
     id: number
     name: string,
-    created_at: string,
-    updated_at: string,
   }[]
-  questions: Question[]
-  answers: Answer[]
+  questions: {
+    id: number
+    question: string
+
+    // non dans la requête patch (update quiz)
+    quiz_id: number
+    answers:
+    {
+      id: number
+      answer: string
+      is_valid: boolean
+
+      // non dans la requête patch (update quiz)    question_id:number
+      question_id:number
+    } [],
+
+  } []
 }
 
 export interface Level {
@@ -33,21 +44,23 @@ export interface Author {
 export interface Tag {
   id: number,
   name: string
-  created_at: string
-  updated_at: string
 }
 
 export interface Question {
   id: number
   question: string
-  answers: [
-    {
-      id: number
-      answer: string
-      is_valid: boolean
-    },
-  ]
+
+  // non dans la requête patch (update quiz)
   quiz_id: number
+  answers:
+  {
+    id: number
+    answer: string
+    is_valid: boolean
+
+    // non dans la requête patch (update quiz)    question_id:number
+    question_id:number
+  } [],
 
 }
 
@@ -55,7 +68,5 @@ export interface Answer {
   id: number
   answer: string
   is_valid: boolean
-  created_at: string
-  updated_at: string
   question_id: number
 }

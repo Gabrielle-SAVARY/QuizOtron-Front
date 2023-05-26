@@ -4,8 +4,6 @@ export interface IQuizList {
   title: string
   description: string
   thumbnail: string
-  created_at: string
-  updated_at: string
   level_id: number
   user_id: number
   level: LevelQList
@@ -28,8 +26,6 @@ export interface TagQList {
 }
 
 export interface QuizHasTagQList {
-  created_at: string
-  updated_at: string
   tag_id: number
   quiz_id: number
 }

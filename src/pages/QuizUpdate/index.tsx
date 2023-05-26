@@ -11,7 +11,7 @@ import { axiosInstance } from '../../utils/axios';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
-import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
+import { IUpdatedOneQuiz, QuestionUp, QuizUp } from '../../@types/quizUpdate';
 import UpdateQuestion from './QuestionUpdate';
 import './styles.scss';
 
@@ -34,6 +34,23 @@ function QuizUpdate({
   // Récupère l'id du user du reducer user
   const userId = useAppSelector((state) => state.user.userId);
 
+  const [updatedOneQuiz, setUpdatedOneQuiz] = useState<IUpdatedOneQuiz>({
+    id: 0,
+    title: '',
+    description: '',
+    thumbnail: '',
+    level_id: 0,
+    user_id: 0,
+    level: {
+      name: '',
+    },
+    author: {
+      pseudo: '',
+    },
+    tags: [],
+    questions: [],
+  });
+
   useEffect(() => {
     setQuizId(pageId);
   }, [id, pageId]);
@@ -41,6 +58,19 @@ function QuizUpdate({
   useEffect(() => {
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
+
+  useEffect(() => {
+    if (oneQuiz.id !== 0) {
+      const convertedOneQUiz = {
+        ...oneQuiz,
+        questions: oneQuiz.questions.map(({ quiz_id, ...question }) => ({
+          ...question,
+          answers: question.answers.map(({ question_id, ...answer }) => answer),
+        })),
+      };
+      setUpdatedOneQuiz(convertedOneQUiz);
+    }
+  }, [oneQuiz]);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
   const [errorMessage, setErrorMessage] = useState('');
@@ -57,18 +87,18 @@ function QuizUpdate({
   });
 
   useEffect(() => {
-    if (oneQuiz.id !== 0) {
+    if (updatedOneQuiz.id !== 0) {
       setUpdateQuiz((prevState) => ({
         ...prevState,
-        title: oneQuiz.title,
-        description: oneQuiz.description,
-        thumbnail: oneQuiz.thumbnail,
-        level_id: oneQuiz.level_id,
+        title: updatedOneQuiz.title,
+        description: updatedOneQuiz.description,
+        thumbnail: updatedOneQuiz.thumbnail,
+        level_id: updatedOneQuiz.level_id,
         user_id: userId,
-        tag_id: oneQuiz.tags[0].id,
+        tag_id: updatedOneQuiz.tags[0].id,
       }));
     }
-  }, [oneQuiz, userId]);
+  }, [updatedOneQuiz, userId]);
 
   //* -------- STATE --------
   // Stock chaques questions avec ses réponses pour le nouveau quiz
@@ -98,7 +128,6 @@ function QuizUpdate({
       },
     ],
   });
-
   const [newQuestion2, setNewQuestion2] = useState<QuestionUp>({
     id: 0,
     question: '',
@@ -125,7 +154,6 @@ function QuizUpdate({
       },
     ],
   });
-
   const [newQuestion3, setNewQuestion3] = useState<QuestionUp>({
     id: 0,
     question: '',
@@ -152,7 +180,6 @@ function QuizUpdate({
       },
     ],
   });
-
   const [newQuestion4, setNewQuestion4] = useState<QuestionUp>({
     id: 0,
     question: '',
@@ -179,7 +206,6 @@ function QuizUpdate({
       },
     ],
   });
-
   const [newQuestion5, setNewQuestion5] = useState<QuestionUp>({
     id: 0,
     question: '',
@@ -340,47 +366,47 @@ function QuizUpdate({
   useEffect(() => {
     setNewQuestion1((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[0],
+      ...updatedOneQuiz.questions[0],
     }));
+
     setNewQuestion2((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[1],
+      ...updatedOneQuiz.questions[1],
     }));
     setNewQuestion3((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[2],
+      ...updatedOneQuiz.questions[2],
     }));
     setNewQuestion4((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[3],
+      ...updatedOneQuiz.questions[3],
     }));
     setNewQuestion5((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[4],
+      ...updatedOneQuiz.questions[4],
     }));
     setNewQuestion6((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[5],
+      ...updatedOneQuiz.questions[5],
     }));
     setNewQuestion7((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[6],
+      ...updatedOneQuiz.questions[6],
     }));
     setNewQuestion8((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[7],
+      ...updatedOneQuiz.questions[7],
     }));
 
     setNewQuestion9((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[8],
+      ...updatedOneQuiz.questions[8],
     }));
-
     setNewQuestion10((prevState) => ({
       ...prevState,
-      ...oneQuiz.questions[9],
+      ...updatedOneQuiz.questions[9],
     }));
-  }, [oneQuiz.questions]);
+  }, [updatedOneQuiz.questions]);
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // MISE A JOUR DE newQuiz
@@ -418,7 +444,7 @@ function QuizUpdate({
       );
     } else {
       try {
-        const response = await axiosInstance.patch('/quiz/user/update/:id', {
+        const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
           quiz: updateQuiz,
           questions: [
             newQuestion1,

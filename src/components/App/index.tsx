@@ -42,8 +42,6 @@ function App() {
     title: '',
     description: '',
     thumbnail: '',
-    created_at: '',
-    updated_at: '',
     level_id: 0,
     user_id: 0,
     level: {
@@ -54,7 +52,6 @@ function App() {
     },
     tags: [],
     questions: [],
-    answers: [],
   });
 
   //* Maintient de la connexion utilisateur
@@ -227,7 +224,7 @@ function App() {
           )}
         />
         <Route path="/404" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
+        <Route path="" element={<Navigate to="/404" replace />} />
       </Routes>
     </Layout>
 
