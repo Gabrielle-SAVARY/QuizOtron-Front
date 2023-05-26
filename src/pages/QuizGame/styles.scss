@@ -1,16 +1,36 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-.home {
-  display: flex;
-  justify-content: center;
-  align-items: left;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 3.5rem;
+.quiz-container {
+  text-align: center;
+}
 
-  &__title {
-    font-size: 2rem;
-    padding-bottom: 5rem;
-  }
+.quiz-title {
+  text-align: center;
+}
+
+.quiz-score {
+
+}
+
+.quizgame__questionNb {
+
+}
+
+.quizgame__text {
+
+}
+
+.quizgame__answer {
+
+
+}
+
+.valid{
+  background-color: vars.$valid-answer-color;
+  color: white;
+}
+.invalid{
+  background-color: vars.$wrong-answer-color;
+  color: white;
 }

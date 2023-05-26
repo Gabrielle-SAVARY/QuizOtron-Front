@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Stack } from '@mui/material';
+import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 
@@ -18,6 +19,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   const [score, setScore] = useState<number>(0);
   // Index de la question actuellement affichée
   const [questionIndex, setQuestionIndex] = useState<number>(0);
+
+  const [selectAnswerValid, setSelectAnswerValid] = useState<boolean | null>(null);
 
   // Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
@@ -42,6 +45,9 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     // vérifie si la réponse du joueur est "valide" est la bonne réponse
     if (userAnswer?.is_valid) {
       setScore(score + 1);
+      setSelectAnswerValid(true);
+    } else {
+      setSelectAnswerValid(false);
     }
     // Incrémente
     setQuestionIndex((prevQuestion) => prevQuestion + 1);
@@ -50,28 +56,54 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   return (
     <div>
       {currentQuiz && (
-        <div className="quiz-container">
-          <h1>{currentQuiz.title}</h1>
+        <div className="quizgame__container">
+          <h1 className="quizgame__title">{currentQuiz.title}</h1>
           {questionIndex < currentQuiz.questions.length
             ? (
-              <section className="current-question">
-                <h2>
+              <section className="quizgame__question">
+                <h2 className="quizgame__score">
                   {`Score ${score}`}
                 </h2>
-                <h2>
+                <h2 className="quizgame__scoreNb">
                   {`Question n° ${questionIndex + 1}`}
                 </h2>
-                <h3>{currentQuiz.questions[questionIndex].question}</h3>
-                <div className="current-answers">
-                  {currentQuiz.questions[questionIndex].answers.map((answer) => (
-                    <Button
-                      variant="contained"
-                      key={answer.id}
-                      onClick={() => handleAnswerClicked(answer.id)}
-                    >
-                      {answer.answer}
-                    </Button>
-                  ))}
+                <h3 className="quizgame__text">{currentQuiz.questions[questionIndex].question}</h3>
+                <div className="quizgame__answer">
+                  <Stack
+                    spacing={{ xs: 2, md: 3 }}
+                  >
+                    {currentQuiz.questions[questionIndex].answers.map((answer) => (
+                      <Button
+                        key={answer.id}
+                        variant="contained"
+                        onClick={() => handleAnswerClicked(answer.id)}
+                       /*  className={classnames({
+                          valid: answer.is_valid && selectAnswerValid === true,
+                          invalid: !answer.is_valid && selectAnswerValid === false,
+                        })} */
+                        sx={{
+                          ':hover': {
+                            bgcolor: '#ffb116',
+                          },
+                        }}
+                      >
+                        {answer.answer}
+                      </Button>
+                      /*                       <button
+                        type="button"
+                        key={answer.id}
+                        onClick={() => handleAnswerClicked(answer.id)}
+                        className={classnames({
+                          valid: answer.is_valid && selectAnswerValid === true,
+                          invalid: !answer.is_valid && selectAnswerValid === false,
+                        })}
+
+                      >
+                        {answer.answer}
+                      </button> */
+
+                    ))}
+                  </Stack>
                 </div>
               </section>
             )
