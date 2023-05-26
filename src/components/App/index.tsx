@@ -1,4 +1,6 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {
+  Navigate, Route, Routes, useNavigate,
+} from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -24,6 +26,7 @@ import './styles.scss';
 import NotFound from '../NotFound';
 
 function App() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   // State: utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
@@ -152,10 +155,9 @@ function App() {
       setOneQuiz(data);
       return data;
     } catch (error) {
-      throw new Error('Failed to fetch quiz details');
+      return navigate('/404');
     }
-  }, []);
-  console.log('quizList', quizList);
+  }, [navigate]);
 
   return (
     <Layout>
@@ -228,7 +230,7 @@ function App() {
           )}
         />
         <Route path="/404" element={<NotFound />} />
-        <Route path="" element={<Navigate to="/404" replace />} />
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </Layout>
 

@@ -1,41 +1,46 @@
-import { useState, useEffect } from 'react';
-import './styles.scss';
-import { FiAlignJustify } from 'react-icons/fi';
-import { FaRegUserCircle } from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { FiAlignJustify } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setScreenWidth, setIsToggleMenu } from '../../store/reducers/header';
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '../../hooks/redux';
+import './styles.scss';
 
 function Header() {
-  /*   const [isToggleMenu, setIsToggleMenu] = useState(false); */
-  const dispatch = useAppDispatch();
-  const isToggleMenu = useAppSelector((state) => state.header.isToggleMenu);
-  const screenWidth = useAppSelector((state) => state.header.screenWidth);
-
+  // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
+  // Vérifie si le menu hamburger est ouvert
+  const [isToggleMenu, setIsToggleMenu] = useState(false);
+  // Vérifie la largeur de l'écran
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  // Met à jour le state de isToggleMenu si le menu hamburger est ouvert
-  // au click sur button header__nav__toggle (toogle ouverture/fermeture)
+  //* Toggle du menu hamburger (écran mobile)
   const changeToggleMenu = () => {
-    dispatch(setIsToggleMenu(!isToggleMenu));
+    setIsToggleMenu(!isToggleMenu);
   };
+  //* Ferme le menu hamburger si redimension fenetre
+  useEffect(() => {
+    const handleScreenWidth = () => {
+      setScreenWidth(window.innerWidth);
+      if (screenWidth > 992 && isToggleMenu) {
+        setIsToggleMenu(false);
+      }
+    };
+    // Ajout écouteur d'évenement si la fenêtre est redimensionée par l'utilisateur
+    window.addEventListener('resize', handleScreenWidth);
 
-  const handleScreenWidth = () => {
-    dispatch(setScreenWidth(window.innerWidth));
-    if (screenWidth > 992 && isToggleMenu) {
-      dispatch(setIsToggleMenu(false));
-    }
-  };
-  // écouteur d'évenement sur la fenêtre: permet de fermer le menu si fenetre redimensionnée
-  window.addEventListener('resize', handleScreenWidth);
+    // Cleanup fonction: suppression écouteur d'évenement
+    return () => {
+      window.removeEventListener('resize', handleScreenWidth);
+    };
+  }, [isToggleMenu, screenWidth]);
 
   return (
     <header className="header">
       <h1 className="header__logo"><NavLink to="/">Quiz&apos;O&apos;Tron</NavLink></h1>
 
       <nav className="header__nav">
-        { /* affiche la liste: en mobile si menu hamburger est ouvert et desktop */}
+        { /* affiche les items du menu: écran desktop + mobile hamburger ouvert */}
         {(isToggleMenu || screenWidth >= 992) && (
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
@@ -43,6 +48,7 @@ function Header() {
           </ul>
         )}
         <button type="button" className="header__login">
+          { /* affiche icone profile si connecté sinon bouton connexion */}
           { isLogged
             ? (
               <NavLink to="/profile">
@@ -57,7 +63,7 @@ function Header() {
         </button>
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
-          {/* mobile: change icon si menu est ouvert ou fermé: hamburger */}
+          {/* Change l'icone du menu mobile- fermé: hambuger / ouvert:croix  */}
           {!isToggleMenu ? <FiAlignJustify size={48} stroke="#fff" strokeWidth="1" />
             : (
               <AiFillCloseCircle size={48} stroke="#003051" strokeWidth="0.9" />
@@ -70,4 +76,3 @@ function Header() {
 }
 
 export default Header;
-/*          */

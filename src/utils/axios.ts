@@ -1,11 +1,4 @@
 import axios from 'axios';
-import { getUserDataFromLocalStorage } from './user';
-
-/* const config = {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-} */
 
 // enregistrement de la configuration de base de axios
 export const axiosInstance = axios.create({
@@ -13,6 +6,7 @@ export const axiosInstance = axios.create({
 
 });
 
+// TODO erreur de type
 // ajout du token dans le header (champs Authorization) de chaque requête
 axiosInstance.interceptors.request.use((config) => {
   const tokenStorage = localStorage.getItem('token');
