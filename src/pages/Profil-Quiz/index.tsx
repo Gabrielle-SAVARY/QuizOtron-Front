@@ -9,6 +9,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Card from '../../components/Card';
@@ -85,7 +87,7 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
           <div>
             <div className="content-list">
               {userQuiz.map((quiz) => (
-                <div key={quiz.id}>
+                <div className="card-wrapper" key={quiz.id}>
                   <Card
                     id={quiz.id}
                     title={quiz.title}
@@ -98,14 +100,15 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                     <Button
                       variant="contained"
                       type="button"
-                      className="edit-button"
-                      color="success"
+                      className="edit-button "
+                      color="primary"
                       endIcon={<ModeEditIcon />}
                       component={Link}
                       to={`/profile/quiz/modifier-quiz/${quiz.id}`}
                     >
-                      Edit
+                      Editer
                     </Button>
+
                     <Button
                       variant="contained"
                       type="button"
@@ -116,6 +119,23 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                     >
                       Supprimer
                     </Button>
+                    {/*                     <IconButton
+                      aria-label="delete"
+                      className="delete-button"
+                      color="success"
+                      component={Link}
+                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
+                    >
+                      <ModeEditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      className="delete-button"
+                      color="error"
+                      onClick={handleOpenModal}
+                    >
+                      <DeleteIcon />
+                    </IconButton> */}
                     <Dialog
                       open={showModal}
                       onClose={handleCloseModal}

@@ -11,3 +11,21 @@
   font-size: 1.25rem;
   padding-top: 2rem;
 }
+
+.card-wrapper{
+  position:relative;
+  max-width: 300px;
+  margin: 1rem auto;
+}
+
+.card-buttons {
+/*   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem; */
+  position: absolute;
+  top: 0px;
+  right: 100px;
+  z-index: 1;
+}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './styles.scss';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { Tag } from '../../@types/quizList';
+import { TagQList } from '../../@types/quizList';
 
 interface CardProps {
   id: number;
@@ -10,7 +10,7 @@ interface CardProps {
   thumbnail: string;
   level: string;
   author: string;
-  tags: Tag[];
+  tags: TagQList[];
 }
 
 function Card({
