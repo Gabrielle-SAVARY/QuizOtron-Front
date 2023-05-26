@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import './styles.scss';
 import {
   Button,
@@ -12,26 +12,26 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Card from '../../components/Card';
-import { IAllQuiz } from '../../@types/quizList';
+import { IQuizList } from '../../@types/quizList';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
 
 interface ProfilQuizProps {
-  quizList: IAllQuiz[]
-  setQuizList: (quizList: IAllQuiz[]) => void
+  quizList: IQuizList[]
+  setQuizList: (quizList: IQuizList[]) => void
 }
 function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
   // State: récupère pseudo du reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   // State: stocke les quiz d'un utilisateur
-  const [userQuiz, setUserQuiz] = useState<IAllQuiz[]>([]);
+  const [userQuiz, setUserQuiz] = useState<IQuizList[]>([]);
 
   // State ouvre et ferme la modale pour la confirmation de suppression d'un quiz
   const [showModal, setShowModal] = useState<boolean>(false);
 
   //* Filtre des quiz de l'utilisateur du profil
   useEffect(() => {
-    const filterUserQuiz = (): IAllQuiz[] => quizList.filter(
+    const filterUserQuiz = (): IQuizList[] => quizList.filter(
       (quiz) => quiz.author.pseudo === pseudo,
     );
     const quizFiltered = filterUserQuiz();
@@ -101,6 +101,8 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                       className="edit-button"
                       color="success"
                       endIcon={<ModeEditIcon />}
+                      component={Link}
+                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
                     >
                       Edit
                     </Button>

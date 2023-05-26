@@ -9,5 +9,8 @@ export default defineConfig({
       host: 'localhost',
     },
   },
+  build: {
+    sourcemap: true,
+  },
 
 });

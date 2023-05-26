@@ -1,17 +1,36 @@
+// Type résultat requête: trouve un quiz selon son id "/quiz/:id"
 export interface IOneQuiz {
   id: number
   title: string
   description: string
   thumbnail: string
-  created_at: string
-  updated_at: string
   level_id: number
   user_id: number
-  level: Level
+  level: {
+    name: string
+  }
   author: Author
-  tags: Tag[]
-  questions: Question[]
-  answers: Answer[]
+  tags: {
+    id: number
+    name: string,
+  }[]
+  questions: {
+    id: number
+    question: string
+
+    // non dans la requête patch (update quiz)
+    quiz_id: number
+    answers:
+    {
+      id: number
+      answer: string
+      is_valid: boolean
+
+      // non dans la requête patch (update quiz)    question_id:number
+      question_id:number
+    } [],
+
+  } []
 }
 
 export interface Level {
@@ -23,31 +42,31 @@ export interface Author {
 }
 
 export interface Tag {
+  id: number,
   name: string
-  quiz_has_tag: QuizHasTag
-}
-
-export interface QuizHasTag {
-  created_at: string
-  updated_at: string
-  tag_id: number
-  quiz_id: number
 }
 
 export interface Question {
   id: number
   question: string
-  created_at: string
-  updated_at: string
+
+  // non dans la requête patch (update quiz)
   quiz_id: number
-  answers: Answer[]
+  answers:
+  {
+    id: number
+    answer: string
+    is_valid: boolean
+
+    // non dans la requête patch (update quiz)    question_id:number
+    question_id:number
+  } [],
+
 }
 
 export interface Answer {
   id: number
   answer: string
   is_valid: boolean
-  created_at: string
-  updated_at: string
   question_id: number
 }

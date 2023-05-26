@@ -1,3 +1,4 @@
+// typage data retournée par requête axios: "/login"
 export interface IAuthentification {
   isLogged: boolean
   token: string
@@ -12,5 +13,3 @@ export interface IAuthentification {
   oldPassword: string;
   newPassword: string;
 }
-
-// typage data retournée par requête axios: login

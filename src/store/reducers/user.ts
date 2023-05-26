@@ -100,8 +100,6 @@ export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
   async () => {
     const { data } = await axiosInstance.get('/profile');
-    console.log('user DATA', data);
-
     return data as IAuthentification;
   },
 );

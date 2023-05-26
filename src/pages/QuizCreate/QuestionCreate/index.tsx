@@ -6,13 +6,13 @@ import { SyntheticEvent } from 'react';
 import { Question } from '../../../@types/newQuiz';
 import './styles.scss';
 
-interface CreateQuestionsProps {
+interface QuestionCreateProps {
   questionNumber: number
   newQuestion: Question
   setNewQuestion: (question: Question) => void
 }
 
-function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQuestionsProps) {
+function QuestionCreate({ questionNumber, newQuestion, setNewQuestion }:QuestionCreateProps) {
   //* Mise à jour du state au remplissage du formulaire
   const handleChangeQuestions = (
     event: SyntheticEvent<Element, Event>,
@@ -170,4 +170,4 @@ function CreateQuestion({ questionNumber, newQuestion, setNewQuestion }:CreateQu
   );
 }
 
-export default CreateQuestion;
+export default QuestionCreate;

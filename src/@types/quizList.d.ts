@@ -1,35 +1,31 @@
-export interface IAllQuiz {
+// Type résultat requête tous les quiz "/quiz"
+export interface IQuizList {
   id: number
   title: string
   description: string
   thumbnail: string
-  created_at: string
-  updated_at: string
   level_id: number
   user_id: number
-  level: Level
+  level: LevelQList
   author: Author
-  tags: Tag[]
+  tags: TagQList[]
 }
 
-export interface Level {
+export interface LevelQList {
   name: string
   id: number
 }
 
-export interface Author {
+export interface AuthorQList {
   pseudo: string
 }
 
-export interface Tag {
+export interface TagQList {
   name: string
-  quiz_has_tag: QuizHasTag
-  id: number
+  quiz_has_tag: QuizHasTagQList
 }
 
-export interface QuizHasTag {
-  created_at: string
-  updated_at: string
+export interface QuizHasTagQList {
   tag_id: number
   quiz_id: number
 }

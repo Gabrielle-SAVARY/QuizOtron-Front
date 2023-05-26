@@ -1,25 +1,27 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
-import Layout from '../Layout';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
+import { checkIsLogged, findUser } from '../../store/reducers/user';
+import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
-import Quiz from '../../pages/QuizList';
+import Layout from '../Layout';
 import Login from '../../pages/Login';
-import Register from '../../pages/Register';
 import Profil from '../../pages/Profil';
 import ProtectedRoute from '../ProtectedRoute';
 import ProfilSettings from '../../pages/Profil-Settings';
-
-import './styles.scss';
 import ProfilQuiz from '../../pages/Profil-Quiz';
-import CreateQuiz from '../../pages/Create-Quiz';
-import { ITag } from '../../@types/tag';
-import { IAllQuiz } from '../../@types/quizList';
-import { axiosInstance } from '../../utils/axios';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { checkIsLogged, findUser } from '../../store/reducers/user';
-import { ILevel } from '../../@types/level';
+import Register from '../../pages/Register';
+import Quiz from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';
+import QuizUpdate from '../../pages/QuizUpdate';
+import { ILevel } from '../../@types/level';
+import { IOneQuiz } from '../../@types/quiz';
+import { ITag } from '../../@types/tag';
+import { IQuizList } from '../../@types/quizList';
+import './styles.scss';
+import NotFound from '../NotFound';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,13 +29,30 @@ function App() {
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
   // State: liste des quiz
-  const [quizList, setQuizList] = useState<IAllQuiz[]>([]);
+  const [quizList, setQuizList] = useState<IQuizList[]>([]);
 
   // State: liste des tags/catégories d'un quiz
   const [tagsList, setTagsList] = useState<ITag[]>([]);
 
   // State: liste des levels/niveaux d'un quiz
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
+
+  const [oneQuiz, setOneQuiz] = useState<IOneQuiz>({
+    id: 0,
+    title: '',
+    description: '',
+    thumbnail: '',
+    level_id: 0,
+    user_id: 0,
+    level: {
+      name: '',
+    },
+    author: {
+      pseudo: '',
+    },
+    tags: [],
+    questions: [],
+  });
 
   //* Maintient de la connexion utilisateur
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -45,9 +64,8 @@ function App() {
     if (tokenData) {
       try {
         // Si un token existe, on vérifie s'il n'est pas expiré
-        const { exp, id } = jwtDecode(tokenData) as {
+        const { exp } = jwtDecode(tokenData) as {
           exp: number;
-          id: number;
         };
         // On calcule le timestamp de la date et heure actuelle
         const now = Math.floor(Date.now() / 1000);
@@ -68,23 +86,22 @@ function App() {
     }
   }, [dispatch, isLogged]);
 
-  useEffect(() => {
-    //* Appel API: récupère la liste des quiz
-    const fetchQuizList = async () => {
-      try {
-        const response = await axiosInstance.get('/quiz');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        console.log('response', response);
-        console.log('response DATA', response.data);
-        // met à jour le state avec les données envoyées par l'API
-        setQuizList(response.data);
-      } catch (error) {
-        console.log(error);
+  //* Appel API: récupère la liste des quiz
+  const fetchQuizList = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/quiz');
+      // Si pas de réponse 200 envoi erreur
+      if (response.status !== 200) {
+        throw new Error();
       }
-    };
+      // met à jour le state avec les données envoyées par l'API
+      setQuizList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
     // Récupère la liste des quiz au chargement de la page
     fetchQuizList();
 
@@ -120,7 +137,25 @@ function App() {
       }
     };
     fetchLevels();
+  }, [fetchQuizList]);
+
+  //* Appel API: récupère un quiz selon son id
+  // est rappelé selon l'id de l'url de la page
+  const getQuizDetails = useCallback(async (id: number) => {
+    try {
+      const response = await axiosInstance.get(`/quiz/${id}`);
+      if (response.status !== 200) {
+        throw new Error('Failed to fetch quiz details');
+      }
+      const { data } = response;
+      // Met à jour le state avec les données du quiz
+      setOneQuiz(data);
+      return data;
+    } catch (error) {
+      throw new Error('Failed to fetch quiz details');
+    }
   }, []);
+  console.log('quizList', quizList);
 
   return (
     <Layout>
@@ -133,7 +168,7 @@ function App() {
           path="/quiz"
           element={<Quiz quizList={quizList} />}
         />
-        <Route path="/quiz/:id" element={<QuizGame />} />
+        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
         <Route
           path="/connexion"
           element={<Login />}
@@ -141,6 +176,14 @@ function App() {
         <Route
           path="/inscription"
           element={<Register />}
+        />
+        <Route
+          path="/profile"
+          element={(
+            <ProtectedRoute>
+              <Profil />
+            </ProtectedRoute>
+          )}
         />
         <Route
           path="/profile/parametres"
@@ -162,7 +205,7 @@ function App() {
           path="/profile/quiz/creer-quiz"
           element={(
             <ProtectedRoute>
-              <CreateQuiz
+              <QuizCreate
                 tagsList={tagsList}
                 levelsList={levelsList}
               />
@@ -170,13 +213,21 @@ function App() {
           )}
         />
         <Route
-          path="/profile"
+          path="/profile/quiz/modifier-quiz/:id"
           element={(
             <ProtectedRoute>
-              <Profil />
+              <QuizUpdate
+                tagsList={tagsList}
+                levelsList={levelsList}
+                getQuizDetails={getQuizDetails}
+                oneQuiz={oneQuiz}
+                fetchQuizList={fetchQuizList}
+              />
             </ProtectedRoute>
           )}
         />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="" element={<Navigate to="/404" replace />} />
       </Routes>
     </Layout>
 
