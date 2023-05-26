@@ -5,6 +5,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
 import { ILevel } from '../../@types/level';
@@ -16,11 +17,13 @@ import './styles.scss';
 interface QuizCreateProps {
   tagsList: ITag[]
   levelsList: ILevel[]
+  fetchQuizList: () => void
 }
 
 function QuizCreate({
-  tagsList, levelsList,
+  tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
+  const navigate = useNavigate();
   const userId = useAppSelector((state) => state.user.userId);
 
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
@@ -298,6 +301,8 @@ function QuizCreate({
           ],
         });
         if (response.status !== 200) throw new Error();
+        fetchQuizList();
+        navigate('/profile/quiz');
       } catch (error) {
         console.error(error);
       }
@@ -320,7 +325,11 @@ function QuizCreate({
     <div className="quiz__creation">
       <div className="quiz__header">
         <h3>Créer un quiz</h3>
-        <button type="button" className="quiz__button">Quitter</button>
+        <Link to="/profile/quiz">
+          <button type="button" className="quiz__button">
+            Quitter
+          </button>
+        </Link>
       </div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">

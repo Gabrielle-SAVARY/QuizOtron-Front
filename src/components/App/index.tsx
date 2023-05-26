@@ -208,6 +208,7 @@ function App() {
               <QuizCreate
                 tagsList={tagsList}
                 levelsList={levelsList}
+                fetchQuizList={fetchQuizList}
               />
             </ProtectedRoute>
           )}
