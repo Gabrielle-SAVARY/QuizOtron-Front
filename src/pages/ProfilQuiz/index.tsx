@@ -97,32 +97,32 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                     tags={quiz.tags}
                   />
                   <div className="card-buttons">
-                    <Button
+                    {/*                     <Button
                       variant="contained"
                       type="button"
-                      className="edit-button "
-                      color="primary"
-                      endIcon={<ModeEditIcon />}
-                      component={Link}
-                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
-                    >
-                      Editer
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      type="button"
-                      className="delete-button"
+                      className="card-buttons__delete"
                       endIcon={<DeleteIcon />}
                       color="error"
                       onClick={handleOpenModal}
                     >
                       Supprimer
                     </Button>
-                    {/*                     <IconButton
+                    <Button
+                      variant="contained"
+                      type="button"
+                      className="card-buttons__edit "
+                      color="primary"
+                      endIcon={<ModeEditIcon />}
+                      component={Link}
+                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
+                    >
+                      Editer
+                    </Button> */}
+
+                    <IconButton
                       aria-label="delete"
                       className="delete-button"
-                      color="success"
+                      color="primary"
                       component={Link}
                       to={`/profile/quiz/modifier-quiz/${quiz.id}`}
                     >
@@ -135,7 +135,7 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                       onClick={handleOpenModal}
                     >
                       <DeleteIcon />
-                    </IconButton> */}
+                    </IconButton>
                     <Dialog
                       open={showModal}
                       onClose={handleCloseModal}

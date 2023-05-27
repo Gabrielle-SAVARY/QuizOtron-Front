@@ -13,13 +13,13 @@ interface QuizGameProps {
 
 function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   //* STATE
-  // Quiz en cours
+  // Quiz affiché
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
   // Score du joueur
   const [score, setScore] = useState<number>(0);
   // Index de la question actuellement affichée
   const [questionIndex, setQuestionIndex] = useState<number>(0);
-
+  // Vérifie si la réponse du joueur est valide/correcte
   const [selectAnswerValid, setSelectAnswerValid] = useState<boolean | null>(null);
 
   // Récupère l'id du quiz sur lequel on a cliqué
@@ -40,17 +40,19 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   const handleAnswerClicked = (answerId: number) => {
     // Récupère la question sélectionnée (l'objet)
     const selectedQuestion = currentQuiz?.questions[questionIndex];
-    // récupère la réponse du joueur (l'objet)
+    // Récupère la réponse du joueur (l'objet)
     const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === answerId);
-    // vérifie si la réponse du joueur est "valide" est la bonne réponse
+    // Vérifie si la réponse du joueur est "valide" est la bonne réponse
     if (userAnswer?.is_valid) {
       setScore(score + 1);
       setSelectAnswerValid(true);
     } else {
       setSelectAnswerValid(false);
     }
-    // Incrémente
-    setQuestionIndex((prevQuestion) => prevQuestion + 1);
+    setTimeout(() => {
+      // Incrémente l'index de la question -> affiche la question suivante
+      setQuestionIndex((prevQuestion) => prevQuestion + 1);
+    }, 2000);
   };
 
   return (
@@ -73,35 +75,17 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                     spacing={{ xs: 2, md: 3 }}
                   >
                     {currentQuiz.questions[questionIndex].answers.map((answer) => (
-                      <Button
-                        key={answer.id}
-                        variant="contained"
-                        onClick={() => handleAnswerClicked(answer.id)}
-                       /*  className={classnames({
-                          valid: answer.is_valid && selectAnswerValid === true,
-                          invalid: !answer.is_valid && selectAnswerValid === false,
-                        })} */
-                        sx={{
-                          ':hover': {
-                            bgcolor: '#ffb116',
-                          },
-                        }}
-                      >
-                        {answer.answer}
-                      </Button>
-                      /*                       <button
+                      <button
                         type="button"
                         key={answer.id}
                         onClick={() => handleAnswerClicked(answer.id)}
-                        className={classnames({
+                        className={classnames('quizgame__answerBtn', {
                           valid: answer.is_valid && selectAnswerValid === true,
                           invalid: !answer.is_valid && selectAnswerValid === false,
                         })}
-
                       >
                         {answer.answer}
-                      </button> */
-
+                      </button>
                     ))}
                   </Stack>
                 </div>

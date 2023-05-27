@@ -13,7 +13,7 @@ import Login from '../../pages/Login';
 import Profil from '../../pages/Profil';
 import ProtectedRoute from '../ProtectedRoute';
 import ProfilSettings from '../../pages/Profil-Settings';
-import ProfilQuiz from '../../pages/Profil-Quiz';
+import ProfilQuiz from '../../pages/ProfilQuiz';
 import Register from '../../pages/Register';
 import Quiz from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';

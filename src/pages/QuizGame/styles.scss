@@ -25,6 +25,23 @@
 
 
 }
+.quizgame__answerBtn{
+  outline: 0;
+  border: 0;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: vars.$main-primary-color;
+  border-radius: 0.5rem;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  &:hover {
+    background: vars.$main-secondary-color;
+  }
+
+}
 
 .valid{
   background-color: vars.$valid-answer-color;
