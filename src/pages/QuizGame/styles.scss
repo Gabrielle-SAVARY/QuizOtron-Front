@@ -62,7 +62,7 @@
   cursor: pointer;
   transition: background 0.3s ease;
   &:hover{
-  background: vars.$primary-dark-color;
+  background: vars.$secondary-light-color;
   color: #fff;
   }
   // désactive les boutons après le click de l'utilisateur

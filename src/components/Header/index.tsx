@@ -19,6 +19,7 @@ function Header() {
   // Vérifie la largeur de l'écran
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
+  //* Ajout de la classe active sur le lien cliqué
   const menuLink = ({ isActive }: IMenuLink) => cn('header__nav-list__items', {
     'header__nav-list__items--active': isActive,
   });

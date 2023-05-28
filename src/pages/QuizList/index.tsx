@@ -1,5 +1,6 @@
 import Card from '../../components/Card';
 import { IQuizList } from '../../@types/quizList';
+import './styles.scss';
 
 interface QuizProps {
   quizList: IQuizList[]
@@ -7,10 +8,10 @@ interface QuizProps {
 
 function Quiz({ quizList }: QuizProps) {
   return (
-    <div className="quiz">
-      <h1>Liste des quiz</h1>
+    <div className="quiz-list">
+      <h1 className="quiz-list__title">Liste des quiz</h1>
       {quizList && (
-        <div className="content-list">
+        <div className="quiz-list__items">
           {quizList.map((quiz) => (
             <Card
               key={quiz.id}
