@@ -54,6 +54,10 @@
         margin-right: 0px;
         padding: 20px 0;  
 
+        &--active {
+          background-color: vars.$primary-dark-color;
+        }
+
         @include mixin.breakpoint(desktop) {
           width: auto;
           padding: 10px;  

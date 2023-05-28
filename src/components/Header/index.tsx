@@ -3,8 +3,13 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { FiAlignJustify } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
 import './styles.scss';
+
+interface IMenuLink {
+  isActive: boolean;
+}
 
 function Header() {
   // Vérifie si l'utilisateur est connecté
@@ -13,6 +18,10 @@ function Header() {
   const [isToggleMenu, setIsToggleMenu] = useState(false);
   // Vérifie la largeur de l'écran
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  const menuLink = ({ isActive }: IMenuLink) => cn('header__nav-list__items', {
+    'header__nav-list__items--active': isActive,
+  });
 
   //* Toggle du menu hamburger (écran mobile)
   const changeToggleMenu = () => {
@@ -43,8 +52,8 @@ function Header() {
         { /* affiche les items du menu: écran desktop + mobile hamburger ouvert */}
         {(isToggleMenu || screenWidth >= 992) && (
           <ul className="header__nav-list">
-            <li className="header__nav-list__items"><NavLink to="/">Accueil</NavLink></li>
-            <li className="header__nav-list__items"><NavLink to="/quiz">Liste des quiz</NavLink></li>
+            <li><NavLink to="/" className={menuLink}>Accueil</NavLink></li>
+            <li><NavLink to="/quiz" className={menuLink}>Liste des quiz</NavLink></li>
           </ul>
         )}
         <button type="button" className="header__login">
