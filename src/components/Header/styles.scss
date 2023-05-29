@@ -14,6 +14,7 @@
   top: 0;
   z-index: 100;
 
+/*==================== LOGO ========================*/
   &__logo{
   height: 4rem;
   z-index: 100;
@@ -24,14 +25,13 @@
   color:#fff;
   }
 
-
-
 /*==================== NAVBAR ========================*/
   &__nav{
     position: fixed;
     width: 100%;
     height: 4rem;
 
+    //NAVBAR liste des élements de navigation <li>
     &-list {
       display: flex;
       flex-direction: column;
@@ -44,7 +44,8 @@
         justify-content: center;
         align-items: center;   
       }
-
+      
+      //NAVBAR élements de navigation <li>
       &__items {
         font-size: 1.25rem;
         text-transform: uppercase;
@@ -52,33 +53,44 @@
         border-top: 1px solid rgba(255, 255, 255, 0.555);
         text-align: center;
         margin-right: 0px;
-        padding: 20px 0;  
-
-        &--active {
-          background-color: vars.$primary-dark-color;
-        }
-
+        padding: 20px 0;
+        transition: 0.5s;         
         @include mixin.breakpoint(desktop) {
           width: auto;
           padding: 10px;  
           margin-right: 1.25rem;
           border-top:none;
-          border-radius: 12px;
+          border-radius: 3px;
         }
-      }
+    }
 
-      // Liste 1er élément <li>
+      // 1er élément <li>
       &__items:nth-child(1){
         margin-top: 4rem;
-
         @include mixin.breakpoint(desktop) {
           margin-top: 0; 
         }
       }
 
-      &__items:hover{
-        background-color: vars.$primary-dark-color;
+      // Liens des éléments <li>
+      &__items-link{
+        width: auto;
+        padding: 7px;  
+        border-radius: 3px;
+        transition: 0.5s;
+        &--active{
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(30px);
+          box-shadow: 0 5px 5px rgba(0,0,0,0.2);  
+          transition: 0.5s;        
+        }
       }
+      &__items-link:hover{
+        background: rgba(255, 255, 255, 0.3);
+        transition: 0.5s;
+      }
+
+      
 
 
     }
@@ -106,26 +118,35 @@
     display: block;
     position: absolute;
     font-family: 'Poppins', sans-serif;
-    top: 0.9rem;
+    top: 0.6rem;
     right: 80px;
     outline: none;	
     border: none;
-    border-radius: 8px;
+    border-radius: 20px;
     background-color: #003051;;
-    color: #fff;
     z-index: 100;
-    padding: 5px 5px 1px 5px;
+    padding: 10px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: 0.5s;
   }
   &__login:hover {
     background-color: #fc9100;
+    transition: 0.5s;
   }
 
-
    /*==================== HEADER LINK ========================*/
-  a {
-    color: #fff;
-  }  
+  a{
+    color:#fff;
+  }
 }
+
+
+
+
+
+
 
 
 

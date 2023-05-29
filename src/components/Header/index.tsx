@@ -20,8 +20,8 @@ function Header() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   //* Ajout de la classe active sur le lien cliqué
-  const menuLink = ({ isActive }: IMenuLink) => cn('header__nav-list__items', {
-    'header__nav-list__items--active': isActive,
+  const menuLink = ({ isActive }: IMenuLink) => cn('header__nav-list__items-link', {
+    'header__nav-list__items-link--active': isActive,
   });
 
   //* Toggle du menu hamburger (écran mobile)
@@ -53,8 +53,8 @@ function Header() {
         { /* affiche les items du menu: écran desktop + mobile hamburger ouvert */}
         {(isToggleMenu || screenWidth >= 992) && (
           <ul className="header__nav-list">
-            <li><NavLink to="/" className={menuLink}>Accueil</NavLink></li>
-            <li><NavLink to="/quiz" className={menuLink}>Liste des quiz</NavLink></li>
+            <li className="header__nav-list__items"><NavLink to="/" className={menuLink}>Accueil</NavLink></li>
+            <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink}>Liste des quiz</NavLink></li>
           </ul>
         )}
         <button type="button" className="header__login">
