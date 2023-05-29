@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -76,95 +77,85 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
   return (
     <div className="quiz__management">
       <h1 className="quiz__title">Gérer mes Quiz</h1>
-      <NavLink to="/profile/quiz/creer-quiz">
-        <button type="button" className="quiz__button">
+
+      <div className="quiz__add-Btn">
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          component={NavLink}
+          to="/profile/quiz/creer-quiz"
+        >
           Créer un quiz
-        </button>
-      </NavLink>
+        </Button>
+      </div>
+
       <div>
         <h2 className="quiz__subtitle">Liste des mes quiz</h2>
         {userQuiz && (
-          <div>
-            <div className="content-list">
-              {userQuiz.map((quiz) => (
-                <div className="card-wrapper" key={quiz.id}>
-                  <Card
-                    id={quiz.id}
-                    title={quiz.title}
-                    thumbnail={quiz.thumbnail}
-                    author={quiz.author.pseudo}
-                    level={quiz.level.name}
-                    tags={quiz.tags}
-                  />
-                  <div className="card-buttons">
-                    {/*                     <Button
-                      variant="contained"
-                      type="button"
-                      className="card-buttons__delete"
+
+        <div className="quiz__content-list">
+          {userQuiz.map((quiz) => (
+            <div className="card-wrapper" key={quiz.id}>
+              <div className="card-buttons">
+                <IconButton
+                  aria-label="delete"
+                  className="delete-button"
+                  color="error"
+                  size="large"
+                  onClick={handleOpenModal}
+                >
+                  <DeleteIcon fontSize="inherit" />
+                </IconButton>
+
+                <IconButton
+                  aria-label="edit"
+                  className="edit-button"
+                  color="primary"
+                  size="large"
+                  component={Link}
+                  to={`/profile/quiz/modifier-quiz/${quiz.id}`}
+                >
+                  <ModeEditIcon fontSize="inherit" />
+                </IconButton>
+
+                <Dialog
+                  open={showModal}
+                  onClose={handleCloseModal}
+                  aria-describedby="alert-dialog-slide-description"
+                >
+                  <DialogTitle>Voulez-vous vraiment supprimer ce Quiz?</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                      Attention cette action est irréversible
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseModal} variant="contained">Annuler</Button>
+                    <Button
                       endIcon={<DeleteIcon />}
+                      onClick={() => handleDeleteQuiz(quiz.id)}
+                      variant="contained"
                       color="error"
-                      onClick={handleOpenModal}
                     >
                       Supprimer
                     </Button>
-                    <Button
-                      variant="contained"
-                      type="button"
-                      className="card-buttons__edit "
-                      color="primary"
-                      endIcon={<ModeEditIcon />}
-                      component={Link}
-                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
-                    >
-                      Editer
-                    </Button> */}
+                  </DialogActions>
+                </Dialog>
+              </div>
 
-                    <IconButton
-                      aria-label="delete"
-                      className="delete-button"
-                      color="primary"
-                      component={Link}
-                      to={`/profile/quiz/modifier-quiz/${quiz.id}`}
-                    >
-                      <ModeEditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      className="delete-button"
-                      color="error"
-                      onClick={handleOpenModal}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <Dialog
-                      open={showModal}
-                      onClose={handleCloseModal}
-                      aria-describedby="alert-dialog-slide-description"
-                    >
-                      <DialogTitle>Voulez-vous vraiment supprimer ce Quiz?</DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                          Attention cette action est irréversible
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleCloseModal} variant="contained">Annuler</Button>
-                        <Button
-                          endIcon={<DeleteIcon />}
-                          onClick={() => handleDeleteQuiz(quiz.id)}
-                          variant="contained"
-                          color="error"
-                        >
-                          Supprimer
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </div>
-                </div>
-              ))}
+              <Card
+                id={quiz.id}
+                title={quiz.title}
+                thumbnail={quiz.thumbnail}
+                author={quiz.author.pseudo}
+                level={quiz.level.name}
+                tags={quiz.tags}
+              />
             </div>
+          ))}
+        </div>
 
-          </div>
         )}
 
       </div>

@@ -18,27 +18,29 @@ function Profil() {
 
   return (
     <div className="profil">
-      <p>
-        {`Bienvenue sur ton profile  ${pseudo}`}
-      </p>
-      <NavLink to="/profile/parametres">
-        <button type="submit" className="profil__update">
+
+      <h1 className="profil__title">
+        {`Bienvenue sur ton profile ${pseudo}`}
+      </h1>
+
+      <div className="profil__settings">
+        <NavLink to="/profile/parametres" className="profil__update">
           Modifier mon compte
+        </NavLink>
+        <button type="button" className="profil__button profil__button__logout" onClick={handleLogout}>
+          <NavLink to="/connexion">
+            Déconnexion
+          </NavLink>
         </button>
-      </NavLink>
-      <NavLink to="/profile/quiz">
-        <button type="submit" className="profil__quiz">
+        <button type="button" className="profil__button profil__button__delete" onClick={handleDeleteUser}>
+          Supprimer mon compte
+        </button>
+        <NavLink to="/profile/quiz" className="profil__quiz">
           Gérer mes quiz
-        </button>
-      </NavLink>
-      <NavLink to="/connexion">
-        <button type="button" className="login-page__button" onClick={handleLogout}>
-          Déconnexion
-        </button>
-      </NavLink>
-      <button type="submit" className="profil__delete" onClick={handleDeleteUser}>
-        Supprimer mon compte
-      </button>
+        </NavLink>
+
+      </div>
+
     </div>
 
   );

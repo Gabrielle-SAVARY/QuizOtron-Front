@@ -3,9 +3,36 @@
 
 .profil {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+
+  &__title{
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
+  }
+
+  &__settings{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    gap: 2px;
+
+    @include mixin.breakpoint(desktop) {
+      width: 80%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 
   &__update {
     font-family: 'Poppins', sans-serif;
@@ -17,6 +44,14 @@
     padding: 0.7rem;
     margin-top: 1rem;
     cursor: pointer;
+    width: 12rem;
+    height: 3rem;
+    text-align:center; 
+    transition: 0.5s;   
+  }
+  &__update:hover{
+    background-color: vars.$secondary-light-color;
+    transition: 0.5s;   
   }
 
   &__quiz {
@@ -29,17 +64,55 @@
     padding: 0.7rem;
     margin-top: 1rem;
     cursor: pointer;
+    width: 12rem;
+    height: 3rem;
+    text-align: center;
+    transition: 0.5s;   
+  }
+  &__quiz:hover{
+    background-color: vars.$secondary-light-color;
+    transition: 0.5s;   
+  }
+  
+  &__button{
+    background-color: transparent;
+    border-width: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    padding: 0;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 12rem;
+    height: 3rem;
+    margin-top: 1rem;
+    padding: 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.5s;   
+
+    &__logout{ 
+      background-color: vars.$main-third-color;
+      color: #fff;
+    }
+    &__delete {
+      background-color: red;
+      color: #fff;
+    }
+  }
+  &__button:hover{
+    background-color: vars.$secondary-light-color; 
+    transition: 0.5s;   
   }
 
-  &__delete {
-    font-family: 'Poppins', sans-serif;
-    outline: none;
-    border: none;
-    border-radius: 8px;
-    background-color: red;
-    color: #fff;
-    padding: 0.7rem;
-    margin-top: 1rem;
-    cursor: pointer;
-  }
 }
+.profil__button__logout > a{
+  color: #fff
+}
+
+
+

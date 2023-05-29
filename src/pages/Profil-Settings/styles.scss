@@ -5,6 +5,12 @@
 .profil-settings__update {
   text-align: center;
   margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: vars.$primary-dark-color;
+  text-align: center;
 }
 
 .form {
@@ -36,6 +42,32 @@
   color: #fff;
   font-size: 1rem;
   cursor: pointer;
+  transition: 0.5s;   
+}
+.profil__update-user:hover {
+  background-color: vars.$secondary-light-color;
+  transition: 0.5s;   
+}
+
+.profil__update-user-mdp {
+  outline: 0;
+  border: 0;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background: #fff; 
+  border-radius: 0.5rem;
+  width: 100%;
+  color: vars.$primary-dark-color;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;   
+}
+.profil__update-user-mdp:hover {
+  background: vars.$primary-dark-color;
+  color: #fff;  
+  transition: 0.5s;   
 }
 
 .form__password {
@@ -48,3 +80,4 @@
   font-size: 0.9rem;
   border-radius: 0.7rem;
 }
+

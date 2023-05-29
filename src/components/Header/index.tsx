@@ -67,21 +67,18 @@ function Header() {
         { /* affiche icone profile si connecté sinon bouton connexion */}
         { isLogged
           ? (
-            <button type="button" className="header__login-button">
-              <NavLink to="/profile">
-                <div className="header__login-button-icon">
-                  <PersonIcon />
-                  <span className="header__login-button-pseudo">{pseudo}</span>
-                </div>
-              </NavLink>
-            </button>
+
+            <NavLink to="/profile" className="header__login-button">
+              <div className="header__login-button-icon">
+                <PersonIcon />
+                <span className="header__login-button-pseudo">{pseudo}</span>
+              </div>
+            </NavLink>
           )
           : (
-            <button type="button" className="header__login-button">
-              <NavLink to="/connexion" className="header__login">
-                Connexion
-              </NavLink>
-            </button>
+            <NavLink to="/connexion" className="header__login-button">
+              Connexion
+            </NavLink>
           )}
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>

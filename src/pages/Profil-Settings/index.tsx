@@ -62,7 +62,7 @@ function ProfilSettings() {
   };
 
   return (
-    <div>
+    <div className="profil-settings">
       <p className="profil-settings__update">Mise à jour de votre profil</p>
 
       <form
@@ -95,8 +95,8 @@ function ProfilSettings() {
         className="form"
         onSubmit={handleSubmitPassword}
       >
-        <button type="button" className="profil__update-user" onClick={toggleVisibility}>
-          Changer de mot de passe
+        <button type="button" className="profil__update-user-mdp" onClick={toggleVisibility}>
+          Changer votre de mot de passe ?
         </button>
         {isVisible && (
           <div>
