@@ -57,20 +57,23 @@ function Header() {
             <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink}>Liste des quiz</NavLink></li>
           </ul>
         )}
-        <button type="button" className="header__login">
-          { /* affiche icone profile si connecté sinon bouton connexion */}
-          { isLogged
-            ? (
-              <NavLink to="/profile">
+
+        { /* affiche icone profile si connecté sinon bouton connexion */}
+        { isLogged
+          ? (
+            <NavLink to="/profile">
+              <button type="button" className="header__login">
                 <FaRegUserCircle size={24} />
-              </NavLink>
-            )
-            : (
-              <NavLink to="/connexion" className="header__button-connexion">
+              </button>
+            </NavLink>
+          )
+          : (
+            <NavLink to="/connexion" className="header__login">
+              <button type="button" className="header__login-button">
                 Connexion
-              </NavLink>
-            )}
-        </button>
+              </button>
+            </NavLink>
+          )}
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
           {/* Change l'icone du menu mobile- fermé: hambuger / ouvert:croix  */}

@@ -114,24 +114,26 @@
   }
 
    /*==================== BOUTON LOGIN ========================*/
-  &__login {
+  &__login-button {
     display: block;
     position: absolute;
-    font-family: 'Poppins', sans-serif;
+    z-index: 100;
     top: 0.6rem;
     right: 80px;
     outline: none;	
     border: none;
+    background-color: #003051;
     border-radius: 20px;
-    background-color: #003051;;
-    z-index: 100;
     padding: 10px;
+    font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     text-transform: uppercase;
     font-weight: 500;
     transition: 0.5s;
+    cursor: pointer;
+    color: #fff;
   }
-  &__login:hover {
+  &__login-button:hover {
     background-color: #fc9100;
     transition: 0.5s;
   }
@@ -141,6 +143,7 @@
     color:#fff;
   }
 }
+
 
 
 
