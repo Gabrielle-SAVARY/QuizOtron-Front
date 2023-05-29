@@ -32,6 +32,7 @@
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
+    
   }
 }
 
@@ -68,9 +69,11 @@
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
+    transition: 0.5s;
 
     &:hover {
       background: vars.$main-secondary-color;
+      transition: 0.5s;
     }
   }
 
@@ -83,5 +86,9 @@
   &__inscription {
     color: vars.$main-primary-color;
     padding: 0.5rem;
+    &:hover {
+      color: vars.$main-secondary-color;
+      transition: 0.5s;
+    }
   }
 }
