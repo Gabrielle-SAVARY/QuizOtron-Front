@@ -14,6 +14,7 @@ interface IMenuLink {
 function Header() {
   // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
+  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
   // Vérifie si le menu hamburger est ouvert
   const [isToggleMenu, setIsToggleMenu] = useState(false);
   // Vérifie la largeur de l'écran
@@ -66,18 +67,21 @@ function Header() {
         { /* affiche icone profile si connecté sinon bouton connexion */}
         { isLogged
           ? (
-            <NavLink to="/profile">
-              <button type="button" className="header__login-button">
-                <PersonIcon />
-              </button>
-            </NavLink>
+            <button type="button" className="header__login-button">
+              <NavLink to="/profile">
+                <div className="header__login-button-icon">
+                  <PersonIcon />
+                  <span className="header__login-button-pseudo">{pseudo}</span>
+                </div>
+              </NavLink>
+            </button>
           )
           : (
-            <NavLink to="/connexion" className="header__login">
-              <button type="button" className="header__login-button">
+            <button type="button" className="header__login-button">
+              <NavLink to="/connexion" className="header__login">
                 Connexion
-              </button>
-            </NavLink>
+              </NavLink>
+            </button>
           )}
 
         <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
