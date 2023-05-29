@@ -92,7 +92,7 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                     <Stack
                       spacing={{ xs: 2, md: 3 }}
                     >
-                      {/* classe CSS ajoutées: après le click de l'utilsiateur */}
+                      {/* classe CSS ajoutées: après le click de l'utilisateur */}
                       {/* valid = bonne réponse: réponse sélectionnée par utilisateur */}
                       {/* invalid = mauvaise réponse de l'utilisi=ateur */}
                       {/* selectedBtn: réponse sélectionnée par utilisateur */}
