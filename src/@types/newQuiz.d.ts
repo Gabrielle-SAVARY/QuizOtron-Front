@@ -14,6 +14,7 @@ export interface Quiz {
   tag_id: number
 
   // champs non attendu par le back mais utilisé pour le formulaire
+  // TODO on oblige typescript à typer field comme string pour éiter les erreurs
   [field: string]: string | number
 }
 

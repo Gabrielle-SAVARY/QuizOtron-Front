@@ -18,6 +18,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   const [score, setScore] = useState<number>(0);
   // Index de la question actuellement affichée
   const [questionIndex, setQuestionIndex] = useState<number>(0);
+
+  // STATE concernant la réponse sélectionnée par le joueur
   // Vérifie si le joueur a cliqué sur une réponse
   const [isAnswerClicked, setIsAnswerClicked] = useState<boolean>(false);
   // Stocke l'id de la réponse cliquée par le joueur
@@ -25,23 +27,23 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   // Vérifie si la réponse du joueur est la bonne réponse (réponse valide/correcte)
   const [isSelectAnswerValid, setIsSelectAnswerValid] = useState<boolean | null>(null);
 
-  // Récupère l'id du quiz sur lequel on a cliqué
+  //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const quizId = Number(id);
 
-  // Récupère les infos du quiz sélectionné
+  //* Récupère les infos du quiz sélectionné
   useEffect(() => {
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
-  // Stocke les infos du quiz sélectionné dans le state
+  //* Stocke les infos du quiz sélectionné dans un nouveau state
   useEffect(() => {
     if (oneQuiz) {
       setCurrentQuiz(oneQuiz);
     }
   }, [oneQuiz]);
 
-  //* Actions selon réponse cliquée par le joueur
+  //* QUIZ GAME
   const handleAnswerClicked = (answerId: number) => {
     // Enregistre qu'une réponse a été cliquée
     setIsAnswerClicked(true);
@@ -66,7 +68,7 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
       // Incrémente l'index de la question -> affiche la question suivante
       setQuestionIndex((prevQuestion) => prevQuestion + 1);
       setIsAnswerClicked(false);
-    }, 1200);
+    }, 1500);
   };
 
   return (
@@ -93,8 +95,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                       spacing={{ xs: 2, md: 3 }}
                     >
                       {/* classe CSS ajoutées: après le click de l'utilisateur */}
-                      {/* valid = bonne réponse: réponse sélectionnée par utilisateur */}
-                      {/* invalid = mauvaise réponse de l'utilisi=ateur */}
+                      {/* valid = bonne réponse */}
+                      {/* invalid = mauvaise réponse de l'utilisateur */}
                       {/* selectedBtn: réponse sélectionnée par utilisateur */}
                       {currentQuiz.questions[questionIndex].answers.map((answer) => (
                         <button
@@ -106,7 +108,7 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                             {
                               valid: isAnswerClicked && answer.is_valid,
                               invalid: isAnswerClicked && !isSelectAnswerValid
-                          && userAnswerId === answer.id,
+                                      && userAnswerId === answer.id,
                             },
                             { selectedBtn: userAnswerId === answer.id },
                           )}

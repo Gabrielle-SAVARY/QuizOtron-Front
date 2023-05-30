@@ -10,6 +10,8 @@ import './styles.scss';
 
 function Register() {
   const dispatch = useAppDispatch();
+  //* STATE
+  // Récupère les infos de l'utilisateur stocké dans les states du reducer user
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const passwordConfirm = useAppSelector((state) => state.user.credentials.passwordConfirm);
@@ -17,7 +19,7 @@ function Register() {
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
-  // TODO redirection après connexion ne fonctionne plus
+
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -32,15 +34,10 @@ function Register() {
     );
   };
 
-  // Appel API pour demande de connexion utilisateur
-  const handleRegister = () => {
-    dispatch(register());
-  };
-
-  // Soumission du formulaire
+  // Soumission du formulaire d'inscription
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleRegister();
+    dispatch(register());
   };
 
   return (

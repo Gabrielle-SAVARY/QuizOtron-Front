@@ -9,23 +9,19 @@ import {
 import './styles.scss';
 
 function ProfilSettings() {
-  // state toogle pour afficher le formulaire changer de mot de passe
-  const [isVisible, setIsVisible] = useState(false);
-
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-
   const dispatch = useAppDispatch();
-
-  // import des states pour les input des 2 formulaires de mise à jour
+  //* STATE
+  // Récupère les données de l'utilisateur connecté
   const email = useAppSelector((state) => state.user.credentials.email);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
-  const oldPassword = useAppSelector((state) => state.user.credentials.oldPassword);
   const password = useAppSelector((state) => state.user.credentials.password);
+  // Récupère les valeurs des inputs convernés dans le formulaire
+  const oldPassword = useAppSelector((state) => state.user.credentials.oldPassword);
   const passwordConfirm = useAppSelector((state) => state.user.credentials.passwordConfirm);
+  // Toggle: pour afficher le formulaire pour changer de mot de passe
+  const [isVisible, setIsVisible] = useState(false);
 
-  // Met à jour le state avec la valeur des inputs pour les 2 formulaires
+  //* Met à jour le state avec la valeur des inputs pour les 2 formulaires
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     // récupère name de l'input et le type la donnée
@@ -39,23 +35,25 @@ function ProfilSettings() {
     );
   };
 
-  // Action mise à jour des infos utilisateur: email et pseudo
+  //* Action mise à jour des infos utilisateur: email et pseudo
   const handleUpdate = () => {
     dispatch(update());
   };
-
-  // Soumission du formulaire: mise à jour email et pseudo
+  //* Soumission du formulaire: mise à jour email et pseudo
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleUpdate();
   };
 
-  // Action mise à jour du mot de passe
+  //* Affiche le formulaire pour changer de mot de passe
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+    //* Action mise à jour du mot de passe
   const handleUpdatePassword = () => {
     dispatch(updatePassword());
   };
-
-  // Soumission du formulaire: mise à jour du passe
+  //* Soumission du formulaire: mise à jour du passe
   const handleSubmitPassword = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleUpdatePassword();

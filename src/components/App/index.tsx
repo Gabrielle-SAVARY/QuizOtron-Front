@@ -10,6 +10,7 @@ import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
 import Layout from '../Layout';
 import Login from '../../pages/Login';
+import NotFound from '../NotFound';
 import Profil from '../../pages/Profil';
 import ProtectedRoute from '../ProtectedRoute';
 import ProfilSettings from '../../pages/Profil-Settings';
@@ -23,23 +24,24 @@ import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
-import NotFound from '../NotFound';
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // State: utilisateur est connecté
+  // * STATE
+  // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  // State: liste des quiz
+  // Liste des quiz (informations pour une Card)
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
 
-  // State: liste des tags/catégories d'un quiz
+  // Liste des tags/catégories d'un quiz
   const [tagsList, setTagsList] = useState<ITag[]>([]);
 
-  // State: liste des levels/niveaux d'un quiz
+  // Liste des levels/niveaux d'un quiz
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
 
+  // Stocke un quiz selon son id
   const [oneQuiz, setOneQuiz] = useState<IOneQuiz>({
     id: 0,
     title: '',
@@ -57,7 +59,7 @@ function App() {
     questions: [],
   });
 
-  //* Maintient de la connexion utilisateur
+  //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
   useEffect(() => {
     // On recherche dans le local storage si un token existe
@@ -73,7 +75,7 @@ function App() {
         // On calcule le timestamp de la date et heure actuelle
         const now = Math.floor(Date.now() / 1000);
 
-        // Si le token est expiré: on passe isLogged à false + on supprime le token du localStorage
+        // Si le token est expiré: déconnexion utilisateur + on supprime le token du localStorage
         if (now >= exp) {
           dispatch(checkIsLogged(false));
           localStorage.removeItem('token');
@@ -89,7 +91,7 @@ function App() {
     }
   }, [dispatch, isLogged]);
 
-  //* Appel API: récupère la liste des quiz
+  //* Appel API: récupère la liste des quiz (informations afficher les Card)
   const fetchQuizList = useCallback(async () => {
     try {
       const response = await axiosInstance.get('/quiz');

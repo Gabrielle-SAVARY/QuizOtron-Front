@@ -16,48 +16,49 @@ function QuestionUpdate({
   questionNumber, newQuestion, setNewQuestion,
 }: QuestionUpdateProps) {
   //* Mise à jour du state au remplissage du formulaire
-  // answerNb: identifie si on rensigne une question ou une réponse
-  // isCorrectAnswer: boolean / renseigné pour identifier les boutons radio
+  // answerNb: identifie si on renseigne une question ou une réponse
+  // isRadioBtn: boolean vérifie si on est sur un bouton radio
   const handleChangeQuestions = (
     event: SyntheticEvent<Element, Event>,
     answerNb = 0,
-    isCorrectAnswer = false,
+    isRadioBtn = false,
   ) => {
-    //* Etape 1 : Récupère le contenu du state newQuestion dans l'objet quizQuestions
+    //* Etape 1 : On récupère le contenu du state newQuestion dans l'objet quizQuestions
     const quizQuestions = { ...newQuestion };
 
-    //* Etape 2 : Contrôle le numéro de réponse: answerNb
+    //* Etape 2 : on contrôle le numéro de réponse: answerNb
+    // answerNb: permet de savoir si on renseigne une question ou une réponse
+    // Si answerNb === 0 alors e.target.value est une question
+    // Si answerNb !== 0 ->  n'est pas une question, c'est une réponse
     //* QUESTION
-    // answerNb === 0 alors e.target.value est une question
     if (answerNb === 0) {
       // pour typer la value de event: typer event.target
       const target = event.target as HTMLInputElement;
       quizQuestions.question = target.value;
-    } else if (!isCorrectAnswer) {
+    } else if (!isRadioBtn) {
       //* INPUT TEXTE REPONSE
-      // Si answerNb !== 0 ->  n'est pas une question, c'est une réponse
-      // Si !isCorrectAnswer ->  n'est pas un bouton radio
-
       // answerNb-1: index de la réponse pour commencer à index 0
       const target = event.target as HTMLInputElement;
       quizQuestions.answers[answerNb - 1].answer = target.value;
     } else {
       //* BOUTON RADIO
+      //* On réinitialise tous les boutons radios en mettant  is_valid:false
       // Correction de l'erreur eslint de la boucle for of avec un map
-      // on crée un nouveau tableau à partir de quizQuestions
-      // on met à jour tous les is_valid à false pour réinitialiser les boutons radios
+      // Avec map on crée un nouveau tableau à partir de quizQuestions
       const updatedAnswers = quizQuestions.answers.map((answer) => ({
         ...answer,
         is_valid: false,
       }));
       quizQuestions.answers = updatedAnswers;
 
-      // Ensuite on passe la nouvelle réponse à true (sélection bouton radio)
+      //* On enregistre la nouvelle réponse à true (sélection bouton radio)
       quizQuestions.answers[answerNb - 1].is_valid = true;
     }
-    // Met à jour le state avec les données d'une question
+    //* On et à jour le state avec les données d'une question
     setNewQuestion(quizQuestions);
   };
+
+  // TODO trouver solution pour éviter d'utiliser en key l'index de la réponse dans le map
 
   return (
     <div className="question_container" id={`question${questionNumber}`}>
@@ -80,7 +81,6 @@ function QuestionUpdate({
       >
 
         <fieldset>
-
           {newQuestion.answers.map((answer, index) => (
             <div key={`${answer.id}-${index}`} className="question-choice">
               <div className="answer_container" id={`q${questionNumber}${answer.id}`}>

@@ -11,12 +11,14 @@ import './styles.scss';
 
 function Login() {
   const dispatch = useAppDispatch();
+  //* STATE
+  // Récupère les infos de l'utilisateur stocké dans les states du reducer user
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const isLogged = useAppSelector((state) => state.user.isLogged);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
 
-  // Met à jour le state avec la valur des inputs du formulaire
+  // Met à jour le state avec la valeur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     // récupère name de l'input et le type la donnée
@@ -30,12 +32,13 @@ function Login() {
     );
   };
 
-  // Soumission du formulaire
+  // Soumission du formulaire de connexion
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(login());
   };
 
+  // TODO typer event onClick
   // Déconnexion utilisateur
   const handleLogout = () => {
     dispatch(logout());

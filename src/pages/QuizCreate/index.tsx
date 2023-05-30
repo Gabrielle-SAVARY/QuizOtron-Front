@@ -24,13 +24,13 @@ function QuizCreate({
   tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
   const navigate = useNavigate();
+  //* STATE
+  // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-
-  // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
+  // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
   const [errorMessage, setErrorMessage] = useState('');
-
-  // Stock les informations générale du quiz
-  // on affecte l'id de l'utilsiateur dès le chargement de la page
+  // Stock les informations générale du quiz (state à envoyer au back)
+  // on affecte l'id de l'utilsateur à partir du state
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
     description: '',
@@ -40,8 +40,9 @@ function QuizCreate({
     tag_id: 0,
   });
 
-  //* -------- STATE --------
-  // Stock chaques questions avec ses réponses pour le nouveau quiz
+  //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
+  // Stock chaques questions avec ses réponses pour le nouveau quiz: 1 state par question
+  // on initialise les states à vide
   const [newQuestion1, setNewQuestion1] = useState<Question>({
     question: '',
     answers: [
@@ -254,7 +255,7 @@ function QuizCreate({
   });
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // MISE A JOUR DE newQuiz
+  //* MISE A JOUR DE newQuiz
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
     SelectChangeEvent<string> |
@@ -264,7 +265,7 @@ function QuizCreate({
   ) => {
     setErrorMessage('');
     const quizData = { ...newQuiz } as Quiz;
-    // D'abord on vérifie s'il s'agit du field id ou tag
+    // D'abord on vérifie s'il s'agit du field ou d'un champs id
     if (field === 'tag_id') {
       quizData.tag_id = event.target.value as number;
     } else if (field === 'level_id') {
@@ -272,18 +273,24 @@ function QuizCreate({
     } else {
       quizData[field] = event.target.value;
     }
+    // On met à jour le state newQuiz
     setNewQuiz(quizData);
   };
 
-  // ENVOIE DU FORMULAIRE A l'API
+  //* ENVOIE DU FORMULAIRE A l'API
   // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    //* Critères à respecter avant d'envoyer aux back les données
     if (!newQuiz.title || newQuiz.title.length < 3) {
       setErrorMessage('Vous devez ajouter un titre contenant au moins 3 caractères');
     } else if (!newQuiz.description || newQuiz.description.length < 5) {
       setErrorMessage('Vous devez ajouter une description contenant au moins 5 caractères');
     } else {
+      // Envoi des données au back
+      // On affecte le state newQuiz à quiz
+      // On affecte un tablleau des states des questions à questions
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
@@ -301,25 +308,16 @@ function QuizCreate({
           ],
         });
         if (response.status !== 200) throw new Error();
+
+        // On met à jour le state quizList
         fetchQuizList();
+        // On redirige vers la page de profile
         navigate('/profile/quiz');
       } catch (error) {
         console.error(error);
       }
     }
   };
-
-  // pour le dev pour s'assurer du contenu des states
-  // TODO à supprimer en production
-  useEffect(() => {
-    setErrorMessage('');
-  }, [newQuiz, newQuestion1, newQuestion2]);
-  useEffect(() => {
-  }, [newQuiz]);
-  useEffect(() => {
-  }, [newQuestion1]);
-  useEffect(() => {
-  }, [newQuestion2]);
 
   return (
     <div className="quiz__creation">

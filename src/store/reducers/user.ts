@@ -37,10 +37,7 @@ export const initialState: UserState = {
   },
 };
 
-// Type qui récupère les clé de l'objet du state.credentials
-// `type` permet de créer un type comme `interface`.
-// key of: permet de récupérer les clés dun objet de manière dynamique
-// MONINTERFACE['propriété'] récupère le type d'une propriété
+//* Type qui récupère les clé de l'objet du state.credentials
 export type KeysOfCredentials = keyof UserState['credentials'];
 
 //* ACTION: met à jour la  valeur des champs des inputs de formulaire
@@ -91,10 +88,11 @@ export const login = createAppAsyncThunk(
   },
 );
 
-//* ACTION: vérifier si le token existe
+//* ACTION: vérifier si l'utilisateur est connecté (si le token existe)
 export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 
 //* ACTION: trouver un utilisateur
+// TODO typer l'ation ?
 // Back verifie le pseudo stocké dans le token
 export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
@@ -107,7 +105,7 @@ export const findUser = createAppAsyncThunk(
 //* ACTION: déconnexion utilisateur
 export const logout = createAction('user/LOGOUT');
 
-//* ACTION: mise à jour: email ou mot de passe utilisateur
+//* ACTION: mise à jour: email ou pseudo de l'utilisateur
 export const update = createAppAsyncThunk(
   'user/UPDATE',
   async (_, thunkAPI) => {
@@ -142,6 +140,7 @@ export const updatePassword = createAppAsyncThunk(
 );
 
 //* ACTION: supprimer utilisateur
+// TODO feedback user à faire
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {

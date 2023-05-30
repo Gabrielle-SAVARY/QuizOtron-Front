@@ -10,29 +10,32 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import './styles.scss';
 import { deleteUser, logout } from '../../store/reducers/user';
+import './styles.scss';
 
 function Profil() {
   const dispatch = useAppDispatch();
+  //* STATE
+  // Récupère le pseudo de l'utilisateur connecté
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
-  // State ouvre et ferme la modale pour la confirmation de suppression d'un quiz
+  // Ouvre et ferme la modale pour la confirmation de suppression d'un compte utilisateur
   const [showModalAccount, setShowModalAccount] = useState<boolean>(false);
 
+  //* Ouvre la modale de confirmation pour la suppression d'un compte utilisateur
   const handleOpenModalAccount = () => {
     setShowModalAccount(true);
   };
 
-  // Ferme la modal de confirmation pour la suppression d'un quiz
+  //* Ferme la modale de confirmation pour la suppression d'un quiz
   const handleCloseModalAccount = () => {
     setShowModalAccount(false);
   };
-
+  //* Supprime le compte utilisateur
   const handleDeleteUser = () => {
     dispatch(deleteUser());
   };
 
-  // Déconnexion utilisateur
+  //*  Déconnexion utilisateur
   const handleLogout = () => {
     dispatch(logout());
   };

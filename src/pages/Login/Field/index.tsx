@@ -9,6 +9,7 @@ interface FieldProps {
 
 }
 
+// TODO à coder et utiliser dans Login et Register pour factoriser
 function Field({
   value,
   type,

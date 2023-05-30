@@ -27,16 +27,21 @@ function QuizUpdate({
   tagsList, levelsList, oneQuiz, getQuizDetails, fetchQuizList,
 }: QuizUpdateProps) {
   const navigate = useNavigate();
-
-  // Récupère l'id du quiz sur lequel on a cliqué
+  //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
-  // STATE
-  const [quizId, setQuizId] = useState<number>(pageId);
 
+  //* STATE
+  // Stock l'id du quiz sur lequel on a cliqué
+  const [quizId, setQuizId] = useState<number>(pageId);
   // Récupère l'id du user du reducer user
   const userId = useAppSelector((state) => state.user.userId);
 
+  // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Stock les informations générale du quiz sans les clés étrangères: quiz_id, question_id
+  // Ces clés étrangères sont présentes dans oneQuiz mais non demandées par le back pour l'update
   const [updatedOneQuiz, setUpdatedOneQuiz] = useState<IUpdatedOneQuiz>({
     id: 0,
     title: '',
@@ -54,31 +59,7 @@ function QuizUpdate({
     questions: [],
   });
 
-  useEffect(() => {
-    setQuizId(pageId);
-  }, [id, pageId]);
-
-  useEffect(() => {
-    getQuizDetails(quizId);
-  }, [quizId, getQuizDetails]);
-
-  useEffect(() => {
-    if (oneQuiz.id !== 0) {
-      const convertedOneQUiz = {
-        ...oneQuiz,
-        questions: oneQuiz.questions.map(({ quiz_id, ...question }) => ({
-          ...question,
-          answers: question.answers.map(({ question_id, ...answer }) => answer),
-        })),
-      };
-      setUpdatedOneQuiz(convertedOneQUiz);
-    }
-  }, [oneQuiz]);
-
-  // errorMessage contient un message d'erreur s'il y a un problème lors du submit par ex
-  const [errorMessage, setErrorMessage] = useState('');
-
-  // Stock les informations générale du quiz
+  // Stock les informations générale du quiz (state à envoyer au back)
   // on affecte l'id de l'utilsiateur dès le chargement de la page
   const [updateQuiz, setUpdateQuiz] = useState<QuizUp>({
     title: '',
@@ -89,22 +70,9 @@ function QuizUpdate({
     tag_id: 0,
   });
 
-  useEffect(() => {
-    if (updatedOneQuiz.id !== 0) {
-      setUpdateQuiz((prevState) => ({
-        ...prevState,
-        title: updatedOneQuiz.title,
-        description: updatedOneQuiz.description,
-        thumbnail: updatedOneQuiz.thumbnail,
-        level_id: updatedOneQuiz.level_id,
-        user_id: userId,
-        tag_id: updatedOneQuiz.tags[0].id,
-      }));
-    }
-  }, [updatedOneQuiz, userId]);
-
-  //* -------- STATE --------
-  // Stock chaques questions avec ses réponses pour le nouveau quiz
+  //* -------- STATE QUESTIONS DU QUIZ A METTRE A JOUR --------
+  // Stock chaques questions avec ses réponses pour le nouveau quiz: 1 state par question
+  // on initialise les states à vide
   const [newQuestion1, setNewQuestion1] = useState<QuestionUp>({
     id: 0,
     question: '',
@@ -366,6 +334,53 @@ function QuizUpdate({
     ],
   });
 
+  //* AU CHARGEMENT DE LA PAGE
+  //* On récupère l'id du quiz à parir de l'URL et on stocke dans el state
+  useEffect(() => {
+    setQuizId(pageId);
+  }, [id, pageId]);
+
+  //* Appel API: on récupère les infos d'un quiz + msie à jour du state oneQuiz
+  useEffect(() => {
+    getQuizDetails(quizId);
+  }, [quizId, getQuizDetails]);
+
+  //* On exclu les clé étrangères présentes dans oneQuiz et on stocke les infos dans updatedOneQuiz
+  // on exclu quiz_id et question_id pour éviter erreur de violation de clé étrangère
+  useEffect(() => {
+    // Si oneQuiz existe
+    if (oneQuiz.id !== 0) {
+      const convertedOneQUiz = {
+        ...oneQuiz,
+        questions: oneQuiz.questions.map(({ quiz_id, ...question }) => ({
+          ...question,
+          answers: question.answers.map(({ question_id, ...answer }) => answer),
+        })),
+      };
+      setUpdatedOneQuiz(convertedOneQUiz);
+    }
+  }, [oneQuiz]);
+
+  //* Mise à jour du state updateQuiz avec les infos du state updatedOneQuiz
+  // State updateQuiz sera envoyé au back dans "quiz"
+  // utilisé pour avoir des inputs avec des données pré-remplies
+  useEffect(() => {
+    if (updatedOneQuiz.id !== 0) {
+      setUpdateQuiz((prevState) => ({
+        ...prevState,
+        title: updatedOneQuiz.title,
+        description: updatedOneQuiz.description,
+        thumbnail: updatedOneQuiz.thumbnail,
+        level_id: updatedOneQuiz.level_id,
+        user_id: userId,
+        tag_id: updatedOneQuiz.tags[0].id,
+      }));
+    }
+  }, [updatedOneQuiz, userId]);
+
+  //* Mise à jour des states newQuestion avec les infos des questions du state updatedOneQuiz
+  // State updateQuiz sera envoyé au back dans "questions"
+  // utilisé pour avoir des inputs avec des données pré-remplies
   useEffect(() => {
     setNewQuestion1((prevState) => ({
       ...prevState,
@@ -412,7 +427,7 @@ function QuizUpdate({
   }, [updatedOneQuiz.questions]);
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // MISE A JOUR DE newQuiz
+  // Mise à jour du state updateQuiz
   const handleChangeQuizData = (
     event:
     | SelectChangeEvent<number>
@@ -433,10 +448,12 @@ function QuizUpdate({
     setUpdateQuiz(quizData);
   };
 
-  // ENVOIE DU FORMULAIRE A l'API
+  //* ENVOIE DU FORMULAIRE A l'API
   // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    //* Critères à respecter avant d'envoyer aux back les données
     if (!updateQuiz.title || updateQuiz.title.length < 3) {
       setErrorMessage(
         'Vous devez ajouter un titre contenant au moins 3 caractères',
@@ -446,6 +463,9 @@ function QuizUpdate({
         'Vous devez ajouter une description contenant au moins 5 caractères',
       );
     } else {
+      // Envoi des données au back
+      // On affecte le state newQuiz à quiz
+      // On affecte un tablleau des states des questions à questions
       try {
         const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
           quiz: updateQuiz,
@@ -463,20 +483,16 @@ function QuizUpdate({
           ],
         });
         if (response.status !== 200) throw new Error();
+
+        // On met à jour le state quizList
         fetchQuizList();
+        // On redirige vers la page de profile
         navigate('/profile/quiz');
       } catch (error) {
         console.error(error);
       }
     }
   };
-
-  // pour le dev pour s'assurer du contenu des states
-  // TODO à supprimer en production
-
-  useEffect(() => {
-    console.log('updateQuiz', updateQuiz);
-  }, [updateQuiz]);
 
   return (
     <div className="quiz__creation">

@@ -12,15 +12,17 @@ interface IMenuLink {
 }
 
 function Header() {
+  //* STATE
   // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
+  // Récupère le pseudo de l'utilisateur
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
-  // Vérifie si le menu hamburger est ouvert
+  // Vérifie si le menu hamburger est ouvert (écran <mobile></mobile>)
   const [isToggleMenu, setIsToggleMenu] = useState(false);
   // Vérifie la largeur de l'écran
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  //* Ajout de la classe active sur le lien cliqué
+  //* Ajout de la classe active sur le lien de navigation cliqué
   const menuLink = ({ isActive }: IMenuLink) => cn('header__nav-list__items-link', {
     'header__nav-list__items-link--active': isActive,
   });
@@ -30,11 +32,11 @@ function Header() {
     setIsToggleMenu(false);
   };
 
-  //* Toggle du menu hamburger (écran mobile)
+  //* Toggle du menu hamburger: change l'icone (écran mobile)
   const changeToggleMenu = () => {
     setIsToggleMenu(!isToggleMenu);
   };
-  //* Ferme le menu hamburger si redimension fenetre
+  //* Ferme le menu hamburger si redimension fenetre par utilisateur
   useEffect(() => {
     const handleScreenWidth = () => {
       setScreenWidth(window.innerWidth);

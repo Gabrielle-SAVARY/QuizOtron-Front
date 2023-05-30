@@ -24,33 +24,34 @@ interface ProfilQuizProps {
   setQuizList: (quizList: IQuizList[]) => void
 }
 function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
-  // State: récupère pseudo du reducer user
+  //* STATE
+  // Récupère le pseudo dans le reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
-  // State: stocke les quiz d'un utilisateur
+  // Stocke les quiz d'un utilisateur
   const [userQuiz, setUserQuiz] = useState<IQuizList[]>([]);
-
-  // State ouvre et ferme la modale pour la confirmation de suppression d'un quiz
+  // Toggle: Ouvre et ferme la modale pour la confirmation de suppression d'un quiz
   const [showModal, setShowModal] = useState<boolean>(false);
 
   //* Filtre des quiz de l'utilisateur du profil
   useEffect(() => {
+    // On filtre les quiz par le pseudo utilisateur à partir du state quizList (dans composant App)
     const filterUserQuiz = (): IQuizList[] => quizList.filter(
       (quiz) => quiz.author.pseudo === pseudo,
     );
+    // On stocke les quiz filtrés dans le state userQuiz
     const quizFiltered = filterUserQuiz();
     setUserQuiz(quizFiltered);
   }, [pseudo, quizList]);
 
+  //* Ouvre et ferme la modale de confirmation pour la suppression d'un quiz
   const handleOpenModal = () => {
     setShowModal(true);
   };
-
-  // Ferme la modal de confirmation pour la suppression d'un quiz
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  // Appel API: suppression d'un quiz
+  //* Appel API: suppression d'un quiz
   const handleDeleteQuiz = async (cardId: number) => {
     try {
       const response = await axiosInstance.delete(`/quiz/user/delete/${cardId}`);
@@ -58,19 +59,17 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
       if (response.status !== 200) {
         throw new Error();
       }
-      console.log('response', response);
-      // On récupère une copie des quizz actuels
+      //* On met à jour le state quizList sans faire de requête API
+      // On récupère une copie des quiz actuels
       const oldQuizz = [...quizList];
-      // On filtre : pour chaque quizz, si l'id du quizz (q) ne
-      // correspond pas a cardId on le stock dans newQuizzList
-      // A la fin on a tout les quizz saut celui qu'on vient de supprimer en back
-      const newQuizzList = oldQuizz.filter((q) => q.id !== cardId);
+      //* On exclu le quiz supprimé grâce à son id
+      // On filtre : on garde les quiz dont l'id ne correspond pas à cardId
+      const newQuizzList = oldQuizz.filter((quiz) => quiz.id !== cardId);
+      // met à jour le state quizList
       setQuizList(newQuizzList);
-      // met à jour le state avec les données envoyées par l'API
     } catch (error) {
       console.log(error);
     }
-
     handleCloseModal();
   };
 
