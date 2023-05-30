@@ -68,6 +68,7 @@ function ProfilSettings() {
         className="form"
         onSubmit={handleSubmit}
       >
+        <label htmlFor="" className="label__profil">Email</label>
         <input
           type="text"
           placeholder="Email"
@@ -76,6 +77,7 @@ function ProfilSettings() {
           onChange={handleChangeField}
           name="email"
         />
+        <label htmlFor="" className="label__profil">Pseudo</label>
         <input
           type="text"
           placeholder="Pseudo"
@@ -98,6 +100,7 @@ function ProfilSettings() {
         </button>
         {isVisible && (
           <div>
+            <label htmlFor="" className="label__profil">Ancien mot de passe</label>
             <input
               type="password"
               placeholder="Ancien mot de passe"
@@ -106,6 +109,7 @@ function ProfilSettings() {
               onChange={handleChangeField}
               name="oldPassword"
             />
+            <label htmlFor="" className="label__profil">Nouveau mot de passe</label>
             <input
               type="password"
               placeholder="Nouveau mot de passe"
@@ -114,6 +118,7 @@ function ProfilSettings() {
               onChange={handleChangeField}
               name="password"
             />
+            <label htmlFor="" className="label__profil">Confirmer le nouveau mot de passe</label>
             <input
               type="password"
               placeholder="Confirmer le nouveau mot de passe"
