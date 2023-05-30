@@ -11,6 +11,8 @@ import './styles.scss';
 function ProfilSettings() {
   const dispatch = useAppDispatch();
   //* STATE
+  // TODO : changer le pseudo change l'affichage du pseudo dans header
+  // TODO créer un state intermédiaire
   // Récupère les données de l'utilisateur connecté
   const email = useAppSelector((state) => state.user.credentials.email);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);

@@ -153,11 +153,14 @@ function App() {
         throw new Error('Failed to fetch quiz details');
       }
       const { data } = response;
-      // Met à jour le state avec les données du quiz
-      setOneQuiz(data);
-      return data;
+      if (data) {
+        // Met à jour le state avec les données du quiz
+        setOneQuiz(data);
+      } else {
+        navigate('/404');
+      }
     } catch (error) {
-      return navigate('/404');
+      console.log(error);
     }
   }, [navigate]);
 

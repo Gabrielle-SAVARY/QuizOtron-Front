@@ -48,6 +48,9 @@ function Profil() {
       </h1>
 
       <div className="profil__settings">
+        <NavLink to="/profile/quiz" className="profil__quiz">
+          Gérer mes quiz
+        </NavLink>
         <NavLink to="/profile/parametres" className="profil__update">
           Modifier mon compte
         </NavLink>
@@ -89,10 +92,6 @@ function Profil() {
             </DialogActions>
           </Dialog>
         </div>
-
-        <NavLink to="/profile/quiz" className="profil__quiz">
-          Gérer mes quiz
-        </NavLink>
 
       </div>
 
