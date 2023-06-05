@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
-  KeysOfCredentials,
-  changeCredentialsField,
+  KeysOfUpdateCredentials,
+  updateProfilField,
   update,
   updatePassword,
 } from '../../store/reducers/user';
@@ -20,6 +20,11 @@ function ProfilSettings() {
   // Récupère les valeurs des inputs convernés dans le formulaire
   const oldPassword = useAppSelector((state) => state.user.credentials.oldPassword);
   const passwordConfirm = useAppSelector((state) => state.user.credentials.passwordConfirm);
+
+  // STATE
+  const pseudoUpdate = useAppSelector((state) => state.user.updateCredentials.pseudoUpdate);
+  const emailUpdate = useAppSelector((state) => state.user.updateCredentials.emailUpdate);
+
   // Toggle: pour afficher le formulaire pour changer de mot de passe
   const [isVisible, setIsVisible] = useState(false);
 
@@ -27,11 +32,11 @@ function ProfilSettings() {
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     // récupère name de l'input et le type la donnée
-    const fieldName = event.target.name as KeysOfCredentials;
+    const fieldName = event.target.name as KeysOfUpdateCredentials;
 
     dispatch(
-      changeCredentialsField({
-        propertyKey: fieldName,
+      updateProfilField({
+        propertyUpdate: fieldName,
         value: newValue,
       }),
     );
@@ -75,18 +80,18 @@ function ProfilSettings() {
           type="text"
           placeholder="Email"
           className="form__input"
-          value={email}
+          value={emailUpdate}
           onChange={handleChangeField}
-          name="email"
+          name="emailUpdate"
         />
         <label htmlFor="" className="label__profil">Pseudo</label>
         <input
           type="text"
           placeholder="Pseudo"
           className="form__input"
-          value={pseudo}
+          value={pseudoUpdate}
           onChange={handleChangeField}
-          name="pseudo"
+          name="pseudoUpdate"
         />
         <button type="submit" className="profil__update-user">
           Modifier mon profil

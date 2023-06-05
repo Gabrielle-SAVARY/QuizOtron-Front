@@ -18,6 +18,10 @@ interface UserState {
     passwordConfirm: string;
     oldPassword: string,
   }
+  updateCredentials: {
+    pseudoUpdate: string;
+    emailUpdate: string;
+  }
 }
 
 export const initialState: UserState = {
@@ -35,17 +39,28 @@ export const initialState: UserState = {
     passwordConfirm: '',
     oldPassword: '',
   },
+  updateCredentials: {
+    pseudoUpdate: '',
+    emailUpdate: '',
+  },
 };
 
 //* Type qui récupère les clé de l'objet du state.credentials
 export type KeysOfCredentials = keyof UserState['credentials'];
 
-//* ACTION: met à jour la  valeur des champs des inputs de formulaire
+//* ACTION: met à jour la  valeur des champs des inputs de formulaire logiin/register
 // propertyKey: type  du champs field
 export const changeCredentialsField = createAction<{
   propertyKey: KeysOfCredentials
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
+
+//* Type qui récupère les clé de l'objet du state.updateCredentials
+export type KeysOfUpdateCredentials = keyof UserState['updateCredentials'];
+export const updateProfilField = createAction<{
+  propertyUpdate: KeysOfUpdateCredentials
+  value: string
+}>('user/UPDATE_PROFIL_FIELD');
 
 //* ACTION: créer/inscription utilisateur
 export const register = createAppAsyncThunk(
@@ -113,10 +128,10 @@ export const update = createAppAsyncThunk(
     const state = thunkAPI.getState();
 
     // récupère les states qui correspondent aux inputs du formulaire
-    const { email, pseudo } = state.user.credentials;
+    const { emailUpdate, pseudoUpdate } = state.user.updateCredentials;
 
     // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.patch('/profile/settings/update', { email, pseudo });
+    const { data } = await axiosInstance.patch('/profile/settings/update', { email: emailUpdate, pseudo: pseudoUpdate });
 
     return data as IAuthentification;
   },
@@ -159,6 +174,14 @@ const userReducer = createReducer(initialState, (builder) => {
       const { propertyKey, value } = action.payload;
       state.credentials[propertyKey] = value;
     })
+    .addCase(updateProfilField, (state, action) => {
+      const { propertyUpdate, value } = action.payload;
+      state.updateCredentials[propertyUpdate] = value;
+    })
+    .addCase(update.fulfilled, (state) => {
+      state.credentials.email = state.updateCredentials.emailUpdate;
+      state.credentials.pseudo = state.updateCredentials.pseudoUpdate;
+    })
     .addCase(register.fulfilled, (state, action) => {
       state.isRegistered = action.payload.isRegistered;
 
@@ -177,6 +200,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isLogged = action.payload.isLogged;
       state.token = action.payload.token;
       state.userId = action.payload.id;
+
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.firstname = action.payload.firstname;
       state.credentials.lastname = action.payload.lastname;
@@ -193,12 +217,17 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.email = action.payload.email;
       state.credentials.firstname = action.payload.firstname;
       state.credentials.lastname = action.payload.lastname;
+
+      state.updateCredentials.emailUpdate = action.payload.email;
+      state.updateCredentials.pseudoUpdate = action.payload.pseudo;
     })
     .addCase(logout, (state) => {
       state.isLogged = false;
+      state.updateCredentials.pseudoUpdate = '';
       state.credentials.pseudo = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';
+      state.updateCredentials.emailUpdate = '';
       state.credentials.email = '';
       state.token = '';
       state.userId = 0;
@@ -218,7 +247,9 @@ const userReducer = createReducer(initialState, (builder) => {
       state.token = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';
+      state.updateCredentials.emailUpdate = '';
       state.credentials.email = '';
+      state.updateCredentials.pseudoUpdate = '';
       state.credentials.pseudo = '';
       state.userId = 0;
     });
