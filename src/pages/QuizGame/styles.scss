@@ -27,6 +27,34 @@
   display: inline;
 
 }
+// Validation de la réponse de l'utilisateur
+.validate{
+  border: none;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content:center;
+  align-items: center;
+}
+.btn{
+  background-color: vars.$primary-dark-color;
+  outline: 0;
+  border: 0;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  // width: 50%;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  &:hover{
+    background: vars.$secondary-light-color;
+    color: #fff;
+    }
+}
+
 
 // QUESTIONS
 .quizgame__question{

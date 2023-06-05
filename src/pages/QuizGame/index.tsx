@@ -125,8 +125,10 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                         </button>
                       ))}
                     </Stack>
-                    <button type="button" onClick={() => handleAnswerSubmit()}>Valider la réponse</button>
-                    <button type="submit" onClick={() => handleNextQuestion()}>Question suivante</button>
+                    <div className="validate">
+                      <button type="button" className="btn" onClick={() => handleAnswerSubmit()} style={{ display: isAnswerSubmit ? 'none' : 'block' }}>Valider la réponse</button>
+                      <button type="button" className="btn" onClick={() => handleNextQuestion()} style={{ display: !isAnswerSubmit ? 'none' : 'block' }}>Question suivante</button>
+                    </div>
                   </div>
                 </section>
               </>
