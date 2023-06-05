@@ -24,6 +24,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   const [isAnswerClicked, setIsAnswerClicked] = useState<boolean>(false);
   // Stocke l'id de la réponse cliquée par le joueur
   const [userAnswerId, setUserAnswerId] = useState<number>(0);
+  // Vérifie si le joueur a validé sur une réponse
+  const [isAnswerSubmit, setIsAnswerSubmit] = useState<boolean>(false);
   // Vérifie si la réponse du joueur est la bonne réponse (réponse valide/correcte)
   const [isSelectAnswerValid, setIsSelectAnswerValid] = useState<boolean | null>(null);
 
@@ -49,11 +51,14 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     setIsAnswerClicked(true);
     // Enregistre l'id de la réponse cliquée
     setUserAnswerId(answerId);
+  };
+
+  const handleAnswerSubmit = () => {
+    setIsAnswerSubmit(true);
     // Récupère la question sélectionnée (l'objet)
     const selectedQuestion = currentQuiz?.questions[questionIndex];
     // Récupère la réponse du joueur (l'objet)
-    const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === answerId);
-
+    const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === userAnswerId);
     //* Vérifie si la réponse du joueur est "valide" est la bonne réponse
     // Si oui, incrémente le score + enregistre que la réponse est valide dans le state
     // Si non, enregistre que la réponse est invalide dans le state
@@ -63,12 +68,14 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     } else {
       setIsSelectAnswerValid(false);
     }
-    //* Après un délai affiche la question suivante + réinitialise le state: sélection d'une réponse
-    setTimeout(() => {
-      // Incrémente l'index de la question -> affiche la question suivante
-      setQuestionIndex((prevQuestion) => prevQuestion + 1);
-      setIsAnswerClicked(false);
-    }, 1500);
+  };
+
+  //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
+  const handleNextQuestion = () => {
+    // Incrémente l'index de la question -> affiche la question suivante
+    setQuestionIndex((prevQuestion) => prevQuestion + 1);
+    setIsAnswerClicked(false);
+    setIsAnswerSubmit(false);
   };
 
   return (
@@ -106,18 +113,20 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
                           className={classnames(
                             'quizgame__answerBtn',
                             {
-                              valid: isAnswerClicked && answer.is_valid,
-                              invalid: isAnswerClicked && !isSelectAnswerValid
+                              valid: isAnswerSubmit && answer.is_valid,
+                              invalid: isAnswerSubmit && !isSelectAnswerValid
                                       && userAnswerId === answer.id,
                             },
                             { selectedBtn: userAnswerId === answer.id },
                           )}
-                          disabled={isAnswerClicked}
+                          disabled={isAnswerSubmit}
                         >
                           {answer.answer}
                         </button>
                       ))}
                     </Stack>
+                    <button type="button" onClick={() => handleAnswerSubmit()}>Valider la réponse</button>
+                    <button type="submit" onClick={() => handleNextQuestion()}>Question suivante</button>
                   </div>
                 </section>
               </>
