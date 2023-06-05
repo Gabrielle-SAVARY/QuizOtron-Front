@@ -173,7 +173,7 @@ function App() {
         />
         <Route
           path="/quiz"
-          element={<Quiz quizList={quizList} />}
+          element={<Quiz quizList={quizList} tagsList={tagsList} />}
         />
         <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
         <Route

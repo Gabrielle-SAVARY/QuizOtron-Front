@@ -14,7 +14,7 @@ function Footer() {
           <h3 className="footer__contact-title">Contact</h3>
           <div className="footer__contact-mail">
             <MdEmail />
-            <p>contact@quizotron.com</p>
+            <a href="mailto:contact@quizotron.com" className="footer__contact-mail-text">contact@quizotron.com</a>
           </div>
         </div>
       </div>
