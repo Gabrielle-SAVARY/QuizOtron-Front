@@ -21,6 +21,6 @@ export interface AuthorQList {
 }
 
 export interface TagQList {
-  tag_id: number
+  id: number
   name: string
 }

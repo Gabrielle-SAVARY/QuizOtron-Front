@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TuneIcon from '@mui/icons-material/Tune';
 import Card from '../../components/Card';
 import CardFilter from './CardFilter';
@@ -15,22 +15,32 @@ interface QuizProps {
 
 function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<number[]>([]);
+  const [quizFilter, setQuizFilter] = useState<IQuizList[]>([]);
 
   const handleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const filteredQuizList = quizList.filter((quiz) => {
-    if (selectedCategory && quiz.tags.some((tag) => tag.tag_id === selectedCategory)) {
-      return true;
+  const handleSelectedCategory = (id: number) => {
+    if (selectedCategory.includes(id)) {
+      setSelectedCategory(selectedCategory.filter((categoryId) => categoryId !== id));
+    } else {
+      setSelectedCategory([...selectedCategory, id]);
     }
-    if (selectedLevel && quiz.level_id === selectedLevel) {
-      return true;
-    }
-    return false;
-  });
+  };
+
+  useEffect(() => {
+    const filteredCategory = () => {
+      if (selectedCategory.length !== 0) {
+        return quizList.filter(
+          (quiz) => quiz.tags.some((tag) => selectedCategory.includes(tag.id)),
+        );
+      }
+      return quizList;
+    };
+    setQuizFilter(filteredCategory());
+  }, [quizList, selectedCategory]);
 
   const filteredQuiz = isFilterOpen ? 'quiz-filtered quiz-filtered--open' : 'quiz-filtered';
 
@@ -58,7 +68,7 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
             {tagsList && (
             <div className="card-filter tags-list">
               {tagsList.map((tag) => (
-                <CardFilter key={tag.id} cardType="category" id={tag.id} label={tag.name} onClick={() => setSelectedCategory(Number(tag.id))} />
+                <CardFilter key={tag.id} cardType="category" id={tag.id} label={tag.name} onClick={() => handleSelectedCategory(tag.id)} />
               ))}
             </div>
             )}
@@ -68,7 +78,7 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
             {levelsList && (
               <div className="card-filter levels-list">
                 {levelsList.map((level) => (
-                  <CardFilter key={level.id} cardType="level" id={level.id} label={level.name} onClick={() => setSelectedLevel(Number(level.id))} />
+                  <CardFilter key={level.id} cardType="level" id={level.id} label={level.name} onClick={() => handleSelectedCategory(level.id)} />
                 ))}
               </div>
             )}
@@ -76,9 +86,9 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
         </div>
       </div>
       <h1 className="quiz-list__title">Liste des quiz</h1>
-      {quizList && (
+      {quizFilter && (
         <div className="quiz-list__items">
-          {quizList.map((quiz) => (
+          {quizFilter.map((quiz) => (
             <Card
               key={quiz.id}
               id={quiz.id}

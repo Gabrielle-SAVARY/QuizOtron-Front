@@ -5,14 +5,15 @@ interface CardFilterProps {
   cardType: string;
   id: number;
   label: string;
-  onClick?: () => void;
+  onClick: (id:number) => void;
+
 }
 
 function CardFilter({
-  cardType, id, label, ...rest
+  cardType, id, label, onClick,
 }: CardFilterProps) {
   return (
-    <button type="button" className="cardFilter__btn" {...rest}>
+    <button type="button" className="cardFilter__btn" onClick={() => onClick(id)}>
       <div className={`card-${cardType} ${cardType}${id}`}>
         <div className={`card-${cardType}-header`}>
           <MovieIcon className={`card-${cardType}-header__icon`} />
