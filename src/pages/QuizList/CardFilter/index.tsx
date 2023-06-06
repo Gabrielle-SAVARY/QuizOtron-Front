@@ -2,20 +2,26 @@ import MovieIcon from '@mui/icons-material/Movie';
 import './styles.scss';
 
 interface CardFilterProps {
+  cardType: string;
   id: number;
   label: string;
+  onClick?: () => void;
 }
 
-function CardFilter({ id, label }: CardFilterProps) {
+function CardFilter({
+  cardType, id, label, ...rest
+}: CardFilterProps) {
   return (
-    <div className={`card-category category${id}`}>
-      <div className="card-category-header">
-        <MovieIcon className="card-category-header__icon" />
+    <button type="button" className="cardFilter__btn" {...rest}>
+      <div className={`card-${cardType} ${cardType}${id}`}>
+        <div className={`card-${cardType}-header`}>
+          <MovieIcon className={`card-${cardType}-header__icon`} />
+        </div>
+        <div className={`card-${cardType}-body`}>
+          <h4 className={`card-${cardType}-body__title`}>{label}</h4>
+        </div>
       </div>
-      <div className="card-category-body">
-        <h4 className="card-category-body__title">{label}</h4>
-      </div>
-    </div>
+    </button>
   );
 }
 

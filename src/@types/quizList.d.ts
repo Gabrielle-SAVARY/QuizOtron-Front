@@ -21,11 +21,6 @@ export interface AuthorQList {
 }
 
 export interface TagQList {
-  name: string
-  quiz_has_tag: QuizHasTagQList
-}
-
-export interface QuizHasTagQList {
   tag_id: number
-  quiz_id: number
+  name: string
 }

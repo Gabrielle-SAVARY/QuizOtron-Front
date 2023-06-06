@@ -341,10 +341,11 @@ function QuizCreate({
               label="Catégorie"
               defaultValue="choose option"
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
+              className="select-tag"
             >
               <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
               {tagsList.map((tag) => (
-                <MenuItem key={tag.id} value={tag.id}>{tag.name}</MenuItem>
+                <MenuItem key={tag.id} value={tag.id} className="select-tag">{tag.name}</MenuItem>
               ))}
             </Select>
           </FormControl>

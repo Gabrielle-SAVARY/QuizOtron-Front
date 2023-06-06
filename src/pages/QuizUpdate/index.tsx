@@ -515,12 +515,13 @@ function QuizUpdate({
               label="Catégorie"
               value={updateQuiz.tag_id}
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
+              className="select-tag"
             >
               <MenuItem disabled value="choose option">
                 Sélectionner une catégorie
               </MenuItem>
               {tagsList.map((tag) => (
-                <MenuItem key={tag.id} value={tag.id}>
+                <MenuItem key={tag.id} value={tag.id} className="tags-list">
                   {tag.name}
                 </MenuItem>
               ))}
@@ -536,13 +537,14 @@ function QuizUpdate({
               label="Difficulté"
               value={updateQuiz.level_id}
               onChange={(event) => handleChangeQuizData(event, 'level_id')}
+              className="select-level"
             >
               <MenuItem disabled value="choose option">
                 Sélectionner
               </MenuItem>
 
               {levelsList.map((level) => (
-                <MenuItem key={level.id} value={level.id}>
+                <MenuItem key={level.id} value={level.id} className="levels-list">
                   {level.name}
                 </MenuItem>
               ))}

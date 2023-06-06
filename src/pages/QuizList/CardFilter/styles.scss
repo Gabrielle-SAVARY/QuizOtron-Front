@@ -1,13 +1,9 @@
 @use '../../../styles/mixin';
 @use '../../../styles/vars';
 
-.card-category{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid #fff;
-    margin-bottom: 0.5rem;
-    height: 8rem;
-    width: 8rem;
+.cardFilter__btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
