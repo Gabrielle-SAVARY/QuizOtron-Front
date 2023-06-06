@@ -14,35 +14,99 @@ interface QuizProps {
 }
 
 function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
+  //* STATE
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<number[]>([]);
-  const [quizFilter, setQuizFilter] = useState<IQuizList[]>([]);
 
+  const [categoriesId, setCategoriesId] = useState<number[]>([]);
+  const [levelsId, setLevelsId] = useState<number[]>([]);
+  const [quizFilter, setQuizFilter] = useState<IQuizList[]>(quizList);
+
+  const [categoriesQuiz, setCategoriesQuiz] = useState<IQuizList[]>([]);
+  const [levelsQuiz, setLevelsQuiz] = useState<IQuizList[]>([]);
+
+  //* Toggle l'affichage des filtres
   const handleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
+  const filteredQuiz = isFilterOpen ? 'quiz-filtered quiz-filtered--open' : 'quiz-filtered';
 
-  const handleSelectedCategory = (id: number) => {
-    if (selectedCategory.includes(id)) {
-      setSelectedCategory(selectedCategory.filter((categoryId) => categoryId !== id));
-    } else {
-      setSelectedCategory([...selectedCategory, id]);
+  //* Reset les filtres au click du bouton
+  const handleResetFilter = () => {
+    setCategoriesId([]);
+    setLevelsId([]);
+  };
+
+  //* Récupère les id des catégories et des niveaux sélectionnés et les stocke dans les states
+  const handleSelectedFilter = (id: number, type: string) => {
+    if (type === 'tag') {
+      // quand on reclique sur le filtre de la catégorie, on la retire du state
+      if (categoriesId.includes(id)) {
+        setCategoriesId(categoriesId.filter((categoryId) => categoryId !== id));
+      } else {
+        // quand on clique sur le filtre de la catégorie, on l'ajoute au state
+        setCategoriesId([...categoriesId, id]);
+      }
+    } else if (type === 'level') {
+      if (levelsId.includes(id)) {
+        setLevelsId(levelsId.filter((levelId) => levelId !== id));
+      } else {
+        setLevelsId([...levelsId, id]);
+      }
     }
   };
 
   useEffect(() => {
-    const filteredCategory = () => {
-      if (selectedCategory.length !== 0) {
+    //* Stocke dans le tableau les quiz correspondants aux id des catégories/tags sélectionnées
+    const filterCategoryQuiz = (): IQuizList[] => {
+      // Si catégoriesId n'est pas vide
+      // on filtre les quiz dans quizList dont les tag.id retourne true
+      // Si vide: on retourne un tableau vide
+      if (categoriesId.length !== 0) {
         return quizList.filter(
-          (quiz) => quiz.tags.some((tag) => selectedCategory.includes(tag.id)),
+          (quiz) => quiz.tags.some((tag) => categoriesId.includes(tag.id)),
         );
       }
-      return quizList;
+      return [];
     };
-    setQuizFilter(filteredCategory());
-  }, [quizList, selectedCategory]);
+    //* Stocke dans le tableau les quiz correspondants aux id des niveaux/levels sélectionnées
+    const filterLevelQuiz = (): IQuizList[] => {
+      if (levelsId.length !== 0) {
+        return quizList.filter((quiz) => levelsId.includes(quiz.level.id));
+      }
+      return [];
+    };
+    //* Met à jour les states de categoriesQuiz et levelsQuiz avec les données filtrées
+    setCategoriesQuiz(filterCategoryQuiz());
+    setLevelsQuiz(filterLevelQuiz());
+  }, [categoriesId, levelsId, quizList]);
 
-  const filteredQuiz = isFilterOpen ? 'quiz-filtered quiz-filtered--open' : 'quiz-filtered';
+  //* Mise à jour des quiz filtrés
+  useEffect(() => {
+    const updateFilteredQuiz = () => {
+      // Si aucun filtre n'est sélectionné, afficher tous les quiz
+      if (categoriesId.length === 0 && levelsId.length === 0) {
+        setQuizFilter(quizList);
+      } else {
+        // Nouveau tableau qui regroupe tous les quiz filtrés par catégories et par niveaux
+        const allFilteredQuiz: IQuizList[] = [...categoriesQuiz, ...levelsQuiz];
+        // Nouveau tableau qui regroupe tous les quiz filtrés sans doublons, initialisé à vide
+        const mergedQuiz: IQuizList[] = [];
+
+        // Pour chaque quiz du tableau
+        // vérifier si un quiz avec le même id existe déjà dans le tableau mergedQuiz
+        allFilteredQuiz.forEach((quiz) => {
+          const existingQuiz = mergedQuiz.find((q) => q.id === quiz.id);
+          // Si le quiz n'existe pas, l'ajouter au tableau mergedQuiz
+          if (!existingQuiz) {
+            mergedQuiz.push(quiz);
+          }
+        });
+        console.log('mergedQuiz', mergedQuiz);
+        setQuizFilter(mergedQuiz);
+      }
+    };
+    updateFilteredQuiz();
+  }, [categoriesId.length, levelsId.length, quizList, categoriesQuiz, levelsQuiz]);
 
   return (
     <div className="quiz-list">
@@ -63,12 +127,21 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
           <TuneIcon />
         </button>
         <div className={filteredQuiz}>
+          <button type="button" onClick={handleResetFilter} className="reset__btn">
+            Effacer les filtres
+          </button>
           <div className="quiz-list__filter">
             <h2 className="quiz-list__text">Catégories</h2>
             {tagsList && (
             <div className="card-filter tags-list">
               {tagsList.map((tag) => (
-                <CardFilter key={tag.id} cardType="category" id={tag.id} label={tag.name} onClick={() => handleSelectedCategory(tag.id)} />
+                <CardFilter
+                  key={tag.id}
+                  cardType="category"
+                  id={tag.id}
+                  label={tag.name}
+                  onClick={() => handleSelectedFilter(tag.id, 'tag')}
+                />
               ))}
             </div>
             )}
@@ -78,7 +151,13 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
             {levelsList && (
               <div className="card-filter levels-list">
                 {levelsList.map((level) => (
-                  <CardFilter key={level.id} cardType="level" id={level.id} label={level.name} onClick={() => handleSelectedCategory(level.id)} />
+                  <CardFilter
+                    key={level.id}
+                    cardType="level"
+                    id={level.id}
+                    label={level.name}
+                    onClick={() => handleSelectedFilter(level.id, 'level')}
+                  />
                 ))}
               </div>
             )}

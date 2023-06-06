@@ -112,6 +112,28 @@
   transform: scale(1.05);
 }
 
+.reset__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:  #fff;
+  border: none;
+  border-radius: 1rem;
+  color: vars.$wrong-answer-color;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.reset__btn:hover{
+  background-color: vars.$wrong-answer-color;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+
 
 .card-category{
   display: flex;

@@ -7,3 +7,13 @@
   color: white;
   cursor: pointer;
 }
+
+.cardFilter__btn:hover {
+  color: vars.$secondary-light-color;
+/*   border-color: vars.$secondary-light-color; */
+}
+
+.cardFilter__btn--selected{
+  color: vars.$main-primary-color;
+
+}
