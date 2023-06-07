@@ -1,0 +1,38 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+.quiz-list {
+
+  &__filter {
+    padding-bottom: 2rem;
+  }
+  &__text {
+    padding-bottom: 1rem;
+    font-size: 1.25rem;
+    text-decoration: underline;
+    text-transform: uppercase;
+  }
+
+}
+
+.filter__search-input {
+  padding: 1rem;
+  border: none;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.filter__search-btn {
+  padding:1rem;
+  border: none;
+  background-color: vars.$main-primary-color;
+  color: white;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  cursor: pointer;
+}
+
+.filter__search-btn:hover{
+  background-color: vars.$main-secondary-color;
+}

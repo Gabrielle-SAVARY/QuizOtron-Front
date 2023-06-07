@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import TuneIcon from '@mui/icons-material/Tune';
 import Card from '../../components/Card';
 import CardFilter from './CardFilter';
+import SearchBar from './SearchBar';
 import { IQuizList } from '../../@types/quizList';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
@@ -136,17 +137,10 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
   return (
     <div className="quiz-list">
       <div className="quiz-list__container">
-        <div className="quiz-list__filter">
-          <h2 className="quiz-list__text">
-            Recherche
-          </h2>
-          <div className="filter__search">
-            <input type="text" placeholder="Rechercher un quiz" className="filter__search-input" />
-            <button type="button" className="filter__search-btn">
-              Rechercher
-            </button>
-          </div>
-        </div>
+        <SearchBar
+          quizList={quizList}
+          setQuizFilter={setQuizFilter}
+        />
         <button type="button" onClick={handleFilter} className="filter__btn">
           Filtrer les quiz
           <TuneIcon />
