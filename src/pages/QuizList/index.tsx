@@ -110,26 +110,28 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
       if (categoriesId.length === 0 && levelsId.length === 0) {
         setQuizFilter(quizList);
       } else {
-        // Nouveau tableau qui regroupe tous les quiz filtrés par catégories et par niveaux
-        const allFilteredQuiz: IQuizList[] = [...categoriesQuiz, ...levelsQuiz];
-        // Nouveau tableau qui regroupe tous les quiz filtrés sans doublons, initialisé à vide
-        const mergedQuiz: IQuizList[] = [];
+        // On déclare le tableau qui va contenir les quiz filtrés
+        let allFilteredQuiz: IQuizList[] = [];
 
-        // Pour chaque quiz du tableau
-        // vérifier si un quiz avec le même id existe déjà dans le tableau mergedQuiz
-        allFilteredQuiz.forEach((quiz) => {
-          const existingQuiz = mergedQuiz.find((q) => q.id === quiz.id);
-          // Si le quiz n'existe pas, l'ajouter au tableau mergedQuiz
-          if (!existingQuiz) {
-            mergedQuiz.push(quiz);
-          }
-        });
-        // Met à jour le state avec les quiz filtrés (sans doublon)
-        setQuizFilter(mergedQuiz);
+        // On fait le lien entre les filtres des niveaux et des catégories
+        if (categoriesId.length === 0 || levelsId.length === 0) {
+          // Si un seul type de filtre est sélectionné (tags ou levels)
+          // on stocke les quiz correspondants au type sélectionné
+          allFilteredQuiz = [...categoriesQuiz, ...levelsQuiz];
+        } else if (categoriesId.length !== 0 && levelsId.length !== 0) {
+          // Si les deux types de filtres sont sélectionnés
+          // on filtre les quiz de levelsQuiz pour récupérer les quiz
+          // dont les catégories sont présentes dans categoriesId
+          allFilteredQuiz = levelsQuiz.filter(
+            (quiz) => quiz.tags.some((tag) => categoriesId.includes(tag.id)),
+          );
+        }
+        // Mise à jour du state avec les quiz filtrés (sans doublon)
+        setQuizFilter(allFilteredQuiz);
       }
     };
     updateFilteredQuiz();
-  }, [categoriesId.length, levelsId.length, quizList, categoriesQuiz, levelsQuiz]);
+  }, [categoriesId.length, levelsId.length, quizList, categoriesQuiz, levelsQuiz, categoriesId]);
 
   return (
     <div className="quiz-list">
