@@ -15,14 +15,18 @@ interface QuizProps {
 
 function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
   //* STATE
+  // Toggle l'affichage des filtres (au click du bouton)
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
-
+  // Stocke les id des catégories et des niveaux sélectionnés
   const [categoriesId, setCategoriesId] = useState<number[]>([]);
   const [levelsId, setLevelsId] = useState<number[]>([]);
-  const [quizFilter, setQuizFilter] = useState<IQuizList[]>(quizList);
-
+  // Stocke les quiz filtrés par catégories et par niveaux
   const [categoriesQuiz, setCategoriesQuiz] = useState<IQuizList[]>([]);
   const [levelsQuiz, setLevelsQuiz] = useState<IQuizList[]>([]);
+  // Stocke tous les quiz filtrés sans doublons
+  const [quizFilter, setQuizFilter] = useState<IQuizList[]>(quizList);
+  // Stocke les filtres sélectionnés
+  const [selectedFilters, setSelectedFilters] = useState<{ type: string; id: number }[]>([]);
 
   //* Toggle l'affichage des filtres
   const handleFilter = () => {
@@ -34,10 +38,29 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
   const handleResetFilter = () => {
     setCategoriesId([]);
     setLevelsId([]);
+    setSelectedFilters([]);
   };
+
+  //* Vérifie si le filtre est déjà présent dans le tableau: si oui, retourne true
+  const isFilterInArray = (
+    array: { type: string; id: number }[],
+    obj: { type: string; id: number },
+  ): boolean => array.some((item) => item.type === obj.type && item.id === obj.id);
 
   //* Récupère les id des catégories et des niveaux sélectionnés et les stocke dans les states
   const handleSelectedFilter = (id: number, type: string) => {
+    // Stocke le filtre sélectionné dans un objet
+    const filter = { type, id };
+
+    // Vérifie si le filtre est déjà présent dans le tableau:
+    // si oui, le retire du state
+    // si non, l'ajoute au state
+    if (isFilterInArray(selectedFilters, filter)) {
+      setSelectedFilters(selectedFilters.filter((item) => !(item.type === type && item.id === id)));
+    } else {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+
     if (type === 'tag') {
       // quand on reclique sur le filtre de la catégorie, on la retire du state
       if (categoriesId.includes(id)) {
@@ -101,7 +124,7 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
             mergedQuiz.push(quiz);
           }
         });
-        console.log('mergedQuiz', mergedQuiz);
+        // Met à jour le state avec les quiz filtrés (sans doublon)
         setQuizFilter(mergedQuiz);
       }
     };
@@ -137,10 +160,12 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
               {tagsList.map((tag) => (
                 <CardFilter
                   key={tag.id}
-                  cardType="category"
+                  cardType="tag"
                   id={tag.id}
                   label={tag.name}
                   onClick={() => handleSelectedFilter(tag.id, 'tag')}
+                  isFilterInArray={isFilterInArray}
+                  selectedFilters={selectedFilters}
                 />
               ))}
             </div>
@@ -157,6 +182,8 @@ function Quiz({ quizList, tagsList, levelsList }: QuizProps) {
                     id={level.id}
                     label={level.name}
                     onClick={() => handleSelectedFilter(level.id, 'level')}
+                    isFilterInArray={isFilterInArray}
+                    selectedFilters={selectedFilters}
                   />
                 ))}
               </div>

@@ -13,7 +13,10 @@
 /*   border-color: vars.$secondary-light-color; */
 }
 
-.cardFilter__btn--selected{
-  color: vars.$main-primary-color;
-
+.card-filter--selected{
+  color: vars.$main-secondary-color;
 }
+
+/* .cardFilter__btn--active {
+  color: vars.$secondary-light-color;
+} */
