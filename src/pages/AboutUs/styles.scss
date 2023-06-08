@@ -1,0 +1,37 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.about {
+  &__quizotron {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+  &__title {
+    font-size: 1.5rem;
+  }
+  &__text {
+    padding-top: 2rem;
+  }
+  &__team {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1rem;
+  }
+}
+
+.about__team-card {
+  border: 1px solid black;
+  border-radius: 1rem;
+}
+
+.team-card__footer {
+  background-color: vars.$main-primary-color;
+  border-radius: 1rem;
+  color: white;
+}

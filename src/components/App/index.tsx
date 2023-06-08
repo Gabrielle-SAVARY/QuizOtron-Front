@@ -24,6 +24,7 @@ import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
+import About from '../../pages/AboutUs';
 
 function App() {
   const navigate = useNavigate();
@@ -183,6 +184,10 @@ function App() {
         <Route
           path="/inscription"
           element={<Register />}
+        />
+        <Route
+          path="/apropos"
+          element={<About />}
         />
         <Route
           path="/profile"
