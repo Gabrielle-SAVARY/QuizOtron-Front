@@ -2,7 +2,6 @@
 @use '../../styles/vars';
 
 .quiz-list {
-
   &__title {
     font-size: 1.5rem;
     text-transform: uppercase;
@@ -11,18 +10,17 @@
     margin-bottom: 2rem;
     color: vars.$primary-dark-color;
     text-align: center;
-  
   }
   &__items {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  
+
     @include mixin.breakpoint(desktop) {
       flex-flow: row wrap;
       justify-content: center;
-      align-items: center;   
+      align-items: center;
       gap: 2rem;
     }
   }
@@ -45,7 +43,6 @@
     text-decoration: underline;
     text-transform: uppercase;
   }
-
 }
 
 .card-filter {
@@ -56,7 +53,7 @@
   @include mixin.breakpoint(desktop) {
     flex-flow: row wrap;
     justify-content: center;
-    align-items: center;   
+    align-items: center;
     gap: 2rem;
   }
 }
@@ -85,16 +82,13 @@
   cursor: pointer;
 }
 
-.filter__btn:hover{
+.filter__btn:hover {
   background-color: vars.$main-secondary-color;
   transform: scale(1.05);
 }
 
 .reset__btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color:  #fff;
+  background-color: #fff;
   border: none;
   border-radius: 1rem;
   color: vars.$wrong-answer-color;
@@ -105,15 +99,13 @@
   cursor: pointer;
 }
 
-.reset__btn:hover{
+.reset__btn:hover {
   background-color: vars.$wrong-answer-color;
   color: #fff;
   transform: scale(1.05);
 }
 
-
-
-.card-tag{
+.card-tag {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -126,7 +118,7 @@
   text-transform: capitalize;
 }
 
-.card-level{
+.card-level {
   display: flex;
   flex-direction: row;
   justify-content: center;
