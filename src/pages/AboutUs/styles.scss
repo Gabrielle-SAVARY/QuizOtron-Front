@@ -6,32 +6,36 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    text-align: center;
+    align-items: center;
     padding: 1rem;
   }
   &__title {
     font-size: 1.5rem;
+    padding-bottom: 1rem;
   }
   &__text {
-    padding-top: 2rem;
+    padding-top: 1rem;
+    margin: 0 15rem;
+    text-justify: auto;
   }
   &__team {
     display: flex;
-    justify-content: center;
-    text-align: center;
     flex-direction: column;
-    padding: 2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
     gap: 1rem;
   }
 }
 
-.about__team-card {
-  border: 1px solid black;
-  border-radius: 1rem;
+.about__team-card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1rem;
 }
 
-.team-card__footer {
-  background-color: vars.$main-primary-color;
-  border-radius: 1rem;
-  color: white;
-}

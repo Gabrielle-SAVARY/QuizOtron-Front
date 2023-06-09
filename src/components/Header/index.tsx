@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
+import logo from '../../assets/img/logo.png';
 import './styles.scss';
 
 interface IMenuLink {
@@ -55,7 +56,7 @@ function Header() {
 
   return (
     <header className="header">
-      <h1 className="header__logo"><NavLink to="/">Quiz&apos;O&apos;Tron</NavLink></h1>
+      <img src={logo} alt="Logo quiz o tron" className="header__logo" />
 
       <nav className="header__nav">
         { /* affiche les items du menu: écran desktop + mobile hamburger ouvert */}
