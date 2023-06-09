@@ -60,6 +60,48 @@ function App() {
     questions: [],
   });
 
+  const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
+  // Icone du quiz cliqué pour ajouter le quiz aux favoris de l'utilisateur
+  /*   const [addFavorite, setAddFavorite] = useState<IOneQuiz>(); */
+
+  /*   const AddQuizToFavorite = async (quizId:number) => {
+    try {
+      const response = await axiosInstance.post('/profile/favorites/add', { quizId });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to favorite');
+      }
+      const { data } = response;
+      console.log('data FAVORITE', data);
+      if (data) {
+        setUserFavoritesQuiz((prevQuiz) => [...prevQuiz, data]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }; */
+
+  //* Appel API: récupère la liste des catégories/tags
+  useEffect(() => {
+    const fetchUserFavorites = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/favorites');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // met à jour le state avec les données envoyées par l'API
+        console.log('response.data', response.data);
+        const { data } = response;
+        setUserFavoritesQuiz(data.favorites);
+        console.log('userFavoritesQuiz', userFavoritesQuiz);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // Récupère la liste des catégorie au chargement de la page
+    fetchUserFavorites();
+  }, []);
+
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
   useEffect(() => {
@@ -174,7 +216,15 @@ function App() {
         />
         <Route
           path="/quiz"
-          element={<Quiz quizList={quizList} tagsList={tagsList} levelsList={levelsList} />}
+          element={(
+            <Quiz
+              quizList={quizList}
+              tagsList={tagsList}
+              levelsList={levelsList}
+              userFavoritesQuiz={userFavoritesQuiz}
+              setUserFavoritesQuiz={setUserFavoritesQuiz}
+            />
+        )}
         />
         <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
         <Route
@@ -209,7 +259,10 @@ function App() {
           path="/profile/quiz"
           element={(
             <ProtectedRoute>
-              <ProfilQuiz quizList={quizList} setQuizList={setQuizList} />
+              <ProfilQuiz
+                quizList={quizList}
+                setQuizList={setQuizList}
+              />
             </ProtectedRoute>
           )}
         />
