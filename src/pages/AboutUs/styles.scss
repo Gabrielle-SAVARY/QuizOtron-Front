@@ -18,6 +18,15 @@
     margin: 0 15rem;
     text-justify: auto;
   }
+  &__stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    gap: 1rem;
+  }
   &__team {
     display: flex;
     flex-direction: column;
@@ -35,7 +44,6 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  flex-wrap: wrap;
   padding: 1rem;
 }
 

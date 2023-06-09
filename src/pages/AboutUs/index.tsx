@@ -14,6 +14,9 @@ function About() {
         <p className="about__text">Notre équipe est composée de trois esprits créatifs qui ont uni leurs compétences pour donner vie à ce projet. Nous avons travaillé dur pour vous offrir des questions soigneusement sélectionnées et des fonctionnalités conviviales qui rendront votre expérience de quiz inoubliable. Nous nous engageons à maintenir une plateforme de qualité, constamment mise à jour avec de nouveaux quiz pour satisfaire votre soif de connaissances.</p>
         <p className="about__text">Nous espérons que notre site de quiz vous apportera à la fois du plaisir et des découvertes. N&apos;hésitez pas à explorer les différentes catégories de quiz, à défier vos amis ou à rivaliser avec d&apos;autres joueurs. Relevez le défi, mesurez vos compétences et améliorez-vous continuellement. Nous vous souhaitons une expérience enrichissante sur notre site et espérons que vous vous amuserez autant que nous avons pris plaisir à créer cette plateforme.</p>
       </div>
+      <div className="about__stack">
+        <h2 className="about__title">Les technologies utilisées</h2>
+      </div>
       <div className="about__team">
         <h2 className="about__title">L&apos;équipe</h2>
         <div className="about__team-card-container">
