@@ -22,8 +22,9 @@ import { axiosInstance } from '../../utils/axios';
 interface ProfilQuizProps {
   quizList: IQuizList[]
   setQuizList: (quizList: IQuizList[]) => void
+  addQuizToFavorite: (quizId: number) => void;
 }
-function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
+function ProfilQuiz({ quizList, setQuizList, addQuizToFavorite }: ProfilQuizProps) {
   //* STATE
   // Récupère le pseudo dans le reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
@@ -150,6 +151,7 @@ function ProfilQuiz({ quizList, setQuizList }: ProfilQuizProps) {
                 author={quiz.author.pseudo}
                 level={quiz.level.name}
                 tags={quiz.tags}
+                addQuizToFavorite={addQuizToFavorite}
               />
             </div>
           ))}

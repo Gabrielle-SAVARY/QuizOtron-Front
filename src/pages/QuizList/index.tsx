@@ -12,12 +12,13 @@ interface QuizProps {
   quizList: IQuizList[]
   tagsList: ITag[]
   levelsList: ILevel[]
-  userFavoritesQuiz: IQuizList[];
-  setUserFavoritesQuiz: (userFavoritesQuiz: IQuizList[]) => void;
+  /*   userFavoritesQuiz: IQuizList[];
+  setUserFavoritesQuiz: (userFavoritesQuiz: IQuizList[]) => void; */
+  addQuizToFavorite: (quizId: number) => void;
 }
 
 function Quiz({
-  quizList, tagsList, levelsList, userFavoritesQuiz, setUserFavoritesQuiz,
+  quizList, tagsList, levelsList, addQuizToFavorite,
 }: QuizProps) {
   //* STATE
   // Toggle l'affichage des filtres (au click du bouton)
@@ -203,8 +204,9 @@ function Quiz({
               author={quiz.author.pseudo}
               level={quiz.level.name}
               tags={quiz.tags}
-              userFavoritesQuiz={userFavoritesQuiz}
-              setUserFavoritesQuiz={setUserFavoritesQuiz}
+/*               userFavoritesQuiz={userFavoritesQuiz}
+              setUserFavoritesQuiz={setUserFavoritesQuiz} */
+              addQuizToFavorite={addQuizToFavorite}
             />
           ))}
         </div>

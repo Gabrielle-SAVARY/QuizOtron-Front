@@ -22,9 +22,11 @@ import QuizUpdate from '../../pages/QuizUpdate';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
+import { IGetFavorites, IQuizFavorites } from '../../@types/quizFavorites';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
+import ProfilFavorites from '../../pages/ProfilFavorites';
 
 function App() {
   const navigate = useNavigate();
@@ -64,23 +66,7 @@ function App() {
   // Icone du quiz cliqué pour ajouter le quiz aux favoris de l'utilisateur
   /*   const [addFavorite, setAddFavorite] = useState<IOneQuiz>(); */
 
-  /*   const AddQuizToFavorite = async (quizId:number) => {
-    try {
-      const response = await axiosInstance.post('/profile/favorites/add', { quizId });
-      if (response.status !== 200) {
-        throw new Error('Failed to add quiz to favorite');
-      }
-      const { data } = response;
-      console.log('data FAVORITE', data);
-      if (data) {
-        setUserFavoritesQuiz((prevQuiz) => [...prevQuiz, data]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
-
-  //* Appel API: récupère la liste des catégories/tags
+  //* Appel API: récupère la liste quiz favoris de l'utilisateur connecté
   useEffect(() => {
     const fetchUserFavorites = async () => {
       try {
@@ -92,15 +78,39 @@ function App() {
         // met à jour le state avec les données envoyées par l'API
         console.log('response.data', response.data);
         const { data } = response;
-        setUserFavoritesQuiz(data.favorites);
+        if (userFavoritesQuiz.length !== data.favorites.length) {
+          const dataFavorites = data.favorites;
+
+          const filterUserQuiz = (): IQuizList[] => quizList.filter(
+            (quiz) => dataFavorites.map(
+              (favorite: IQuizFavorites) => favorite.id,
+            ).includes(quiz.id),
+          );
+          console.log('dataFavorites', dataFavorites);
+          setUserFavoritesQuiz(filterUserQuiz());
+        }
+
         console.log('userFavoritesQuiz', userFavoritesQuiz);
       } catch (error) {
         console.log(error);
       }
     };
-    // Récupère la liste des catégorie au chargement de la page
+    // Récupère la liste des quiz favoris
     fetchUserFavorites();
-  }, []);
+  }, [quizList, userFavoritesQuiz]);
+
+  const addQuizToFavorite = async (quizId:number) => {
+    try {
+      console.log('passe là', quizId);
+      const response = await axiosInstance.post('/profile/favorites/add', { quiz_id: quizId });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to favorite');
+      }
+      const { data } = response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -221,8 +231,9 @@ function App() {
               quizList={quizList}
               tagsList={tagsList}
               levelsList={levelsList}
-              userFavoritesQuiz={userFavoritesQuiz}
-              setUserFavoritesQuiz={setUserFavoritesQuiz}
+/*               userFavoritesQuiz={userFavoritesQuiz}
+              setUserFavoritesQuiz={setUserFavoritesQuiz} */
+              addQuizToFavorite={addQuizToFavorite}
             />
         )}
         />
@@ -262,6 +273,7 @@ function App() {
               <ProfilQuiz
                 quizList={quizList}
                 setQuizList={setQuizList}
+                addQuizToFavorite={addQuizToFavorite}
               />
             </ProtectedRoute>
           )}
@@ -288,6 +300,17 @@ function App() {
                 getQuizDetails={getQuizDetails}
                 oneQuiz={oneQuiz}
                 fetchQuizList={fetchQuizList}
+              />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/favoris"
+          element={(
+            <ProtectedRoute>
+              <ProfilFavorites
+                userFavoritesQuiz={userFavoritesQuiz}
+                addQuizToFavorite={addQuizToFavorite}
               />
             </ProtectedRoute>
           )}

@@ -14,13 +14,14 @@ interface CardProps {
   level: string;
   author: string;
   tags: TagQList[];
-  userFavoritesQuiz: IQuizList[];
-  setUserFavoritesQuiz: (userFavoritesQuiz: IQuizList[]) => void;
+  addQuizToFavorite: (quizId: number) => void;
+  /*   userFavoritesQuiz: IQuizList[];
+  setUserFavoritesQuiz: (userFavoritesQuiz: IQuizList[]) => void; */
 
 }
 
 function Card({
-  id, title, thumbnail, level, author, tags, userFavoritesQuiz, setUserFavoritesQuiz,
+  id, title, thumbnail, level, author, tags, addQuizToFavorite,
 }: CardProps) {
   //* STATE
   const isLogged = useAppSelector((state) => state.user.isLogged);
@@ -32,22 +33,9 @@ function Card({
     setFavorite(!favorite);
   };
 
-  const AddQuizToFavorite = async (quizId:number) => {
-    try {
-      console.log('passe là', quizId);
-      const response = await axiosInstance.post('/profile/favorites/add', { quiz_id: quizId });
-      if (response.status !== 200) {
-        throw new Error('Failed to add quiz to favorite');
-      }
-      const { data } = response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleAddFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
     console.log('passe ici', 'passe ici');
-    AddQuizToFavorite(quizId);
+    addQuizToFavorite(quizId);
   };
 
   return (

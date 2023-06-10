@@ -51,6 +51,9 @@ function Profil() {
         <NavLink to="/profile/quiz" className="profil__quiz">
           Gérer mes quiz
         </NavLink>
+        <NavLink to="/profile/favoris" className="profil__quiz">
+          Mes quiz favoris
+        </NavLink>
         <NavLink to="/profile/parametres" className="profil__update">
           Modifier mon compte
         </NavLink>
