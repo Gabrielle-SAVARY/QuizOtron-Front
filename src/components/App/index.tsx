@@ -75,34 +75,53 @@ function App() {
         if (response.status !== 200) {
           throw new Error();
         }
-        // met à jour le state avec les données envoyées par l'API
-        console.log('response.data', response.data);
+        // récupère les données de la réponse
         const { data } = response;
+        // Si la longueur des tableaux du state des quiz favoris
+        // et des données récupérées sont différentes
+        // alors le state des quiz favoris doit être mis à jour
         if (userFavoritesQuiz.length !== data.favorites.length) {
+          // on stocke le tableau des quiz favoris de l'utilisateur retourné par l'API
           const dataFavorites = data.favorites;
 
+          // les données des quiz favoris doivent être du même format que le state quizList
+          // on filtre tous les quiz pour récupérer uniquement favoris ( id retourné par l'API)
           const filterUserQuiz = (): IQuizList[] => quizList.filter(
             (quiz) => dataFavorites.map(
               (favorite: IQuizFavorites) => favorite.id,
             ).includes(quiz.id),
           );
-          console.log('dataFavorites', dataFavorites);
+          // Mise à jour du state des quiz favoris au format du state quizList
           setUserFavoritesQuiz(filterUserQuiz());
         }
-
-        console.log('userFavoritesQuiz', userFavoritesQuiz);
       } catch (error) {
         console.log(error);
       }
     };
-    // Récupère la liste des quiz favoris
-    fetchUserFavorites();
-  }, [quizList, userFavoritesQuiz]);
+    // Récupère la liste des quiz favoris ssi l'utilisateur est connecté
+    if (isLogged) {
+      fetchUserFavorites();
+    }
+  }, [isLogged, quizList, userFavoritesQuiz]);
 
+  // TODO pour add et delete favorites voir si besoin d'un usecallback
+  //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
   const addQuizToFavorite = async (quizId:number) => {
     try {
-      console.log('passe là', quizId);
       const response = await axiosInstance.post('/profile/favorites/add', { quiz_id: quizId });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to favorite');
+      }
+      const { data } = response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // TODO à tester + relier à un nouveau bouton avec icone
+  //* Appel API: supprime un quiz des favoris de l'utilisateur connecté
+  const deleteQuizToFavorite = async (quizId:number) => {
+    try {
+      const response = await axiosInstance.post('/profile/favorites/delete', { quiz_id: quizId });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to favorite');
       }

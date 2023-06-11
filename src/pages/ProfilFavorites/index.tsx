@@ -1,23 +1,6 @@
-import { useEffect, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import './styles.scss';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
-
-import DeleteIcon from '@mui/icons-material/Delete';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Card from '../../components/Card';
 import { IQuizList } from '../../@types/quizList';
-import { useAppSelector } from '../../hooks/redux';
-import { axiosInstance } from '../../utils/axios';
+import './styles.scss';
 
 interface ProfilQuizProps {
   userFavoritesQuiz: IQuizList[]

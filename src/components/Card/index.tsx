@@ -25,6 +25,8 @@ function Card({
 }: CardProps) {
   //* STATE
   const isLogged = useAppSelector((state) => state.user.isLogged);
+  // TODO lien de la card (mis uniqument sur l'image -> doit être sur tout Card) + bouton favoris
+  // TODO gérer les  boutons pour les favoris
 
   // TODO ajout des favoris utilisateurs: pour l'instant change uniquement la couleur de l'icone
   const [favorite, setFavorite] = useState<boolean>(false);
