@@ -62,47 +62,46 @@ function App() {
     questions: [],
   });
 
+  // Stocke la liste des quiz favoris de l'utilisateur connecté
   const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
-  // Icone du quiz cliqué pour ajouter le quiz aux favoris de l'utilisateur
-  /*   const [addFavorite, setAddFavorite] = useState<IOneQuiz>(); */
 
   //* Appel API: récupère la liste quiz favoris de l'utilisateur connecté
-  useEffect(() => {
-    const fetchUserFavorites = async () => {
-      try {
-        const response = await axiosInstance.get('/profile/favorites');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // récupère les données de la réponse
-        const { data } = response;
-
-        //* Mise à jour du state des quiz favoris au format de la liste des quiz
-        // Si la longueur des tableaux du state des quiz favoris
-        // et des données récupérées sont différentes
-        // alors le state des quiz favoris doit être mis à jour
-        if (userFavoritesQuiz.length !== data.favorites.length) {
-          // on stocke le tableau des quiz favoris de l'utilisateur retourné par l'API
-          const dataFavorites = data.favorites;
-          // on filtre tous les quiz pour récupérer uniquement favoris ( id retourné par l'API)
-          const filterUserQuiz = (): IQuizList[] => quizList.filter(
-            (quiz) => dataFavorites.map(
-              (favorite: IQuizFavorites) => favorite.id,
-            ).includes(quiz.id),
-          );
-          // Mise à jour du state des quiz favoris au format du state quizList
-          setUserFavoritesQuiz(filterUserQuiz());
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchUserFavorites = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/profile/favorites');
+      // Si pas de réponse 200 envoi erreur
+      if (response.status !== 200) {
+        throw new Error();
       }
-    };
+      // récupère les données de la réponse
+      const { data } = response;
+
+      //* Mise à jour du state des quiz favoris au format de la liste des quiz
+      // Si la longueur des tableaux du state des quiz favoris
+      // et des données récupérées sont différentes
+      // alors le state des quiz favoris doit être mis à jour
+      if (userFavoritesQuiz.length !== data.favorites.length) {
+        // on stocke le tableau des quiz favoris de l'utilisateur retourné par l'API
+        const dataFavorites = data.favorites;
+        // on filtre tous les quiz pour récupérer uniquement favoris ( id retourné par l'API)
+        const filterUserQuiz = (): IQuizList[] => quizList.filter(
+          (quiz) => dataFavorites.map(
+            (favorite: IQuizFavorites) => favorite.id,
+          ).includes(quiz.id),
+        );
+        // Mise à jour du state des quiz favoris au format du state quizList
+        setUserFavoritesQuiz(filterUserQuiz());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [quizList, userFavoritesQuiz]);
+  useEffect(() => {
     // Récupère la liste des quiz favoris si l'utilisateur est connecté
     if (isLogged) {
       fetchUserFavorites();
     }
-  }, [isLogged, quizList, userFavoritesQuiz]);
+  }, [fetchUserFavorites, isLogged, quizList, userFavoritesQuiz]);
 
   //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
   const addQuizToFavorite = async (quizId:number) => {
@@ -124,15 +123,17 @@ function App() {
     }
   };
 
-  // TODO à tester + relier à un nouveau bouton avec icone
   //* Appel API: supprime un quiz des favoris de l'utilisateur connecté
   const deleteQuizToFavorite = async (quizId:number) => {
     try {
-      const response = await axiosInstance.post('/profile/favorites/delete', { quiz_id: quizId });
+      const response = await axiosInstance.delete('/profile/favorites/delete', { data: { quiz_id: quizId } });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to favorite');
       }
       const { data } = response;
+      // Exclu le quiz supprimé du state des quiz favoris
+      const filteredFavoritesQuiz = userFavoritesQuiz.filter((quiz) => quiz.id !== quizId);
+      setUserFavoritesQuiz(filteredFavoritesQuiz);
     } catch (error) {
       console.log(error);
     }
@@ -257,9 +258,9 @@ function App() {
               quizList={quizList}
               tagsList={tagsList}
               levelsList={levelsList}
-              addQuizToFavorite={addQuizToFavorite}
               userFavoritesQuiz={userFavoritesQuiz}
-
+              addQuizToFavorite={addQuizToFavorite}
+              deleteQuizToFavorite={deleteQuizToFavorite}
             />
         )}
         />
@@ -299,8 +300,9 @@ function App() {
               <ProfilQuiz
                 quizList={quizList}
                 setQuizList={setQuizList}
-                addQuizToFavorite={addQuizToFavorite}
                 userFavoritesQuiz={userFavoritesQuiz}
+                addQuizToFavorite={addQuizToFavorite}
+                deleteQuizToFavorite={deleteQuizToFavorite}
               />
             </ProtectedRoute>
           )}
@@ -338,6 +340,7 @@ function App() {
               <ProfilFavorites
                 userFavoritesQuiz={userFavoritesQuiz}
                 addQuizToFavorite={addQuizToFavorite}
+                deleteQuizToFavorite={deleteQuizToFavorite}
               />
             </ProtectedRoute>
           )}

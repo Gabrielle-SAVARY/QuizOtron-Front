@@ -12,13 +12,14 @@ interface CardProps {
   level: string;
   author: string;
   tags: TagQList[];
-  addQuizToFavorite: (quizId: number) => void;
   userFavoritesQuiz: IQuizList[];
+  addQuizToFavorite: (quizId: number) => void;
+  deleteQuizToFavorite: (quizId: number) => void;
 }
 
 function Card({
-  id, title, thumbnail, level, author, tags,
-  addQuizToFavorite, userFavoritesQuiz,
+  id, title, thumbnail, level, author, tags, userFavoritesQuiz,
+  addQuizToFavorite, deleteQuizToFavorite,
 }: CardProps) {
   //* STATE
   // Stocke si l'utilisateur est connecté
@@ -46,6 +47,11 @@ function Card({
     addQuizToFavorite(quizId);
   };
 
+  //* Supprime un quiz des favoris de l'utilisateur
+  const handleDeleteFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
+    deleteQuizToFavorite(quizId);
+  };
+
   //* Gestion rendu bouton favoris
   const handleFavoriteBtn = () => {
     if (isLogged) {
@@ -56,6 +62,7 @@ function Card({
             type="button"
             className="card-body__btn-favoris"
             title="Supprimer des favoris"
+            onClick={(event) => handleDeleteFavorite(event, id)}
           >
             <MdFavorite color="red" size={36} />
           </button>
