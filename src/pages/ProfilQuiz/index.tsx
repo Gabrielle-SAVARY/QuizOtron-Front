@@ -23,8 +23,11 @@ interface ProfilQuizProps {
   quizList: IQuizList[]
   setQuizList: (quizList: IQuizList[]) => void
   addQuizToFavorite: (quizId: number) => void;
+  userFavoritesQuiz: IQuizList[];
 }
-function ProfilQuiz({ quizList, setQuizList, addQuizToFavorite }: ProfilQuizProps) {
+function ProfilQuiz({
+  quizList, setQuizList, addQuizToFavorite, userFavoritesQuiz,
+}: ProfilQuizProps) {
   //* STATE
   // Récupère le pseudo dans le reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
@@ -152,6 +155,7 @@ function ProfilQuiz({ quizList, setQuizList, addQuizToFavorite }: ProfilQuizProp
                 level={quiz.level.name}
                 tags={quiz.tags}
                 addQuizToFavorite={addQuizToFavorite}
+                userFavoritesQuiz={userFavoritesQuiz}
               />
             </div>
           ))}

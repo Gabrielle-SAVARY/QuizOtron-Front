@@ -1,9 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
-import { axiosInstance } from '../../utils/axios';
-import { IOneQuiz } from '../../@types/quiz';
 import { IQuizList, TagQList } from '../../@types/quizList';
 import './styles.scss';
 
@@ -15,29 +13,77 @@ interface CardProps {
   author: string;
   tags: TagQList[];
   addQuizToFavorite: (quizId: number) => void;
-  /*   userFavoritesQuiz: IQuizList[];
-  setUserFavoritesQuiz: (userFavoritesQuiz: IQuizList[]) => void; */
-
+  userFavoritesQuiz: IQuizList[];
 }
 
 function Card({
-  id, title, thumbnail, level, author, tags, addQuizToFavorite,
+  id, title, thumbnail, level, author, tags,
+  addQuizToFavorite, userFavoritesQuiz,
 }: CardProps) {
   //* STATE
+  // Stocke si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
-  // TODO lien de la card (mis uniqument sur l'image -> doit être sur tout Card) + bouton favoris
-  // TODO gérer les  boutons pour les favoris
+  // Stocke si le quiz est dans les favoris de l'utilisateur
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
-  // TODO ajout des favoris utilisateurs: pour l'instant change uniquement la couleur de l'icone
-  const [favorite, setFavorite] = useState<boolean>(false);
-  // Met à jour la couleur l'icone de favoris
-  const toggleFavorite = () => {
-    setFavorite(!favorite);
+  // TODO lien de la card (mis uniqument sur l'image -> doit être sur tout Card) + bouton favoris
+
+  //* Vérifie si le quiz est dans les favoris de l'utilisateur
+  const checkFavorite = (carId: number, arrayFavoritesQuiz: IQuizList[]) => {
+    const favoriteQuiz = arrayFavoritesQuiz.find((quiz) => quiz.id === carId);
+    if (favoriteQuiz) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  };
+  useEffect(() => {
+    checkFavorite(id, userFavoritesQuiz);
+  }, [id, userFavoritesQuiz]);
+
+  //* Ajoute un quiz aux favoris de l'utilisateur
+  const handleAddFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
+    addQuizToFavorite(quizId);
   };
 
-  const handleAddFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
-    console.log('passe ici', 'passe ici');
-    addQuizToFavorite(quizId);
+  //* Gestion rendu bouton favoris
+  const handleFavoriteBtn = () => {
+    if (isLogged) {
+      if (isFavorite) {
+        //* Bouton favoris avec icon remplie + fonction supprimer des favoris
+        return (
+          <button
+            type="button"
+            className="card-body__btn-favoris"
+            title="Supprimer des favoris"
+          >
+            <MdFavorite color="red" size={36} />
+          </button>
+        );
+      } if (!isFavorite) {
+        //* Bouton favoris avec icon vide + fonction ajouter aux favoris
+        return (
+          <button
+            type="button"
+            className="card-body__btn-favoris"
+            title="Ajouter aux favoris"
+            onClick={(event) => handleAddFavorite(event, id)}
+          >
+            <MdFavoriteBorder size={36} />
+          </button>
+        );
+      }
+    }
+    return (
+      //* Bouton favoris avec icon vide + survol indique de se connecter
+      <button
+        type="button"
+        className="card-body__btn-favoris"
+        title="Vous devez vous connecter à votre compte"
+      >
+        <MdFavoriteBorder size={36} />
+      </button>
+    );
   };
 
   return (
@@ -68,18 +114,7 @@ function Card({
               </span>
               <span className="autor__name">{author}</span>
             </div>
-            <button
-              type="button"
-              className="card-body__btn-favoris"
-              title="Ajouter aux favoris"
-              onClick={(event) => handleAddFavorite(event, id)}
-            >
-              {!isLogged ? (
-                <MdFavoriteBorder size={36} />
-              ) : (
-                <MdFavorite color="red" size={36} />
-              )}
-            </button>
+            { handleFavoriteBtn()}
           </div>
         </div>
 

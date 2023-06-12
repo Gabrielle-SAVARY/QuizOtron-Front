@@ -25,6 +25,7 @@ function ProfilFavorites({ userFavoritesQuiz, addQuizToFavorite }: ProfilQuizPro
               level={quiz.level.name}
               tags={quiz.tags}
               addQuizToFavorite={addQuizToFavorite}
+              userFavoritesQuiz={userFavoritesQuiz}
             />
           ))}
         </div>
