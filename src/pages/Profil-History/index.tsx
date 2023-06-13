@@ -2,7 +2,9 @@ import './styles.scss';
 
 function ProfilHistory() {
   return (
-    <div>test</div>
+    <div>
+      <h1 className="quiz__title">Mon historique</h1>
+    </div>
   );
 }
 
