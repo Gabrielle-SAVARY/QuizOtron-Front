@@ -22,9 +22,11 @@ import QuizUpdate from '../../pages/QuizUpdate';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
+import { IGetFavorites, IQuizFavorites } from '../../@types/quizFavorites';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
+import ProfilFavorites from '../../pages/ProfilFavorites';
 
 function App() {
   const navigate = useNavigate();
@@ -59,6 +61,9 @@ function App() {
     tags: [],
     questions: [],
   });
+
+  // Stocke la liste des quiz favoris de l'utilisateur connecté
+  const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -165,6 +170,65 @@ function App() {
     }
   }, [navigate]);
 
+  //* Appel API: récupère la liste quiz favoris de l'utilisateur connecté
+  useEffect(() => {
+    const fetchUserFavoritesQuiz = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/favorites');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // récupère les données de la réponse
+        const { data } = response;
+        // Mise à jour du state des quiz favoris au format de la liste des quiz
+        setUserFavoritesQuiz(data.favorites);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // Récupère la liste des quiz favoris si l'utilisateur est connecté
+    if (isLogged) {
+      fetchUserFavoritesQuiz();
+    }
+  }, [isLogged, quizList]);
+
+  //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
+  const addQuizToFavorite = async (quizId:number) => {
+    try {
+      const response = await axiosInstance.post('/profile/favorites/add', { quiz_id: quizId });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to favorite');
+      }
+      // récupère les données de la réponse (message du back)
+      const { data } = response;
+
+      // Ajout du quiz aux quiz favoris dans le state (on récupère le quiz puis ajout)
+      const addedQuiz = quizList.find((quiz) => quiz.id === quizId);
+      if (addedQuiz) {
+        setUserFavoritesQuiz([...userFavoritesQuiz, addedQuiz]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //* Appel API: supprime un quiz des favoris de l'utilisateur connecté
+  const deleteQuizToFavorite = async (quizId:number) => {
+    try {
+      const response = await axiosInstance.delete('/profile/favorites/delete', { data: { quiz_id: quizId } });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to favorite');
+      }
+      const { data } = response;
+      // Suppression du quiz des quiz favoris dans le state (on exclu le quiz en filtrant)
+      const filteredFavoritesQuiz = userFavoritesQuiz.filter((quiz) => quiz.id !== quizId);
+      setUserFavoritesQuiz(filteredFavoritesQuiz);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout>
       <Routes>
@@ -174,7 +238,16 @@ function App() {
         />
         <Route
           path="/quiz"
-          element={<Quiz quizList={quizList} tagsList={tagsList} levelsList={levelsList} />}
+          element={(
+            <Quiz
+              quizList={quizList}
+              tagsList={tagsList}
+              levelsList={levelsList}
+              userFavoritesQuiz={userFavoritesQuiz}
+              addQuizToFavorite={addQuizToFavorite}
+              deleteQuizToFavorite={deleteQuizToFavorite}
+            />
+        )}
         />
         <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
         <Route
@@ -209,7 +282,13 @@ function App() {
           path="/profile/quiz"
           element={(
             <ProtectedRoute>
-              <ProfilQuiz quizList={quizList} setQuizList={setQuizList} />
+              <ProfilQuiz
+                quizList={quizList}
+                setQuizList={setQuizList}
+                userFavoritesQuiz={userFavoritesQuiz}
+                addQuizToFavorite={addQuizToFavorite}
+                deleteQuizToFavorite={deleteQuizToFavorite}
+              />
             </ProtectedRoute>
           )}
         />
@@ -235,6 +314,18 @@ function App() {
                 getQuizDetails={getQuizDetails}
                 oneQuiz={oneQuiz}
                 fetchQuizList={fetchQuizList}
+              />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/favoris"
+          element={(
+            <ProtectedRoute>
+              <ProfilFavorites
+                userFavoritesQuiz={userFavoritesQuiz}
+                addQuizToFavorite={addQuizToFavorite}
+                deleteQuizToFavorite={deleteQuizToFavorite}
               />
             </ProtectedRoute>
           )}

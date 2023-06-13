@@ -1,0 +1,41 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.quiz__favoris{
+  padding: 2rem;
+}
+.quiz__title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  color: vars.$primary-dark-color;
+  text-align: center;
+}
+
+.quiz__subtitle {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 1.5rem;
+  color: vars.$main-primary-color;
+  text-align: center;
+  font-weight: 500;
+}
+.quiz__content-list{
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+
+
+  @include mixin.breakpoint(desktop) {
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+
+
+
