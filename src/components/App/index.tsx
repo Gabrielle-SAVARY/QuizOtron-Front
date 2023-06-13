@@ -27,6 +27,7 @@ import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
 import ProfilFavorites from '../../pages/ProfilFavorites';
+import ProfilHistory from '../../pages/Profil-History';
 
 function App() {
   const navigate = useNavigate();
@@ -275,6 +276,14 @@ function App() {
           element={(
             <ProtectedRoute>
               <ProfilSettings />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/historique"
+          element={(
+            <ProtectedRoute>
+              <ProfilHistory />
             </ProtectedRoute>
           )}
         />
