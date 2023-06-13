@@ -44,11 +44,15 @@ function Card({
 
   //* Ajoute un quiz aux favoris de l'utilisateur
   const handleAddFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
+    // Empêche le lien (sur toute la Card) vers le jeu de quiz de s'ouvrir
+    event.preventDefault();
     addQuizToFavorite(quizId);
   };
 
   //* Supprime un quiz des favoris de l'utilisateur
   const handleDeleteFavorite = (event: React.MouseEvent<HTMLButtonElement>, quizId: number) => {
+    // Empêche le lien (sur toute la Card) vers le jeu de quiz de s'ouvrir
+    event.preventDefault();
     deleteQuizToFavorite(quizId);
   };
 
@@ -81,16 +85,6 @@ function Card({
         );
       }
     }
-    return (
-      //* Bouton favoris avec icon vide + survol indique de se connecter
-      <button
-        type="button"
-        className="card-body__btn-favoris"
-        title="Vous devez vous connecter à votre compte"
-      >
-        <MdFavoriteBorder size={36} />
-      </button>
-    );
   };
 
   return (
@@ -101,30 +95,29 @@ function Card({
             <img className="card-header__img" src={thumbnail} alt="Quiz" />
           </div>
 
-        </Link>
-        <div className="card-body">
-          <h4 className="card-body__title">{title}</h4>
-          <div className="card-body__tag">
-            {tags && (
-            <span className="card-body__categorie">
-              {tags.map((tag) => (
-                <span key={tag.name}>{tag.name}</span>
-              ))}
-            </span>
-            )}
-            <span className="card-body__difficulty">{level}</span>
-          </div>
-          <div className="card-body__tag2">
-            <div className="card-body__autor">
-              <span className="autor__img">
-                <MdFace size={36} stroke="#fff" strokeWidth="1" />
+          <div className="card-body">
+            <h4 className="card-body__title">{title}</h4>
+            <div className="card-body__tag">
+              {tags && (
+              <span className="card-body__categorie">
+                {tags.map((tag) => (
+                  <span key={tag.name}>{tag.name}</span>
+                ))}
               </span>
-              <span className="autor__name">{author}</span>
+              )}
+              <span className="card-body__difficulty">{level}</span>
             </div>
-            { handleFavoriteBtn()}
+            <div className="card-body__tag2">
+              <div className="card-body__autor">
+                <span className="autor__img">
+                  <MdFace size={36} stroke="#fff" strokeWidth="1" />
+                </span>
+                <span className="autor__name">{author}</span>
+              </div>
+              { handleFavoriteBtn()}
+            </div>
           </div>
-        </div>
-
+        </Link>
       </article>
     </div>
   );
