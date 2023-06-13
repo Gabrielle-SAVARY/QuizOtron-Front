@@ -28,6 +28,7 @@ import './styles.scss';
 import About from '../../pages/AboutUs';
 import ProfilFavorites from '../../pages/ProfilFavorites';
 import ProfilHistory from '../../pages/Profil-History';
+import { IQuizHistory, IQuizzesScore } from '../../@types/quizHistory';
 
 function App() {
   const navigate = useNavigate();
@@ -65,6 +66,9 @@ function App() {
 
   // Stocke la liste des quiz favoris de l'utilisateur connecté
   const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
+
+  // Stocke l'historique des quiz joués par l'utilisateur connecté
+  const [quizHistory, setQuizHistory] = useState<IQuizzesScore[]>([]);
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -283,7 +287,7 @@ function App() {
           path="/profile/historique"
           element={(
             <ProtectedRoute>
-              <ProfilHistory />
+              <ProfilHistory quizHistory={quizHistory} setQuizHistory={setQuizHistory} />
             </ProtectedRoute>
           )}
         />
