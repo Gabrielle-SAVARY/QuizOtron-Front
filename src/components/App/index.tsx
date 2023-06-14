@@ -242,10 +242,17 @@ function App() {
         if (response.status !== 200) {
           throw new Error();
         }
-        // récupère les données de la réponse
+        // Récupère les données de la réponse
         const { data } = response;
-        // Mise à jour du state avec les données de la réponse
-        setQuizHistory(data.quizzes_scores);
+        console.log('data', data);
+        // Créer une copie du tableau
+        const dataArray = [...data.quizzes_scores];
+        console.log('dataArray', dataArray);
+        // Inverse l'ordre des données pour avoir les plus récentes en premier
+        const dataReverse = dataArray.reverse();
+        console.log('dataReverse', dataReverse);
+        // Mise à jour du state avec les données inversées de la réponse
+        setQuizHistory(dataReverse);
       } catch (error) {
         console.log(error);
       }
@@ -276,7 +283,17 @@ function App() {
             />
         )}
         />
-        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
+        <Route
+          path="/quiz/:id"
+          element={(
+            <QuizGame
+              getQuizDetails={getQuizDetails}
+              oneQuiz={oneQuiz}
+              quizHistory={quizHistory}
+              setQuizHistory={setQuizHistory}
+            />
+          )}
+        />
         <Route
           path="/connexion"
           element={<Login />}

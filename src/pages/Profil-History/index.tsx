@@ -6,7 +6,7 @@ import CardHistory from '../../components/CardHistory';
 
 interface ProfilHistoryProps {
   quizHistory: IQuizzesScore[];
-  setQuizHistory: (quizHistory: IQuizzesScore[]) => void;
+  setQuizHistory: (IQuizzesScore: IQuizzesScore[]) => void;
 }
 
 function ProfilHistory({ quizHistory, setQuizHistory }: ProfilHistoryProps) {

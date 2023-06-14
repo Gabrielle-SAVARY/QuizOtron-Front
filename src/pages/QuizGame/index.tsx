@@ -2,17 +2,22 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import classnames from 'classnames';
+import { current } from '@reduxjs/toolkit';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 import { axiosInstance } from '../../utils/axios';
-import { current } from '@reduxjs/toolkit';
+import { IQuizzesScore, IQuizHistory } from '../../@types/quizHistory';
 
 interface QuizGameProps {
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
+  quizHistory: IQuizzesScore[];
+  setQuizHistory: (quizHistory: IQuizzesScore[]) => void;
 }
 
-function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
+function QuizGame({
+  oneQuiz, getQuizDetails, quizHistory, setQuizHistory,
+}: QuizGameProps) {
   //* STATE
   // Stocke les infos Quiz affiché
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
@@ -33,21 +38,40 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
 
   const [isLastQuestionValidated, setIsLastQuestionValidated] = useState<boolean>(false);
 
+  const [scoreIdHistory, setScoreIdHistory] = useState<number | null>(null);
+
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const quizId = Number(id);
 
   //* Récupère les infos du quiz sélectionné
   useEffect(() => {
+    setScoreIdHistory(null);
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
-  //* Stocke les infos du quiz sélectionné dans un nouveau state
   useEffect(() => {
+    //* Récupère l'id du score du quiz sélectionné dans l'historique
+    const foundScoreHistory = () => {
+      if (currentQuiz !== undefined) {
+        const foundQuiz = quizHistory.find(
+          (item) => item.id === currentQuiz.id,
+        ) as IQuizzesScore | undefined;
+        console.log('foundQuiz', foundQuiz);
+        if (foundQuiz !== undefined) {
+          setScoreIdHistory(foundQuiz.score.id);
+          console.log('scoreIdHistory', scoreIdHistory);
+        }
+      }
+    };
+      //* Stocke les infos du quiz sélectionné dans un nouveau state
     if (oneQuiz) {
       setCurrentQuiz(oneQuiz);
+      if (quizHistory.length !== undefined) {
+        foundScoreHistory();
+      }
     }
-  }, [oneQuiz]);
+  }, [currentQuiz, currentQuiz?.id, oneQuiz, quizHistory, scoreIdHistory]);
 
   //* QUIZ GAME
   const handleAnswerClicked = (answerId: number) => {
@@ -80,15 +104,31 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     }
   };
 
-  const addQuizToHistory = async (quizIdHistory: number, scoreHistory: number) => {
+  const addQuizToHistory = async (
+    quizIdHistory: number,
+    scoreHistory: number,
+    scoreId: number | null,
+  ) => {
     try {
-      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory });
+      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory, score_id: scoreId });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to history');
       }
       console.log('quizIdHistory', quizIdHistory);
       console.log('scoreHistory', scoreHistory);
-      // const addedQuizHistory =
+      console.log('scoreId', scoreId);
+      // Récupère les données de la réponse
+      const { data } = response;
+      console.log('data', data);
+      // Créer une copie du tableau
+      const dataArray = [...data.data.quizzes_scores];
+      console.log('dataArray', dataArray);
+      // Inverse l'ordre des données pour avoir les plus récentes en premier
+      const dataReverse = dataArray.reverse();
+      console.log('dataReverse', dataReverse);
+
+      // Mise à jour du state avec les données inversées de la réponse
+      setQuizHistory(dataReverse);
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +141,7 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     setIsAnswerClicked(false);
     setIsAnswerSubmit(false);
     if (isLastQuestionValidated) {
-      addQuizToHistory(quizId, score);
+      addQuizToHistory(quizId, score, scoreIdHistory);
     }
   };
 

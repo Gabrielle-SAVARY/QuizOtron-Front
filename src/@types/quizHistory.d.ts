@@ -18,6 +18,7 @@ export interface IQuizzesScore {
   level_id: number
   user_id: number
   score: {
+    id: number
     quiz_score:number
   }
 }
