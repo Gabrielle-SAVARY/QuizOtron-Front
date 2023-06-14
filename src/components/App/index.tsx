@@ -234,6 +234,28 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const fetchQuizHistory = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/history');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // récupère les données de la réponse
+        const { data } = response;
+        // Mise à jour du state avec les données de la réponse
+        setQuizHistory(data.quizzes_scores);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (isLogged) {
+      fetchQuizHistory();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged]);
+
   return (
     <Layout>
       <Routes>

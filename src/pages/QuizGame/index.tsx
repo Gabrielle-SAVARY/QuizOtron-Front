@@ -4,6 +4,8 @@ import { Button, Stack } from '@mui/material';
 import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
+import { axiosInstance } from '../../utils/axios';
+import { current } from '@reduxjs/toolkit';
 
 interface QuizGameProps {
   oneQuiz: IOneQuiz
@@ -28,6 +30,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   const [isAnswerSubmit, setIsAnswerSubmit] = useState<boolean>(false);
   // Vérifie si la réponse du joueur est la bonne réponse (réponse valide/correcte)
   const [isSelectAnswerValid, setIsSelectAnswerValid] = useState<boolean | null>(null);
+
+  const [isLastQuestionValidated, setIsLastQuestionValidated] = useState<boolean>(false);
 
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
@@ -57,6 +61,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     setIsAnswerSubmit(true);
     // Récupère la question sélectionnée (l'objet)
     const selectedQuestion = currentQuiz?.questions[questionIndex];
+    console.log('currentQuiz', currentQuiz);
+    console.log('questionIndex', questionIndex);
     // Récupère la réponse du joueur (l'objet)
     const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === userAnswerId);
     //* Vérifie si la réponse du joueur est "valide" est la bonne réponse
@@ -68,6 +74,24 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     } else {
       setIsSelectAnswerValid(false);
     }
+    if (currentQuiz && questionIndex === (currentQuiz.questions.length - 1)) {
+      console.log('LAST QUESTION questionIndex', questionIndex);
+      setIsLastQuestionValidated(true);
+    }
+  };
+
+  const addQuizToHistory = async (quizIdHistory: number, scoreHistory: number) => {
+    try {
+      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to history');
+      }
+      console.log('quizIdHistory', quizIdHistory);
+      console.log('scoreHistory', scoreHistory);
+      // const addedQuizHistory =
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
@@ -76,6 +100,9 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     setQuestionIndex((prevQuestion) => prevQuestion + 1);
     setIsAnswerClicked(false);
     setIsAnswerSubmit(false);
+    if (isLastQuestionValidated) {
+      addQuizToHistory(quizId, score);
+    }
   };
 
   return (

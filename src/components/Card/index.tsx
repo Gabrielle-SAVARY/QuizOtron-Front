@@ -27,8 +27,6 @@ function Card({
   // Stocke si le quiz est dans les favoris de l'utilisateur
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
-  // TODO lien de la card (mis uniqument sur l'image -> doit être sur tout Card) + bouton favoris
-
   //* Vérifie si le quiz est dans les favoris de l'utilisateur
   const checkFavorite = (carId: number, arrayFavoritesQuiz: IQuizList[]) => {
     const favoriteQuiz = arrayFavoritesQuiz.find((quiz) => quiz.id === carId);
@@ -85,6 +83,7 @@ function Card({
         );
       }
     }
+    return null;
   };
 
   return (

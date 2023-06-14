@@ -10,26 +10,6 @@ interface ProfilHistoryProps {
 }
 
 function ProfilHistory({ quizHistory, setQuizHistory }: ProfilHistoryProps) {
-  useEffect(() => {
-    const fetchQuizHistory = async () => {
-      try {
-        const response = await axiosInstance.get('/profile/history');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // récupère les données de la réponse
-        const { data } = response;
-        // Stocke les données dans le state quizHistory
-        setQuizHistory(data.quizzes_scores);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchQuizHistory();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div>
       <h1 className="quiz__title">Mon historique</h1>
