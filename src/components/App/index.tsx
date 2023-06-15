@@ -244,13 +244,18 @@ function App() {
         }
         // Récupère les données de la réponse
         const { data } = response;
-        console.log('data', data);
-        // Créer une copie du tableau
+        // On stocke les données de la réponse dans un nouveau tableau
         const dataArray = [...data.quizzes_scores];
+
+        //* On change l'ordre des données pour avoir les derniers quiz joués en premier
+        // Créer une copie du tableau entier avec slice() - car pas d'index de début et de fin
+        // (permet que le tableau d'origine dataArray ne soit pas modifié)
+        // et inverse l'ordre des données avec reverse()
+        const dataReverse :IQuizzesScore[] = dataArray.slice().reverse();
+        console.log('data', data);
         console.log('dataArray', dataArray);
-        // Inverse l'ordre des données pour avoir les plus récentes en premier
-        const dataReverse = dataArray.reverse();
         console.log('dataReverse', dataReverse);
+
         // Mise à jour du state avec les données inversées de la réponse
         setQuizHistory(dataReverse);
       } catch (error) {
@@ -326,7 +331,7 @@ function App() {
           path="/profile/historique"
           element={(
             <ProtectedRoute>
-              <ProfilHistory quizHistory={quizHistory} setQuizHistory={setQuizHistory} />
+              <ProfilHistory quizHistory={quizHistory} />
             </ProtectedRoute>
           )}
         />

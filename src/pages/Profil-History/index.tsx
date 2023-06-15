@@ -1,15 +1,12 @@
-import { useEffect } from 'react';
 import { IQuizzesScore } from '../../@types/quizHistory';
-import { axiosInstance } from '../../utils/axios';
 import './styles.scss';
 import CardHistory from '../../components/CardHistory';
 
 interface ProfilHistoryProps {
   quizHistory: IQuizzesScore[];
-  setQuizHistory: (IQuizzesScore: IQuizzesScore[]) => void;
 }
 
-function ProfilHistory({ quizHistory, setQuizHistory }: ProfilHistoryProps) {
+function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
   return (
     <div>
       <h1 className="quiz__title">Mon historique</h1>

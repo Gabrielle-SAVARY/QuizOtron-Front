@@ -57,10 +57,8 @@ function QuizGame({
         const foundQuiz = quizHistory.find(
           (item) => item.id === currentQuiz.id,
         ) as IQuizzesScore | undefined;
-        console.log('foundQuiz', foundQuiz);
         if (foundQuiz !== undefined) {
           setScoreIdHistory(foundQuiz.score.id);
-          console.log('scoreIdHistory', scoreIdHistory);
         }
       }
     };
@@ -85,8 +83,6 @@ function QuizGame({
     setIsAnswerSubmit(true);
     // Récupère la question sélectionnée (l'objet)
     const selectedQuestion = currentQuiz?.questions[questionIndex];
-    console.log('currentQuiz', currentQuiz);
-    console.log('questionIndex', questionIndex);
     // Récupère la réponse du joueur (l'objet)
     const userAnswer = selectedQuestion?.answers.find((answer) => answer.id === userAnswerId);
     //* Vérifie si la réponse du joueur est "valide" est la bonne réponse
@@ -99,7 +95,6 @@ function QuizGame({
       setIsSelectAnswerValid(false);
     }
     if (currentQuiz && questionIndex === (currentQuiz.questions.length - 1)) {
-      console.log('LAST QUESTION questionIndex', questionIndex);
       setIsLastQuestionValidated(true);
     }
   };
@@ -114,18 +109,20 @@ function QuizGame({
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to history');
       }
-      console.log('quizIdHistory', quizIdHistory);
-      console.log('scoreHistory', scoreHistory);
-      console.log('scoreId', scoreId);
+
       // Récupère les données de la réponse
       const { data } = response;
-      console.log('data', data);
-      // Créer une copie du tableau
+      // On stocke les données de la réponse dans un nouveau tableau
       const dataArray = [...data.data.quizzes_scores];
-      console.log('dataArray', dataArray);
-      // Inverse l'ordre des données pour avoir les plus récentes en premier
-      const dataReverse = dataArray.reverse();
-      console.log('dataReverse', dataReverse);
+
+      //* On change l'ordre des données pour avoir les derniers quiz joués en premier
+      // Créer une copie du tableau entier avec slice() - car pas d'index de début et de fin
+      // (permet que le tableau d'origine dataArray ne soit pas modifié)
+      // et inverse l'ordre des données avec reverse()
+      const dataReverse = dataArray.slice().reverse();
+      console.log('ADD data', data);
+      console.log('ADD dataArray', dataArray);
+      console.log('ADD dataReverse', dataReverse);
 
       // Mise à jour du state avec les données inversées de la réponse
       setQuizHistory(dataReverse);
@@ -133,7 +130,7 @@ function QuizGame({
       console.log(error);
     }
   };
-
+  // TODO dernière question afficher "terminé" au lieu de question suivante
   //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
   const handleNextQuestion = () => {
     // Incrémente l'index de la question -> affiche la question suivante
