@@ -1,4 +1,19 @@
 // Type résultat requête des quiz joués"
+export interface IScoreHistory {
+  user_id: number
+  id: number
+  quiz_score: number
+  quiz: IQuizHistory
+}
+
+export interface IQuizHistory {
+  id: number
+  title: string
+  description: string
+  thumbnail: string
+}
+
+/*
 export interface IQuizHistory {
   id: number
   pseudo: string
@@ -22,3 +37,4 @@ export interface IQuizzesScore {
     quiz_score:number
   }
 }
+ */

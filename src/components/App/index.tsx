@@ -22,13 +22,12 @@ import QuizUpdate from '../../pages/QuizUpdate';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
-import { IGetFavorites, IQuizFavorites } from '../../@types/quizFavorites';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
 import ProfilFavorites from '../../pages/ProfilFavorites';
 import ProfilHistory from '../../pages/Profil-History';
-import { IQuizHistory, IQuizzesScore } from '../../@types/quizHistory';
+import { IScoreHistory } from '../../@types/quizHistory';
 
 function App() {
   const navigate = useNavigate();
@@ -68,7 +67,7 @@ function App() {
   const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
 
   // Stocke l'historique des quiz joués par l'utilisateur connecté
-  const [quizHistory, setQuizHistory] = useState<IQuizzesScore[]>([]);
+  const [quizHistory, setQuizHistory] = useState<IScoreHistory[]>([]);
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -244,20 +243,10 @@ function App() {
         }
         // Récupère les données de la réponse
         const { data } = response;
-        // On stocke les données de la réponse dans un nouveau tableau
-        const dataArray = [...data.quizzes_scores];
-
-        //* On change l'ordre des données pour avoir les derniers quiz joués en premier
-        // Créer une copie du tableau entier avec slice() - car pas d'index de début et de fin
-        // (permet que le tableau d'origine dataArray ne soit pas modifié)
-        // et inverse l'ordre des données avec reverse()
-        const dataReverse :IQuizzesScore[] = dataArray.slice().reverse();
         console.log('data', data);
-        console.log('dataArray', dataArray);
-        console.log('dataReverse', dataReverse);
 
         // Mise à jour du state avec les données inversées de la réponse
-        setQuizHistory(dataReverse);
+        setQuizHistory(data);
       } catch (error) {
         console.log(error);
       }

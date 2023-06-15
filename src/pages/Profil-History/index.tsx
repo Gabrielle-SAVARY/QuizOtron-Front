@@ -1,9 +1,9 @@
-import { IQuizzesScore } from '../../@types/quizHistory';
+import { IScoreHistory } from '../../@types/quizHistory';
 import './styles.scss';
 import CardHistory from '../../components/CardHistory';
 
 interface ProfilHistoryProps {
-  quizHistory: IQuizzesScore[];
+  quizHistory: IScoreHistory[];
 }
 
 function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
@@ -11,12 +11,12 @@ function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
     <div>
       <h1 className="quiz__title">Mon historique</h1>
       <div className="cardhistory__container">
-        {quizHistory.map((quiz) => (
+        {quizHistory.map((score) => (
           <CardHistory
-            key={quiz.id}
-            cardThumbnail={quiz.thumbnail}
-            cardTitle={quiz.title}
-            cardScore={quiz.score.quiz_score}
+            key={score.id}
+            cardThumbnail={score.quiz.thumbnail}
+            cardTitle={score.quiz.title}
+            cardScore={score.quiz_score}
           />
         ))}
       </div>

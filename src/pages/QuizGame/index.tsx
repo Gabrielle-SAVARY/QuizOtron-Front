@@ -2,17 +2,16 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import classnames from 'classnames';
-import { current } from '@reduxjs/toolkit';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
 import { axiosInstance } from '../../utils/axios';
-import { IQuizzesScore, IQuizHistory } from '../../@types/quizHistory';
+import { IScoreHistory } from '../../@types/quizHistory';
 
 interface QuizGameProps {
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
-  quizHistory: IQuizzesScore[];
-  setQuizHistory: (quizHistory: IQuizzesScore[]) => void;
+  quizHistory: IScoreHistory[];
+  setQuizHistory: (quizHistory: IScoreHistory[]) => void;
 }
 
 function QuizGame({
@@ -38,38 +37,22 @@ function QuizGame({
 
   const [isLastQuestionValidated, setIsLastQuestionValidated] = useState<boolean>(false);
 
-  const [scoreIdHistory, setScoreIdHistory] = useState<number | null>(null);
-
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const quizId = Number(id);
 
   //* Récupère les infos du quiz sélectionné
   useEffect(() => {
-    setScoreIdHistory(null);
+    /* setScoreIdHistory(null); */
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
   useEffect(() => {
-    //* Récupère l'id du score du quiz sélectionné dans l'historique
-    const foundScoreHistory = () => {
-      if (currentQuiz !== undefined) {
-        const foundQuiz = quizHistory.find(
-          (item) => item.id === currentQuiz.id,
-        ) as IQuizzesScore | undefined;
-        if (foundQuiz !== undefined) {
-          setScoreIdHistory(foundQuiz.score.id);
-        }
-      }
-    };
-      //* Stocke les infos du quiz sélectionné dans un nouveau state
+    //* Stocke les infos du quiz sélectionné dans un nouveau state
     if (oneQuiz) {
       setCurrentQuiz(oneQuiz);
-      if (quizHistory.length !== undefined) {
-        foundScoreHistory();
-      }
     }
-  }, [currentQuiz, currentQuiz?.id, oneQuiz, quizHistory, scoreIdHistory]);
+  }, [currentQuiz, currentQuiz?.id, oneQuiz, quizHistory]);
 
   //* QUIZ GAME
   const handleAnswerClicked = (answerId: number) => {
@@ -102,30 +85,17 @@ function QuizGame({
   const addQuizToHistory = async (
     quizIdHistory: number,
     scoreHistory: number,
-    scoreId: number | null,
   ) => {
     try {
-      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory, score_id: scoreId });
+      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to history');
       }
-
       // Récupère les données de la réponse
       const { data } = response;
-      // On stocke les données de la réponse dans un nouveau tableau
-      const dataArray = [...data.data.quizzes_scores];
-
-      //* On change l'ordre des données pour avoir les derniers quiz joués en premier
-      // Créer une copie du tableau entier avec slice() - car pas d'index de début et de fin
-      // (permet que le tableau d'origine dataArray ne soit pas modifié)
-      // et inverse l'ordre des données avec reverse()
-      const dataReverse = dataArray.slice().reverse();
-      console.log('ADD data', data);
-      console.log('ADD dataArray', dataArray);
-      console.log('ADD dataReverse', dataReverse);
-
+      console.log('data', data);
       // Mise à jour du state avec les données inversées de la réponse
-      setQuizHistory(dataReverse);
+      setQuizHistory(data);
     } catch (error) {
       console.log(error);
     }
@@ -138,7 +108,7 @@ function QuizGame({
     setIsAnswerClicked(false);
     setIsAnswerSubmit(false);
     if (isLastQuestionValidated) {
-      addQuizToHistory(quizId, score, scoreIdHistory);
+      addQuizToHistory(quizId, score);
     }
   };
 
