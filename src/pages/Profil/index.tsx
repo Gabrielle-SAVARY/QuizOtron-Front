@@ -13,7 +13,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { deleteUser, logout } from '../../store/reducers/user';
 import './styles.scss';
 
-function Profil() {
+interface ProfilProps {
+  userAverageScore: number | null;
+}
+
+function Profil({ userAverageScore }: ProfilProps) {
   const dispatch = useAppDispatch();
   //* STATE
   // Récupère le pseudo de l'utilisateur connecté
@@ -48,7 +52,7 @@ function Profil() {
       <h1 className="profil__title">
         {`Bienvenue sur ton profile ${pseudo}`}
       </h1>
-
+      <p>{userAverageScore}</p>
       <div className="profil__settings">
         <NavLink to="/profile/quiz" className="profil__quiz">
           Gérer mes quiz

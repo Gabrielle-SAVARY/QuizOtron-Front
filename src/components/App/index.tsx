@@ -69,6 +69,9 @@ function App() {
   // Stocke l'historique des quiz joués par l'utilisateur connecté
   const [quizHistory, setQuizHistory] = useState<IScoreHistory[]>([]);
 
+  // Stocke le score global de l'utilisateur connecté
+  const [userAverageScore, setUserAverageScore] = useState<number | null>(null);
+
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
   useEffect(() => {
@@ -191,9 +194,11 @@ function App() {
         console.log(error);
       }
     };
-    // Récupère la liste des quiz favoris si l'utilisateur est connecté
+    // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
     if (isLogged) {
       fetchUserFavoritesQuiz();
+    } else {
+      setUserFavoritesQuiz([]);
     }
   }, [isLogged, quizList]);
 
@@ -234,6 +239,7 @@ function App() {
   };
 
   useEffect(() => {
+    //* Appel API: récupère la liste des quiz joués par l'utilisateur connecté
     const fetchQuizHistory = async () => {
       try {
         const response = await axiosInstance.get('/profile/history');
@@ -251,11 +257,40 @@ function App() {
         console.log(error);
       }
     };
+    // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
     if (isLogged) {
       fetchQuizHistory();
+    } else {
+      setQuizHistory([]);
     }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
+
+  useEffect(() => {
+    //* Appel API: récupère la moyenne des scores aux quiz joué par l'utilisateur connecté
+    const fetchAverageScore = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/score');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        const { data } = response;
+        const averageNumber = Number(data[0].averageScore);
+        setUserAverageScore(averageNumber);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
+    if (isLogged) {
+      fetchAverageScore();
+    } else {
+      setUserAverageScore(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged, quizHistory]);
 
   return (
     <Layout>
@@ -304,7 +339,7 @@ function App() {
           path="/profile"
           element={(
             <ProtectedRoute>
-              <Profil />
+              <Profil userAverageScore={userAverageScore} />
             </ProtectedRoute>
           )}
         />
