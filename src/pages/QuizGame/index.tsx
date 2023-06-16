@@ -4,13 +4,19 @@ import { Button, Stack } from '@mui/material';
 import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
+import { axiosInstance } from '../../utils/axios';
+import { IScoreHistory } from '../../@types/quizHistory';
 
 interface QuizGameProps {
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
+  quizHistory: IScoreHistory[];
+  setQuizHistory: (quizHistory: IScoreHistory[]) => void;
 }
 
-function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
+function QuizGame({
+  oneQuiz, getQuizDetails, quizHistory, setQuizHistory,
+}: QuizGameProps) {
   //* STATE
   // Stocke les infos Quiz affiché
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
@@ -29,6 +35,8 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
   // Vérifie si la réponse du joueur est la bonne réponse (réponse valide/correcte)
   const [isSelectAnswerValid, setIsSelectAnswerValid] = useState<boolean | null>(null);
 
+  const [isLastQuestionValidated, setIsLastQuestionValidated] = useState<boolean>(false);
+
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const quizId = Number(id);
@@ -38,12 +46,12 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
-  //* Stocke les infos du quiz sélectionné dans un nouveau state
   useEffect(() => {
+    //* Stocke les infos du quiz sélectionné dans un nouveau state
     if (oneQuiz) {
       setCurrentQuiz(oneQuiz);
     }
-  }, [oneQuiz]);
+  }, [currentQuiz, currentQuiz?.id, oneQuiz, quizHistory]);
 
   //* QUIZ GAME
   const handleAnswerClicked = (answerId: number) => {
@@ -68,14 +76,38 @@ function QuizGame({ oneQuiz, getQuizDetails }: QuizGameProps) {
     } else {
       setIsSelectAnswerValid(false);
     }
+    if (currentQuiz && questionIndex === (currentQuiz.questions.length - 1)) {
+      setIsLastQuestionValidated(true);
+    }
   };
 
+  const addQuizToHistory = async (
+    quizIdHistory: number,
+    scoreHistory: number,
+  ) => {
+    try {
+      const response = await axiosInstance.post('/profile/history', { quiz_id: quizIdHistory, quiz_score: scoreHistory });
+      if (response.status !== 200) {
+        throw new Error('Failed to add quiz to history');
+      }
+      // Récupère les données de la réponse
+      const { data } = response;
+      // Mise à jour du state avec les données inversées de la réponse
+      setQuizHistory(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // TODO dernière question afficher "terminé" au lieu de question suivante
   //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
   const handleNextQuestion = () => {
     // Incrémente l'index de la question -> affiche la question suivante
     setQuestionIndex((prevQuestion) => prevQuestion + 1);
     setIsAnswerClicked(false);
     setIsAnswerSubmit(false);
+    if (isLastQuestionValidated) {
+      addQuizToHistory(quizId, score);
+    }
   };
 
   return (

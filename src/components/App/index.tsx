@@ -22,11 +22,12 @@ import QuizUpdate from '../../pages/QuizUpdate';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
-import { IGetFavorites, IQuizFavorites } from '../../@types/quizFavorites';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
 import ProfilFavorites from '../../pages/ProfilFavorites';
+import ProfilHistory from '../../pages/Profil-History';
+import { IScoreHistory } from '../../@types/quizHistory';
 
 function App() {
   const navigate = useNavigate();
@@ -64,6 +65,9 @@ function App() {
 
   // Stocke la liste des quiz favoris de l'utilisateur connecté
   const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
+
+  // Stocke l'historique des quiz joués par l'utilisateur connecté
+  const [quizHistory, setQuizHistory] = useState<IScoreHistory[]>([]);
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
@@ -229,6 +233,30 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const fetchQuizHistory = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/history');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        // Récupère les données de la réponse
+        const { data } = response;
+        console.log('data', data);
+
+        // Mise à jour du state avec les données inversées de la réponse
+        setQuizHistory(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (isLogged) {
+      fetchQuizHistory();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged]);
+
   return (
     <Layout>
       <Routes>
@@ -249,7 +277,17 @@ function App() {
             />
         )}
         />
-        <Route path="/quiz/:id" element={<QuizGame getQuizDetails={getQuizDetails} oneQuiz={oneQuiz} />} />
+        <Route
+          path="/quiz/:id"
+          element={(
+            <QuizGame
+              getQuizDetails={getQuizDetails}
+              oneQuiz={oneQuiz}
+              quizHistory={quizHistory}
+              setQuizHistory={setQuizHistory}
+            />
+          )}
+        />
         <Route
           path="/connexion"
           element={<Login />}
@@ -275,6 +313,14 @@ function App() {
           element={(
             <ProtectedRoute>
               <ProfilSettings />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/profile/historique"
+          element={(
+            <ProtectedRoute>
+              <ProfilHistory quizHistory={quizHistory} />
             </ProtectedRoute>
           )}
         />
