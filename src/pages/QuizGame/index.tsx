@@ -43,7 +43,6 @@ function QuizGame({
 
   //* Récupère les infos du quiz sélectionné
   useEffect(() => {
-    /* setScoreIdHistory(null); */
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
@@ -93,7 +92,6 @@ function QuizGame({
       }
       // Récupère les données de la réponse
       const { data } = response;
-      console.log('data', data);
       // Mise à jour du state avec les données inversées de la réponse
       setQuizHistory(data);
     } catch (error) {
