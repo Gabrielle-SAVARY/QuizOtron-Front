@@ -297,7 +297,14 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home />}
+          element={(
+            <Home
+              quizList={quizList}
+              userFavoritesQuiz={userFavoritesQuiz}
+              addQuizToFavorite={addQuizToFavorite}
+              deleteQuizToFavorite={deleteQuizToFavorite}
+            />
+)}
         />
         <Route
           path="/quiz"

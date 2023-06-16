@@ -1,12 +1,70 @@
+import { useState, useEffect } from 'react';
+import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
+import { IOneQuiz } from '../../@types/quiz';
+import Card from '../../components/Card';
 
-function Home() {
+interface HomeProps {
+  quizList: IQuizList[]
+  userFavoritesQuiz: IQuizList[];
+  addQuizToFavorite: (quizId: number) => void;
+  deleteQuizToFavorite: (quizId: number) => void;
+}
+
+function Home({
+  quizList, userFavoritesQuiz, addQuizToFavorite, deleteQuizToFavorite,
+}: HomeProps) {
+  // STATE Stocke un quiz aléatoire
+  const [randomQuiz, setRandomQuiz] = useState<IQuizList>({
+    id: 0,
+    title: '',
+    description: '',
+    thumbnail: '',
+    level_id: 0,
+    user_id: 0,
+    level: {
+      name: '',
+      id: 0,
+    },
+    author: {
+      pseudo: '',
+    },
+    tags: [],
+  });
+
+  useEffect(() => {
+    //* Fonction pour récupérer un quiz aléatoire avec son id
+    const getRandomQuiz = () => {
+      // Si la liste de quiz est supérieure à 0
+      if (quizList.length > 0) {
+        // On récupère un index aléatoire
+        const randomIndex = Math.floor(Math.random() * quizList.length);
+        // On récupère le quiz correspondant à l'index aléatoire
+        const newRandomQuiz = quizList[randomIndex];
+        // On met à jour le state
+        setRandomQuiz(newRandomQuiz);
+      }
+    };
+    getRandomQuiz();
+  }, [quizList]);
+
   return (
     <div className="home__bg">
       <div className="home">
         <h1 className="home__title">
           Bienvenue sur le site de Quiz&apos;O&apos;Tron!
         </h1>
+        <Card
+          id={randomQuiz.id}
+          title={randomQuiz.title}
+          thumbnail={randomQuiz.thumbnail}
+          level={randomQuiz.level.name}
+          author={randomQuiz.author.pseudo}
+          tags={randomQuiz.tags}
+          userFavoritesQuiz={userFavoritesQuiz}
+          addQuizToFavorite={addQuizToFavorite}
+          deleteQuizToFavorite={deleteQuizToFavorite}
+        />
         <p className="home__description">
           Bienvenue sur notre site de quiz, l&apos;endroit idéal pour mettre à
           l&apos;épreuve vos connaissances et vous divertir! Que vous soyez un
