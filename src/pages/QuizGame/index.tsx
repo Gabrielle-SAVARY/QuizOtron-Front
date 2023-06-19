@@ -79,6 +79,7 @@ function QuizGame({
     if (currentQuiz && questionIndex === (currentQuiz.questions.length - 1)) {
       setIsLastQuestionValidated(true);
     }
+    setIsAnswerClicked(false);
   };
 
   const addQuizToHistory = async (
@@ -98,17 +99,23 @@ function QuizGame({
       console.log(error);
     }
   };
-  // TODO dernière question afficher "terminé" au lieu de question suivante
   //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
   const handleNextQuestion = () => {
     // Incrémente l'index de la question -> affiche la question suivante
     setQuestionIndex((prevQuestion) => prevQuestion + 1);
-    setIsAnswerClicked(false);
+
     setIsAnswerSubmit(false);
     if (isLastQuestionValidated) {
       addQuizToHistory(quizId, score);
     }
   };
+
+  // Style bouton "valider la réponse"
+  const validateAnswerBtnStyle = { display: !isAnswerClicked ? 'none' : 'block' };
+  // Style bouton "question suivante"
+  const nextBtnStyle = { display: !isAnswerSubmit ? 'none' : 'block' };
+  // Texte bouton "question suivante" si dernière question "Terminé"
+  const nextBtnText = isLastQuestionValidated ? 'Terminé' : 'Question suivante';
 
   return (
     <div>
@@ -147,7 +154,7 @@ function QuizGame({
                             {
                               valid: isAnswerSubmit && answer.is_valid,
                               invalid: isAnswerSubmit && !isSelectAnswerValid
-                                      && userAnswerId === answer.id,
+                                && userAnswerId === answer.id,
                             },
                             { selectedBtn: userAnswerId === answer.id },
                           )}
@@ -158,8 +165,8 @@ function QuizGame({
                       ))}
                     </Stack>
                     <div className="validate">
-                      <button type="button" className="btn" onClick={() => handleAnswerSubmit()} style={{ display: isAnswerSubmit ? 'none' : 'block' }}>Valider la réponse</button>
-                      <button type="button" className="btn" onClick={() => handleNextQuestion()} style={{ display: !isAnswerSubmit ? 'none' : 'block' }}>Question suivante</button>
+                      <button type="button" className="btn" onClick={() => handleAnswerSubmit()} style={validateAnswerBtnStyle}>Valider la réponse</button>
+                      <button type="button" className="btn" onClick={() => handleNextQuestion()} style={nextBtnStyle}>{nextBtnText}</button>
                     </div>
                   </div>
                 </section>
