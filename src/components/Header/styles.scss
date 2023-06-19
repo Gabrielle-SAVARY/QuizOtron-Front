@@ -1,170 +1,18 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-
-/*==================== HEADER ========================*/
-
 .header {
-  background-color: vars.$main-primary-color;
-  color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  width: 100vw;
-  height: 4rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
   position: fixed;
-  top: 0;
-  z-index: 100;
-
-/*==================== LOGO ========================*/
-  &__logo{
-  height: 5rem;
-  z-index: 100;
-  position: fixed;
-  left: 10px;
-  }
-
-/*==================== NAVBAR ========================*/
-  &__nav{
-    position: fixed;
-    width: 100%;
-    height: 4rem;
-
-    //NAVBAR liste des élements de navigation <li>
-    &-list {
-      display: flex;
-      flex-direction: column;
-      height: auto;
-      background-color: vars.$main-primary-color;
-
-      @include mixin.breakpoint(desktop) {
-        height: 100%;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;   
-      }
-      
-      //NAVBAR élements de navigation <li>
-      &__items {
-        font-size: 1.25rem;
-        text-transform: uppercase;
-        width: 100%;
-        border-top: 1px solid rgba(255, 255, 255, 0.555);
-        text-align: center;
-        margin-right: 0px;
-        padding: 20px 0;
-        transition: 0.5s;         
-        @include mixin.breakpoint(desktop) {
-          width: auto;
-          padding: 10px;  
-          margin-right: 1.25rem;
-          border-top:none;
-          border-radius: 3px;
-        }
-    }
-
-      // 1er élément <li>
-      &__items:nth-child(1){
-        margin-top: 4rem;
-        @include mixin.breakpoint(desktop) {
-          margin-top: 0; 
-        }
-      }
-
-      // Liens des éléments <li>
-      &__items-link{
-        width: auto;
-        padding: 7px;  
-        border-radius: 3px;
-        transition: ease-in-out 0.3s;
-        &--active{
-          text-decoration: underline;       
-        }
-      }
-      &__items-link:hover{
-        text-decoration: underline;
-      }
-
-      
-
-
-    }
-
-  /*==================== BOUTON TOOGLE: menu hamburger ========================*/
-  // ICON du menu change avec le state toggleMenu
-    &__toggle{
-      display: block;
-      position: absolute;
-      right: 10px;
-      top: 7px;
-      outline: none;	
-      border: none;
-      background-color: vars.$main-primary-color;
-      color: #fff;
-
-      @include mixin.breakpoint(desktop) {
-        display: none;
-      }
-    }   
-  }
-
-   /*==================== BOUTON LOGIN ========================*/
-  &__login-button {
-    display: block;
-    position: absolute;
-    z-index: 100;
-    top: 0.6rem;
-    right: 80px;
-    outline: none;	
-    border: none;
-    background-color: #003051;
-    border-radius: 1rem;
-    padding: 12px 10px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: 0.5s;
-    cursor: pointer;
-    color: #fff;
-
-    &-icon{
-      display: flex;
-      flex-direction: row;
-      align-items: center;  
-    }
-    
-    &-pseudo{
-      display: none;
-      @include mixin.breakpoint(desktop) {
-        display: block;
-        margin-left: 5px;
-        text-transform:none;
-      }
-    }
-  
-  }
-  &__login-button:hover {
-    background-color: #fc9100;
-    transition: 0.5s;
-  }
-
-   /*==================== HEADER LINK ========================*/
-  a{
-    color:#fff;
-  }
+  width: 100%;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 1px 1px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.header__nav__toggle {
+  background-color: transparent;
+  border: none;
+}

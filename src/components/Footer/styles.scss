@@ -7,6 +7,11 @@
   background-color: vars.$main-primary-color;
   color: #fff;
   width: 100vw;
+  margin-top: auto; /* Pousse le footer en bas */
+
+  /*   @include mixin.breakpoint(desktop) {
+    min-height: 10vh;
+  } */
 
   &__contact {
     display: flex;

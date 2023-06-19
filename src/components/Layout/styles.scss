@@ -1,6 +1,10 @@
 @use '../../styles/vars';
 
-
+.app__container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .app__content {
-    padding-top: 4rem;
+  padding-top: 4rem;
 }

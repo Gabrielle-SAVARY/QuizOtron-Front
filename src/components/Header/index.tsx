@@ -1,11 +1,9 @@
-import { AiFillCloseCircle } from 'react-icons/ai';
 import PersonIcon from '@mui/icons-material/Person';
-import { FiAlignJustify } from 'react-icons/fi';
+import { FiAlignJustify, FiXCircle } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
-import logo from '../../assets/img/logo.png';
 import './styles.scss';
 
 interface IMenuLink {
@@ -55,10 +53,17 @@ function Header() {
   }, [isToggleMenu, screenWidth]);
 
   return (
-    <header className="header">
-      <img src={logo} alt="Logo quiz o tron" className="header__logo" />
+    <header>
 
-      <nav className="header__nav">
+      <nav className="header">
+        <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
+          {/* Change l'icone du menu mobile- fermé: hambuger / ouvert:croix  */}
+          {!isToggleMenu ? <FiAlignJustify size={46} stroke="#000000" strokeWidth="1" />
+            : (
+              <FiXCircle size={46} stroke="#003051" strokeWidth="1" />
+            )}
+        </button>
+        <p className="header__logo">Quiz&apos;O&apos;Tron</p>
         { /* affiche les items du menu: écran desktop + mobile hamburger ouvert */}
         {(isToggleMenu || screenWidth >= 992) && (
           <ul className="header__nav-list">
@@ -68,29 +73,23 @@ function Header() {
         )}
 
         { /* affiche icone profile si connecté sinon bouton connexion */}
-        { isLogged
+
+        {isLogged
           ? (
 
-            <NavLink to="/profile" className="header__login-button">
-              <div className="header__login-button-icon">
+            <NavLink to="/profile" className="header__profil">
+              <div className="header__profil-btn">
                 <PersonIcon />
-                <span className="header__login-button-pseudo">{pseudo}</span>
+                <span className="header__profil-btn-text">{pseudo}</span>
               </div>
             </NavLink>
           )
           : (
-            <NavLink to="/connexion" className="header__login-button">
+            <NavLink to="/connexion" className="header__login-btn">
               Connexion
             </NavLink>
           )}
 
-        <button type="button" className="header__nav__toggle" onClick={changeToggleMenu}>
-          {/* Change l'icone du menu mobile- fermé: hambuger / ouvert:croix  */}
-          {!isToggleMenu ? <FiAlignJustify size={48} stroke="#fff" strokeWidth="1" />
-            : (
-              <AiFillCloseCircle size={48} stroke="#003051" strokeWidth="0.9" />
-            )}
-        </button>
       </nav>
 
     </header>

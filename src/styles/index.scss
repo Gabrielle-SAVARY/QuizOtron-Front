@@ -2,26 +2,25 @@
 @use './mixin';
 @use './vars';
 
-
 /*==================== STYLE ========================*/
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
-    width: 100vw;
-    max-width: 100%;
-  }
-  
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  width: 100vw;
+  max-width: 100%;
+}
+
 /*==================== SECTION ========================*/
-  
+
 section {
-padding: 1rem;
-margin: 1rem 1.5rem;
+  padding: 1rem;
+  margin: 1rem 1.5rem;
 }
 
 button {
