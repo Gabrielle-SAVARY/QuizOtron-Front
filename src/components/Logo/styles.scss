@@ -1,0 +1,18 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+
+.header__logo{
+  display: flex;
+ flex-direction: row; 
+  align-items: center;
+  gap: 0.5rem;
+  &-img{
+    font-size: 1.8rem;
+  }
+  &-text{
+    font-size: 1.2rem;
+  }
+
+
+}
