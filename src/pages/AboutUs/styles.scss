@@ -9,14 +9,20 @@
     align-items: center;
     padding: 1rem;
   }
+  &__textcontainer {
+    margin-top: 1rem;
+  }
   &__title {
     font-size: 1.5rem;
-    padding-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: white;
+    background-color: vars.$main-primary-color;
   }
   &__text {
-    padding-top: 1rem;
-    margin: 0 15rem;
+    padding: 1rem;
     text-justify: auto;
+
   }
   &__stack {
     display: flex;
@@ -24,7 +30,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 1rem;
     gap: 1rem;
   }
   &__team {
@@ -40,10 +45,16 @@
 
 .about__team-card-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
   padding: 1rem;
+  @include mixin.breakpoint(desktop) {
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
 }
 

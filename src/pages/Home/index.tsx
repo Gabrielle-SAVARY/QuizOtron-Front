@@ -52,19 +52,8 @@ function Home({
     <div className="home__bg">
       <div className="home">
         <h1 className="home__title">
-          Bienvenue sur le site de Quiz&apos;O&apos;Tron!
+          Prenez une pause, faite un quiz sur Quiz&apos;O&apos;Tron!
         </h1>
-        <Card
-          id={randomQuiz.id}
-          title={randomQuiz.title}
-          thumbnail={randomQuiz.thumbnail}
-          level={randomQuiz.level.name}
-          author={randomQuiz.author.pseudo}
-          tags={randomQuiz.tags}
-          userFavoritesQuiz={userFavoritesQuiz}
-          addQuizToFavorite={addQuizToFavorite}
-          deleteQuizToFavorite={deleteQuizToFavorite}
-        />
         <p className="home__description">
           Bienvenue sur notre site de quiz, l&apos;endroit idéal pour mettre à
           l&apos;épreuve vos connaissances et vous divertir! Que vous soyez un
@@ -103,6 +92,22 @@ function Home({
           avec les quiz les plus captivants du web!
         </p>
       </div>
+      <div className="home__dailyquiz">
+        <h2 className="home__subtitle">Quiz du jour!</h2>
+        <Card
+          id={randomQuiz.id}
+          title={randomQuiz.title}
+          thumbnail={randomQuiz.thumbnail}
+          level={randomQuiz.level.name}
+          author={randomQuiz.author.pseudo}
+          tags={randomQuiz.tags}
+          userFavoritesQuiz={userFavoritesQuiz}
+          addQuizToFavorite={addQuizToFavorite}
+          deleteQuizToFavorite={deleteQuizToFavorite}
+        />
+
+      </div>
+
     </div>
   );
 }
