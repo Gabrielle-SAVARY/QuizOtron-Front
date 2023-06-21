@@ -10,6 +10,9 @@
     padding: 1rem;
   }
   &__textcontainer {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
     margin-top: 1rem;
   }
   &__title {
@@ -22,7 +25,6 @@
   &__text {
     padding: 1rem;
     text-justify: auto;
-
   }
   &__stack {
     display: flex;
@@ -57,4 +59,3 @@
     gap: 2rem;
   }
 }
-

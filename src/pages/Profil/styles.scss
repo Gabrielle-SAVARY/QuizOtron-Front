@@ -6,9 +6,37 @@
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  
 
-  &__title{
+  &__container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  &__user {
+    background-color: vars.$main-primary-color;
+    border-radius: 1rem;
+    padding: 3rem;
+    color: white;
+  }
+
+  &__user-stat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  &__user-title {
+    font-size: 2rem;
+  }
+
+  &__title {
     font-size: 1.5rem;
     font-weight: 500;
     padding-top: 1rem;
@@ -17,101 +45,62 @@
     text-align: center;
   }
 
-  &__settings{
+  &__update:hover {
+    transition: 0.5s;
+    transform: rotate(360deg);
+  }
+
+  &__settings {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
-    gap: 2px;
+    align-items: center;
+    gap: 1rem;
     padding: 1rem;
+    border-left: 1px solid black;
+    margin-left: 1rem;
 
     @include mixin.breakpoint(desktop) {
       width: 80%;
-
-    } 
-  }
-
-  &__update {
-    font-family: 'Poppins', sans-serif;
-    outline: none;
-    border: none;
-    border-radius: 8px;
-    background-color: vars.$main-primary-color;
-    color: #fff;
-    padding: 0.7rem;
-    margin-top: 1rem;
-    cursor: pointer;
-    width: 12rem;
-    height: 3rem;
-    text-align:center; 
-    transition: 0.5s;   
-  }
-  &__update:hover{
-    background-color: vars.$secondary-light-color;
-    transition: 0.5s;   
+    }
   }
 
   &__quiz {
-    font-family: 'Poppins', sans-serif;
-    outline: none;
+    font-size: 1.2rem;
     border: none;
-    border-radius: 8px;
-    background-color: vars.$main-primary-color;
-    color: #fff;
-    padding: 0.7rem;
-    margin-top: 1rem;
     cursor: pointer;
-    width: 12rem;
-    height: 3rem;
     text-align: center;
-    transition: 0.5s;   
-  }
-  &__quiz:hover{
-    background-color: vars.$secondary-light-color;
-    transition: 0.5s;   
-  }
-  
-  &__button{
-    background-color: transparent;
-    border-width: 0;
-    font-family: inherit;
-    font-size: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    width: 12rem;
-    height: 3rem;
-    margin-top: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
     transition: 0.5s;
-    flex-shrink: 0;   
-
-    &__logout{ 
-      background-color: vars.$main-primary-color;
-      color: #fff;
-    }
-    &__delete {
-      background-color: red;
-      color: #fff;
-    }
   }
-  &__button:hover{
-    background-color: vars.$secondary-light-color; 
-    transition: 0.5s;   
+  &__quiz:hover {
+    text-decoration: underline;
   }
-
-}
-.profil__button__logout > a{
-  color: #fff
 }
 
-.profil__button__delete {
-  margin-top: 2rem;
+.profil__quiz--disconnect {
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.5s;
+  background: none;
+}
+
+.profil__quiz--disconnect:hover {
+  text-decoration: underline;
+}
+
+.profil__quiz--delete {
+  background: red;
+  font-size: 0.75rem;
+  color: white;
+  padding: 0.25rem;
+  border-radius: 1rem;
+}
+
+.profil__score {
+  margin-top: 1rem;
+  font-size: 1.5rem;
 }

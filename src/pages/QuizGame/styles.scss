@@ -7,7 +7,7 @@
   justify-content: center;
   align-items: center;
 
-  &-title{
+  &-title {
     font-size: 1.5rem;
     text-transform: uppercase;
     font-weight: 500;
@@ -18,25 +18,24 @@
   }
 }
 // SCORE PENDANT LE QUIZ
-.quizgame__score{
+.quizgame__score {
   font-size: 1.3rem;
   text-transform: uppercase;
   font-weight: 500;
   color: vars.$main-third-color;
   margin-top: 1rem;
   display: inline;
-
 }
 // Validation de la réponse de l'utilisateur
-.validate{
+.validate {
   border: none;
   display: flex;
   flex-wrap: nowrap;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
 }
-.btn{
-  background-color: vars.$primary-dark-color;
+.btn {
+  background-color: vars.$main-primary-color;
   outline: 0;
   border: 0;
   padding: 1rem;
@@ -49,33 +48,45 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.3s ease;
-  &:hover{
+  &:hover {
     background: vars.$secondary-light-color;
     color: #fff;
-    }
+  }
 }
 
-
 // QUESTIONS
-.quizgame__question{
-    margin-bottom: 1rem;
-    &-info{
-      width: 100%;
-      text-align: left;
-    }
-  &-Nb{
-    color: vars.$primary-dark-color;
+.quizgame__question {
+  background-color: vars.$primary-dark-color;
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  &-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  &-Nb {
+    background-color: vars.$main-primary-color;
+    color: white;
     font-size: 1.3rem;
     font-weight: 500;
+    padding: 1rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
   }
-  &-text{
+  &-text {
+    background-color: vars.$main-primary-color;
+    color: white;
     font-size: 1.2rem;
-    margin-top: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
   }
 }
 
 // BOUTONS DE REPONSES DU QUIZ
-.quizgame__answerBtn{
+.quizgame__answerBtn {
   outline: 0;
   border: 0;
   padding: 1rem;
@@ -89,49 +100,49 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.3s ease;
-  &:hover{
-  background: vars.$secondary-light-color;
-  color: #fff;
+  &:hover {
+    background: vars.$secondary-light-color;
+    color: #fff;
   }
   // désactive les boutons après le click de l'utilisateur
-  &:disabled{
+  &:disabled {
     pointer-events: none;
   }
 }
 
 //  Classes ajoutées après le click de l'utilisateur
 // réponse de l'utilisateur
-.selectedBtn{
-border-color: vars.$secondary-light-color;
-box-shadow: 0 0 10px 0 vars.$secondary-light-color inset, 0 0 10px 4px vars.$secondary-light-color;
+.selectedBtn {
+  border-color: vars.$secondary-light-color;
+  box-shadow: 0 0 10px 0 vars.$secondary-light-color inset,
+    0 0 10px 4px vars.$secondary-light-color;
 }
 // la réponse à la question (sélectionée ou non par l'utilisateur)
-.valid{
+.valid {
   background-color: vars.$valid-answer-color;
   border: none;
 }
 // mauvaise réponse de l'utilisateur
-.invalid{
+.invalid {
   background-color: vars.$wrong-answer-color;
-
 }
 
 // FIN DU QUIZ
-.quizgame__end{
+.quizgame__end {
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  &-text{
-    margin-top: 1rem; 
+  &-text {
+    margin-top: 1rem;
     font-weight: 500;
     font-size: 1.3rem;
     color: vars.$main-primary-color;
   }
-  &-score{
+  &-score {
     display: inline;
-    margin-top: 0.5rem;  
-    &-Nb{
+    margin-top: 0.5rem;
+    &-Nb {
       font-size: 1.3rem;
       text-transform: uppercase;
       font-weight: 500;
@@ -139,24 +150,18 @@ box-shadow: 0 0 10px 0 vars.$secondary-light-color inset, 0 0 10px 4px vars.$sec
       display: inline;
     }
   }
-  &-img{
+  &-img {
     width: 80%;
     max-width: 800px;
     height: 200px;
     margin: 1rem auto;
   }
-
 }
 
 // BOUTON DE REDIRECTION
-.quizgame__redirectionBtn{
+.quizgame__redirectionBtn {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  margin:1rem ;
-
+  margin: 1rem;
 }
-
-
-
-

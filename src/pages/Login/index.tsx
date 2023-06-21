@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { ChangeEvent, FormEvent } from 'react';
+import logo from '../../assets/img/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
@@ -65,8 +66,9 @@ function Login() {
             className="form form-login"
             onSubmit={handleSubmit}
           >
-            <div className="form__logo">Quiz&apos;O&apos;tron</div>
-
+            {/* <div className="form__logo">Quiz&apos;O&apos;tron</div> */}
+            <img src={logo} alt="logo quizotron" className="form__logo" />
+            <label htmlFor="email" className="form__label">Email</label>
             <input
               type="text"
               placeholder="Email"
@@ -75,6 +77,7 @@ function Login() {
               onChange={handleChangeField}
               name="email"
             />
+            <label htmlFor="password" className="form__label">Mot de passe</label>
             <input
               type="password"
               placeholder="Mot de passe"

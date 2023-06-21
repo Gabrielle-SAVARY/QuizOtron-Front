@@ -12,10 +12,17 @@
     font-size: 2rem;
     margin-bottom: 3rem;
   }
+
+  &__description {
+    background-color: white;
+  }
 }
 
 .home__dailyquiz {
-
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .home__subtitle {
@@ -23,7 +30,7 @@
   color: white;
   background-color: vars.$main-primary-color;
   font-size: 1.5rem;
-  padding: 0.5rem;
+  padding: 1rem;
   margin: 0 5rem;
   border-radius: 1rem;
 }

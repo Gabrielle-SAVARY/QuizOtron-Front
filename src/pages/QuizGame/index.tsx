@@ -129,7 +129,7 @@ function QuizGame({
                 <h2 className="quizgame__score">
                   {`Score: ${score} ${score > 1 ? 'points' : 'point'}`}
                 </h2>
-                <section className="quizgame__question">
+                <div className="quizgame__question">
                   <div className="quizgame__question-info">
                     <h2 className="quizgame__question-Nb">
                       {`Question n° ${questionIndex + 1}/10`}
@@ -169,7 +169,7 @@ function QuizGame({
                       <button type="button" className="btn" onClick={() => handleNextQuestion()} style={nextBtnStyle}>{nextBtnText}</button>
                     </div>
                   </div>
-                </section>
+                </div>
               </>
             )
             : (

@@ -3,11 +3,12 @@
 
 .login-page {
   padding: 0.1%;
+  background-color: white;
 
   &__wrapper {
     max-width: 22.5rem;
     margin: 0 auto;
-    padding: 2.5rem;
+    padding: 0.5rem 2.5rem;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
     border-radius: 12px;
@@ -38,12 +39,6 @@
   max-width: 22.5rem;
   margin: 0 auto 4rem;
   text-align: center;
-
-  &__logo {
-    padding: 2rem;
-    font-size: 2rem;
-    color: vars.$main-primary-color;
-  }
 
   &__input {
     outline: 0;

@@ -10,7 +10,8 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
   overflow-x: hidden;
   width: 100vw;
   max-width: 100%;
@@ -21,8 +22,10 @@ body {
 section {
   padding: 1rem;
   margin: 1rem 1.5rem;
+  background: url('../assets/img/bg_quiz.jpg');
 }
 
 button {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
 }
