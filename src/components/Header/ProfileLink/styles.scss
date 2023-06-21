@@ -1,28 +1,7 @@
 @use '../../../styles/mixin';
 @use '../../../styles/vars';
 
-
-/*==================== BOUTON LOGIN ========================*/
 .header__link-btn{
-/*   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  padding: 4px;
-  cursor: pointer;
-  transition: 0.5s;
-
-  @include mixin.breakpoint(desktop) {
-    width: auto;
-    padding: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    transition: 0.5s;
-    cursor: pointer;
-
-  } */
   &-text{
     display: none;
     @include mixin.breakpoint(desktop) {
@@ -34,6 +13,7 @@
 // mobile: icone 
 // desktop: "connexion"
   &__login{
+    // style commun login/profile
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -42,7 +22,7 @@
     padding: 8px;
     cursor: pointer;
     transition: ease-in-out 0.5s;
-
+    // style login
     border:none;
     color: vars.$primary-dark-color;
     &:hover {
@@ -55,30 +35,29 @@
     color: #fff; 
     }
       @include mixin.breakpoint(desktop) {
+        // style commun login/profile
         width: auto;
         font-size: 1rem;
         font-weight: 500;
         text-transform: uppercase;
         transition: 0.5s;
         cursor: pointer;
-
+        // style login
         border: 1.5px solid vars.$primary-dark-color;
         background-color: #fff;
         color: vars.$primary-dark-color; 
       &--active {
-       background-color: vars.$primary-dark-color; 
-
+        background-color: vars.$primary-dark-color; 
         color: #fff;  
       }
-    }
-    
-
+    }   
   }
 
 // LINK redirection vers'/profile': utilisateur connecté
 // mobile: icone 
 // desktop: icone + pseudo"
     &__profile{
+      // style commun login/profile
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -87,9 +66,9 @@
       padding: 8px;
       cursor: pointer;
       transition: ease-in-out 0.5s;
-
-    background-color: vars.$main-primary-color;
-    color: #fff;
+      // style profile
+      background-color: vars.$main-primary-color;
+      color: #fff;
     &:hover {
       background-color: vars.$secondary-light-color;
       color:  #fff; 
@@ -100,16 +79,16 @@
       color:  #fff; 
     }
       @include mixin.breakpoint(desktop) {
+        // style commun login/profile
         width: auto;
         font-size: 1rem;
         font-weight: 500;
         text-transform: uppercase;
         cursor: pointer;
-
+        // style profile
         border-radius: 8px;
-
-      background-color: #fff;
-      color:  vars.$main-primary-color;    
+        background-color: #fff;
+        color:  vars.$main-primary-color;    
       &--active {
         background:vars.$main-secondary-color;
         color:  #fff; 

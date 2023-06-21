@@ -67,14 +67,11 @@ function Header() {
             <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
           </ul>
         </nav>
-
         <ProfileLink
           isUserLogged={isLogged}
           userPseudo={pseudo}
         />
-
       </div>
-
     </header>
   );
 }
