@@ -1,0 +1,123 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+
+/*==================== BOUTON LOGIN ========================*/
+.header__link-btn{
+/*   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+  transition: 0.5s;
+
+  @include mixin.breakpoint(desktop) {
+    width: auto;
+    padding: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: 0.5s;
+    cursor: pointer;
+
+  } */
+  &-text{
+    display: none;
+    @include mixin.breakpoint(desktop) {
+      display: block;
+      margin-left: 5px;
+    }
+  }
+// LINK redirection vers'/connexion': utilisateur déconnecté
+// mobile: icone 
+// desktop: "connexion"
+  &__login{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: ease-in-out 0.5s;
+
+    border:none;
+    color: vars.$primary-dark-color;
+    &:hover {
+      background-color: vars.$primary-dark-color;
+      color:  #fff;
+      transition: ease-in-out 0.5s;  
+    }
+    &--active {
+    background: vars.$primary-dark-color;  
+    color: #fff; 
+    }
+      @include mixin.breakpoint(desktop) {
+        width: auto;
+        font-size: 1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: 0.5s;
+        cursor: pointer;
+
+        border: 1.5px solid vars.$primary-dark-color;
+        background-color: #fff;
+        color: vars.$primary-dark-color; 
+      &--active {
+       background-color: vars.$primary-dark-color; 
+
+        color: #fff;  
+      }
+    }
+    
+
+  }
+
+// LINK redirection vers'/profile': utilisateur connecté
+// mobile: icone 
+// desktop: icone + pseudo"
+    &__profile{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-end;
+      border-radius: 50%;
+      padding: 8px;
+      cursor: pointer;
+      transition: ease-in-out 0.5s;
+
+    background-color: vars.$main-primary-color;
+    color: #fff;
+    &:hover {
+      background-color: vars.$secondary-light-color;
+      color:  #fff; 
+      transition: ease-in-out 0.3s;
+    }
+    &--active {
+      background:vars.$main-secondary-color;
+      color:  #fff; 
+    }
+      @include mixin.breakpoint(desktop) {
+        width: auto;
+        font-size: 1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        cursor: pointer;
+
+        border-radius: 8px;
+
+      background-color: #fff;
+      color:  vars.$main-primary-color;    
+      &--active {
+        background:vars.$main-secondary-color;
+        color:  #fff; 
+      }
+    } 
+  }
+}
+
+
+
+

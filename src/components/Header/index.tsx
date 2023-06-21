@@ -9,6 +9,7 @@ import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
 import './styles.scss';
 import Logo from '../Logo';
+import ProfileLink from './ProfileLink';
 
 interface IMenuLink {
   isActive: boolean;
@@ -58,30 +59,21 @@ function Header() {
 
   return (
     <header className="header">
-      <Logo />
-      <nav className="header__nav">
-        <ul className="header__nav-list">
-          <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>
-          <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
-        </ul>
-      </nav>
+      <div className="header__container">
+        <Logo />
+        <nav className="header__nav">
+          <ul className="header__nav-list">
+            <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>
+            <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
+          </ul>
+        </nav>
 
-      { /* affiche icone profile si connecté sinon bouton connexion */}
-      { isLogged
-        ? (
+        <ProfileLink
+          isUserLogged={isLogged}
+          userPseudo={pseudo}
+        />
 
-          <NavLink to="/profile" className="header__login-button">
-            <div className="header__login-button-icon">
-              <PersonIcon />
-              <span className="header__login-button-pseudo">{pseudo}</span>
-            </div>
-          </NavLink>
-        )
-        : (
-          <NavLink to="/connexion" className="header__login-button">
-            Connexion
-          </NavLink>
-        )}
+      </div>
 
     </header>
   );
