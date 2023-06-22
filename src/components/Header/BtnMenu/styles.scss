@@ -1,0 +1,16 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+
+.header__nav__toggle{
+  display: block;
+  outline: none;	
+  border: none;
+  background-color: #fff;
+  color: vars.$main-primary-color;
+  z-index: 300;
+
+  @include mixin.breakpoint(desktop) {
+    display: none;
+  }
+}   

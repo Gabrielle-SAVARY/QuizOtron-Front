@@ -39,7 +39,6 @@
         width: auto;
         font-size: 1rem;
         font-weight: 500;
-        text-transform: uppercase;
         transition: 0.5s;
         cursor: pointer;
         // style login
@@ -82,16 +81,15 @@
         // style commun login/profile
         width: auto;
         font-size: 1rem;
-        font-weight: 500;
-        text-transform: uppercase;
+        font-weight: 500;   
         cursor: pointer;
         // style profile
         border-radius: 8px;
-        background-color: #fff;
-        color:  vars.$main-primary-color;    
+        background-color: vars.$main-primary-color;
+        color:  #fff;    
       &--active {
         background:vars.$main-secondary-color;
-        color:  #fff; 
+        color:  #fff ; 
       }
     } 
   }

@@ -9,15 +9,10 @@
   color: vars.$main-primary-color;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   width: 100vw;
-  height: 4rem;
+  height: vars.$headerHeight;
   position: fixed;
   z-index: 100;
-/*   padding: 0.5rem 1rem; */
-/* display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: space-between; */
-display: block;
+  display: block;
 
 
 &__container{
@@ -26,25 +21,38 @@ display: block;
   align-items: center;
   justify-content: space-between;
   padding: 0px 2rem;
+  height: vars.$headerHeight;
   @include mixin.breakpoint(desktop) {
     padding: 0px 5rem; 
+    justify-content: space-between;
   }
 }
 
 /*==================== NAVBAR ========================*/
   &__nav{
-
-    height: 4rem;
+    height: vars.$headerHeight;
+    position: absolute;
+    display:none;
+    top: 0;
+    left:0;
+    @include mixin.breakpoint(desktop) {
+      display: block;
+      position:inherit;
+    }
 
     //NAVBAR liste des élements de navigation <li>
     &-list {
       display: flex;
       flex-direction: column;
-      height: auto;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
       background-color: vars.$main-primary-color;
+
 
       @include mixin.breakpoint(desktop) {
         height: 100%;
+        width: auto;
         flex-direction: row;
         justify-content: center;
         align-items: center;   
@@ -52,18 +60,17 @@ display: block;
       
       //NAVBAR élements de navigation <li>
       &__items {
-        display: none;
-/*         font-size: 1.25rem;
-        text-transform: uppercase;
-        width: 100%;
+        display: block;
+        font-size: 1.25rem;
+    /*     text-transform: uppercase; */
+        width: 100vh;
         border-top: 1px solid rgba(255, 255, 255, 0.555);
         text-align: center;
         margin-right: 0px;
         padding: 20px 0;
-        transition: 0.5s;    */     
+        transition: 0.5s;        
        
         @include mixin.breakpoint(desktop) {
-          display: block;
           width: auto;
           padding: 10px;  
           margin-right: 1.25rem;
@@ -74,9 +81,9 @@ display: block;
 
       // 1er élément <li>
       &__items:nth-child(1){
-        margin-top: 4rem;
+        margin-top: vars.$headerHeight;
         @include mixin.breakpoint(desktop) {
-          margin-top: 0; 
+           margin-top: 0; 
         }
       }
 
@@ -101,20 +108,18 @@ display: block;
 
   /*==================== BOUTON TOOGLE: menu hamburger ========================*/
   // ICON du menu change avec le state toggleMenu
-    &__toggle{
+    /* &__toggle{
       display: block;
-      position: absolute;
-      right: 10px;
-      top: 7px;
       outline: none;	
       border: none;
-      background-color: vars.$main-primary-color;
-      color: #fff;
+      background-color: #fff;
+      color: vars.$main-primary-color;
+      z-index: 300;
 
       @include mixin.breakpoint(desktop) {
         display: none;
       }
-    }   
+    }    */
   }
 
    

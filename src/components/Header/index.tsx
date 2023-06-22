@@ -1,15 +1,11 @@
-import { AiFillCloseCircle } from 'react-icons/ai';
-import PersonIcon from '@mui/icons-material/Person';
-import { FiAlignJustify } from 'react-icons/fi';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
 import './styles.scss';
-import Logo from '../Logo';
+import Logo from './Logo';
 import ProfileLink from './ProfileLink';
+import BtnMenu from './BtnMenu';
 
 interface IMenuLink {
   isActive: boolean;
@@ -60,17 +56,15 @@ function Header() {
   return (
     <header className="header">
       <div className="header__container">
+        <BtnMenu isToggleMenu={isToggleMenu} changeToggleMenu={changeToggleMenu} />
         <Logo />
-        <nav className="header__nav">
+        <nav className="header__nav" style={{ display: isToggleMenu || screenWidth > 992 ? 'block' : 'none' }}>
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>
             <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
           </ul>
         </nav>
-        <ProfileLink
-          isUserLogged={isLogged}
-          userPseudo={pseudo}
-        />
+        <ProfileLink isUserLogged={isLogged} userPseudo={pseudo} />
       </div>
     </header>
   );

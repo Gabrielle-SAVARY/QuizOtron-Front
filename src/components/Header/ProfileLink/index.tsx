@@ -19,7 +19,7 @@ function ProfileLink({ isUserLogged, userPseudo }: ProfileBtnProps) {
   // redirection vers une route
   const redirectLink = isUserLogged ? '/profile' : '/connexion';
   // Texte acoller à l'icone
-  const asideTextLink = isUserLogged ? userPseudo : 'connexion';
+  const asideTextLink = isUserLogged ? userPseudo : 'me connecter';
 
   //* Ajout de la classe active sur la classe du lien cliqué
   const activeLink = ({ isActive }: ILink) => cn(classNameLinkBtn, {
