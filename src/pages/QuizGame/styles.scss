@@ -23,7 +23,7 @@
   text-transform: uppercase;
   font-weight: 500;
   color: vars.$main-third-color;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   display: inline;
 }
 // Validation de la réponse de l'utilisateur
@@ -68,20 +68,15 @@
     padding: 1rem;
   }
   &-Nb {
-    background-color: vars.$main-primary-color;
     color: white;
     font-size: 1.3rem;
     font-weight: 500;
     padding: 1rem;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
   }
   &-text {
-    background-color: vars.$main-primary-color;
     color: white;
     font-size: 1.2rem;
     padding: 1rem;
-    border-radius: 1rem;
   }
 }
 
