@@ -1,18 +1,105 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
+
+/*==================== HEADER ========================*/
+
 .header {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  text-align: center;
+  background-color: #fff;
+  color: vars.$main-primary-color;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  width: 100vw;
+  height: vars.$headerHeight;
   position: fixed;
-  width: 100%;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 1px 1px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
+  z-index: 100;
+  display: block;
+
+&__container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 2rem;
+  height: vars.$headerHeight;
+  @include mixin.breakpoint(desktop) {
+    padding: 0px 5rem; 
+    justify-content: space-between;
+  }
 }
 
-.header__nav__toggle {
-  background-color: transparent;
-  border: none;
+/*==================== NAVBAR ========================*/
+  &__nav{
+    height: vars.$headerHeight;
+    position: absolute;
+    display:none;
+    top: vars.$headerHeight;
+    left:0;
+    @include mixin.breakpoint(desktop) {
+      display: block;
+      position:inherit;
+    }
+    // NAVBAR - liste des élements de navigation <ul>
+    &-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+
+      background-color: vars.$primary-dark-color;
+      @include mixin.breakpoint(desktop) {
+        height: 100%;
+        width: auto;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+      }      
+      //NAVBAR - élements de navigation <li>
+      &__items {
+        display: block;
+        font-size: 1.25rem;                
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.555);
+        text-align: center;
+        margin-right: 0px;
+        @include mixin.breakpoint(desktop) {
+          width: auto;
+          margin-right: 1.25rem;
+          border-top:none;
+          border-radius: 3px;
+        }
+      }
+      // NAVBAR - Liens des éléments <NavLink>/<a>
+      &__items-link{
+        display:block;
+        width: 100%;
+        height: 100%;
+        padding: 20px 0;    
+        background-color: vars.$primary-dark-color;
+        color:#fff;
+        @include mixin.breakpoint(desktop) {
+          background-color: #fff;
+          color: vars.$main-primary-color;
+        }     
+        &--active{
+          color: vars.$main-secondary-color; 
+          background-color: #fff;
+        }
+      }
+      &__items-link:hover{
+        color: vars.$secondary-light-color; 
+        background-color: #fff;       
+      }  
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
