@@ -10,10 +10,10 @@ interface BtnMenuProps {
 function BtnMenu({ isToggleMenu, changeToggleMenu }: BtnMenuProps) {
   // Style des icones
   const styledIconMenu = {
-    stroke: '#0d72da', strokeWidth: '1', height: '3em', width: '3em',
+    stroke: '#003051', strokeWidth: '1', height: '3em', width: '3em',
   };
   const styledIconCross = {
-    stroke: '#0d72da', strokeWidth: '0.9', height: '3em', width: '3em',
+    stroke: '#003051', strokeWidth: '0.9', height: '3em', width: '3em',
   };
 
   // Change l'icone du menu hamburger

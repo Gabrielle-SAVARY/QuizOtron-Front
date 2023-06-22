@@ -18,11 +18,10 @@
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
-    border-radius: 8px;
     padding: 8px;
     cursor: pointer;
-    transition: ease-in-out 0.5s;
     // style login
+    border-radius: 50%;
     border:none;
     color: vars.$primary-dark-color;
     &:hover {
@@ -39,9 +38,9 @@
         width: auto;
         font-size: 1rem;
         font-weight: 500;
-        transition: 0.5s;
         cursor: pointer;
         // style login
+        border-radius: 8px;
         border: 1.5px solid vars.$primary-dark-color;
         background-color: #fff;
         color: vars.$primary-dark-color; 
@@ -64,14 +63,14 @@
       border-radius: 50%;
       padding: 8px;
       cursor: pointer;
-      transition: ease-in-out 0.5s;
+/*       transition: ease-in-out 0.5s; */
       // style profile
       background-color: vars.$main-primary-color;
       color: #fff;
     &:hover {
       background-color: vars.$secondary-light-color;
       color:  #fff; 
-      transition: ease-in-out 0.3s;
+     transition: ease-in-out 0.5s; 
     }
     &--active {
       background:vars.$main-secondary-color;

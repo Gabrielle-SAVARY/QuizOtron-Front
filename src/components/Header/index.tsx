@@ -36,6 +36,7 @@ function Header() {
   const changeToggleMenu = () => {
     setIsToggleMenu(!isToggleMenu);
   };
+
   //* Ferme le menu hamburger si redimension fenetre par utilisateur
   useEffect(() => {
     const handleScreenWidth = () => {
@@ -53,12 +54,14 @@ function Header() {
     };
   }, [isToggleMenu, screenWidth]);
 
+  const navigationDisplay = { display: isToggleMenu || screenWidth > 992 ? 'block' : 'none' };
+
   return (
     <header className="header">
       <div className="header__container">
         <BtnMenu isToggleMenu={isToggleMenu} changeToggleMenu={changeToggleMenu} />
         <Logo />
-        <nav className="header__nav" style={{ display: isToggleMenu || screenWidth > 992 ? 'block' : 'none' }}>
+        <nav className="header__nav" style={navigationDisplay}>
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>
             <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>

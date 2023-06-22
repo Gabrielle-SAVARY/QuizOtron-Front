@@ -14,7 +14,6 @@
   z-index: 100;
   display: block;
 
-
 &__container{
   display: flex;
   flex-direction: row;
@@ -33,102 +32,69 @@
     height: vars.$headerHeight;
     position: absolute;
     display:none;
-    top: 0;
+    top: vars.$headerHeight;
     left:0;
     @include mixin.breakpoint(desktop) {
       display: block;
       position:inherit;
     }
-
-    //NAVBAR liste des élements de navigation <li>
+    // NAVBAR - liste des élements de navigation <ul>
     &-list {
       display: flex;
       flex-direction: column;
       align-items: center;
       height: 100vh;
       width: 100vw;
-      background-color: vars.$main-primary-color;
 
-
+      background-color: vars.$primary-dark-color;
       @include mixin.breakpoint(desktop) {
         height: 100%;
         width: auto;
         flex-direction: row;
         justify-content: center;
-        align-items: center;   
-      }
-      
-      //NAVBAR élements de navigation <li>
+        align-items: center;
+        background-color: #fff;
+      }      
+      //NAVBAR - élements de navigation <li>
       &__items {
         display: block;
-        font-size: 1.25rem;
-    /*     text-transform: uppercase; */
-        width: 100vh;
+        font-size: 1.25rem;                
+        width: 100%;
         border-top: 1px solid rgba(255, 255, 255, 0.555);
         text-align: center;
         margin-right: 0px;
-        padding: 20px 0;
-        transition: 0.5s;        
-       
         @include mixin.breakpoint(desktop) {
           width: auto;
-          padding: 10px;  
           margin-right: 1.25rem;
           border-top:none;
           border-radius: 3px;
         }
-    }
-
-      // 1er élément <li>
-      &__items:nth-child(1){
-        margin-top: vars.$headerHeight;
-        @include mixin.breakpoint(desktop) {
-           margin-top: 0; 
-        }
       }
-
-      // Liens des éléments <li>
+      // NAVBAR - Liens des éléments <NavLink>/<a>
       &__items-link{
-        width: auto;
-        padding: 7px;  
-        border-radius: 3px;
-        transition: ease-in-out 0.3s;
+        display:block;
+        width: 100%;
+        height: 100%;
+        padding: 20px 0;    
+        background-color: vars.$primary-dark-color;
+        color:#fff;
+        @include mixin.breakpoint(desktop) {
+          background-color: #fff;
+          color: vars.$main-primary-color;
+        }     
         &--active{
-          text-decoration: underline;       
+          color: vars.$main-secondary-color; 
+          background-color: #fff;
         }
       }
       &__items-link:hover{
-        text-decoration: underline;
-      }
-    
-      
-
-
+        color: vars.$secondary-light-color; 
+        background-color: #fff;       
+      }  
     }
-
-  /*==================== BOUTON TOOGLE: menu hamburger ========================*/
-  // ICON du menu change avec le state toggleMenu
-    /* &__toggle{
-      display: block;
-      outline: none;	
-      border: none;
-      background-color: #fff;
-      color: vars.$main-primary-color;
-      z-index: 300;
-
-      @include mixin.breakpoint(desktop) {
-        display: none;
-      }
-    }    */
   }
-
-   
-
-   /*==================== HEADER LINK ========================*/
-/*   a{
-    color:#fff;
-  } */
 }
+
 
 
 
