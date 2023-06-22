@@ -8,7 +8,7 @@
   border: none;
   background-color: #fff;
   color: vars.$main-primary-color;
-  z-index: 200;
+  z-index: 2;
 
   @include mixin.breakpoint(desktop) {
     display: none;
