@@ -1,9 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { ChangeEvent, FormEvent } from 'react';
+import {
+  ChangeEvent, FormEvent, useEffect, useState,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
   changeCredentialsField,
+  clearInputsAndErrors,
   login,
   logout,
 } from '../../store/reducers/user';
@@ -19,6 +22,19 @@ function Login() {
   const password = useAppSelector((state) => state.user.credentials.password);
   const isLogged = useAppSelector((state) => state.user.isLogged);
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
+  // Récupère les messages d'erreur stocké dans les states du reducer user
+  const errorMessages = useAppSelector((state) => state.user.errorMessages);
+
+  // Au chargement de la page, si l'utilisateur n'est pas connecté
+  // on vide les champs du formulaire et les messages d'erreur
+  useEffect(() => {
+    const handleClearInputsandErrors = () => {
+      if (!isLogged) {
+        dispatch(clearInputsAndErrors());
+      }
+    };
+    handleClearInputsandErrors();
+  }, [dispatch, isLogged]);
 
   // Met à jour le state avec la valeur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -86,7 +102,7 @@ function Login() {
               onChange={handleChangeField}
               name="password"
             />
-
+            {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
             <button type="submit" className="form__button">
               Connexion
             </button>

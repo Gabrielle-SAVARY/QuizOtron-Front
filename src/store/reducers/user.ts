@@ -1,4 +1,5 @@
-import { createAction, createReducer } from '@reduxjs/toolkit';
+import { PayloadAction, createAction, createReducer } from '@reduxjs/toolkit';
+import axios, { AxiosError } from 'axios';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
@@ -8,6 +9,7 @@ interface UserState {
   token: string;
   isRegistered: boolean
   userId: number
+  errorMessages: string
 
   credentials: {
     firstname: string
@@ -29,6 +31,7 @@ export const initialState: UserState = {
   token: '',
   isRegistered: false,
   userId: 0,
+  errorMessages: '',
 
   credentials: {
     firstname: '',
@@ -54,6 +57,10 @@ export const changeCredentialsField = createAction<{
   propertyKey: KeysOfCredentials
   value: string
 }>('user/CHANGE_CREDENTIALS_FIELD');
+
+//* ACTION: vide les champs des inputs de formulaire
+// par défaut va vider le contenu du state errorMessages
+export const clearInputsAndErrors = createAction('user/CLEAR_INPUTS_AND_ERRORS');
 
 //* Type qui récupère les clé de l'objet du state.updateCredentials
 export type KeysOfUpdateCredentials = keyof UserState['updateCredentials'];
@@ -92,14 +99,25 @@ export const login = createAppAsyncThunk(
 
     // récupère les states qui correspondent aux inputs du formulaire
     const { email, password } = state.user.credentials;
-
-    // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.post('/login', { email, password });
-
-    // Stocke dans le localStorage
-    localStorage.setItem('token', JSON.stringify(data.token));
-
-    return data as IAuthentification;
+    try {
+      // Appel API avec envoie des données du formulaire
+      const { data } = await axiosInstance.post('/login', { email, password });
+      // Stocke dans le localStorage
+      localStorage.setItem('token', JSON.stringify(data.token));
+      return data as IAuthentification;
+    } catch (error) {
+      // Gestion des erreurs
+      // si statut de la réponse est 400 alors on retourne les messages d'erreurs
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          const dataError: string = error.response?.data;
+          return thunkAPI.rejectWithValue(dataError);
+        }
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
   },
 );
 
@@ -173,6 +191,17 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(changeCredentialsField, (state, action) => {
       const { propertyKey, value } = action.payload;
       state.credentials[propertyKey] = value;
+      state.errorMessages = '';
+    })
+    .addCase(clearInputsAndErrors, (state) => {
+      state.credentials.email = '';
+      state.credentials.pseudo = '';
+      state.credentials.firstname = '';
+      state.credentials.lastname = '';
+      state.credentials.password = '';
+      state.credentials.passwordConfirm = '';
+      state.credentials.oldPassword = '';
+      state.errorMessages = '';
     })
     .addCase(updateProfilField, (state, action) => {
       const { propertyUpdate, value } = action.payload;
@@ -197,16 +226,21 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API
-      state.isLogged = action.payload.isLogged;
-      state.token = action.payload.token;
-      state.userId = action.payload.id;
+      const payload = action.payload as IAuthentification;
+      state.isLogged = payload.isLogged;
+      state.token = payload.token;
+      state.userId = payload.id;
 
-      state.credentials.pseudo = action.payload.pseudo;
-      state.credentials.firstname = action.payload.firstname;
-      state.credentials.lastname = action.payload.lastname;
+      state.credentials.pseudo = payload.pseudo;
+      state.credentials.firstname = payload.firstname;
+      state.credentials.lastname = payload.lastname;
 
       // Je réinitialise les credentials
       state.credentials.password = '';
+    })
+    .addCase(login.rejected, (state, action) => {
+      const payload = action.payload as string;
+      state.errorMessages = payload;
     })
     .addCase(checkIsLogged, (state, action) => {
       state.isLogged = action.payload;

@@ -36,6 +36,9 @@ function App() {
   // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
+  // Stocke message d'erreur
+  const [errorMessage, setErrorMessage] = useState('');
+
   // Liste des quiz (informations pour une Card)
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
 
@@ -332,7 +335,7 @@ function App() {
         />
         <Route
           path="/connexion"
-          element={<Login />}
+          element={<Login errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
         />
         <Route
           path="/inscription"
