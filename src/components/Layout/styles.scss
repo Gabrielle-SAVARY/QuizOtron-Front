@@ -9,10 +9,9 @@
 .app__content {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
   min-height: 80.9vh;
-/*   padding-top: 3.3rem; */
-  padding: 4rem 2rem 0 2rem;
+  padding-top: vars.$headerHeight;
   background: linear-gradient(
       rgba(255, 255, 255, 0.95),
       rgba(255, 255, 255, 0.95)
@@ -20,7 +19,7 @@
     url('../../assets/img/bg_quiz.jpg');
 
   @include mixin.breakpoint(desktop) {
-  padding: 4rem 2rem 0 2rem;
+
   }
 
 }
