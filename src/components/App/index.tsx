@@ -335,7 +335,7 @@ function App() {
         />
         <Route
           path="/connexion"
-          element={<Login errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
+          element={<Login />}
         />
         <Route
           path="/inscription"

@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router-dom';
+
 interface LogoProps {
   logoContainerClassName: string;
   logoName: string;
@@ -6,9 +8,11 @@ interface LogoProps {
 
 function Logo({ logoName, logoClassName, logoContainerClassName }: LogoProps) {
   return (
-    <div className={logoContainerClassName}>
-      <img src={logoName} alt="logo quizotron" className={logoClassName} />
-    </div>
+    <NavLink to="/">
+      <div className={logoContainerClassName}>
+        <img src={logoName} alt="logo quizotron" className={logoClassName} />
+      </div>
+    </NavLink>
   );
 }
 
