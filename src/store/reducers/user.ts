@@ -81,12 +81,26 @@ export const register = createAppAsyncThunk(
       email, pseudo, firstname, lastname, password, passwordConfirm,
     } = state.user.credentials;
 
-    // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.post('/signup', {
-      email, pseudo, firstname, lastname, password, passwordConfirm,
-    });
+    try {
+      // Appel API avec envoie des données du formulaire
+      const { data } = await axiosInstance.post('/signup', {
+        email, pseudo, firstname, lastname, password, passwordConfirm,
+      });
 
-    return data as IAuthentification;
+      return data as IAuthentification;
+    } catch (error) {
+      // Gestion des erreurs
+      // si statut de la réponse est 400 alors on retourne les messages d'erreurs
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          const dataError: string = error.response?.data;
+          return thunkAPI.rejectWithValue(dataError);
+        }
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
   },
 );
 
@@ -221,8 +235,10 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(register.pending, (state) => {
       state.isRegistered = false;
     })
-    .addCase(register.rejected, (state) => {
+    .addCase(register.rejected, (state, action) => {
       state.isRegistered = false;
+      const payload = action.payload as string;
+      state.errorMessages = payload;
     })
     .addCase(login.fulfilled, (state, action) => {
       // J'enregistre les informations retournées par mon API

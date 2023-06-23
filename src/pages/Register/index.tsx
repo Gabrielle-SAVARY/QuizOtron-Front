@@ -19,6 +19,8 @@ function Register() {
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
+  // Récupère les messages d'erreur stocké dans les states du reducer user
+  const errorMessages = useAppSelector((state) => state.user.errorMessages);
 
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -110,7 +112,7 @@ function Register() {
             onChange={handleChangeField}
             name="passwordConfirm"
           />
-
+          {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
           <button type="submit" className="form__button">
             Inscription
           </button>

@@ -29,3 +29,11 @@ button {
   font-family: 'Comic Neue', cursive;
   font-weight: 700;
 }
+
+.error-message {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  color: white;
+  background: rgba(203, 24, 24, 0.757);
+  border-radius: 5px;
+}
