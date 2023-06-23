@@ -2,10 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useAppSelector } from '../../hooks/redux';
-import './styles.scss';
-import Logo from './Logo';
+import Logo from '../Logo';
 import ProfileLink from './ProfileLink';
 import BtnMenu from './BtnMenu';
+import logoQuizotron from '../../assets/img/logoQuizotron.png';
+import './styles.scss';
 
 interface IMenuLink {
   isActive: boolean;
@@ -60,7 +61,7 @@ function Header() {
     <header className="header">
       <div className="header__container">
         <BtnMenu isToggleMenu={isToggleMenu} changeToggleMenu={changeToggleMenu} />
-        <Logo />
+        <Logo logoName={logoQuizotron} logoContainerClassName="header__logo" logoClassName="header__logo-img" />
         <nav className="header__nav" style={navigationDisplay}>
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>

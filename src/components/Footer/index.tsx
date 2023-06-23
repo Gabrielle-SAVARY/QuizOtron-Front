@@ -1,15 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import './styles.scss';
-
 import { MdEmail } from 'react-icons/md';
+import Logo from '../Logo';
+import logoQuizotronWhite from '../../assets/img/logo_quizotron_white.png';
+import './styles.scss';
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer__contact">
-        <div className="footer__contact-logo">
-          <h3>LOGO Quiz&apos;O&apos;Tron</h3>
-        </div>
+        <Logo logoContainerClassName="footer__contact-logo" logoName={logoQuizotronWhite} logoClassName="footer__contact-logo-img" />
         <div>
           <h3 className="footer__contact-title">Contact</h3>
           <div className="footer__contact-mail">

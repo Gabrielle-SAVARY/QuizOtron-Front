@@ -12,7 +12,13 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem;
+    &-logo{
+      &-img{
+        width: 125px;
+        height: auto;
+      }
+    }
   }
 
   &__contact-title {
@@ -30,7 +36,7 @@
 /* FOOTER DARK: SITEMAP + MENTIONS */
 .footer-dark {
   background-color: vars.$primary-dark-color;
-  padding: 1rem 1rem 0.5rem 1rem;
+  padding: 1.5rem;
   text-align: center;
 
   &__nav-list {

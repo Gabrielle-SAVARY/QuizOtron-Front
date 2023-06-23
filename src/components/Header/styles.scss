@@ -27,6 +27,18 @@
   }
 }
 
+/*==================== LOGO ========================*/
+&__logo{
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  gap: 0.5rem;
+  &-img{
+    width: 100px;
+    max-height: vars.$headerHeight;
+  }
+}
+
 /*==================== NAVBAR ========================*/
   &__nav{
     height: vars.$headerHeight;

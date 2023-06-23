@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { ChangeEvent, FormEvent } from 'react';
-import logo from '../../assets/img/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
@@ -8,6 +7,8 @@ import {
   login,
   logout,
 } from '../../store/reducers/user';
+import Logo from '../../components/Logo';
+import logoQuizotron from '../../assets/img/logoQuizotron.png';
 import './styles.scss';
 
 function Login() {
@@ -66,8 +67,7 @@ function Login() {
             className="form form-login"
             onSubmit={handleSubmit}
           >
-            {/* <div className="form__logo">Quiz&apos;O&apos;tron</div> */}
-            <img src={logo} alt="logo quizotron" className="form__logo" />
+            <Logo logoContainerClassName="form__container-logo" logoName={logoQuizotron} logoClassName="form__logo-img" />
             <label htmlFor="email" className="form__label">Email</label>
             <input
               type="text"
