@@ -43,9 +43,9 @@ function Register() {
   };
 
   return (
-    <div className="login-page">
+    <div className="register-page">
       {isRegistered && (
-      <div className="login-page__isLogged">
+      <div className="register-page__isLogged">
         <p>Vous êtes inscrit, veuillez vous connecter.</p>
         <p className="form__message">
           Déjà un compte?
@@ -56,10 +56,10 @@ function Register() {
       </div>
       )}
       {!isRegistered && (
-      <div className="login-page__wrapper">
+      <div className="register-page__wrapper">
         <form
           action="submit"
-          className="form form-login"
+          className="form form-register"
           onSubmit={handleSubmit}
         >
           <div className="form__logo">Quiz&apos;O&apos;tron</div>

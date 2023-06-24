@@ -37,3 +37,23 @@ button {
   background: rgba(203, 24, 24, 0.757);
   border-radius: 5px;
 }
+// ERREURS
+// erreur sur un input de fomulaire
+.error-input{
+  background-color: #fce4e4;
+  color: #cc0033;
+  border: 1px solid #cc0033;
+  outline: none;
+
+}
+// message d'erreur du backend
+.error-msg {
+  color: #cc0033;
+  display: inline-block;
+  font-size: 0.75rem;
+  margin-top: 8px;
+  height: 1rem;
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+}
