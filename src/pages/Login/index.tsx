@@ -13,6 +13,7 @@ import {
 import { IerrorFormLogin } from '../../@types/error';
 import Logo from '../../components/Logo';
 import logoQuizotron from '../../assets/img/logoQuizotron.png';
+import { validationRulesLogin } from '../../utils/validationsRules';
 import './styles.scss';
 
 function Login() {
@@ -57,51 +58,41 @@ function Login() {
     setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
   };
 
-  // Validation des champs du formulaire et mise à jour du state des erreurs
-  const validateEmail = (emailSubmit: string) => {
-    // Effectuez les validations et mettez à jour le state en conséquence
-    if (emailSubmit.trim() === '') {
-      setErrorInputMsg((prevState) => ({
-        ...prevState,
-        email: "L'e-mail ne peut pas être vide.",
-      }));
-    }
-  };
-  const validatePassword = (passwordSubmit: string) => {
-    if (passwordSubmit.trim() === '') {
-      setErrorInputMsg((prevState) => ({
-        ...prevState,
-        password: 'Le mot de passe ne peut pas être vide.',
-      }));
-    } else if (passwordSubmit.length < 6 || passwordSubmit.length > 30) {
-      setErrorInputMsg((prevState) => ({
-        ...prevState,
-        password: 'Le mot de passe doit comporter entre 6 et 30 caractères.',
-      }));
-    }
-  };
-
   // Soumission du formulaire de connexion
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Typepage de l'event.target
     const form = event.target as HTMLFormElement;
-    // Récupération des valeurs des champs du formulaire
-    const emailSubmit = form.email.value;
-    const passwordSubmit = form.password.value;
-    // Vérification et validation des champs du formulaire
-    validateEmail(emailSubmit);
-    validatePassword(passwordSubmit);
-    // Si pas d'erreur et que tous les champs ne sont pas vides faire requête POST au backend
-    if (
-      errorInputMsg.email === ''
-    && errorInputMsg.password === ''
-    && emailSubmit !== ''
-    && passwordSubmit !== ''
-    && emailSubmit.trim() !== ''
-    && passwordSubmit.trim() !== ''
-    && !(passwordSubmit.length < 6 || passwordSubmit.length > 30)
-    ) {
+
+    // Initialisation d'un objet vide qui contiendra les messages d'erreurs
+    const errors: { [key: string]: string } = {};
+
+    // Validation des champs du formulaire
+    validationRulesLogin.forEach((rule) => {
+      const { field, validate } = rule;
+      const { value } = form[field];
+      const error = validate(value);
+      console.log('rule', rule);
+      console.log('field', field);
+      console.log('value', value);
+      console.log('error', error);
+
+      // Si erreur, on stocke le message d'erreur dans l'objet errors
+      if (error !== '') {
+        errors[field] = error;
+      }
+    });
+    console.log('ERRORS', errors);
+    console.log('Object.keys(errors)', Object.keys(errors));
+    console.log('Object.keys(errors).length', Object.keys(errors).length);
+
+    // Mise à jour du state des avec les messages d'erreurs (asynchrone)
+    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
+
+    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
+    // et on vérifie sa longueur
+    // Si vide alors pas d'erreur: faire la requête POST au backend
+    if (Object.keys(errors).length === 0) {
       dispatch(login());
     }
   };
