@@ -1,3 +1,5 @@
+import { IValidationRule } from '../@types/error';
+
 // Règles de validation du champ `email`
 const validateEmail = (value: string): string => {
   if (value.trim() === '') {
@@ -17,7 +19,7 @@ const validatePassword = (value: string): string => {
 };
 
 // Tableau des règles de validation pour les champs du formulaire login
-export const validationRulesLogin = [
+export const validationRulesLogin: IValidationRule[] = [
   {
     field: 'email',
     validate: validateEmail,

@@ -10,10 +10,11 @@ import {
   login,
   logout,
 } from '../../store/reducers/user';
+import { validateFormFields } from '../../utils/validateFormField';
+import { validationRulesLogin } from '../../utils/validationsRules';
 import { IerrorFormLogin } from '../../@types/error';
 import Logo from '../../components/Logo';
 import logoQuizotron from '../../assets/img/logoQuizotron.png';
-import { validationRulesLogin } from '../../utils/validationsRules';
 import './styles.scss';
 
 function Login() {
@@ -58,43 +59,31 @@ function Login() {
     setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
   };
 
-  // Soumission du formulaire de connexion
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Typepage de l'event.target
-    const form = event.target as HTMLFormElement;
-
-    // Initialisation d'un objet vide qui contiendra les messages d'erreurs
-    const errors: { [key: string]: string } = {};
-
-    // Validation des champs du formulaire
-    validationRulesLogin.forEach((rule) => {
-      const { field, validate } = rule;
-      const { value } = form[field];
-      const error = validate(value);
-      console.log('rule', rule);
-      console.log('field', field);
-      console.log('value', value);
-      console.log('error', error);
-
-      // Si erreur, on stocke le message d'erreur dans l'objet errors
-      if (error !== '') {
-        errors[field] = error;
-      }
-    });
-    console.log('ERRORS', errors);
-    console.log('Object.keys(errors)', Object.keys(errors));
-    console.log('Object.keys(errors).length', Object.keys(errors).length);
-
-    // Mise à jour du state des avec les messages d'erreurs (asynchrone)
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
-
+  // Soumission du formulaire si aucune erreur
+  const handleFormSubmit = (errors: { [key: string]: string }) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
     // et on vérifie sa longueur
     // Si vide alors pas d'erreur: faire la requête POST au backend
     if (Object.keys(errors).length === 0) {
       dispatch(login());
     }
+  };
+
+  // Soumission du formulaire de connexion
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Typepage de l'event.target
+    const form = event.target as HTMLFormElement;
+
+    // Résultat de la validation des champs du formulaire
+    // errors: objet vide ou contient les messages d'erreurs
+    const errors = validateFormFields(form, validationRulesLogin);
+
+    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
+    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
+
+    // Gère la soumission du formulaire
+    handleFormSubmit(errors);
   };
 
   // TODO typer event onClick
