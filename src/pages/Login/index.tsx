@@ -56,6 +56,7 @@ function Login() {
         value: newValue,
       }),
     );
+    // Réinitialise le message d'erreur de l'input
     setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
   };
 

@@ -3,6 +3,14 @@ export interface IerrorFormLogin {
   email: string;
   password: string;
 }
+export interface IerrorFormRegister {
+  firstname: string
+  lastname: string
+  pseudo: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
 
 export interface IValidationRule {
   field: string;

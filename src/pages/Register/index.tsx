@@ -1,12 +1,17 @@
 import { NavLink } from 'react-router-dom';
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
   changeCredentialsField,
   register,
 } from '../../store/reducers/user';
+import Logo from '../../components/Logo';
+import logoQuizotron from '../../assets/img/logoQuizotron.png';
+import { IerrorFormRegister } from '../../@types/error';
 import './styles.scss';
+import { validateFormFields } from '../../utils/validateFormField';
+import { validationRulesSignup } from '../../utils/validationsRules';
 
 function Register() {
   const dispatch = useAppDispatch();
@@ -19,9 +24,17 @@ function Register() {
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
-  // Récupère les messages d'erreur stocké dans les states du reducer user
+  // Récupère les messages d'erreur suite requête au backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
-
+  // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
+  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormRegister>({
+    firstname: '',
+    lastname: '',
+    pseudo: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
   // Met à jour le state avec la valur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
@@ -34,12 +47,34 @@ function Register() {
         value: newValue,
       }),
     );
+    // Réinitialise le message d'erreur de l'input
+    setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
+  };
+
+  // Soumission du formulaire si aucune erreur
+  const handleFormSubmit = (errors: { [key: string]: string }) => {
+    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
+    // et on vérifie sa longueur
+    // Si vide alors pas d'erreur: faire la requête POST au backend
+    if (Object.keys(errors).length === 0) {
+      dispatch(register());
+    }
   };
 
   // Soumission du formulaire d'inscription
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(register());
+    // Typepage de l'event.target
+    const form = event.target as HTMLFormElement;
+
+    // Résultat de la validation des champs du formulaire
+    // errors: objet vide ou contient les messages d'erreurs
+    const errors = validateFormFields(form, validationRulesSignup);
+
+    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
+    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
+    // Gère la soumission du formulaire
+    handleFormSubmit(errors);
   };
 
   return (
@@ -62,56 +97,93 @@ function Register() {
           className="form form-register"
           onSubmit={handleSubmit}
         >
-          <div className="form__logo">Quiz&apos;O&apos;tron</div>
+          <Logo logoContainerClassName="form__container-logo" logoName={logoQuizotron} logoClassName="form__logo-img" />
 
           <input
             type="text"
             placeholder="Prénom"
-            className="form__input"
+            className={`form__input ${errorInputMsg.firstname !== '' ? 'error-input' : ''}`}
             value={firstname}
             onChange={handleChangeField}
             name="firstname"
           />
+          {errorInputMsg.firstname !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.firstname}
+            </div>
+            )}
           <input
             type="text"
             placeholder="Nom"
-            className="form__input"
+            className={`form__input ${errorInputMsg.lastname !== '' ? 'error-input' : ''}`}
             value={lastname}
             onChange={handleChangeField}
             name="lastname"
           />
+          {errorInputMsg.lastname !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.lastname}
+            </div>
+            )}
           <input
             type="text"
             placeholder="Pseudo"
-            className="form__input"
+            className={`form__input ${errorInputMsg.pseudo !== '' ? 'error-input' : ''}`}
             value={pseudo}
             onChange={handleChangeField}
             name="pseudo"
           />
+          {errorInputMsg.pseudo !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.pseudo}
+            </div>
+            )}
           <input
-            type="text"
+            type="email"
             placeholder="Email"
-            className="form__input"
+            className={`form__input ${errorInputMsg.email !== '' ? 'error-input' : ''}`}
             value={email}
             onChange={handleChangeField}
             name="email"
           />
+          {errorInputMsg.email !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.email}
+            </div>
+            )}
           <input
             type="password"
             placeholder="Mot de passe"
-            className="form__input"
+            className={`form__input ${errorInputMsg.password !== '' ? 'error-input' : ''}`}
             value={password}
             onChange={handleChangeField}
             name="password"
           />
+          {errorInputMsg.password !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.password}
+            </div>
+            )}
           <input
             type="password"
             placeholder="Confirmation mot de passe"
-            className="form__input"
+            className={`form__input ${errorInputMsg.passwordConfirm !== '' ? 'error-input' : ''}`}
             value={passwordConfirm}
             onChange={handleChangeField}
             name="passwordConfirm"
           />
+          {errorInputMsg.passwordConfirm !== ''
+            && (
+            <div className="error-msg">
+              {errorInputMsg.passwordConfirm}
+            </div>
+            )}
+
           {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
           <button type="submit" className="form__button">
             Inscription
