@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ChangeEvent, FormEvent, useEffect, useState,
 } from 'react';
@@ -8,7 +8,6 @@ import {
   changeCredentialsField,
   clearInputsAndErrors,
   login,
-  logout,
 } from '../../store/reducers/user';
 import { validateFormFields } from '../../utils/validateFormField';
 import { validationRulesLogin } from '../../utils/validationsRules';
@@ -18,14 +17,14 @@ import logoQuizotron from '../../assets/img/logoQuizotron.png';
 import './styles.scss';
 
 function Login() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   //* STATE
   // Récupère les infos de l'utilisateur stocké dans les states du reducer user
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const isLogged = useAppSelector((state) => state.user.isLogged);
-  const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
-  // Récupère les messages d'erreur suite requête au backend
+  // Récupère les messages d'erreur suite requête POST du backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormLogin>({
@@ -33,8 +32,8 @@ function Login() {
     password: '',
   });
 
+  //* Vide les champs du formulaire et les messages d'erreur
   // Au chargement de la page, si l'utilisateur n'est pas connecté
-  // on vide les champs du formulaire et les messages d'erreur
   useEffect(() => {
     const handleClearInputsandErrors = () => {
       if (!isLogged) {
@@ -44,7 +43,14 @@ function Login() {
     handleClearInputsandErrors();
   }, [dispatch, isLogged]);
 
-  // Met à jour le state avec la valeur des inputs du formulaire
+  //* Redirection vers la page profil, si l'utilisateur est connecté
+  useEffect(() => {
+    if (isLogged) {
+      navigate('/profile');
+    }
+  }, [isLogged, navigate]);
+
+  //* Met à jour le state avec la valeur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     // récupère name de l'input et le type la donnée
@@ -60,7 +66,7 @@ function Login() {
     setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
   };
 
-  // Soumission du formulaire si aucune erreur
+  //* Envoi du formulaire au backend si aucune erreur
   const handleFormSubmit = (errors: { [key: string]: string }) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
     // et on vérifie sa longueur
@@ -70,7 +76,7 @@ function Login() {
     }
   };
 
-  // Soumission du formulaire de connexion
+  //* Soumission du formulaire de connexion
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Typepage de l'event.target
@@ -87,26 +93,8 @@ function Login() {
     handleFormSubmit(errors);
   };
 
-  // TODO typer event onClick
-  // Déconnexion utilisateur
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
   return (
     <div className="login-page">
-      {isLogged && (
-        <div className="login-page__isLogged">
-          <p>
-            {`Vous êtes connecté ${pseudo}`}
-          </p>
-          <NavLink to="/connexion">
-            <button type="button" className="login-page__button" onClick={handleLogout}>
-              Déconnexion
-            </button>
-          </NavLink>
-        </div>
-      )}
       {!isLogged && (
         <div className="login-page__wrapper">
           <form
