@@ -3,10 +3,12 @@
 
 .header__link-btn{
   &-text{
-    display: none;
+    display: none;    
+    font-weight: bold;
+
     @include mixin.breakpoint(desktop) {
       display: block;
-      margin-left: 5px;
+      margin-left: 8px;
     }
   }
 // LINK redirection vers'/connexion': utilisateur déconnecté

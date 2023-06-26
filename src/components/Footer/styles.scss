@@ -4,6 +4,7 @@
 /*==================== FOOTER ========================*/
 
 .footer {
+  flex-shrink: 0;
   background-color: vars.$main-primary-color;
   color: #fff;
   width: 100vw;

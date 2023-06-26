@@ -98,7 +98,7 @@ function Register() {
           onSubmit={handleSubmit}
         >
           <Logo logoContainerClassName="form__container-logo" logoName={logoQuizotron} logoClassName="form__logo-img" />
-
+          <label htmlFor="Prénom" className="form__label">Prénom</label>
           <input
             type="text"
             placeholder="Prénom"
@@ -113,6 +113,7 @@ function Register() {
               {errorInputMsg.firstname}
             </div>
             )}
+          <label htmlFor="Nom" className="form__label">Nom</label>
           <input
             type="text"
             placeholder="Nom"
@@ -127,6 +128,7 @@ function Register() {
               {errorInputMsg.lastname}
             </div>
             )}
+          <label htmlFor="Pseudo" className="form__label">Pseudo</label>
           <input
             type="text"
             placeholder="Pseudo"
@@ -141,6 +143,7 @@ function Register() {
               {errorInputMsg.pseudo}
             </div>
             )}
+          <label htmlFor="email" className="form__label">Email</label>
           <input
             type="email"
             placeholder="Email"
@@ -155,6 +158,7 @@ function Register() {
               {errorInputMsg.email}
             </div>
             )}
+          <label htmlFor="password" className="form__label">Mot de passe</label>
           <input
             type="password"
             placeholder="Mot de passe"
@@ -169,6 +173,7 @@ function Register() {
               {errorInputMsg.password}
             </div>
             )}
+          <label htmlFor="password" className="form__label">Confirmation du mot de passe</label>
           <input
             type="password"
             placeholder="Confirmation mot de passe"

@@ -55,7 +55,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 100vh;
+      justify-content: center;
+      height: calc(100vh - vars.$headerHeight);
       width: 100vw;
 
       background-color: vars.$primary-dark-color;
@@ -72,8 +73,9 @@
         display: block;
         font-size: 1.25rem;                
         width: 100%;
-        border-top: 1px solid rgba(255, 255, 255, 0.555);
+        /* border-top: 1px solid rgba(255, 255, 255, 0.555); */
         text-align: center;
+
         margin-right: 0px;
         @include mixin.breakpoint(desktop) {
           width: auto;

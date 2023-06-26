@@ -19,7 +19,7 @@ function ProfileLink({ isUserLogged, userPseudo }: ProfileBtnProps) {
   // redirection vers une route
   const redirectLink = isUserLogged ? '/profile' : '/connexion';
   // Texte acoller à l'icone
-  const asideTextLink = isUserLogged ? userPseudo : 'Me connecter';
+  const asideTextLink = isUserLogged ? userPseudo : 'Se connecter';
 
   //* Ajout de la classe active sur la classe du lien cliqué
   const activeLink = ({ isActive }: ILink) => cn(classNameLinkBtn, {
@@ -27,7 +27,7 @@ function ProfileLink({ isUserLogged, userPseudo }: ProfileBtnProps) {
   });
 
   // Style de l'icone
-  const styledIcon = { fontSize: '1.5rem', stroke: '1' };
+  const styledIcon = { fontSize: '1.3rem', stroke: '1' };
 
   return (
     <NavLink to={redirectLink} className={activeLink}>
