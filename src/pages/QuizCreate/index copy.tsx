@@ -3,7 +3,7 @@ import {
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
-  FormControl, FormHelperText, InputLabel, MenuItem, TextField,
+  FormControl, InputLabel, MenuItem, TextField,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
@@ -13,9 +13,6 @@ import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
 import QuestionCreate from './QuestionCreate';
 import './styles.scss';
-import { IerrorFormNewQuiz } from '../../@types/error';
-import { validationRulesNewQuiz } from '../../utils/validationsRules';
-import { validateFormFields } from '../../utils/validateFormField';
 
 interface QuizCreateProps {
   tagsList: ITag[]
@@ -32,7 +29,6 @@ function QuizCreate({
   const userId = useAppSelector((state) => state.user.userId);
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
   const [errorMessage, setErrorMessage] = useState('');
-
   // Stock les informations générale du quiz (state à envoyer au back)
   // on affecte l'id de l'utilsateur à partir du state
   const [newQuiz, setNewQuiz] = useState<Quiz>({
@@ -42,16 +38,6 @@ function QuizCreate({
     level_id: 0,
     user_id: userId,
     tag_id: 0,
-  });
-  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({
-    title: '',
-    description: '',
-    thumbnail: '',
-
-  });
-  const [errorSelectMsg, setErrorSelectMsg] = useState({
-    tag_id: '',
-    level_id: '0',
   });
 
   //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
@@ -277,6 +263,7 @@ function QuizCreate({
     HTMLTextAreaElement>,
     field: string,
   ) => {
+    setErrorMessage('');
     const quizData = { ...newQuiz } as Quiz;
     // D'abord on vérifie s'il s'agit du field ou d'un champs id
     if (field === 'tag_id') {
@@ -288,20 +275,22 @@ function QuizCreate({
     }
     // On met à jour le state newQuiz
     setNewQuiz(quizData);
-    // Réinitialise le message d'erreur de l'input
-    setErrorInputMsg({ ...errorInputMsg, [field]: '' });
   };
 
   //* ENVOIE DU FORMULAIRE A l'API
-  //* Envoi du formulaire au backend si aucune erreur
-  const handleFormSubmit = async (errors: { [key: string]: string }) => {
-    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
-    // et on vérifie sa longueur
-    // Si vide alors pas d'erreur: faire la requête POST au backend
-    if (Object.keys(errors).length === 0) {
-    // Envoi des données au back
-    // On affecte le state newQuiz à quiz
-    // On affecte un tablleau des states des questions à questions
+  // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    //* Critères à respecter avant d'envoyer aux back les données
+    if (!newQuiz.title || newQuiz.title.length < 3) {
+      setErrorMessage('Vous devez ajouter un titre contenant au moins 3 caractères');
+    } else if (!newQuiz.description || newQuiz.description.length < 5) {
+      setErrorMessage('Vous devez ajouter une description contenant au moins 5 caractères');
+    } else {
+      // Envoi des données au back
+      // On affecte le state newQuiz à quiz
+      // On affecte un tablleau des states des questions à questions
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
@@ -329,25 +318,6 @@ function QuizCreate({
       }
     }
   };
-  // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Typepage de l'event.target
-    const form = event.target as HTMLFormElement;
-
-    // Résultat de la validation des champs du formulaire
-    // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateFormFields(form, validationRulesNewQuiz);
-    if (newQuiz.tag_id === 0) {
-      setErrorSelectMsg((prevState) => ({ ...prevState, tag_id: 'Veuillez choisir une catégorie' }));
-    }
-
-    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
-
-    // Gère la soumission du formulaire
-    handleFormSubmit(errors);
-  };
 
   return (
     <div className="quiz__creation">
@@ -363,7 +333,7 @@ function QuizCreate({
         <fieldset className="quiz__parameter">
 
           {/* //? ======= Choix de la catégorie========== */}
-          <FormControl fullWidth required error={errorSelectMsg.tag_id !== ''}>
+          <FormControl fullWidth>
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
             <Select
               labelId="label-select-tag"
@@ -378,7 +348,6 @@ function QuizCreate({
                 <MenuItem key={tag.id} value={tag.id} className="select-tag">{tag.name}</MenuItem>
               ))}
             </Select>
-            <FormHelperText>{errorSelectMsg.tag_id !== '' ? errorSelectMsg.tag_id : 'selectionner une catégorie'}</FormHelperText>
           </FormControl>
 
           {/* //? ======= Choix de la difficulté========== */}
@@ -390,7 +359,6 @@ function QuizCreate({
               label="Difficulté"
               defaultValue="choose option"
               onChange={(event) => handleChangeQuizData(event, 'level_id')}
-              required
             >
               <MenuItem disabled value="choose option">Sélectionner un niveau</MenuItem>
               {
@@ -407,9 +375,6 @@ function QuizCreate({
             label="Titre du quiz"
             variant="outlined"
             onChange={(event) => handleChangeQuizData(event, 'title')}
-            name="title"
-            error={errorInputMsg.title !== ''}
-            helperText={errorInputMsg.title !== '' ? errorInputMsg.title : ''}
           />
 
           {/* //? ======= Choix de la description ========== */}
@@ -418,9 +383,6 @@ function QuizCreate({
             label="Description du quiz"
             variant="outlined"
             onChange={(event) => handleChangeQuizData(event, 'description')}
-            name="description"
-            error={errorInputMsg.description !== ''}
-            helperText={errorInputMsg.description !== '' ? errorInputMsg.description : ''}
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
@@ -429,9 +391,7 @@ function QuizCreate({
             label="Image du quiz"
             variant="outlined"
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
-            name="thumbnail"
-            error={errorInputMsg.thumbnail !== ''}
-            helperText={errorInputMsg.thumbnail !== '' ? errorInputMsg.thumbnail : 'Coller l\'url de l\'image'}
+            helperText="Coller l'url de l'image"
           />
 
         </fieldset>

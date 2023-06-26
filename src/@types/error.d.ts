@@ -12,6 +12,16 @@ export interface IerrorFormRegister {
   passwordConfirm: string;
 }
 
+export interface IerrorFormNewQuiz {
+  title: string
+  description: string
+  thumbnail: string;
+/*   questions: {
+    question: string;
+    answers: [string, string, string, string];
+  }[]; */
+}
+
 export interface IValidationRule {
   field: string;
   validate: (value: string) => string;

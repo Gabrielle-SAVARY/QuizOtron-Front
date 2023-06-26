@@ -52,6 +52,35 @@ const validatePseudo = (value: string): string => {
   }
   return '';
 };
+
+const validateTitle = (value: string): string => {
+  if (value.trim() === '') {
+    return 'Le champs "titre" ne peut pas être vide.';
+  } if (value.length < 3 || value.length > 150) {
+    return 'Le champs "titre" doit comporter entre 6 et 150 caractères.';
+  }
+  return '';
+};
+const validateDescription = (value: string): string => {
+  if (value.trim() === '') {
+    return 'Le champs "description" ne peut pas être vide.';
+  } if (value.length < 3 || value.length > 300) {
+    return 'Le champs "description" doit comporter entre 6 et 300 caractères.';
+  }
+  return '';
+};
+const validateThumbnail = (value: string): string => {
+  if (value.trim() === '') {
+    return 'Le champs "image" ne peut pas être vide.';
+  }
+  return '';
+};
+const validateCategory = (value: number): string => {
+  if (value === 0) {
+    return 'Sélectionner une catégorie.';
+  }
+  return '';
+};
 // Nom des champs texte
 /* const findTextFieldName = (value: string): string => {
   let fieldName = '';
@@ -127,4 +156,24 @@ export const validationRulesSignup: IValidationRule[] = [
     field: 'passwordConfirm',
     validate: validatePasswordConfirm,
   },
+];
+
+export const validationRulesNewQuiz: IValidationRule[] = [
+  {
+    field: 'title',
+    validate: validateTitle,
+  },
+  {
+    field: 'description',
+    validate: validateDescription,
+  },
+  {
+    field: 'thumbnail',
+    validate: validateThumbnail,
+  },
+  /*   {
+    field: 'tag_id',
+    validate: validateCategory,
+  }, */
+
 ];
