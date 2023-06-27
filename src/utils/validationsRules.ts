@@ -78,6 +78,7 @@ const validatePseudo = (value: string): string => {
   return '';
 };
 
+// Règles de validation du champ 'title' d'un quiz
 const validateTitle = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "titre" ne peut pas être vide.';
@@ -87,6 +88,7 @@ const validateTitle = (value: string): string => {
   }
   return '';
 };
+// Règles de validation du champ 'description' d'un quiz
 const validateDescription = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "description" ne peut pas être vide.';
@@ -96,21 +98,34 @@ const validateDescription = (value: string): string => {
   }
   return '';
 };
+// Règles de validation du champ 'thumbnail'/ url de l'image d'un quiz
 const validateThumbnail = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "image" ne peut pas être vide.';
   }
   return '';
 };
+// Règles de validation du champ 'tag'/catégorie d'un quiz
 const validateCategory = (value: string): string => {
   if (value === 'choose option') {
     return 'Veuillez sélectionner une catégorie.';
   }
   return '';
 };
+// Règles de validation du champ 'level'/niveau de difficulté d'un quiz
 const validateLevel = (value: string): string => {
   if (value === 'choose option') {
     return 'Veuillez sélectionner un niveau de difficulté.';
+  }
+  return '';
+};
+// Règles de validation pour les champs de type texte vides (utilisé pour les questions et réponses)
+export const validateNotEmpty = (value: string): string => {
+  if (value.trim() === '') {
+    return 'Le champs ne peut pas être vide.';
+  }
+  if (value.length < 3 || value.length > 150) {
+    return 'Le champs doit comporter entre 3 et 150 caractères.';
   }
   return '';
 };
@@ -156,6 +171,7 @@ export const validationRulesSignup: IValidationRule[] = [
   },
 ];
 
+// formulaire newQuiz/création d'un quiz
 export const validationRulesNewQuiz: IValidationRule[] = [
   {
     field: 'title',
