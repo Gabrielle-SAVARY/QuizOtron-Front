@@ -16,10 +16,8 @@ export interface IerrorFormNewQuiz {
   title: string
   description: string
   thumbnail: string;
-/*   questions: {
-    question: string;
-    answers: [string, string, string, string];
-  }[]; */
+  tag_id: string;
+  level_id: string;
 }
 
 export interface IValidationRule {

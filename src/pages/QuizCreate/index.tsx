@@ -47,12 +47,14 @@ function QuizCreate({
     title: '',
     description: '',
     thumbnail: '',
+    tag_id: '',
+    level_id: '',
 
   });
-  const [errorSelectMsg, setErrorSelectMsg] = useState({
+  /*   const [errorSelectMsg, setErrorSelectMsg] = useState({
     tag_id: '',
     level_id: '0',
-  });
+  }); */
 
   //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
   // Stock chaques questions avec ses réponses pour le nouveau quiz: 1 state par question
@@ -290,7 +292,6 @@ function QuizCreate({
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
-    setErrorSelectMsg({ ...errorSelectMsg, [field]: '' });
   };
 
   //* ENVOIE DU FORMULAIRE A l'API
@@ -341,11 +342,6 @@ function QuizCreate({
     // errors: objet vide ou contient les messages d'erreurs
     const errors = validateFormFields(form, validationRulesNewQuiz);
 
-    //! TEST menu déroulant
-    if (newQuiz.tag_id === 0) {
-      setErrorSelectMsg((prevState) => ({ ...prevState, tag_id: 'Veuillez choisir une catégorie' }));
-    }
-
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
 
@@ -363,11 +359,12 @@ function QuizCreate({
           </button>
         </Link>
       </div>
+      <div>tous les champs sont obligatories</div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
 
           {/* //? ======= Choix de la catégorie========== */}
-          <FormControl fullWidth required error={errorSelectMsg.tag_id !== ''}>
+          <FormControl fullWidth required error={errorInputMsg.tag_id !== ''}>
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
             <Select
               labelId="label-select-tag"
@@ -376,17 +373,20 @@ function QuizCreate({
               defaultValue="choose option"
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
               className="select-tag"
+              name="tag_id"
             >
               <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
               {tagsList.map((tag) => (
                 <MenuItem key={tag.id} value={tag.id} className="select-tag">{tag.name}</MenuItem>
               ))}
             </Select>
-            <FormHelperText>{errorSelectMsg.tag_id !== '' ? errorSelectMsg.tag_id : 'selectionner une catégorie'}</FormHelperText>
+            <FormHelperText>
+              {errorInputMsg.tag_id !== '' ? errorInputMsg.tag_id : 'selectionner une catégorie'}
+            </FormHelperText>
           </FormControl>
 
           {/* //? ======= Choix de la difficulté========== */}
-          <FormControl fullWidth>
+          <FormControl fullWidth required error={errorInputMsg.level_id !== ''}>
             <InputLabel id="label-select-level">Difficulté</InputLabel>
             <Select
               labelId="label-select-level"
@@ -395,6 +395,7 @@ function QuizCreate({
               defaultValue="choose option"
               onChange={(event) => handleChangeQuizData(event, 'level_id')}
               required
+              name="level_id"
             >
               <MenuItem disabled value="choose option">Sélectionner un niveau</MenuItem>
               {
@@ -403,6 +404,9 @@ function QuizCreate({
                 ))
               }
             </Select>
+            <FormHelperText>
+              {errorInputMsg.level_id !== '' ? errorInputMsg.level_id : 'selectionner une catégorie'}
+            </FormHelperText>
           </FormControl>
 
           {/* //? ======= Choix du titre ========== */}
@@ -413,7 +417,7 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'title')}
             name="title"
             error={errorInputMsg.title !== ''}
-            helperText={errorInputMsg.title !== '' ? errorInputMsg.title : ''}
+            helperText={errorInputMsg.title !== '' ? errorInputMsg.title : `${newQuiz.title.length}/150 caractères maximum`}
           />
 
           {/* //? ======= Choix de la description ========== */}
@@ -424,7 +428,9 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'description')}
             name="description"
             error={errorInputMsg.description !== ''}
-            helperText={errorInputMsg.description !== '' ? errorInputMsg.description : ''}
+            helperText={errorInputMsg.description !== '' ? errorInputMsg.description : `${newQuiz.description.length}/300 caractères maximum`}
+            multiline
+            rows={4}
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}

@@ -1,4 +1,4 @@
-import { IValidationRule } from '../@types/error';
+import { IValidationRule, IValidationSelectMenuRule } from '../@types/error';
 
 // Vérification des champs du formulaire
 export const validateFormFields = (form: HTMLFormElement, validationRules: IValidationRule[]):

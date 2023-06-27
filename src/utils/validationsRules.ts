@@ -22,6 +22,23 @@ const validatePassword = (value: string): string => {
   }
   return '';
 };
+// TODO choisir entre if ou switch
+/* const validatePassword = (value: string) => {
+  let errorMessage = '';
+  switch (true) {
+    case value.trim() === '':
+      errorMessage = 'Le mot de passe ne peut pas être vide.';
+      break;
+    case value.length < 6 || value.length > 30:
+      errorMessage = 'Le mot de passe doit comporter entre 6 et 30 caractères.';
+      break;
+    default:
+      errorMessage = '';
+      break;
+  }
+  return errorMessage;
+}; */
+
 // Règles de validation du champ 'confirmation mot de passe'
 const validatePasswordConfirm = (value: string): string => {
   if (value.trim() === '') {
@@ -85,47 +102,18 @@ const validateThumbnail = (value: string): string => {
   }
   return '';
 };
-const validateCategory = (value: number): string => {
-  if (value === 0) {
-    return 'Sélectionner une catégorie.';
+const validateCategory = (value: string): string => {
+  if (value === 'choose option') {
+    return 'Veuillez sélectionner une catégorie.';
   }
   return '';
 };
-// Nom des champs texte
-/* const findTextFieldName = (value: string): string => {
-  let fieldName = '';
-  switch (value) {
-    case 'firstname':
-      fieldName = 'prénom';
-      break;
-    case 'lastname':
-      fieldName = 'nom';
-      break;
-    case 'pseudo':
-      fieldName = 'pseudo';
-      break;
-
-    default:
-      break;
-  }
-  // renvoie la valeur de fieldName
-
-  return fieldName;
-}; */
-
-/* // Règles de validation des champs texte`
-const validateTextField = (value: string): string => {
-  const fieldName = findTextFieldName(value);
-  console.log('fieldName', fieldName);
-  console.log('value validateTextField', value);
-
-  if (value.trim() === '') {
-    return `Le champs ${fieldName} ne peut pas être vide.`;
-  } if (value.length < 3 || value.length > 30) {
-    return `Le champs ${fieldName} doit comporter entre 6 et 30 caractères.`;
+const validateLevel = (value: string): string => {
+  if (value === 'choose option') {
+    return 'Veuillez sélectionner un niveau de difficulté.';
   }
   return '';
-}; */
+};
 
 // Tableau des règles de validation pour les formulaires
 // formulaire login/connexion
@@ -181,9 +169,13 @@ export const validationRulesNewQuiz: IValidationRule[] = [
     field: 'thumbnail',
     validate: validateThumbnail,
   },
-  /*   {
+  {
     field: 'tag_id',
     validate: validateCategory,
-  }, */
+  },
+  {
+    field: 'level_id',
+    validate: validateLevel,
+  },
 
 ];
