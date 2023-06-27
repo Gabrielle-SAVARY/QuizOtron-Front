@@ -290,6 +290,7 @@ function QuizCreate({
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
+    setErrorSelectMsg({ ...errorSelectMsg, [field]: '' });
   };
 
   //* ENVOIE DU FORMULAIRE A l'API
@@ -334,10 +335,13 @@ function QuizCreate({
     event.preventDefault();
     // Typepage de l'event.target
     const form = event.target as HTMLFormElement;
-
+    console.log('form.title', form.title);
+    console.log('form.question1', form.question1);
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
     const errors = validateFormFields(form, validationRulesNewQuiz);
+
+    //! TEST menu déroulant
     if (newQuiz.tag_id === 0) {
       setErrorSelectMsg((prevState) => ({ ...prevState, tag_id: 'Veuillez choisir une catégorie' }));
     }

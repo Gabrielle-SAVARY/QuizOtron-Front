@@ -1,9 +1,13 @@
+import validator from 'validator';
 import { IValidationRule } from '../@types/error';
 
 // Règles de validation du champ 'email'
 const validateEmail = (value: string): string => {
   if (value.trim() === '') {
     return "L'e-mail ne peut pas être vide.";
+  }
+  if (!validator.isEmail(value)) {
+    return "L'e-mail n'est pas valide.";
   }
   return '';
 };
@@ -12,7 +16,8 @@ const validateEmail = (value: string): string => {
 const validatePassword = (value: string): string => {
   if (value.trim() === '') {
     return 'Le mot de passe ne peut pas être vide.';
-  } if (value.length < 6 || value.length > 30) {
+  }
+  if (value.length < 6 || value.length > 30) {
     return 'Le mot de passe doit comporter entre 6 et 30 caractères.';
   }
   return '';
@@ -29,7 +34,8 @@ const validatePasswordConfirm = (value: string): string => {
 const validateFirstName = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "prénom" ne peut pas être vide.';
-  } if (value.length < 3 || value.length > 30) {
+  }
+  if (value.length < 3 || value.length > 30) {
     return 'Le champs "prénom" doit comporter entre 6 et 30 caractères.';
   }
   return '';
@@ -38,7 +44,8 @@ const validateFirstName = (value: string): string => {
 const validateLastName = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "nom" ne peut pas être vide.';
-  } if (value.length < 3 || value.length > 30) {
+  }
+  if (value.length < 3 || value.length > 30) {
     return 'Le champs "nom" doit comporter entre 6 et 30 caractères.';
   }
   return '';
@@ -47,7 +54,8 @@ const validateLastName = (value: string): string => {
 const validatePseudo = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "pseudo" ne peut pas être vide.';
-  } if (value.length < 3 || value.length > 30) {
+  }
+  if (value.length < 3 || value.length > 30) {
     return 'Le champs "pseudo" doit comporter entre 6 et 30 caractères.';
   }
   return '';
@@ -56,7 +64,8 @@ const validatePseudo = (value: string): string => {
 const validateTitle = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "titre" ne peut pas être vide.';
-  } if (value.length < 3 || value.length > 150) {
+  }
+  if (value.length < 3 || value.length > 150) {
     return 'Le champs "titre" doit comporter entre 6 et 150 caractères.';
   }
   return '';
@@ -64,7 +73,8 @@ const validateTitle = (value: string): string => {
 const validateDescription = (value: string): string => {
   if (value.trim() === '') {
     return 'Le champs "description" ne peut pas être vide.';
-  } if (value.length < 3 || value.length > 300) {
+  }
+  if (value.length < 3 || value.length > 300) {
     return 'Le champs "description" doit comporter entre 6 et 300 caractères.';
   }
   return '';

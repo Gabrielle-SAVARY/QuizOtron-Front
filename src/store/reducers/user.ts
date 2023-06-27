@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
+// TODO vérifier import car utilisé dans le reducer
 
 interface UserState {
   isLogged: boolean;
