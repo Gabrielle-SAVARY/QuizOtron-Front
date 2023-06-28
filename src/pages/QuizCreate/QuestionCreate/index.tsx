@@ -10,10 +10,9 @@ import './styles.scss';
 interface QuestionCreateProps {
   questionNumber: number
   newQuestion: Question
-  setNewQuestion: (question: Question) => void
+  setNewQuestion: (updatedQuestion: Question) => void
   errorInputMsg: IerrorFormNewQuiz
   setErrorInputMsg: (error: IerrorFormNewQuiz) => void
-
 }
 
 function QuestionCreate({
@@ -139,6 +138,7 @@ function QuestionCreate({
                   control={<Radio />}
                   label=""
                   onChange={(event) => handleChangeQuestions('', event, 2, true)}
+                  name={`q${questionNumber}Answer2`}
                 />
               </span>
               <span className="answer_input-text">

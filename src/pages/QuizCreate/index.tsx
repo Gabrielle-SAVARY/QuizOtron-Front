@@ -28,11 +28,16 @@ function QuizCreate({
   tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
   const navigate = useNavigate();
+  // Nombre de  questions par quiz
+  const numberOfQuestions = 10;
+  // Génère un tableau de nombres de 1 à numberOfQuestions
+  const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
+
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
   // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   // Stock les informations générale du quiz (state à envoyer au back)
   // on affecte l'id de l'utilsateur à partir du state
@@ -48,9 +53,8 @@ function QuizCreate({
   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({});
 
   //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
-  // Stock chaques questions avec ses réponses pour le nouveau quiz: 1 state par question
-  // on initialise les states à vide
-  const [newQuestion1, setNewQuestion1] = useState<Question>({
+  // moddèle d'une question initialisée à vide
+  const questionModel = {
     question: '',
     answers: [
       {
@@ -70,199 +74,15 @@ function QuizCreate({
         is_valid: false,
       },
     ],
-  });
-  const [newQuestion2, setNewQuestion2] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion3, setNewQuestion3] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion4, setNewQuestion4] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion5, setNewQuestion5] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion6, setNewQuestion6] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion7, setNewQuestion7] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion8, setNewQuestion8] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion9, setNewQuestion9] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
-  const [newQuestion10, setNewQuestion10] = useState<Question>({
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  });
+  };
+  // Stock le tableau des questions et des réponses du quiz
+  // Chaque élément est une copie de l'objet questionModel répété selon le nombre de questions
+  const [newQuestions, setNewQuestions] = useState(
+    Array.from({ length: numberOfQuestions }, () => ({ ...questionModel })),
+  );
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  //* MISE A JOUR DE newQuiz
+  // Mise à jour de newQuiz
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
     SelectChangeEvent<string> |
@@ -285,6 +105,16 @@ function QuizCreate({
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
   };
 
+  // Mise à jour d'une question spécifique dans newQuestions
+  const handleUpdateQuestion = (questionIndex: number, updatedQuestion: Question) => {
+    // Créer une copie du state newQuestions
+    const updatedQuestions = [...newQuestions];
+    // Sélection de la question en fonction de l'index
+    updatedQuestions[questionIndex] = updatedQuestion;
+    // Mise à jour du state newQuestions
+    setNewQuestions(updatedQuestions);
+  };
+
   //* ENVOIE DU FORMULAIRE A l'API
   //* Envoi du formulaire au backend si aucune erreur
   const handleFormSubmit = async (errors: { [key: string]: string }) => {
@@ -298,18 +128,7 @@ function QuizCreate({
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
-          questions: [
-            newQuestion1,
-            newQuestion2,
-            newQuestion3,
-            newQuestion4,
-            newQuestion5,
-            newQuestion6,
-            newQuestion7,
-            newQuestion8,
-            newQuestion9,
-            newQuestion10,
-          ],
+          questions: newQuestions,
         });
         if (response.status !== 200) throw new Error();
 
@@ -329,7 +148,8 @@ function QuizCreate({
     const form = event.target as HTMLFormElement;
     console.log('form.title', form.title);
     console.log('form.question1', form.question1);
-    console.log('form.question1', form.answer1Q1);
+    console.log('form.answer1Q10', form.answer1Q10);
+    console.log('form.q10Answer2', form.q10Answer2);
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
@@ -488,81 +308,24 @@ function QuizCreate({
               ? errorInputMsg.thumbnail
               : 'Coller l\'url de l\'image'}
           />
-
         </fieldset>
-
         <fieldset className="quiz__questions">
-          {/* Question 1 */}
-          <QuestionCreate
-            questionNumber={1}
-            newQuestion={newQuestion1}
-            setNewQuestion={setNewQuestion1}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={2}
-            newQuestion={newQuestion2}
-            setNewQuestion={setNewQuestion2}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={3}
-            newQuestion={newQuestion3}
-            setNewQuestion={setNewQuestion3}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={4}
-            newQuestion={newQuestion4}
-            setNewQuestion={setNewQuestion4}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={5}
-            newQuestion={newQuestion5}
-            setNewQuestion={setNewQuestion5}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={6}
-            newQuestion={newQuestion6}
-            setNewQuestion={setNewQuestion6}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={7}
-            newQuestion={newQuestion7}
-            setNewQuestion={setNewQuestion7}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={8}
-            newQuestion={newQuestion8}
-            setNewQuestion={setNewQuestion8}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={9}
-            newQuestion={newQuestion9}
-            setNewQuestion={setNewQuestion9}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
-          <QuestionCreate
-            questionNumber={10}
-            newQuestion={newQuestion10}
-            setNewQuestion={setNewQuestion10}
-            errorInputMsg={errorInputMsg}
-            setErrorInputMsg={setErrorInputMsg}
-          />
+          {questionNumbers.map((questionNumber) => {
+            const questionIndex = questionNumber - 1;
+            const question = newQuestions[questionIndex];
+            return (
+              <QuestionCreate
+                key={questionNumber}
+                questionNumber={questionNumber}
+                newQuestion={question}
+                setNewQuestion={
+                  (updatedQuestion) => handleUpdateQuestion(questionIndex, updatedQuestion)
+                }
+                errorInputMsg={errorInputMsg}
+                setErrorInputMsg={setErrorInputMsg}
+              />
+            );
+          })}
         </fieldset>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">Créer le Quiz</button>
