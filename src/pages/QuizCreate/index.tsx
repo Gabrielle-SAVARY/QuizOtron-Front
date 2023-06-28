@@ -55,32 +55,36 @@ function QuizCreate({
 
   //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
   // moddèle d'une question initialisée à vide
-  const questionModel = {
-    question: '',
-    answers: [
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-      {
-        answer: '',
-        is_valid: false,
-      },
-    ],
-  };
-  // Stock le tableau des questions et des réponses du quiz
+  function createQuestionModel() {
+    return {
+      question: '',
+      answers: [
+        {
+          answer: '',
+          is_valid: false,
+        },
+        {
+          answer: '',
+          is_valid: false,
+        },
+        {
+          answer: '',
+          is_valid: false,
+        },
+        {
+          answer: '',
+          is_valid: false,
+        },
+      ],
+    };
+  }
   // Chaque élément est une copie de l'objet questionModel répété selon le nombre de questions
-  const [newQuestions, setNewQuestions] = useState(
-    Array.from({ length: numberOfQuestions }, () => ({ ...questionModel })),
+  const initialNewQuestions = Array.from(
+    { length: numberOfQuestions },
+    () => createQuestionModel(),
   );
+  // Stock le tableau des questions et des réponses du quiz
+  const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions);
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // Mise à jour de newQuiz
@@ -147,11 +151,6 @@ function QuizCreate({
     event.preventDefault();
     // Typepage de l'event.target
     const form = event.target as HTMLFormElement;
-    console.log('form.title', form.title);
-    console.log('form.question1', form.question1);
-    console.log('form.answer1Q10', form.answer1Q10);
-    console.log('form.q10Answer2', form.q10Answer2);
-
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
     const errors = {
@@ -291,14 +290,14 @@ function QuizCreate({
         <fieldset className="quiz__questions">
           {questionNumbers.map((questionNumber) => {
             const questionIndex = questionNumber - 1;
-            const question = newQuestions[questionIndex];
+            const questionToUpdate = newQuestions[questionIndex];
             return (
               <QuestionCreate
                 key={questionNumber}
                 questionNumber={questionNumber}
-                newQuestion={question}
+                newQuestion={questionToUpdate}
                 setNewQuestion={
-                  (updatedQuestion) => handleUpdateQuestion(questionIndex, updatedQuestion)
+                (updatedQuestion) => handleUpdateQuestion(questionIndex, updatedQuestion)
                 }
                 errorInputMsg={errorInputMsg}
                 setErrorInputMsg={setErrorInputMsg}
