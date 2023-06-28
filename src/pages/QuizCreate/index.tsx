@@ -8,6 +8,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import { getError, getHelperText } from '../../utils/showError';
 import { validateNotEmpty, validationRulesNewQuiz } from '../../utils/validationsRules';
 import { validateFormFields, validateQuiz } from '../../utils/validateFormField';
 import { IerrorFormNewQuiz } from '../../@types/error';
@@ -257,16 +258,8 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'title')}
             name="title"
             fullWidth
-            error={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
-            }
-            helperText={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
-                ? errorInputMsg.title
-                : `${newQuiz.title.length}/150 caractères maximum`
-            }
+            error={getError(errorInputMsg, 'title')}
+            helperText={getHelperText(errorInputMsg, 'title', `${newQuiz.title.length}/150 caractères maximum`)}
           />
 
           {/* //? ======= Choix de la description ========== */}
@@ -279,16 +272,8 @@ function QuizCreate({
             fullWidth
             multiline
             rows={4}
-            error={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
-            }
-            helperText={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
-                ? errorInputMsg.description
-                : `${newQuiz.description.length}/300 caractères maximum`
-            }
+            error={getError(errorInputMsg, 'description')}
+            helperText={getHelperText(errorInputMsg, 'description', `${newQuiz.description.length}/300 caractères maximum`)}
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
@@ -299,14 +284,8 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             name="thumbnail"
             fullWidth
-            error={
-              errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
-            }
-            helperText={errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
-              ? errorInputMsg.thumbnail
-              : 'Coller l\'url de l\'image'}
+            error={getError(errorInputMsg, 'thumbnail')}
+            helperText={getHelperText(errorInputMsg, 'thumbnail', 'Coller l\'url de l\'image')}
           />
         </fieldset>
         <fieldset className="quiz__questions">
