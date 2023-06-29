@@ -10,7 +10,7 @@ import Logo from '../../components/Logo';
 import logoQuizotron from '../../assets/img/logoQuizotron.png';
 import { IerrorFormRegister } from '../../@types/error';
 import './styles.scss';
-import { validateFormFields } from '../../utils/validateFormField';
+import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesSignup } from '../../utils/validationsRules';
 
 function Register() {
@@ -72,7 +72,7 @@ function Register() {
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateFormFields(dataToValidate, validationRulesSignup);
+    const errors = validateTextFields(dataToValidate, validationRulesSignup);
 
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));

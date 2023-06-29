@@ -5,7 +5,7 @@ import {
   FormLabel, Radio, RadioGroup, TextField,
 } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
-import { IerrorFormNewQuiz } from '../../../@types/error';
+import { IerrorFormNewQuiz, QuestionError } from '../../../@types/error';
 import { Question } from '../../../@types/newQuiz';
 import './styles.scss';
 import { getError, getHelperText } from '../../../utils/showError';
@@ -16,10 +16,11 @@ interface QuestionCreateProps {
   setNewQuestion: (updatedQuestion: Question) => void
   errorInputMsg: IerrorFormNewQuiz
   setErrorInputMsg: (error: IerrorFormNewQuiz) => void
+  questionError: QuestionError
 }
 
 function QuestionCreate({
-  questionNumber, newQuestion, setNewQuestion, errorInputMsg, setErrorInputMsg,
+  questionNumber, newQuestion, setNewQuestion, errorInputMsg, setErrorInputMsg, questionError,
 }:QuestionCreateProps) {
   const [isErrorRadio, setIsErrorRadio] = useState<boolean>(true);
 
@@ -34,6 +35,8 @@ function QuestionCreate({
   ) => {
     //* Etape 1 : On récupère le contenu du state newQuestion dans l'objet updatedQuestion
     const updatedQuestion = { ...newQuestion, answers: [...newQuestion.answers] };
+    // TODO gérer la suppression de l'erreur au onChange
+    const updatedQuestionError = { ...questionError, answers: [...questionError.answers] };
     const answerIndex = answerNb - 1;
     const target = event.target as HTMLInputElement;
 
@@ -68,7 +71,7 @@ function QuestionCreate({
     setNewQuestion(updatedQuestion);
 
     //* On réinitialise le message d'erreur de l'input text
-    setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
+    /*  setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' }); */
   };
 
   return (
@@ -86,14 +89,26 @@ function QuestionCreate({
         name={`question${questionNumber}`}
         onChange={(event) => handleChangeQuestions(`question${questionNumber}`, event)}
         value={newQuestion.question}
-        error={getError(errorInputMsg, `question${questionNumber}`)}
+        error={
+          questionError.question !== undefined
+          && questionError.question !== ''
+        }
+        helperText={
+          questionError.question !== undefined
+          && questionError.question !== ''
+            ? questionError.question
+            : `${newQuestion.question.length}/150 caractères maximum`
+        }
+        /* error={getError(errorInputMsg, `question${questionNumber}`)}
         helperText={getHelperText(
           errorInputMsg,
           `question${questionNumber}`,
           '',
-        )}
+        )} */
       />
-      <FormControl error={isErrorRadio}>
+      <FormControl error={questionError.radioGroup !== undefined
+          && questionError.radioGroup !== ''}
+      >
         <FormLabel id="demo-radio-buttons-group-label">Ecrivez les 4 choix de réponses et sélectionner la bonne réponse à la question</FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
@@ -122,12 +137,23 @@ function QuestionCreate({
                     fullWidth
                     onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A1`, event, 1)}
                     value={newQuestion.answers[0].answer}
-                    error={getError(errorInputMsg, `answerQ${questionNumber}A1`)}
+                    error={
+                      questionError.answers[0].answer !== undefined
+                      && questionError.answers[0].answer !== ''
+                    }
+                    helperText={
+                      questionError.answers[0].answer !== undefined
+                      && questionError.answers[0].answer !== ''
+                        ? questionError.answers[0].answer
+                        : ''
+                    }
+
+/*                     error={getError(errorInputMsg, `answerQ${questionNumber}A1`)}
                     helperText={getHelperText(
                       errorInputMsg,
                       `answerQ${questionNumber}A1`,
                       '',
-                    )}
+                    )} */
                   />
                 </span>
               </div>
@@ -154,12 +180,22 @@ function QuestionCreate({
                     fullWidth
                     onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A2`, event, 2)}
                     value={newQuestion.answers[1].answer}
-                    error={getError(errorInputMsg, `answerQ${questionNumber}A2`)}
+                    error={
+                      questionError.answers[1].answer !== undefined
+                      && questionError.answers[1].answer !== ''
+                    }
+                    helperText={
+                      questionError.answers[1].answer !== undefined
+                      && questionError.answers[1].answer !== ''
+                        ? questionError.answers[1].answer
+                        : ''
+                    }
+                    /* error={getError(errorInputMsg, `answerQ${questionNumber}A2`)}
                     helperText={getHelperText(
                       errorInputMsg,
                       `answerQ${questionNumber}A2`,
                       '',
-                    )}
+                    )} */
                   />
                 </span>
               </div>
@@ -185,12 +221,22 @@ function QuestionCreate({
                     fullWidth
                     onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A3`, event, 3)}
                     value={newQuestion.answers[2].answer}
-                    error={getError(errorInputMsg, `answerQ${questionNumber}A3`)}
+                    error={
+                      questionError.answers[2].answer !== undefined
+                      && questionError.answers[2].answer !== ''
+                    }
+                    helperText={
+                      questionError.answers[2].answer !== undefined
+                      && questionError.answers[2].answer !== ''
+                        ? questionError.answers[2].answer
+                        : ''
+                    }
+                   /*  error={getError(errorInputMsg, `answerQ${questionNumber}A3`)}
                     helperText={getHelperText(
                       errorInputMsg,
                       `answerQ${questionNumber}A3`,
                       '',
-                    )}
+                    )} */
                   />
                 </span>
               </div>
@@ -216,12 +262,22 @@ function QuestionCreate({
                     fullWidth
                     onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A4`, event, 4)}
                     value={newQuestion.answers[3].answer}
-                    error={getError(errorInputMsg, `answerQ${questionNumber}A4`)}
+                    error={
+                      questionError.answers[3].answer !== undefined
+                      && questionError.answers[3].answer !== ''
+                    }
+                    helperText={
+                      questionError.answers[3].answer !== undefined
+                      && questionError.answers[3].answer !== ''
+                        ? questionError.answers[3].answer
+                        : ''
+                    }
+                   /*  error={getError(errorInputMsg, `answerQ${questionNumber}A4`)}
                     helperText={getHelperText(
                       errorInputMsg,
                       `answerQ${questionNumber}A4`,
                       '',
-                    )}
+                    )} */
                   />
                 </span>
               </div>

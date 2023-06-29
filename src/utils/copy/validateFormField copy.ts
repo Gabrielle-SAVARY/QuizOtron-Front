@@ -2,7 +2,7 @@ import { IValidationRule } from '../../@types/error';
 // TODO supprimer les consoles log
 
 // Vérification des champs du formulaire
-export const validateFormFields = (form: HTMLFormElement, validationRules: IValidationRule[]):
+export const validateTextFields = (form: HTMLFormElement, validationRules: IValidationRule[]):
 { [key: string]: string } => {
   console.log('form', form);
   // Initialisation d'un objet vide qui contiendra les messages d'erreurs
@@ -31,7 +31,7 @@ export const validateFormFields = (form: HTMLFormElement, validationRules: IVali
 };
 
 // Vérification des champs questions ou réponses du formulaire de quiz
-export const validateQuiz = (
+export const validateQuestions = (
   form: HTMLFormElement,
   fieldToValidate: string,
   validationRule:(value: string) => string,

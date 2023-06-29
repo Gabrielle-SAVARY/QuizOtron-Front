@@ -9,14 +9,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
 import { getError, getHelperText } from '../../utils/showError';
-import { validateNotEmpty, validationRulesNewQuiz } from '../../utils/validationsRules';
-import { validateFormFields, validateQuiz } from '../../utils/validateFormField';
-import { IerrorFormNewQuiz } from '../../@types/error';
+import { validateNotEmpty, validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
+import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
+import { IerrorFormNewQuiz, QuestionError } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
 import QuestionCreate from './QuestionCreate';
 import './styles.scss';
+import { numberOfQuestions } from '../../utils/constants';
+import { initialNewQuestions, initialQuestionErrors } from '../../utils/createModels';
 // TODO supprimer les consoles log
 
 interface QuizCreateProps {
@@ -29,19 +31,11 @@ function QuizCreate({
   tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
   const navigate = useNavigate();
-  // Nombre de  questions par quiz
-  const numberOfQuestions = 10;
-  // Génère un tableau de nombres de 1 à numberOfQuestions
-  const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
-
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-  // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // Stock les informations générale du quiz (state à envoyer au back)
-  // on affecte l'id de l'utilsateur à partir du state
+  // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
     description: '',
@@ -50,41 +44,24 @@ function QuizCreate({
     user_id: userId,
     tag_id: 0,
   });
-  // Stock les messages d'erreur des inputs (texte et select) du formulaire - repéré par le frontEnd
-  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({});
 
-  //* -------- STATE QUESTIONS DU NOUVEAU QUIZ--------
-  // moddèle d'une question initialisée à vide
-  function createQuestionModel() {
-    return {
-      question: '',
-      answers: [
-        {
-          answer: '',
-          is_valid: false,
-        },
-        {
-          answer: '',
-          is_valid: false,
-        },
-        {
-          answer: '',
-          is_valid: false,
-        },
-        {
-          answer: '',
-          is_valid: false,
-        },
-      ],
-    };
-  }
-  // Chaque élément est une copie de l'objet questionModel répété selon le nombre de questions
-  const initialNewQuestions = Array.from(
-    { length: numberOfQuestions },
-    () => createQuestionModel(),
-  );
   // Stock le tableau des questions et des réponses du quiz
-  const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions);
+  const [newQuestions, setNewQuestions] = useState<Question[]>(
+    initialNewQuestions(numberOfQuestions),
+  );
+
+  // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
+  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({
+    title: '',
+    description: '',
+    thumbnail: '',
+    level_id: '',
+    tag_id: '',
+    questions: initialQuestionErrors(numberOfQuestions),
+  });
+
+  // Stock les messages d'erreurs du backend suite à la soumission du formulaire
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // Mise à jour de newQuiz
@@ -119,17 +96,26 @@ function QuizCreate({
     // Mise à jour du state newQuestions
     setNewQuestions(updatedQuestions);
   };
+    // Mise à jour de l'erreur d'une question spécifique dans newQuestions
+  // const handleUpdateQuestionError = (questionIndex: number, updatedQuestionError: QuestionError) => {
+  //   // Créer une copie du state newQuestions
+  //   const updatedQuestionsErrors = [...newQuestions];
+  //   // Sélection de la question en fonction de l'index
+  //   updatedQuestions[questionIndex] = updatedQuestion;
+  //   // Mise à jour du state newQuestions
+  //   setNewQuestions(updatedQuestions);
+  // };
 
-  //* ENVOIE DU FORMULAIRE A l'API
-  //* Envoi du formulaire au backend si aucune erreur
-  const handleFormSubmit = async (errors: { [key: string]: string }) => {
+  //* Envoi du formulaire si aucune erreur
+  const handleFormSubmit = async (isAllowed: boolean) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
     // et on vérifie sa longueur
     // Si vide alors pas d'erreur: faire la requête POST au backend
-    if (Object.keys(errors).length === 0) {
-    // Envoi des données au back
-    // On affecte le state newQuiz à quiz
-    // On affecte un tablleau des states des questions à questions
+
+    if (isAllowed) {
+      // Envoi des données au back
+      // On affecte le state newQuiz à quiz
+      // On affecte un tablleau des states des questions à questions
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
@@ -146,26 +132,60 @@ function QuizCreate({
       }
     }
   };
-  // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
+
+  //* Gère la validation des données et déclenche la soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Typepage de l'event.target
-    const form = event.target as HTMLFormElement;
-    // Résultat de la validation des champs du formulaire
-    // errors: objet vide ou contient les messages d'erreurs
-    /*     const errors = {
-      ...validateFormFields(form, validationRulesNewQuiz),
-      ...validateQuiz(form, 'question', validateNotEmpty),
-      ...validateQuiz(form, 'answer', validateNotEmpty),
+    //* Récupération des erreurs du formulaire à partir des states
+    // partie informations du quiz: state newQuiz
+    // Erreurs des champs texte
+    const dataToValidate = {
+      title: newQuiz.title,
+      description: newQuiz.description,
+      thumbnail: newQuiz.thumbnail,
+    };
+    // Erreur des menus déroulants
+    const menuSelectToValidate = {
+      tag_id: newQuiz.tag_id,
+      level_id: newQuiz.level_id,
+    };
+    // partie questions du quiz: state newQuestions
+    const quizDataToValidate = [...newQuestions];
+
+    //* Validation du formulaire
+    // Récupère la validations des champs texte et des menus déroulants
+    const fieldsErrors = validateTextFields(dataToValidate, validationRulesNewQuiz);
+    const menuSelectErrors = validateMenuSelect(menuSelectToValidate, validationRulesSelect);
+
+    // Récupère la validation des questions, réponses et boutons radio
+    const questionsErrors = validateQuestions(quizDataToValidate);
+
+    //* Rassemble toutes les erreurs dans un nouvel objet
+    const errors = {
+      title: fieldsErrors.errors.title,
+      description: fieldsErrors.errors.description,
+      thumbnail: fieldsErrors.errors.thumbnail,
+      level_id: menuSelectErrors.errors.level_id,
+      tag_id: menuSelectErrors.errors.tag_id,
+      questions: questionsErrors.errors,
     };
     console.log('TOTAL !!!!! errors', errors);
+    // Mise à jour du state avec les messages d'erreurs du frontend
+    setErrorInputMsg(errors);
+    console.log('fieldsErrors.hasError', fieldsErrors.hasError);
+    console.log('menuSelectErrors.hasError', menuSelectErrors.hasError);
+    console.log('questionsErrors.hasError', questionsErrors.hasError);
+    // eslint-disable-next-line no-unneeded-ternary
+    const isAllowToSubmit = (!fieldsErrors.hasError
+      && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
+    console.log('isAllowToSubmit CREATQUIZ', isAllowToSubmit);
 
-    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
-
-    // Gère la soumission du formulaire
-    handleFormSubmit(errors); */
+    //* Gère la soumission du formulaire
+    handleFormSubmit(isAllowToSubmit);
   };
+
+  // Génère un tableau de nombres de 1 à numberOfQuestions pour boucler et afficher les questions
+  const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
 
   return (
     <div className="quiz__creation">
@@ -257,8 +277,16 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'title')}
             name="title"
             fullWidth
-            error={getError(errorInputMsg, 'title')}
-            helperText={getHelperText(errorInputMsg, 'title', `${newQuiz.title.length}/150 caractères maximum`)}
+            error={
+              errorInputMsg.title !== undefined
+              && errorInputMsg.title !== ''
+            }
+            helperText={
+              errorInputMsg.title !== undefined
+              && errorInputMsg.title !== ''
+                ? errorInputMsg.title
+                : `${newQuiz.title.length}/150 caractères maximum`
+            }
           />
 
           {/* //? ======= Choix de la description ========== */}
@@ -271,8 +299,18 @@ function QuizCreate({
             fullWidth
             multiline
             rows={4}
-            error={getError(errorInputMsg, 'description')}
-            helperText={getHelperText(errorInputMsg, 'description', `${newQuiz.description.length}/300 caractères maximum`)}
+            error={
+              errorInputMsg.description !== undefined
+              && errorInputMsg.description !== ''
+            }
+            helperText={
+              errorInputMsg.description !== undefined
+              && errorInputMsg.description !== ''
+                ? errorInputMsg.description
+                : `${newQuiz.description.length}/300 caractères maximum`
+            }
+/*             error={getError(errorInputMsg, 'description')}
+            helperText={getHelperText(errorInputMsg, 'description', `${newQuiz.description.length}/300 caractères maximum`)} */
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
@@ -283,14 +321,25 @@ function QuizCreate({
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             name="thumbnail"
             fullWidth
-            error={getError(errorInputMsg, 'thumbnail')}
-            helperText={getHelperText(errorInputMsg, 'thumbnail', 'Coller l\'url de l\'image')}
+            error={
+              errorInputMsg.thumbnail !== undefined
+              && errorInputMsg.thumbnail !== ''
+            }
+            helperText={
+              errorInputMsg.thumbnail !== undefined
+              && errorInputMsg.thumbnail !== ''
+                ? errorInputMsg.thumbnail
+                : 'Coller l\'url de l\'image'
+            }
+/*             error={getError(errorInputMsg, 'thumbnail')}
+            helperText={getHelperText(errorInputMsg, 'thumbnail', 'Coller l\'url de l\'image')} */
           />
         </fieldset>
         <fieldset className="quiz__questions">
           {questionNumbers.map((questionNumber) => {
             const questionIndex = questionNumber - 1;
             const questionToUpdate = newQuestions[questionIndex];
+            const questionError = errorInputMsg.questions[questionIndex];
             return (
               <QuestionCreate
                 key={questionNumber}
@@ -301,6 +350,8 @@ function QuizCreate({
                 }
                 errorInputMsg={errorInputMsg}
                 setErrorInputMsg={setErrorInputMsg}
+                questionError={questionError}
+
               />
             );
           })}

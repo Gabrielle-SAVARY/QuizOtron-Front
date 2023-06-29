@@ -9,7 +9,7 @@ import {
   clearInputsAndErrors,
   login,
 } from '../../store/reducers/user';
-import { validateFormFields } from '../../utils/validateFormField';
+import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesLogin } from '../../utils/validationsRules';
 import { IerrorFormLogin } from '../../@types/error';
 import Logo from '../../components/Logo';
@@ -67,11 +67,15 @@ function Login() {
   };
 
   //* Envoi du formulaire au backend si aucune erreur
-  const handleFormSubmit = (errors: { [key: string]: string }) => {
+  const handleFormSubmit = (isAllowed:boolean) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
     // et on vérifie sa longueur
     // Si vide alors pas d'erreur: faire la requête POST au backend
+    /*     console.log('Object.keys(errors)', Object.keys(errors));
     if (Object.keys(errors).length === 0) {
+      dispatch(login());
+    } */
+    if (isAllowed) {
       dispatch(login());
     }
   };
@@ -85,13 +89,17 @@ function Login() {
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateFormFields(dataToValidate, validationRulesLogin);
+    const errors = validateTextFields(dataToValidate, validationRulesLogin);
+    console.log('errors', errors);
 
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
+    setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
+
+    const isAllowToSubmit = !errors.hasError;
+    console.log('isAllowToSubmit', isAllowToSubmit);
 
     // Gère la soumission du formulaire
-    handleFormSubmit(errors);
+    handleFormSubmit(isAllowToSubmit);
   };
 
   return (

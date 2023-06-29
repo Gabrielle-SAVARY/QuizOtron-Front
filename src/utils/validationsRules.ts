@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { IValidationRule } from '../@types/error';
+import { IValidationNumberRule, IValidationRule } from '../@types/error';
 
 // Règles de validation du champ 'email'
 const validateEmail = (value: string): string => {
@@ -80,6 +80,8 @@ const validatePseudo = (value: string): string => {
 
 // Règles de validation du champ 'title' d'un quiz
 const validateTitle = (value: string): string => {
+  console.log('validateTitle', value);
+
   if (value.trim() === '') {
     return 'Le champs "titre" ne peut pas être vide.';
   }
@@ -106,19 +108,20 @@ const validateThumbnail = (value: string): string => {
   return '';
 };
 // Règles de validation du champ 'tag'/catégorie d'un quiz
-const validateCategory = (value: string): string => {
-  if (value === 'choose option') {
+const validateCategory = (value: number): string => {
+  if (value === 0) {
     return 'Veuillez sélectionner une catégorie.';
   }
   return '';
 };
 // Règles de validation du champ 'level'/niveau de difficulté d'un quiz
-const validateLevel = (value: string): string => {
-  if (value === 'choose option') {
+const validateLevel = (value: number): string => {
+  if (value === 0) {
     return 'Veuillez sélectionner un niveau de difficulté.';
   }
   return '';
 };
+
 // Règles de validation pour les champs de type texte vides (utilisé pour les questions et réponses)
 export const validateNotEmpty = (value: string): string => {
   if (value.trim() === '') {
@@ -185,6 +188,10 @@ export const validationRulesNewQuiz: IValidationRule[] = [
     field: 'thumbnail',
     validate: validateThumbnail,
   },
+];
+
+// formulaire newQuiz/création d'un quiz
+export const validationRulesSelect: IValidationNumberRule[] = [
   {
     field: 'tag_id',
     validate: validateCategory,
