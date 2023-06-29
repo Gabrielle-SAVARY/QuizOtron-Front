@@ -64,12 +64,15 @@ function Register() {
   // Soumission du formulaire d'inscription
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Typepage de l'event.target
-    const form = event.target as HTMLFormElement;
+    // Données du state à valider avant envoi au backend
+    const dataToValidate = {
+      firstname, lastname, email, pseudo, password, passwordConfirm,
+    };
+    console.log('dataToValidate REGISTER', dataToValidate);
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateFormFields(form, validationRulesSignup);
+    const errors = validateFormFields(dataToValidate, validationRulesSignup);
 
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));

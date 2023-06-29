@@ -153,7 +153,7 @@ function QuizCreate({
     const form = event.target as HTMLFormElement;
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
-    const errors = {
+    /*     const errors = {
       ...validateFormFields(form, validationRulesNewQuiz),
       ...validateQuiz(form, 'question', validateNotEmpty),
       ...validateQuiz(form, 'answer', validateNotEmpty),
@@ -164,7 +164,7 @@ function QuizCreate({
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
 
     // Gère la soumission du formulaire
-    handleFormSubmit(errors);
+    handleFormSubmit(errors); */
   };
 
   return (
