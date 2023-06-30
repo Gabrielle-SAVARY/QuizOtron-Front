@@ -87,16 +87,6 @@ function QuizCreate({
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
   };
 
-  // Mise à jour de l'erreur d'une question spécifique dans newQuestions
-  // const handleUpdateQuestionError = (questionIndex: number, updatedQuestionError: QuestionError) => {
-  //   // Créer une copie du state newQuestions
-  //   const updatedQuestionsErrors = [...newQuestions];
-  //   // Sélection de la question en fonction de l'index
-  //   updatedQuestions[questionIndex] = updatedQuestion;
-  //   // Mise à jour du state newQuestions
-  //   setNewQuestions(updatedQuestions);
-  // };
-
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async (isAllowed: boolean) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
@@ -163,9 +153,9 @@ function QuizCreate({
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
     setErrorInputMsg(errors);
-    console.log('fieldsErrors.hasError', fieldsErrors.hasError);
-    console.log('menuSelectErrors.hasError', menuSelectErrors.hasError);
-    console.log('questionsErrors.hasError', questionsErrors.hasError);
+    // console.log('fieldsErrors.hasError', fieldsErrors.hasError);
+    // console.log('menuSelectErrors.hasError', menuSelectErrors.hasError);
+    // console.log('questionsErrors.hasError', questionsErrors.hasError);
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
@@ -182,10 +172,19 @@ function QuizCreate({
   const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
     // Créer une copie du state newQuestions
     const quizQuestions = [...newQuestions];
-    // Affecte la question mise à jour à la question sélectionnée
+    // On remplace avec la question mise à jour
     quizQuestions[questionIndex] = updatedQuestion;
-    // Mise à jour du state newQuestions avec la question mise à jour
+    // Mise à jour du state
     setNewQuestions(quizQuestions);
+  };
+    // Mise à jour d'une question dans newQuestions
+  const handleSetQuestionsErrors = (questionIndex: number, updatedQuestionError: QuestionError) => {
+    // Créer une copie du tableau contenant les erreurs des champs du formulaire sur les questions
+    const quizQuestionsErrors = [...errorInputMsg.questions];
+    // On remplace avec les nouvelles erreurs sur la question
+    quizQuestionsErrors[questionIndex] = updatedQuestionError;
+    // Mise à jour du state
+    setErrorInputMsg({ ...errorInputMsg, questions: quizQuestionsErrors });
   };
 
   return (
@@ -337,26 +336,25 @@ function QuizCreate({
           />
         </fieldset>
         <fieldset className="quiz__questions">
-          {questionNumbers.map((questionNumber) => {
-            const questionIndex = questionNumber - 1;
-            const currentQuestion = { ...newQuestions[questionIndex] };
-
-            const questionError = errorInputMsg.questions[questionIndex];
-            return (
-              <QuestionCreate
-                key={`question${questionNumber}`}
-                questionNumber={questionNumber}
-                currentQuestion={currentQuestion}
-                handleUpdateQuestion={
-                (updatedQuestion) => handleSetNewQuestions(questionIndex, updatedQuestion)
+          {questionNumbers.map((questionNumber) => (
+            <QuestionCreate
+              key={`question${questionNumber}`}
+              questionNumber={questionNumber}
+              newQuestions={newQuestions}
+              setNewQuestions={setNewQuestions}
+              handleUpdateQuestion={
+                (updatedQuestion) => handleSetNewQuestions((questionNumber - 1), updatedQuestion)
                 }
-                errorInputMsg={errorInputMsg}
-                setErrorInputMsg={setErrorInputMsg}
-                questionError={questionError}
-
-              />
-            );
-          })}
+              handleUpdateQuestionErrors={
+                  (updatedQuestionError) => handleSetQuestionsErrors(
+                    (questionNumber - 1),
+                    updatedQuestionError,
+                  )
+                  }
+              errorInputMsg={errorInputMsg}
+              setErrorInputMsg={setErrorInputMsg}
+            />
+          ))}
         </fieldset>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">Créer le Quiz</button>

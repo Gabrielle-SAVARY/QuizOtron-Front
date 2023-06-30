@@ -12,19 +12,41 @@ import { getError, getHelperText } from '../../../utils/showError';
 
 interface QuestionCreateProps {
   questionNumber: number
-  currentQuestion: Question
+  newQuestions: Question[]
+  setNewQuestions: (updatedQuestions: Question[]) => void
   handleUpdateQuestion: (updatedQuestion: Question) => void
-  // setNewQuestion: (updatedQuestion: Question) => void
+  handleUpdateQuestionErrors: (updatedQuestionError: QuestionError) => void
   errorInputMsg: IerrorFormNewQuiz
   setErrorInputMsg: (error: IerrorFormNewQuiz) => void
-  questionError: QuestionError
 }
 
 function QuestionCreate({
-  questionNumber, currentQuestion, handleUpdateQuestion,
-  errorInputMsg, setErrorInputMsg, questionError,
+  questionNumber, newQuestions, setNewQuestions, handleUpdateQuestion, handleUpdateQuestionErrors,
+  errorInputMsg, setErrorInputMsg,
 }:QuestionCreateProps) {
-  // const [isErrorRadio, setIsErrorRadio] = useState<boolean>(true);
+  // Index de la question (du state tableau newQuestions)
+  const questionIndex = questionNumber - 1;
+
+  // Copie du state des données de la question en cours
+  const copyNewQuestions = newQuestions.map((question) => ({
+    ...question,
+    answers: question.answers.map((answer) => ({ ...answer })),
+  }));
+  const currentQuestion = { ...copyNewQuestions[questionIndex] };
+
+  // Copie du state des données dees erreurs de la question en cours
+  const copyErrorInputMsg = {
+    ...errorInputMsg,
+    questions: errorInputMsg.questions.map((question) => ({
+      ...question,
+      answers: question.answers.map((answer) => ({ ...answer })),
+    })),
+  };
+  const questionError = {
+    ...copyErrorInputMsg.questions[questionIndex],
+    answers:
+    [...copyErrorInputMsg.questions[questionIndex].answers.map((answer) => ({ ...answer }))],
+  };
 
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on renseigne une question ou une réponse
@@ -35,9 +57,6 @@ function QuestionCreate({
     isRadioBtn = false,
   ) => {
     //* Etape 1 : On récupère le contenu du state newQuestion dans l'objet updatedQuestion
-    const updatedQuestion = { ...currentQuestion };
-    // TODO gérer la suppression de l'erreur au onChange
-    const updatedQuestionError = { ...questionError, answers: [...questionError.answers] };
     const answerIndex = answerNb - 1;
     const target = event.target as HTMLInputElement;
 
@@ -47,32 +66,34 @@ function QuestionCreate({
     // Si answerNb !== 0 ->  n'est pas une question, c'est une réponse
     if (answerNb === 0) {
       // pour typer la value de l'évenement on type précisement event.target
-      updatedQuestion.question = target.value;
+      currentQuestion.question = target.value;
+      questionError.question = '';
     } else if (!isRadioBtn) {
       //* INPUT TEXTE REPONSE
       // answerNb-1: index de la réponse pour commencer à index 0
-      updatedQuestion.answers[answerIndex].answer = target.value;
+      currentQuestion.answers[answerIndex].answer = target.value;
+
+      questionError.answers[answerIndex].answer = '';
     } else {
       //* BOUTON RADIO
       //* On réinitialise tous les boutons radios en mettant  is_valid:false
       // Correction de l'erreur eslint de la boucle for of avec un map
       // Avec map on crée un nouveau tableau à partir de updatedQuestion
-      const updatedAnswers = updatedQuestion.answers.map((answer) => ({
+      const updatedAnswers = currentQuestion.answers.map((answer) => ({
         ...answer,
         is_valid: false,
       }));
-      updatedQuestion.answers = updatedAnswers;
+      currentQuestion.answers = updatedAnswers;
 
       //* On enregistre la nouvelle réponse à true (sélection bouton radio)
-      updatedQuestion.answers[answerIndex].is_valid = true;
-      // setIsErrorRadio(false);
+      currentQuestion.answers[answerIndex].is_valid = true;
+      questionError.radioGroup = '';
     }
 
     //* On met à jour le state avec les données d'une question
-    handleUpdateQuestion(updatedQuestion);
-
+    handleUpdateQuestion(currentQuestion);
     //* On réinitialise le message d'erreur de l'input text
-    /*  setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' }); */
+    handleUpdateQuestionErrors(questionError);
   };
 
   return (
