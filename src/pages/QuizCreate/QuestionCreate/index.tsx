@@ -12,29 +12,30 @@ import { getError, getHelperText } from '../../../utils/showError';
 
 interface QuestionCreateProps {
   questionNumber: number
-  newQuestion: Question
-  setNewQuestion: (updatedQuestion: Question) => void
+  currentQuestion: Question
+  handleUpdateQuestion: (updatedQuestion: Question) => void
+  // setNewQuestion: (updatedQuestion: Question) => void
   errorInputMsg: IerrorFormNewQuiz
   setErrorInputMsg: (error: IerrorFormNewQuiz) => void
   questionError: QuestionError
 }
 
 function QuestionCreate({
-  questionNumber, newQuestion, setNewQuestion, errorInputMsg, setErrorInputMsg, questionError,
+  questionNumber, currentQuestion, handleUpdateQuestion,
+  errorInputMsg, setErrorInputMsg, questionError,
 }:QuestionCreateProps) {
-  const [isErrorRadio, setIsErrorRadio] = useState<boolean>(true);
+  // const [isErrorRadio, setIsErrorRadio] = useState<boolean>(true);
 
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on renseigne une question ou une réponse
   // isRadioBtn: boolean vérifie si on est sur un bouton radio
   const handleChangeQuestions = (
-    fieldName: string,
     event: SyntheticEvent<Element, Event>,
     answerNb = 0,
     isRadioBtn = false,
   ) => {
     //* Etape 1 : On récupère le contenu du state newQuestion dans l'objet updatedQuestion
-    const updatedQuestion = { ...newQuestion, answers: [...newQuestion.answers] };
+    const updatedQuestion = { ...currentQuestion };
     // TODO gérer la suppression de l'erreur au onChange
     const updatedQuestionError = { ...questionError, answers: [...questionError.answers] };
     const answerIndex = answerNb - 1;
@@ -64,11 +65,11 @@ function QuestionCreate({
 
       //* On enregistre la nouvelle réponse à true (sélection bouton radio)
       updatedQuestion.answers[answerIndex].is_valid = true;
-      setIsErrorRadio(false);
+      // setIsErrorRadio(false);
     }
 
     //* On met à jour le state avec les données d'une question
-    setNewQuestion(updatedQuestion);
+    handleUpdateQuestion(updatedQuestion);
 
     //* On réinitialise le message d'erreur de l'input text
     /*  setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' }); */
@@ -87,8 +88,8 @@ function QuestionCreate({
         label={`Question ${questionNumber}`}
         variant="outlined"
         name={`question${questionNumber}`}
-        onChange={(event) => handleChangeQuestions(`question${questionNumber}`, event)}
-        value={newQuestion.question}
+        onChange={(event) => handleChangeQuestions(event)}
+        value={currentQuestion.question}
         error={
           questionError.question !== undefined
           && questionError.question !== ''
@@ -97,7 +98,7 @@ function QuestionCreate({
           questionError.question !== undefined
           && questionError.question !== ''
             ? questionError.question
-            : `${newQuestion.question.length}/150 caractères maximum`
+            : `${currentQuestion.question.length}/150 caractères maximum`
         }
         /* error={getError(errorInputMsg, `question${questionNumber}`)}
         helperText={getHelperText(
@@ -125,7 +126,7 @@ function QuestionCreate({
                     value="answer1"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChangeQuestions('', event, 1, true)}
+                    onChange={(event) => handleChangeQuestions(event, 1, true)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -133,10 +134,10 @@ function QuestionCreate({
                     id={`answer1-q${questionNumber}`}
                     label="Réponse 1"
                     variant="outlined"
-                    name={`answerQ${questionNumber}A1`}
+                    name={`answer1-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A1`, event, 1)}
-                    value={newQuestion.answers[0].answer}
+                    onChange={(event) => handleChangeQuestions(event, 1)}
+                    value={currentQuestion.answers[0].answer}
                     error={
                       questionError.answers[0].answer !== undefined
                       && questionError.answers[0].answer !== ''
@@ -167,7 +168,7 @@ function QuestionCreate({
                     value="answer2"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChangeQuestions('', event, 2, true)}
+                    onChange={(event) => handleChangeQuestions(event, 2, true)}
                     name={`q${questionNumber}Answer2`}
                   />
                 </span>
@@ -176,10 +177,10 @@ function QuestionCreate({
                     id={`answer2-q${questionNumber}`}
                     label="Réponse 2"
                     variant="outlined"
-                    name={`answerQ${questionNumber}A2`}
+                    name={`answer2-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A2`, event, 2)}
-                    value={newQuestion.answers[1].answer}
+                    onChange={(event) => handleChangeQuestions(event, 2)}
+                    value={currentQuestion.answers[1].answer}
                     error={
                       questionError.answers[1].answer !== undefined
                       && questionError.answers[1].answer !== ''
@@ -209,7 +210,7 @@ function QuestionCreate({
                     value="answer3"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChangeQuestions('', event, 3, true)}
+                    onChange={(event) => handleChangeQuestions(event, 3, true)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -217,10 +218,10 @@ function QuestionCreate({
                     id={`answer3-q${questionNumber}`}
                     label="Réponse 3"
                     variant="outlined"
-                    name={`answerQ${questionNumber}A3`}
+                    name={`answer3-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A3`, event, 3)}
-                    value={newQuestion.answers[2].answer}
+                    onChange={(event) => handleChangeQuestions(event, 3)}
+                    value={currentQuestion.answers[2].answer}
                     error={
                       questionError.answers[2].answer !== undefined
                       && questionError.answers[2].answer !== ''
@@ -250,7 +251,7 @@ function QuestionCreate({
                     value="answer4"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChangeQuestions('', event, 4, true)}
+                    onChange={(event) => handleChangeQuestions(event, 4, true)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -258,10 +259,10 @@ function QuestionCreate({
                     id={`answer4-q${questionNumber}`}
                     label="Réponse 4"
                     variant="outlined"
-                    name={`answerQ${questionNumber}A4`}
+                    name={`answer4-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChangeQuestions(`answerQ${questionNumber}A4`, event, 4)}
-                    value={newQuestion.answers[3].answer}
+                    onChange={(event) => handleChangeQuestions(event, 4)}
+                    value={currentQuestion.answers[3].answer}
                     error={
                       questionError.answers[3].answer !== undefined
                       && questionError.answers[3].answer !== ''

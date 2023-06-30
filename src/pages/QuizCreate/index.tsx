@@ -87,16 +87,7 @@ function QuizCreate({
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
   };
 
-  // Mise à jour d'une question spécifique dans newQuestions
-  const handleUpdateQuestion = (questionIndex: number, updatedQuestion: Question) => {
-    // Créer une copie du state newQuestions
-    const updatedQuestions = [...newQuestions];
-    // Sélection de la question en fonction de l'index
-    updatedQuestions[questionIndex] = updatedQuestion;
-    // Mise à jour du state newQuestions
-    setNewQuestions(updatedQuestions);
-  };
-    // Mise à jour de l'erreur d'une question spécifique dans newQuestions
+  // Mise à jour de l'erreur d'une question spécifique dans newQuestions
   // const handleUpdateQuestionError = (questionIndex: number, updatedQuestionError: QuestionError) => {
   //   // Créer une copie du state newQuestions
   //   const updatedQuestionsErrors = [...newQuestions];
@@ -186,6 +177,16 @@ function QuizCreate({
 
   // Génère un tableau de nombres de 1 à numberOfQuestions pour boucler et afficher les questions
   const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
+
+  // Mise à jour d'une question dans newQuestions
+  const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
+    // Créer une copie du state newQuestions
+    const quizQuestions = [...newQuestions];
+    // Affecte la question mise à jour à la question sélectionnée
+    quizQuestions[questionIndex] = updatedQuestion;
+    // Mise à jour du state newQuestions avec la question mise à jour
+    setNewQuestions(quizQuestions);
+  };
 
   return (
     <div className="quiz__creation">
@@ -338,15 +339,16 @@ function QuizCreate({
         <fieldset className="quiz__questions">
           {questionNumbers.map((questionNumber) => {
             const questionIndex = questionNumber - 1;
-            const questionToUpdate = newQuestions[questionIndex];
+            const currentQuestion = { ...newQuestions[questionIndex] };
+
             const questionError = errorInputMsg.questions[questionIndex];
             return (
               <QuestionCreate
-                key={questionNumber}
+                key={`question${questionNumber}`}
                 questionNumber={questionNumber}
-                newQuestion={questionToUpdate}
-                setNewQuestion={
-                (updatedQuestion) => handleUpdateQuestion(questionIndex, updatedQuestion)
+                currentQuestion={currentQuestion}
+                handleUpdateQuestion={
+                (updatedQuestion) => handleSetNewQuestions(questionIndex, updatedQuestion)
                 }
                 errorInputMsg={errorInputMsg}
                 setErrorInputMsg={setErrorInputMsg}
