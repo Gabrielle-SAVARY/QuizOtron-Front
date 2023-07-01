@@ -153,9 +153,6 @@ function QuizCreate({
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
     setErrorInputMsg(errors);
-    // console.log('fieldsErrors.hasError', fieldsErrors.hasError);
-    // console.log('menuSelectErrors.hasError', menuSelectErrors.hasError);
-    // console.log('questionsErrors.hasError', questionsErrors.hasError);
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
@@ -168,23 +165,30 @@ function QuizCreate({
   // Génère un tableau de nombres de 1 à numberOfQuestions pour boucler et afficher les questions
   const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
 
-  // Mise à jour d'une question dans newQuestions
+  // Mise à jour d'une question
   const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
-    // Créer une copie du state newQuestions
-    const quizQuestions = [...newQuestions];
-    // On remplace avec la question mise à jour
-    quizQuestions[questionIndex] = updatedQuestion;
-    // Mise à jour du state
-    setNewQuestions(quizQuestions);
+    // Mise à jour du state en remplaçant la question à l'index par la nouvelle question
+    setNewQuestions(newQuestions.map((question, index) => {
+      if (index === questionIndex) {
+        return updatedQuestion;
+      }
+      return question;
+    }));
   };
-    // Mise à jour d'une question dans newQuestions
+    // Mise à jour des erreurs d'une question
   const handleSetQuestionsErrors = (questionIndex: number, updatedQuestionError: QuestionError) => {
-    // Créer une copie du tableau contenant les erreurs des champs du formulaire sur les questions
-    const quizQuestionsErrors = [...errorInputMsg.questions];
-    // On remplace avec les nouvelles erreurs sur la question
-    quizQuestionsErrors[questionIndex] = updatedQuestionError;
+    // Créer une copie du tableau et remplace avec les nouvelles erreurs sur la question à l'index
+    const updatedErrors = errorInputMsg.questions.map((question, index) => {
+      if (index === questionIndex) {
+        return updatedQuestionError;
+      }
+      return question;
+    });
     // Mise à jour du state
-    setErrorInputMsg({ ...errorInputMsg, questions: quizQuestionsErrors });
+    setErrorInputMsg({
+      ...errorInputMsg,
+      questions: updatedErrors,
+    });
   };
 
   return (
@@ -341,18 +345,9 @@ function QuizCreate({
               key={`question${questionNumber}`}
               questionNumber={questionNumber}
               newQuestions={newQuestions}
-              setNewQuestions={setNewQuestions}
-              handleUpdateQuestion={
-                (updatedQuestion) => handleSetNewQuestions((questionNumber - 1), updatedQuestion)
-                }
-              handleUpdateQuestionErrors={
-                  (updatedQuestionError) => handleSetQuestionsErrors(
-                    (questionNumber - 1),
-                    updatedQuestionError,
-                  )
-                  }
               errorInputMsg={errorInputMsg}
-              setErrorInputMsg={setErrorInputMsg}
+              handleSetNewQuestions={handleSetNewQuestions}
+              handleSetQuestionsErrors={handleSetQuestionsErrors}
             />
           ))}
         </fieldset>
