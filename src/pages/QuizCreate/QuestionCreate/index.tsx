@@ -49,48 +49,63 @@ function QuestionCreate({
     [...copyErrorInputMsg.questions[questionIndex].answers.map((answer) => ({ ...answer }))],
   };
 
-  //* Mise à jour du state au remplissage du formulaire
-  // answerNb: si différent de 0 alors c'est sur une réponse
-  // isRadioBtn: boolean vérifie si on est sur un bouton radio
-  const handleChange = (
-    event: SyntheticEvent<Element, Event>,
-    answerNb = 0,
-    isRadioBtn = false,
+  //* Déclenche les fonctions pour mettre à jour les states des questions et des erreurs
+  const handleStateUpdate = (
+    indexQuestion: number,
+    questionToUpdate: Question,
+    errorToUpdate: QuestionError,
   ) => {
-    // Index de la réponse (du state tableau newQuestions)
-    const answerIndex = answerNb - 1;
+    // On met à jour le state avec les données d'une question
+    handleSetNewQuestions(indexQuestion, questionToUpdate);
+    // On réinitialise le message d'erreur du champs mis à jour
+    handleSetQuestionsErrors(indexQuestion, errorToUpdate);
+  };
+
+  // Mise à jour du champs question
+  const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
     // On réccupère et on type la cible de l'évenement
     const target = event.target as HTMLInputElement;
+    // On récupère la valeur de l'input et on l'affecte à la copie du state
+    currentQuestion.question = target.value;
+    // On efface l'erreur concernant l'input
+    questionError.question = '';
+    handleStateUpdate(indexQuestion, currentQuestion, questionError);
+  };
 
-    //* Champs texte de la question
-    if (answerNb === 0) {
-      // On récupère la valeur de l'input et on l'affecte à la copie du state
-      currentQuestion.question = target.value;
-      // On efface l'erreur concernant l'input
-      questionError.question = '';
-    } else if (!isRadioBtn) {
-      //* Champs texte des réponses (on exclut les boutons radios)
-      currentQuestion.answers[answerIndex].answer = target.value;
-      questionError.answers[answerIndex].answer = '';
-    } else {
-      //* Bouton radio
-      // On réinitialise tous les boutons radios en mettant  is_valid:false avec un map
-      const updatedAnswers = currentQuestion.answers.map((answer) => ({
-        ...answer,
-        is_valid: false,
-      }));
-      currentQuestion.answers = updatedAnswers;
-      // On enregistre la nouvelle réponse à true (sélection bouton radio)
-      currentQuestion.answers[answerIndex].is_valid = true;
-      // On efface l'erreur sur le groupe de boutons radios
-      // la sélection d'un bouton indique qu'une réponse sera toujours sélectionnée
-      questionError.radioGroup = '';
-    }
+  //* Mise à jour du champs d'une réponse
+  const handleChangeAnswer = (
+    event: SyntheticEvent<Element, Event>,
+    indexQuestion: number,
+    AnswerNumber: number,
+  ) => {
+    // On réccupère et on type la cible de l'évenement
+    const target = event.target as HTMLInputElement;
+    // Index de la réponse (du state tableau newQuestions)
+    const answerIndex = AnswerNumber - 1;
+    currentQuestion.answers[answerIndex].answer = target.value;
+    questionError.answers[answerIndex].answer = '';
+    handleStateUpdate(indexQuestion, currentQuestion, questionError);
+  };
 
-    //* On met à jour le state avec les données d'une question
-    handleSetNewQuestions(questionIndex, currentQuestion);
-    //* On réinitialise le message d'erreur de l'input text
-    handleSetQuestionsErrors(questionIndex, questionError);
+  //* Mise à jour lors de la sélection d'un bouton radio
+  const handleChangeRadioBtn = (
+    indexQuestion: number,
+    AnswerNumber: number,
+  ) => {
+    // Index de la réponse (du state tableau newQuestions)
+    const answerIndex = AnswerNumber - 1;
+    // On réinitialise tous les boutons radios en mettant  is_valid:false avec un map
+    const updatedAnswers = currentQuestion.answers.map((answer) => ({
+      ...answer,
+      is_valid: false,
+    }));
+    currentQuestion.answers = updatedAnswers;
+    // On enregistre la nouvelle réponse à true (sélection bouton radio)
+    currentQuestion.answers[answerIndex].is_valid = true;
+    // On efface l'erreur sur le groupe de boutons radios
+    // la sélection d'un bouton indique qu'une réponse sera toujours sélectionnée
+    questionError.radioGroup = '';
+    handleStateUpdate(indexQuestion, currentQuestion, questionError);
   };
 
   return (
@@ -106,7 +121,7 @@ function QuestionCreate({
         label={`Question ${questionNumber}`}
         variant="outlined"
         name={`question${questionNumber}`}
-        onChange={(event) => handleChange(event)}
+        onChange={(event) => handleChangeQuestion(event, questionIndex)}
         value={currentQuestion.question}
         error={
           questionError.question !== undefined
@@ -144,7 +159,7 @@ function QuestionCreate({
                     value="answer1"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChange(event, 1, true)}
+                    onChange={() => handleChangeRadioBtn(questionIndex, 1)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -154,7 +169,7 @@ function QuestionCreate({
                     variant="outlined"
                     name={`answer1-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChange(event, 1)}
+                    onChange={(event) => handleChangeAnswer(event, questionIndex, 1)}
                     value={currentQuestion.answers[0].answer}
                     error={
                       questionError.answers[0].answer !== undefined
@@ -186,7 +201,7 @@ function QuestionCreate({
                     value="answer2"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChange(event, 2, true)}
+                    onChange={() => handleChangeRadioBtn(questionIndex, 2)}
                     name={`q${questionNumber}Answer2`}
                   />
                 </span>
@@ -197,7 +212,7 @@ function QuestionCreate({
                     variant="outlined"
                     name={`answer2-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChange(event, 2)}
+                    onChange={(event) => handleChangeAnswer(event, questionIndex, 2)}
                     value={currentQuestion.answers[1].answer}
                     error={
                       questionError.answers[1].answer !== undefined
@@ -228,7 +243,7 @@ function QuestionCreate({
                     value="answer3"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChange(event, 3, true)}
+                    onChange={() => handleChangeRadioBtn(questionIndex, 3)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -238,7 +253,7 @@ function QuestionCreate({
                     variant="outlined"
                     name={`answer3-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChange(event, 3)}
+                    onChange={(event) => handleChangeAnswer(event, questionIndex, 3)}
                     value={currentQuestion.answers[2].answer}
                     error={
                       questionError.answers[2].answer !== undefined
@@ -269,7 +284,7 @@ function QuestionCreate({
                     value="answer4"
                     control={<Radio />}
                     label=""
-                    onChange={(event) => handleChange(event, 4, true)}
+                    onChange={() => handleChangeRadioBtn(questionIndex, 4)}
                   />
                 </span>
                 <span className="answer_input-text">
@@ -279,7 +294,7 @@ function QuestionCreate({
                     variant="outlined"
                     name={`answer4-q${questionNumber}`}
                     fullWidth
-                    onChange={(event) => handleChange(event, 4)}
+                    onChange={(event) => handleChangeAnswer(event, questionIndex, 4)}
                     value={currentQuestion.answers[3].answer}
                     error={
                       questionError.answers[3].answer !== undefined
