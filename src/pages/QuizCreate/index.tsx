@@ -8,7 +8,6 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
-import { getError, getHelperText } from '../../utils/showError';
 import { validateNotEmpty, validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
 import { IerrorFormNewQuiz, QuestionError } from '../../@types/error';
@@ -17,7 +16,6 @@ import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
 import QuestionCreate from './QuestionCreate';
 import './styles.scss';
-import { numberOfQuestions } from '../../utils/constants';
 import { initialNewQuestions, initialQuestionErrors } from '../../utils/createModels';
 // TODO supprimer les consoles log
 
@@ -31,6 +29,8 @@ function QuizCreate({
   tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
   const navigate = useNavigate();
+  // Nombre de  questions par quiz
+  const numberOfQuestions = 10;
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
@@ -162,9 +162,6 @@ function QuizCreate({
     handleFormSubmit(isAllowToSubmit);
   };
 
-  // Génère un tableau de nombres de 1 à numberOfQuestions pour boucler et afficher les questions
-  const questionNumbers = Array.from({ length: numberOfQuestions }, (_, index) => index + 1);
-
   // Mise à jour d'une question
   const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
     // Mise à jour du state en remplaçant la question à l'index par la nouvelle question
@@ -278,8 +275,9 @@ function QuizCreate({
             id="input-title"
             label="Titre du quiz"
             variant="outlined"
-            onChange={(event) => handleChangeQuizData(event, 'title')}
             name="title"
+            value={newQuiz.title}
+            onChange={(event) => handleChangeQuizData(event, 'title')}
             fullWidth
             error={
               errorInputMsg.title !== undefined
@@ -298,8 +296,9 @@ function QuizCreate({
             id="input-description"
             label="Description du quiz"
             variant="outlined"
-            onChange={(event) => handleChangeQuizData(event, 'description')}
             name="description"
+            value={newQuiz.description}
+            onChange={(event) => handleChangeQuizData(event, 'description')}
             fullWidth
             multiline
             rows={4}
@@ -313,8 +312,6 @@ function QuizCreate({
                 ? errorInputMsg.description
                 : `${newQuiz.description.length}/300 caractères maximum`
             }
-/*             error={getError(errorInputMsg, 'description')}
-            helperText={getHelperText(errorInputMsg, 'description', `${newQuiz.description.length}/300 caractères maximum`)} */
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
@@ -322,8 +319,9 @@ function QuizCreate({
             id="input-thumbnail"
             label="Image du quiz"
             variant="outlined"
-            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             name="thumbnail"
+            value={newQuiz.thumbnail}
+            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             fullWidth
             error={
               errorInputMsg.thumbnail !== undefined
@@ -335,15 +333,15 @@ function QuizCreate({
                 ? errorInputMsg.thumbnail
                 : 'Coller l\'url de l\'image'
             }
-/*             error={getError(errorInputMsg, 'thumbnail')}
-            helperText={getHelperText(errorInputMsg, 'thumbnail', 'Coller l\'url de l\'image')} */
           />
         </fieldset>
         <fieldset className="quiz__questions">
-          {questionNumbers.map((questionNumber) => (
+          {newQuestions.map((question, index) => (
             <QuestionCreate
-              key={`question${questionNumber}`}
-              questionNumber={questionNumber}
+              key={`question${index + 1}`}
+              questionIndex={index}
+              questionData={question}
+              errorData={errorInputMsg.questions[index]}
               newQuestions={newQuestions}
               errorInputMsg={errorInputMsg}
               handleSetNewQuestions={handleSetNewQuestions}
