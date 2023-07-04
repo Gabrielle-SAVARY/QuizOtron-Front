@@ -47,20 +47,21 @@ function QuestionCreate({
     questionToUpdate: Question,
     errorToUpdate: QuestionError,
   ) => {
-    // On met à jour le state avec les données d'une question
+    // Met à jour le state avec les données d'une question
     handleSetNewQuestions(indexQuestion, questionToUpdate);
-    // On réinitialise le message d'erreur du champs mis à jour
+    // Réinitialise le message d'erreur du champs mis à jour
     handleSetQuestionsErrors(indexQuestion, errorToUpdate);
   };
 
   // Mise à jour du champs question
   const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-    // On réccupère et on type la cible de l'évenement
+    // Récupère et type la cible de l'évenement
     const target = event.target as HTMLInputElement;
-    // On récupère la valeur de l'input et on l'affecte à la copie du state
+    // Récupère la valeur de l'input et l'affecte à la copie du state
     currentQuestion.question = target.value;
-    // On efface l'erreur concernant l'input
+    // Efface l'erreur concernant l'input à la copie du state
     currentQuestionError.question = '';
+    // Mise à jour des states
     handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
   };
 
@@ -68,35 +69,35 @@ function QuestionCreate({
   const handleChangeAnswer = (
     event: SyntheticEvent<Element, Event>,
     indexQuestion: number,
-    answerNumber: number,
+    indexAnswer: number,
   ) => {
-    // On réccupère et on type la cible de l'évenement
+    // Récupère et type la cible de l'évenement
     const target = event.target as HTMLInputElement;
-    // Index de la réponse (du state tableau newQuestions)
-    const answerIndex = answerNumber - 1;
-    currentQuestion.answers[answerIndex].answer = target.value;
-    currentQuestionError.answers[answerIndex].answer = '';
+    // Récupère la valeur de l'input et l'affecte à la copie du state
+    currentQuestion.answers[indexAnswer].answer = target.value;
+    // Efface l'erreur concernant l'input à la copie du state
+    currentQuestionError.answers[indexAnswer].answer = '';
+    // Mise à jour des states
     handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
   };
 
   //* Mise à jour lors de la sélection d'un bouton radio
   const handleChangeRadioBtn = (
     indexQuestion: number,
-    AnswerNumber: number,
+    indexAnswer: number,
   ) => {
-    // Index de la réponse (du state tableau newQuestions)
-    const answerIndex = AnswerNumber - 1;
-    // On réinitialise tous les boutons radios en mettant  is_valid:false avec un map
+    // Réinitialise tous les boutons radios à false
     const updatedAnswers = currentQuestion.answers.map((answer) => ({
       ...answer,
       is_valid: false,
     }));
     currentQuestion.answers = updatedAnswers;
-    // On enregistre la nouvelle réponse à true (sélection bouton radio)
-    currentQuestion.answers[answerIndex].is_valid = true;
-    // On efface l'erreur sur le groupe de boutons radios
+    // Enregistre la nouvelle réponse à true (sélection bouton radio)
+    currentQuestion.answers[indexAnswer].is_valid = true;
+    // Efface l'erreur sur le groupe de boutons radios
     // la sélection d'un bouton indique qu'une réponse sera toujours sélectionnée
     currentQuestionError.radioGroup = '';
+    // Mise à jour des states
     handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
   };
 

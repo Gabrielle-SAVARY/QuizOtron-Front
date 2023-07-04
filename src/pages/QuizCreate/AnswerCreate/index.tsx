@@ -24,7 +24,7 @@ function AnswerCreate({
             value={`answer${answerIndex + 1}`}
             control={<Radio />}
             label=""
-            onChange={() => onChangeRadio(questionIndex, answerIndex + 1)}
+            onChange={() => onChangeRadio(questionIndex, answerIndex)}
           />
         </span>
         <span className="answer_input-text">
@@ -34,7 +34,7 @@ function AnswerCreate({
             variant="outlined"
             name={`answer${answerIndex + 1}-q${questionIndex + 1}`}
             fullWidth
-            onChange={(event) => onChangeAnswer(event, questionIndex, answerIndex + 1)}
+            onChange={(event) => onChangeAnswer(event, questionIndex, answerIndex)}
             value={answer}
             error={answerErrorData.answer !== undefined
               && answerErrorData.answer !== ''}

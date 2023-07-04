@@ -64,7 +64,7 @@ function QuizCreate({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // Mise à jour de newQuiz
+  // Mise à jour de newQuiz: infos du quiz
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
     SelectChangeEvent<string> |
@@ -85,6 +85,32 @@ function QuizCreate({
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
+  };
+
+  // Mise à jour desdonnées d'une question: question, réponses, boutons radio
+  const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
+    // Mise à jour du state en remplaçant la question à l'index par la nouvelle question
+    setNewQuestions(newQuestions.map((question, index) => {
+      if (index === questionIndex) {
+        return updatedQuestion;
+      }
+      return question;
+    }));
+  };
+    // Mise à jour des erreurs d'une question
+  const handleSetQuestionsErrors = (questionIndex: number, updatedQuestionError: QuestionError) => {
+    // Créer une copie du tableau et remplace avec les nouvelles erreurs sur la question à l'index
+    const updatedErrors = errorInputMsg.questions.map((question, index) => {
+      if (index === questionIndex) {
+        return updatedQuestionError;
+      }
+      return question;
+    });
+    // Mise à jour du state
+    setErrorInputMsg({
+      ...errorInputMsg,
+      questions: updatedErrors,
+    });
   };
 
   //* Envoi du formulaire si aucune erreur
@@ -160,32 +186,6 @@ function QuizCreate({
 
     //* Gère la soumission du formulaire
     handleFormSubmit(isAllowToSubmit);
-  };
-
-  // Mise à jour d'une question
-  const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
-    // Mise à jour du state en remplaçant la question à l'index par la nouvelle question
-    setNewQuestions(newQuestions.map((question, index) => {
-      if (index === questionIndex) {
-        return updatedQuestion;
-      }
-      return question;
-    }));
-  };
-    // Mise à jour des erreurs d'une question
-  const handleSetQuestionsErrors = (questionIndex: number, updatedQuestionError: QuestionError) => {
-    // Créer une copie du tableau et remplace avec les nouvelles erreurs sur la question à l'index
-    const updatedErrors = errorInputMsg.questions.map((question, index) => {
-      if (index === questionIndex) {
-        return updatedQuestionError;
-      }
-      return question;
-    });
-    // Mise à jour du state
-    setErrorInputMsg({
-      ...errorInputMsg,
-      questions: updatedErrors,
-    });
   };
 
   return (
