@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { IQuizList } from '../../@types/quizList';
-import './styles.scss';
-import { IOneQuiz } from '../../@types/quiz';
 import Card from '../../components/Card';
+import './styles.scss';
 
 interface HomeProps {
   quizList: IQuizList[]

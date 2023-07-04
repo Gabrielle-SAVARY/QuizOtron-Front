@@ -85,7 +85,6 @@ function Login() {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
     const dataToValidate = { email, password };
-    console.log('dataToValidate LOGIN', dataToValidate);
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
@@ -96,7 +95,6 @@ function Login() {
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
 
     const isAllowToSubmit = !errors.hasError;
-    console.log('isAllowToSubmit', isAllowToSubmit);
 
     // Gère la soumission du formulaire
     handleFormSubmit(isAllowToSubmit);

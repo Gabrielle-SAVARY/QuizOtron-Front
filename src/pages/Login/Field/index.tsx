@@ -30,7 +30,7 @@ function Field({
         id={inputId}
         type={type}
         value={value}
-        onChangeField={handleChangeField}
+        onChange={handleChangeField}
         placeholder={placeholder}
         className="field__input"
       />
