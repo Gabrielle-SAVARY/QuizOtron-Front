@@ -7,6 +7,7 @@
   align-items: center;
   flex-direction: column;
   background-color: white;
+  padding-top: vars.$headerHeight; 
 }
 
 .quiz__parameter {
@@ -16,7 +17,12 @@
   flex-direction: column;
   margin-bottom: 1rem;
   gap: 1.5rem;
+
+
 }
+.quiz__questions{
+}
+
 
 .quiz__selector {
   margin-bottom: 1rem;
@@ -30,6 +36,11 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.quiz__header p {
+  font-size: 1rem;
 }
 .quiz__button {
   font-family: 'Poppins', sans-serif;

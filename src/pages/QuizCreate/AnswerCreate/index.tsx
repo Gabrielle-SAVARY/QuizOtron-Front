@@ -7,7 +7,7 @@ interface AnswerCreateProps {
   questionIndex:number
   answerIndex: number;
   answer: string;
-  answerErrorData: AnswerError;
+  currentAnswerError: AnswerError;
   onChangeRadio: (indexQuestion: number, answerNumber: number,) => void;
   onChangeAnswer: (event: SyntheticEvent<Element, Event>,
     indexQuestion: number, answerNumber: number) => void;
@@ -18,7 +18,7 @@ const AnswerCreate = memo(
     questionIndex,
     answerIndex,
     answer,
-    answerErrorData,
+    currentAnswerError,
     onChangeRadio,
     onChangeAnswer,
   }: AnswerCreateProps) => {
@@ -43,10 +43,10 @@ const AnswerCreate = memo(
               fullWidth
               onChange={(event) => onChangeAnswer(event, questionIndex, answerIndex)}
               value={answer}
-              error={answerErrorData.answer !== undefined && answerErrorData.answer !== ''}
+              error={currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''}
               helperText={
-                answerErrorData.answer !== undefined && answerErrorData.answer !== ''
-                  ? answerErrorData.answer
+                currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''
+                  ? currentAnswerError.answer
                   : ''
               }
             />

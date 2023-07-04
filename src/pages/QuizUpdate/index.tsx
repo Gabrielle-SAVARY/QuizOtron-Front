@@ -495,7 +495,7 @@ function QuizUpdate({
   };
 
   return (
-    <div className="quiz__creation">
+    <div className="quiz__update">
       <div className="quiz__header">
         <h3>Mise à jour du quiz</h3>
         <Link to="/profile/quiz">

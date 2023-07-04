@@ -8,15 +8,16 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import { initialNewQuestions, initialQuestionErrors} from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
-import { IerrorFormNewQuiz, QuestionError } from '../../@types/error';
+import { IerrorFormNewQuiz} from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
 import QuestionCreate from './QuestionCreate';
 import './styles.scss';
-import { initialNewQuestions, initialQuestionErrors } from '../../utils/createModels';
+import axios from 'axios';
 // TODO supprimer les consoles log
 
 interface QuizCreateProps {
@@ -35,6 +36,8 @@ function QuizCreate({
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
 
+  const [errorBackend, setErrorBackend] = useState<string>('');
+
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
@@ -46,9 +49,7 @@ function QuizCreate({
   });
 
   // Stock le tableau des questions et des réponses du quiz
-  const [newQuestions, setNewQuestions] = useState<Question[]>(
-    initialNewQuestions(numberOfQuestions),
-  );
+  const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions(numberOfQuestions));
 
   // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({
@@ -87,38 +88,9 @@ function QuizCreate({
     setErrorInputMsg({ ...errorInputMsg, [field]: '' });
   };
 
-  // Mise à jour desdonnées d'une question: question, réponses, boutons radio
-  const handleSetNewQuestions = (questionIndex: number, updatedQuestion: Question) => {
-    // Mise à jour du state en remplaçant la question à l'index par la nouvelle question
-    setNewQuestions(newQuestions.map((question, index) => {
-      if (index === questionIndex) {
-        return updatedQuestion;
-      }
-      return question;
-    }));
-  };
-    // Mise à jour des erreurs d'une question
-  const handleSetQuestionsErrors = (questionIndex: number, updatedQuestionError: QuestionError) => {
-    // Créer une copie du tableau et remplace avec les nouvelles erreurs sur la question à l'index
-    const updatedErrors = errorInputMsg.questions.map((question, index) => {
-      if (index === questionIndex) {
-        return updatedQuestionError;
-      }
-      return question;
-    });
-    // Mise à jour du state
-    setErrorInputMsg({
-      ...errorInputMsg,
-      questions: updatedErrors,
-    });
-  };
-
+  
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async (isAllowed: boolean) => {
-    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
-    // et on vérifie sa longueur
-    // Si vide alors pas d'erreur: faire la requête POST au backend
-
     if (isAllowed) {
       // Envoi des données au back
       // On affecte le state newQuiz à quiz
@@ -130,12 +102,22 @@ function QuizCreate({
         });
         if (response.status !== 200) throw new Error();
 
-        // On met à jour le state quizList
+        // Rappel API de la liste des quiz pour mettre à jour le state et les données
         fetchQuizList();
-        // On redirige vers la page de profile
+        // Vide le state des erreurs du backend
+        setErrorBackend('');
+        // Redirige vers la page de profile
         navigate('/profile/quiz');
       } catch (error) {
-        console.error(error);
+        // Gestion des erreurs, si statut 400 envoi d'un message d'erreur
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.status === 400) {
+            const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier que vous êtes  bien connecté et que tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
+            setErrorBackend(newErrorMsg);        }
+        } else {
+          console.error(error);
+        }
+        throw error;
       }
     }
   };
@@ -167,7 +149,7 @@ function QuizCreate({
     // Récupère la validation des questions, réponses et boutons radio
     const questionsErrors = validateQuestions(quizDataToValidate);
 
-    //* Rassemble toutes les erreurs dans un nouvel objet
+    //*Rassemble toutes les erreurs dans un nouvel objet
     const errors = {
       title: fieldsErrors.errors.title,
       description: fieldsErrors.errors.description,
@@ -182,105 +164,132 @@ function QuizCreate({
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
-    console.log('isAllowToSubmit CREATQUIZ', isAllowToSubmit);
 
-    //* Gère la soumission du formulaire
+    //*Gère la soumission du formulaire
     handleFormSubmit(isAllowToSubmit);
   };
 
-   //* Mise à jour du champs d'une réponse
-   const handleChangeAnswer = useCallback(
-    (
-      event: SyntheticEvent<Element, Event>,
-      indexQuestion: number,
-      indexAnswer: number
-    ) => {
-      // Récupère et type la cible de l'évenement
-      const target = event.target as HTMLInputElement;
-      // Récupère la valeur de l'input et l'affecte à la copie du state
-      const newValue = target.value;
-      setNewQuestions((newQuestions: Question[]) =>
-        newQuestions.map((question, questionIndex) => {
-          if (questionIndex === indexQuestion) {
-            return {
-              ...question,
-              answers: question.answers.map((answer, answerIndex) => {
-                if (answerIndex === indexAnswer) {
-                  return {
-                    ...answer,
-                    answer: newValue,
-                  };
-                }
-                return answer;
-              }),
-            };
-          }
-          return question;
-        })
-      );
-    },
-    []
-  );
+  //* Mise à jour du state des erreurs si modification d'un champ question
+  const setErrorQuestion=(indexQuestion: number) => {
+    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
+      ...errorInputMsg,
+      questions: errorInputMsg.questions.map((questionError, index) => {
+        if (index === indexQuestion) {
+          return {
+            ...questionError,
+            question: '',
+          };
+        }
+        return questionError;
+      }),
+    }));
+  };
 
-  // const handleChangeQuestion = useCallback(
-  //   (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-  //   // Récupère et type la cible de l'évenement
-  //     const target = event.target as HTMLInputElement;
-  //     // Récupère la valeur de l'input et l'affecte à la copie du state
-  //     const newValue = target.value;
-  //     setNewQuestions((newQuestions: Question[]) => newQuestions.map((questionObject, questionIndex) => {
-  //       if (questionIndex === indexQuestion) {
-  //         return {
-  //           ...questionObject,
-  //           question: newValue,           
-  //         };
-  //       }
-  //       return questionObject;
-  //     })
-  //   );
-  //   },
-  //   [newQuestions, setNewQuestions],
-  // );
-  const handleChangeQuestion = useCallback(
-    (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-      // Récupère et type la cible de l'événement
-      const target = event.target as HTMLInputElement;
-      // Récupère la valeur de l'input et l'affecte à la copie du state
-      const newValue = target.value;
-      setNewQuestions((newQuestions: Question[]) =>
-        newQuestions.map((questionObject, questionIndex) => {
-          if (questionIndex === indexQuestion) {
-            return {
-              ...questionObject,
-              question: newValue,
-            };
-          }
-          return questionObject;
-        })
-      );
-    },
-    []
-  );
+ //* Mise à jour du state des erreurs si modification d'un champ réponse
+ const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
+  setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
+    ...errorInputMsg,
+    questions: errorInputMsg.questions.map((questionError, index) => {
+      if (index === indexQuestion) {
+        return {
+          ...questionError,
+          answers: questionError.answers.map((answerError, answerIndex) => {
+            if (answerIndex === indexAnswer) {
+              return {
+                ...answerError,
+                answer: '',
+              };
+            }
+            return answerError;
+          }),
+        };
+      }
+      return questionError;
+    }),
+  }));
+ };
 
+  //* Mise à jour du state des erreurs si sélection d'un bouton radio
+ const setErrorRadio =(indexQuestion: number) => {
+  setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
+    ...errorInputMsg,
+    questions: errorInputMsg.questions.map((questionError, index) => {
+      if (index === indexQuestion) {
+        return {
+          ...questionError,
+          radioGroup: '',
+        };
+      }
+      return questionError;
+    }),
+  }));
+ };
+
+   //* Mise à jour du champs d'une question
+   const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
+       // Récupère et type la cible de l'événement
+       const target = event.target as HTMLInputElement;
+       // Récupère la valeur de l'input et l'affecte à la copie du state
+       const newValue = target.value;
+       console.log('indexQuestion',indexQuestion);
+       setNewQuestions((newQuestions: Question[]) =>
+         newQuestions.map((questionObject, questionIndex) => {
+           if (questionIndex === indexQuestion) {
+             return {
+               ...questionObject,
+               question: newValue,              
+             };
+           }
+           return questionObject;
+         })
+       );
+        // Mise à jour du state errors
+        setErrorQuestion(indexQuestion);
+     };    
+
+  //* Mise à jour du champs d'une réponse
+  const handleChangeAnswer = useCallback(
+  (
+    event: SyntheticEvent<Element, Event>,
+    indexQuestion: number,
+    indexAnswer: number
+  ) => {
+    // Récupère et type la cible de l'évenement
+    const target = event.target as HTMLInputElement;
+    // Récupère la valeur de l'input 
+    const newValue = target.value;
+    // Mise à jour du state
+    setNewQuestions((newQuestions: Question[]) =>
+      newQuestions.map((question, questionIndex) => {
+        if (questionIndex === indexQuestion) {
+          return {
+            ...question,
+            answers: question.answers.map((answer, answerIndex) => {
+              if (answerIndex === indexAnswer) {
+                return {
+                  ...answer,
+                  answer: newValue,
+                };
+              }
+              return answer;
+            }),
+          };
+        }
+        return question;
+      })
+    );
+    // Mise à jour du state des erreurs
+    setErrorAnswer(indexQuestion, indexAnswer);
+  },
+  []
+);
+
+//* Mise à jour sélection d'un bouton radio
   const handleChangeRadioBtn = useCallback(
     (
       indexQuestion: number,
       indexAnswer: number
     ) => {
-      setNewQuestions((newQuestions: Question[]) =>
-        newQuestions.map((question, ) => {          
-            return {
-              ...question,
-              answers: question.answers.map((answer) => {                
-                  return {
-                    ...answer,
-                    is_valid: false,
-                  }; 
-              }),
-            };   
-        })
-      );
-
       setNewQuestions((newQuestions: Question[]) =>
       newQuestions.map((question, questionIndex) => {
         if (questionIndex === indexQuestion) {
@@ -293,13 +302,18 @@ function QuizCreate({
                   is_valid: true,
                 };
               }
-              return answer;
+              return   {
+                ...answer,
+                is_valid: false,
+              };
             }),
           };
         }
         return question;
       })
     );
+    // Mise à jour du state des erreurs
+    setErrorRadio(indexQuestion);
     },
     []
   );
@@ -314,8 +328,8 @@ function QuizCreate({
             Quitter
           </button>
         </Link>
+      <p>tous les champs sont obligatoires</p>
       </div>
-      <div>tous les champs sont obligatoires</div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
 
@@ -457,22 +471,17 @@ function QuizCreate({
             <QuestionCreate
               key={`question${index + 1}`}
               questionIndex={index}
-              questionData={question}
-              errorData={errorInputMsg.questions[index]}
-              newQuestions={newQuestions}
-              errorInputMsg={errorInputMsg}
-              handleSetNewQuestions={handleSetNewQuestions}
-              handleSetQuestionsErrors={handleSetQuestionsErrors}
-              setNewQuestions={setNewQuestions}
+              currentQuestion={question}
+              currentQuestionError={errorInputMsg.questions[index]}
               onChangeQuestion={handleChangeQuestion}
               handleChangeAnswer={handleChangeAnswer}
               handleChangeRadioBtn={handleChangeRadioBtn}
             />
           ))}
         </fieldset>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">Créer le Quiz</button>
       </form>
+        {errorBackend !== '' && <div className="error-message">{errorBackend}</div>}
     </div>
   );
 }
