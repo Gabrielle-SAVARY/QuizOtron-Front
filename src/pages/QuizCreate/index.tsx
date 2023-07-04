@@ -8,7 +8,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
-import { validateNotEmpty, validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
+import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
 import { IerrorFormNewQuiz, QuestionError } from '../../@types/error';
 import { ILevel } from '../../@types/level';
@@ -61,7 +61,7 @@ function QuizCreate({
   });
 
   // Stock les messages d'erreurs du backend suite à la soumission du formulaire
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage] = useState<string>('');
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // Mise à jour de newQuiz: infos du quiz
@@ -198,7 +198,7 @@ function QuizCreate({
           </button>
         </Link>
       </div>
-      <div>tous les champs sont obligatories</div>
+      <div>tous les champs sont obligatoires</div>
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
 

@@ -1,5 +1,5 @@
-import { PayloadAction, createAction, createReducer } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import { createAction, createReducer } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';

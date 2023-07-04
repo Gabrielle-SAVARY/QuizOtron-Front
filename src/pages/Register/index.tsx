@@ -52,11 +52,11 @@ function Register() {
   };
 
   // Soumission du formulaire si aucune erreur
-  const handleFormSubmit = (errors: { [key: string]: string }) => {
+  const handleFormSubmit = (isAllowed:boolean) => {
     // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
     // et on vérifie sa longueur
     // Si vide alors pas d'erreur: faire la requête POST au backend
-    if (Object.keys(errors).length === 0) {
+    if (isAllowed) {
       dispatch(register());
     }
   };
@@ -68,16 +68,16 @@ function Register() {
     const dataToValidate = {
       firstname, lastname, email, pseudo, password, passwordConfirm,
     };
-    console.log('dataToValidate REGISTER', dataToValidate);
 
     // Résultat de la validation des champs du formulaire
     // errors: objet vide ou contient les messages d'erreurs
     const errors = validateTextFields(dataToValidate, validationRulesSignup);
 
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors }));
+    setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
+    const isAllowToSubmit = !errors.hasError;
     // Gère la soumission du formulaire
-    handleFormSubmit(errors);
+    handleFormSubmit(isAllowToSubmit);
   };
 
   return (
