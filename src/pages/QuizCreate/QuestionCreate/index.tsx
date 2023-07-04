@@ -1,7 +1,7 @@
 import {
   FormControl, RadioGroup, TextField, FormLabel,
 } from '@mui/material';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useCallback } from 'react';
 import { IerrorFormNewQuiz, QuestionError } from '../../../@types/error';
 import { Question } from '../../../@types/newQuiz';
 import './styles.scss';
@@ -15,12 +15,15 @@ interface QuestionCreateProps {
   errorInputMsg: IerrorFormNewQuiz
   handleSetNewQuestions: (questionIndex: number, updatedQuestion: Question) => void
   handleSetQuestionsErrors: (questionIndex: number, updatedQuestionError: QuestionError) => void
+  setNewQuestions: (newQuestions: Question[]) => void
+  handleChangeAnswer: (event: SyntheticEvent<Element, Event>, indexQuestion: number, indexAnswer: number) => void
 }
 
 function QuestionCreate({
   questionIndex, questionData, errorData, newQuestions,
-  errorInputMsg, handleSetNewQuestions, handleSetQuestionsErrors,
+  errorInputMsg, handleSetNewQuestions, handleSetQuestionsErrors,setNewQuestions, handleChangeAnswer
 }:QuestionCreateProps) {
+  console.log(`QCREATE ${questionIndex}`);
   //* Copie des states (pour pouvoir les modifier)
   // Copie du state des questions
   const copyNewQuestions = newQuestions.map((question) => ({
@@ -65,21 +68,55 @@ function QuestionCreate({
     handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
   };
 
-  //* Mise à jour du champs d'une réponse
-  const handleChangeAnswer = (
-    event: SyntheticEvent<Element, Event>,
-    indexQuestion: number,
-    indexAnswer: number,
-  ) => {
-    // Récupère et type la cible de l'évenement
-    const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input et l'affecte à la copie du state
-    currentQuestion.answers[indexAnswer].answer = target.value;
-    // Efface l'erreur concernant l'input à la copie du state
-    currentQuestionError.answers[indexAnswer].answer = '';
-    // Mise à jour des states
-    handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
-  };
+  // //* Mise à jour du champs d'une réponse
+  // const handleChangeAnswer = (
+  //   event: SyntheticEvent<Element, Event>,
+  //   indexQuestion: number,
+  //   indexAnswer: number,
+  // ) => {
+  //   // Récupère et type la cible de l'évenement
+  //   const target = event.target as HTMLInputElement;
+  //   // Récupère la valeur de l'input et l'affecte à la copie du state
+  //   currentQuestion.answers[indexAnswer].answer = target.value;
+  //   // Efface l'erreur concernant l'input à la copie du state
+  //   currentQuestionError.answers[indexAnswer].answer = '';
+  //   // Mise à jour des states
+  //   handleStateUpdate(indexQuestion, currentQuestion, currentQuestionError);
+  // };
+
+    // //* Mise à jour du champs d'une réponse
+    // const handleChangeAnswer = useCallback(
+    //   (
+    //     event: SyntheticEvent<Element, Event>,
+    //     indexQuestion: number,
+    //     indexAnswer: number
+    //   ) => {
+    //     // Récupère et type la cible de l'évenement
+    //     const target = event.target as HTMLInputElement;
+    //     // Récupère la valeur de l'input et l'affecte à la copie du state
+    //     const newValue = target.value;
+    //     setNewQuestions((newQuestions: Question[]) =>
+    //       newQuestions.map((question, questionIndex) => {
+    //         if (questionIndex === indexQuestion) {
+    //           return {
+    //             ...question,
+    //             answers: question.answers.map((answer, answerIndex) => {
+    //               if (answerIndex === indexAnswer) {
+    //                 return {
+    //                   ...answer,
+    //                   answer: newValue,
+    //                 };
+    //               }
+    //               return answer;
+    //             }),
+    //           };
+    //         }
+    //         return question;
+    //       })
+    //     );
+    //   },
+    //   []
+    // );
 
   //* Mise à jour lors de la sélection d'un bouton radio
   const handleChangeRadioBtn = (
@@ -144,7 +181,7 @@ function QuestionCreate({
                 answerIndex={index}
                 answer={answer.answer}
                 answerErrorData={errorData.answers[index]}
-                onChangeRadio={handleChangeRadioBtn}
+                // onChangeRadio={handleChangeRadioBtn}
                 onChangeAnswer={handleChangeAnswer}
               />
             ))}
