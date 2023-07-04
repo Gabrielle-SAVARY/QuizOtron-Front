@@ -8,7 +8,7 @@ interface AnswerCreateProps {
   answerIndex: number;
   answer: string;
   answerErrorData: AnswerError;
-  // onChangeRadio: (indexQuestion: number, answerNumber: number,) => void;
+  onChangeRadio: (indexQuestion: number, answerNumber: number,) => void;
   onChangeAnswer: (event: SyntheticEvent<Element, Event>,
     indexQuestion: number, answerNumber: number) => void;
 }
@@ -19,21 +19,21 @@ const AnswerCreate = memo(
     answerIndex,
     answer,
     answerErrorData,
-    // onChangeRadio,
+    onChangeRadio,
     onChangeAnswer,
   }: AnswerCreateProps) => {
     console.log(`${questionIndex} Answer${answerIndex}`);
     return (
       <div className="question-choice">
         <div className="answer_container" id={`q${questionIndex + 1}Answer${answerIndex + 1}`}>
-          {/* <span className="answer_radio-button">
+          <span className="answer_radio-button">
             <FormControlLabel
               value={`answer${answerIndex + 1}`}
               control={<Radio />}
               label=""
               onChange={() => onChangeRadio(questionIndex, answerIndex)}
             />
-          </span> */}
+          </span>
           <span className="answer_input-text">
             <TextField
               id={`answer${answerIndex + 1}-q${questionIndex + 1}`}

@@ -222,6 +222,89 @@ function QuizCreate({
     []
   );
 
+  // const handleChangeQuestion = useCallback(
+  //   (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
+  //   // Récupère et type la cible de l'évenement
+  //     const target = event.target as HTMLInputElement;
+  //     // Récupère la valeur de l'input et l'affecte à la copie du state
+  //     const newValue = target.value;
+  //     setNewQuestions((newQuestions: Question[]) => newQuestions.map((questionObject, questionIndex) => {
+  //       if (questionIndex === indexQuestion) {
+  //         return {
+  //           ...questionObject,
+  //           question: newValue,           
+  //         };
+  //       }
+  //       return questionObject;
+  //     })
+  //   );
+  //   },
+  //   [newQuestions, setNewQuestions],
+  // );
+  const handleChangeQuestion = useCallback(
+    (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
+      // Récupère et type la cible de l'événement
+      const target = event.target as HTMLInputElement;
+      // Récupère la valeur de l'input et l'affecte à la copie du state
+      const newValue = target.value;
+      setNewQuestions((newQuestions: Question[]) =>
+        newQuestions.map((questionObject, questionIndex) => {
+          if (questionIndex === indexQuestion) {
+            return {
+              ...questionObject,
+              question: newValue,
+            };
+          }
+          return questionObject;
+        })
+      );
+    },
+    []
+  );
+
+  const handleChangeRadioBtn = useCallback(
+    (
+      indexQuestion: number,
+      indexAnswer: number
+    ) => {
+      setNewQuestions((newQuestions: Question[]) =>
+        newQuestions.map((question, ) => {          
+            return {
+              ...question,
+              answers: question.answers.map((answer) => {                
+                  return {
+                    ...answer,
+                    is_valid: false,
+                  }; 
+              }),
+            };   
+        })
+      );
+
+      setNewQuestions((newQuestions: Question[]) =>
+      newQuestions.map((question, questionIndex) => {
+        if (questionIndex === indexQuestion) {
+          return {
+            ...question,
+            answers: question.answers.map((answer, answerIndex) => {
+              if (answerIndex === indexAnswer) {
+                return {
+                  ...answer,
+                  is_valid: true,
+                };
+              }
+              return answer;
+            }),
+          };
+        }
+        return question;
+      })
+    );
+    },
+    []
+  );
+  
+
   return (
     <div className="quiz__creation">
       <div className="quiz__header">
@@ -381,7 +464,9 @@ function QuizCreate({
               handleSetNewQuestions={handleSetNewQuestions}
               handleSetQuestionsErrors={handleSetQuestionsErrors}
               setNewQuestions={setNewQuestions}
+              onChangeQuestion={handleChangeQuestion}
               handleChangeAnswer={handleChangeAnswer}
+              handleChangeRadioBtn={handleChangeRadioBtn}
             />
           ))}
         </fieldset>
