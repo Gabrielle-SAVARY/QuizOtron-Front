@@ -1,3 +1,7 @@
+//* Constante nombre de questions par quiz
+export const numberOfQuestions = 10;
+
+//* Formulaire création d'un quiz
 // Créer un objet question modèle pour un nouveau quiz
 export const createQuestionModel = () => ({
   question: '',
@@ -50,4 +54,39 @@ export const createQuestionErrorModel = () => ({
 export const initialQuestionErrors = (questionNumber: number) => Array.from(
   { length: questionNumber },
   () => createQuestionErrorModel(),
+);
+
+//* Formulaire mise à jour d'un quiz
+// Créer un objet question modèle pour un nouveau quiz
+export const updateQuestionModel = () => ({
+  id: 0,
+  question: '',
+  answers: [
+    {
+      id: 0,
+      answer: '',
+      is_valid: false,
+    },
+    {
+      id: 0,
+      answer: '',
+      is_valid: false,
+    },
+    {
+      id: 0,
+      answer: '',
+      is_valid: false,
+    },
+    {
+      id: 0,
+      answer: '',
+      is_valid: false,
+    },
+  ],
+});
+
+// Création d'un tableau de questions selon le nombre de questions par quiz
+export const initialUpdateQuestions = (questionNumber: number) => Array.from(
+  { length: questionNumber },
+  () => updateQuestionModel(),
 );

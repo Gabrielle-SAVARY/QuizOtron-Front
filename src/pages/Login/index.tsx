@@ -90,7 +90,7 @@ function Login() {
     // errors: objet vide ou contient les messages d'erreurs
     const errors = validateTextFields(dataToValidate, validationRulesLogin);
     console.log('errors', errors);
-
+    //TODO vérifer errors et le prevState copié dans le nouveau state?
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
 

@@ -8,7 +8,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
-import { initialNewQuestions, initialQuestionErrors} from '../../utils/createModels';
+import { initialNewQuestions, initialQuestionErrors, numberOfQuestions} from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
 import { IerrorFormNewQuiz} from '../../@types/error';
@@ -30,12 +30,10 @@ function QuizCreate({
   tagsList, levelsList, fetchQuizList,
 }: QuizCreateProps) {
   const navigate = useNavigate();
-  // Nombre de  questions par quiz
-  const numberOfQuestions = 10;
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-
+  // Stocke le message d'erreur du backend suite à une erreur 400 lors de la soumission du formulaire 
   const [errorBackend, setErrorBackend] = useState<string>('');
 
   // Stock les informations générale du quiz
@@ -60,9 +58,6 @@ function QuizCreate({
     tag_id: '',
     questions: initialQuestionErrors(numberOfQuestions),
   });
-
-  // Stock les messages d'erreurs du backend suite à la soumission du formulaire
-  const [errorMessage] = useState<string>('');
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // Mise à jour de newQuiz: infos du quiz

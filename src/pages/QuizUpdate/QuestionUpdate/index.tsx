@@ -8,23 +8,25 @@ import './styles.scss';
 
 interface QuestionUpdateProps {
   questionNumber: number
-  newQuestion: QuestionUp
-  setNewQuestion: (question: QuestionUp) => void
+  updateQuestion: QuestionUp
+  onChangeQuestion:(event: SyntheticEvent<Element, Event>, idQuestion: number) => void
+
 }
 
 function QuestionUpdate({
-  questionNumber, newQuestion, setNewQuestion,
+  questionNumber, updateQuestion, onChangeQuestion
 }: QuestionUpdateProps) {
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on renseigne une question ou une réponse
   // isRadioBtn: boolean vérifie si on est sur un bouton radio
+  console.log(questionNumber,updateQuestion);
   const handleChangeQuestions = (
     event: SyntheticEvent<Element, Event>,
     answerNb = 0,
     isRadioBtn = false,
   ) => {
     //* Etape 1 : On récupère le contenu du state newQuestion dans l'objet quizQuestions
-    const quizQuestions = { ...newQuestion };
+    const quizQuestions = { ...updateQuestion };
 
     //* Etape 2 : on contrôle le numéro de réponse: answerNb
     // answerNb: permet de savoir si on renseigne une question ou une réponse
@@ -55,7 +57,7 @@ function QuestionUpdate({
       quizQuestions.answers[answerNb - 1].is_valid = true;
     }
     //* On et à jour le state avec les données d'une question
-    setNewQuestion(quizQuestions);
+    // setNewQuestion(quizQuestions);
   };
 
   // TODO trouver solution pour éviter d'utiliser en key l'index de la réponse dans le map
@@ -68,20 +70,23 @@ function QuestionUpdate({
       </h3>
       <TextField
         fullWidth
-        id={`question-${questionNumber}`}
+        id={`question-${updateQuestion.id}`}
         label={`Question ${questionNumber}`}
         variant="outlined"
-        onChange={handleChangeQuestions}
-        value={newQuestion.question}
+        onChange={(event) =>onChangeQuestion(event, updateQuestion.id )}
+        value={updateQuestion.question}
       />
-      <FormLabel id="demo-radio-buttons-group-label">Réponses</FormLabel>
+      <FormLabel id="demo-radio-buttons-group-label" 
+      sx={{ pt: 2 }}>
+        Ecrivez les 4 choix de réponses et sélectionner la bonne réponse à la question
+      </FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         name={`radio-q${questionNumber}`}
       >
 
         <fieldset>
-          {newQuestion.answers.map((answer, index) => (
+          {updateQuestion.answers.map((answer, index) => (
             <div key={`${answer.id}-${index}`} className="question-choice">
               <div className="answer_container" id={`q${questionNumber}${answer.id}`}>
                 <span className="answer_radio-button">
