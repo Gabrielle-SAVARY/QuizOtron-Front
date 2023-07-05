@@ -8,7 +8,7 @@ interface AnswerCreateProps {
   answerIndex: number;
   answer: string;
   currentAnswerError: AnswerError;
-  onChangeRadio: (indexQuestion: number, answerNumber: number,) => void;
+  onChangeRadioBtn: (indexQuestion: number, answerNumber: number,) => void;
   onChangeAnswer: (event: SyntheticEvent<Element, Event>,
     indexQuestion: number, answerNumber: number) => void;
 }
@@ -19,7 +19,7 @@ const AnswerCreate = memo(
     answerIndex,
     answer,
     currentAnswerError,
-    onChangeRadio,
+    onChangeRadioBtn,
     onChangeAnswer,
   }: AnswerCreateProps) => {
     console.log(`${questionIndex} Answer${answerIndex}`);
@@ -31,7 +31,7 @@ const AnswerCreate = memo(
               value={`answer${answerIndex + 1}`}
               control={<Radio />}
               label=""
-              onChange={() => onChangeRadio(questionIndex, answerIndex)}
+              onChange={() => onChangeRadioBtn(questionIndex, answerIndex)}
             />
           </span>
           <span className="answer_input-text">

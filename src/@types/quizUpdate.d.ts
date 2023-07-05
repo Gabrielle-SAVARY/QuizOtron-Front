@@ -26,6 +26,11 @@ export interface QuestionUp {
 
   }[],
 }
+export interface AnswerUp {
+  id: number
+  answer: string
+  is_valid: boolean
+}
 
 // Type résultat requête converti (sans quiz_id  et question_id):
 // trouve un quiz selon son id "/quiz/:id"

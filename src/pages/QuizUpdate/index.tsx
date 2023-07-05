@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent,
+  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback,
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
@@ -418,12 +418,11 @@ function QuizUpdate({
     };
     
     //* Mise à jour du champs d'une question
-    const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
+    const handleUpdateQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
      // Récupère et type la cible de l'événement
      const target = event.target as HTMLInputElement;
      // Récupère la valeur de l'input et l'affecte à la copie du state
      const newValue = target.value;
-     console.log('idQuestion',idQuestion);
      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
      updateQuestions.map((questionObject) => {
          if (questionObject.id === idQuestion) {
@@ -438,6 +437,74 @@ function QuizUpdate({
       // Mise à jour du state errors
      //  setErrorQuestion(indexQuestion);
    };    
+
+   //* Mise à jour du champs d'une réponse
+  const handleUpdateAnswer = useCallback(
+    (
+      event: SyntheticEvent<Element, Event>,
+      idQuestion: number,
+      idAnswer: number
+    ) => {
+      // Récupère et type la cible de l'évenement
+      const target = event.target as HTMLInputElement;
+      // Récupère la valeur de l'input 
+      const newValue = target.value;
+      // Mise à jour du state
+      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
+      updateQuestions.map((question) => {
+          if (question.id === idQuestion) {
+            return {
+              ...question,
+              answers: question.answers.map((answer) => {
+                if (answer.id === idAnswer) {
+                  return {
+                    ...answer,
+                    answer: newValue,
+                  };
+                }
+                return answer;
+              }),
+            };
+          }
+          return question;
+        })
+      );
+      // Mise à jour du state des erreurs
+      // setErrorAnswer(indexQuestion, indexAnswer);
+    },
+    []
+  );
+
+  //* Mise à jour sélection d'un bouton radio
+  const handleUpdateRadioBtn = useCallback(
+    (idQuestion: number,idAnswer: number) => {
+      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
+      updateQuestions.map((question) => {
+        if (question.id === idQuestion) {
+          return {
+            ...question,
+            answers: question.answers.map((answer) => {
+              if (answer.id === idAnswer) {
+                return {
+                  ...answer,
+                  is_valid: true,
+                };
+              }
+              return   {
+                ...answer,
+                is_valid: false,
+              };
+            }),
+          };
+        }
+        return question;
+      })
+    );
+    // Mise à jour du state des erreurs
+    // setErrorRadio(indexQuestion);
+    },
+    []
+  );
 
   //* ENVOIE DU FORMULAIRE A l'API
   // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
@@ -565,8 +632,10 @@ function QuizUpdate({
             <UpdateQuestion
               key={`question${index + 1}-id${question.id}`}
               questionNumber={index + 1}
-              updateQuestion={question}
-              onChangeQuestion={handleChangeQuestion}
+              currentQuestion={question}
+              onChangeQuestion={handleUpdateQuestion}
+              handleUpdateRadioBtn={handleUpdateRadioBtn}
+              handleUpdateAnswer={handleUpdateAnswer}
               />
         ))}         
         </fieldset>

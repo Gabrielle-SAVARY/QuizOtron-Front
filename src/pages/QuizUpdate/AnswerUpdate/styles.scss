@@ -1,0 +1,13 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+.question__number {
+    margin-bottom: 1rem;
+}
+.answer_container {
+    width: 100%;
+}
+.answer_input-text {
+    width: 100%;
+flex-grow: 1;
+}

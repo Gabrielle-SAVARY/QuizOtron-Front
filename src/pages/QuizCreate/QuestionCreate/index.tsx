@@ -65,7 +65,7 @@ function QuestionCreate({
                 answerIndex={index}
                 answer={answer.answer}
                 currentAnswerError={currentQuestionError.answers[index]}
-                onChangeRadio={handleChangeRadioBtn}
+                onChangeRadioBtn={handleChangeRadioBtn}
                 onChangeAnswer={handleChangeAnswer}
               />
             ))}
