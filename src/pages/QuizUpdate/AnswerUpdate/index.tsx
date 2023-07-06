@@ -2,14 +2,16 @@ import { FormControlLabel, Radio, TextField } from '@mui/material';
 import { SyntheticEvent, memo } from 'react';
 import './styles.scss';
 import { AnswerUp } from '../../../@types/quizUpdate';
+import { AnswerUpError } from '../../../@types/error';
 
 interface AnswerUpdateProps {
   questionNumber:number;
   questionId:number;
+  answerIndex: number;
   answerNumber: number;
   answerId:number;
   answer: AnswerUp;
-  // currentAnswerError: AnswerError;
+  currentAnswerError: AnswerUpError;
   onChangeRadioBtn: (idQuestion: number, idAnswer: number,) => void;
   onChangeAnswer: (event: SyntheticEvent<Element, Event>,
     idQuestion: number, idAnswer: number) => void;
@@ -22,11 +24,11 @@ const AnswerUpdate = memo(
     answerNumber,
     answerId,
     answer,
-    // currentAnswerError,
+    currentAnswerError,
     onChangeRadioBtn,
     onChangeAnswer,
   }: AnswerUpdateProps) => {
-    console.log(`${questionNumber} Answer${answerNumber}`);
+    // console.log(`${questionNumber} Answer${answerNumber}`);
     return (
       <div className="question-choice">
         <div className="answer_container" id={`q${questionNumber}Answer${answerNumber}-${answerId}`}>
@@ -48,13 +50,12 @@ const AnswerUpdate = memo(
               fullWidth
               onChange={(event) => onChangeAnswer(event, questionId, answerId)}
               value={answer.answer}
-
-              // error={currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''}
-              // helperText={
-              //   currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''
-              //     ? currentAnswerError.answer
-              //     : ''
-              // }
+              error={currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''}
+              helperText={
+                currentAnswerError.answer !== undefined && currentAnswerError.answer !== ''
+                  ? currentAnswerError.answer
+                  : ''
+              }
             />
           </span>
         </div>

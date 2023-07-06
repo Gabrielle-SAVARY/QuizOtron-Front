@@ -6,19 +6,22 @@ import { SyntheticEvent } from 'react';
 import { QuestionUp } from '../../../@types/quizUpdate';
 import './styles.scss';
 import AnswerUpdate from '../AnswerUpdate';
+import { QuestionUpError } from '../../../@types/error';
 
 interface QuestionUpdateProps {
+  questionIndex:number
   questionNumber: number
   currentQuestion: QuestionUp
+  currentQuestionError: QuestionUpError
   onChangeQuestion:(event: SyntheticEvent<Element, Event>, idQuestion: number) => void
   handleUpdateRadioBtn: (idQuestion: number, idAnswer: number) => void
   handleUpdateAnswer: (event: SyntheticEvent<Element, Event>, idQuestion: number, idAnswer: number) => void
 }
 
 function QuestionUpdate({
-  questionNumber, currentQuestion, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
+  questionIndex, questionNumber, currentQuestion,currentQuestionError, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
 }: QuestionUpdateProps) {
-  console.log(`QUPDATE ${questionNumber}`);  
+  // console.log(`QUPDATE ${questionNumber}`);  
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on renseigne une question ou une réponse
   // isRadioBtn: boolean vérifie si on est sur un bouton radio
@@ -76,8 +79,19 @@ function QuestionUpdate({
         id={`question-${currentQuestion.id}`}
         label={`Question ${questionNumber}`}
         variant="outlined"
+        name={`question${questionNumber}`}
         onChange={(event) =>onChangeQuestion(event, currentQuestion.id )}
         value={currentQuestion.question}
+        error={
+          currentQuestionError.question !== undefined
+          && currentQuestionError.question !== ''
+        }
+        helperText={
+          currentQuestionError.question !== undefined
+          && currentQuestionError.question !== ''
+            ? currentQuestionError.question
+            : `${currentQuestion.question.length}/150 caractères maximum`
+        }
       />
       <FormLabel id="demo-radio-buttons-group-label" 
       sx={{ pt: 2 }}>
@@ -94,9 +108,11 @@ function QuestionUpdate({
             key={`answer${index}-${answer.id}`}
             questionNumber={questionNumber}
             questionId={currentQuestion.id}
+            answerIndex={index}
             answerNumber={index + 1}
             answerId={answer.id}
             answer={answer}
+            currentAnswerError={currentQuestionError.answers[index]}
             onChangeRadioBtn={handleUpdateRadioBtn}
             onChangeAnswer={handleUpdateAnswer}  
             />

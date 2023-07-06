@@ -22,22 +22,6 @@ const validatePassword = (value: string): string => {
   }
   return '';
 };
-// TODO choisir entre if ou switch
-/* const validatePassword = (value: string) => {
-  let errorMessage = '';
-  switch (true) {
-    case value.trim() === '':
-      errorMessage = 'Le mot de passe ne peut pas être vide.';
-      break;
-    case value.length < 6 || value.length > 30:
-      errorMessage = 'Le mot de passe doit comporter entre 6 et 30 caractères.';
-      break;
-    default:
-      errorMessage = '';
-      break;
-  }
-  return errorMessage;
-}; */
 
 // Règles de validation du champ 'confirmation mot de passe'
 const validatePasswordConfirm = (value: string): string => {

@@ -33,9 +33,7 @@ function QuizCreate({
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-  // Stocke le message d'erreur du backend suite à une erreur 400 lors de la soumission du formulaire 
-  const [errorBackend, setErrorBackend] = useState<string>('');
-
+  
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
@@ -45,10 +43,10 @@ function QuizCreate({
     user_id: userId,
     tag_id: 0,
   });
-
+  
   // Stock le tableau des questions et des réponses du quiz
   const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions(numberOfQuestions));
-
+  
   // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({
     title: '',
@@ -58,6 +56,9 @@ function QuizCreate({
     tag_id: '',
     questions: initialQuestionErrors(numberOfQuestions),
   });
+
+  // Stocke le message d'erreur du backend suite à une erreur 400 lors de la soumission du formulaire 
+  const [errorBackend, setErrorBackend] = useState<string>('');
 
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
   // Mise à jour de newQuiz: infos du quiz
@@ -338,13 +339,13 @@ function QuizCreate({
           >
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
             <Select
-              labelId="label-select-tag"
               id="select-tag"
+              className="select-tag"
+              name="tag_id"
+              labelId="label-select-tag"
               label="Catégorie"
               defaultValue="choose option"
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
-              className="select-tag"
-              name="tag_id"
             >
               <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
               {tagsList.map((tag) => (
@@ -371,13 +372,12 @@ function QuizCreate({
           >
             <InputLabel id="label-select-level">Difficulté</InputLabel>
             <Select
-              labelId="label-select-level"
               id="select-level"
-              label="Difficulté"
-              defaultValue="choose option"
-              onChange={(event) => handleChangeQuizData(event, 'level_id')}
-              required
               name="level_id"
+              label="Difficulté"
+              labelId="label-select-level"
+              defaultValue="choose option"
+              onChange={(event) => handleChangeQuizData(event, 'level_id')}   
             >
               <MenuItem disabled value="choose option">Sélectionner niveau de difficulté</MenuItem>
               {

@@ -3,7 +3,7 @@ import {
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
-  FormControl, InputLabel, MenuItem, TextField,
+  FormControl, FormHelperText, InputLabel, MenuItem, TextField,
 } from '@mui/material';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
@@ -14,7 +14,11 @@ import { ITag } from '../../@types/tag';
 import { IUpdatedOneQuiz, QuestionUp, QuizUp } from '../../@types/quizUpdate';
 import UpdateQuestion from './QuestionUpdate';
 import './styles.scss';
-import { initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
+import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
+import axios from 'axios';
+import { IerrorFormUpdateQuiz } from '../../@types/error';
+import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
+import { validateMenuSelect, validateQuestions, validateTextFields } from '../../utils/validateFormField';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -37,34 +41,8 @@ function QuizUpdate({
   const [quizId, setQuizId] = useState<number>(pageId);
   // Récupère l'id du user du reducer user
   const userId = useAppSelector((state) => state.user.userId);
-  // Stocke le message d'erreur du backend lors d'une erreur 400
-  const [errorBackend, setErrorBackend] = useState<string>('');
-
-  // errorMessage contient un message d'erreur s'il y a un problème lors du submit du formulaire
-  const [errorMessage, setErrorMessage] = useState('');
-
-  // Stock les informations générale du quiz sans les clés étrangères: quiz_id, question_id
-  // Ces clés étrangères sont présentes dans oneQuiz mais non demandées par le back pour l'update
-  //TODO à supprimer ?
-  const [updatedOneQuiz, setUpdatedOneQuiz] = useState<IUpdatedOneQuiz>({
-    id: 0,
-    title: '',
-    description: '',
-    thumbnail: '',
-    level_id: 0,
-    user_id: 0,
-    level: {
-      name: '',
-    },
-    author: {
-      pseudo: '',
-    },
-    tags: [],
-    questions: [],
-  });
-
-  // Stock les informations générale du quiz (state à envoyer au back)
-  // on affecte l'id de l'utilsiateur dès le chargement de la page
+  
+  // Stock les informations générale du quiz
   const [updateQuiz, setUpdateQuiz] = useState<QuizUp>({
     title: '',
     description: '',
@@ -73,277 +51,23 @@ function QuizUpdate({
     user_id: 0,
     tag_id: 0,
   });
-
-  //* -------- STATE QUESTIONS DU QUIZ A METTRE A JOUR --------
-  // Stock chaques questions avec ses réponses pour le nouveau quiz: 1 state par question
-  // on initialise les states à vide
+  
   // Stock le tableau des questions et des réponses du quiz
   const [updateQuestions, setUpdateQuestions] = useState<QuestionUp[]>(initialUpdateQuestions(numberOfQuestions));
-  //TODO à supprimer ?
-  // const [newQuestion1, setNewQuestion1] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion2, setNewQuestion2] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion3, setNewQuestion3] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion4, setNewQuestion4] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion5, setNewQuestion5] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion6, setNewQuestion6] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion7, setNewQuestion7] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion8, setNewQuestion8] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion9, setNewQuestion9] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
-  // const [newQuestion10, setNewQuestion10] = useState<QuestionUp>({
-  //   id: 0,
-  //   question: '',
-  //   answers: [
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //     {
-  //       id: 0,
-  //       answer: '',
-  //       is_valid: false,
-  //     },
-  //   ],
-  // });
 
-  //* AU CHARGEMENT DE LA PAGE
-  //* On récupère l'id du quiz à parir de l'URL et on stocke dans el state
-  
+  // Stocke le message d'erreur du backend lors d'une erreur 400
+  const [errorBackend, setErrorBackend] = useState<string>('');
+
+   // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
+   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormUpdateQuiz>({
+    title: '',
+    description: '',
+    thumbnail: '',
+    level_id: '',
+    tag_id: '',
+    questions: initialQuestionUpErrors(numberOfQuestions),
+  });
+
   useEffect(() => {
     setQuizId(pageId);
   }, [id, pageId]);
@@ -403,7 +127,6 @@ function QuizUpdate({
     | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string,
     ) => {
-      setErrorMessage('');
       const quizData = { ...updateQuiz } as QuizUp;
       // D'abord on vérifie s'il s'agit du field id ou tag
       if (field === 'tag_id') {
@@ -414,7 +137,8 @@ function QuizUpdate({
         quizData[field] = event.target.value;
       }
       setUpdateQuiz(quizData);
-      //TODO MAJ state erreur front
+       // Réinitialise le message d'erreur de l'input
+      setErrorInputMsg({ ...errorInputMsg, [field]: '' });
     };
     
     //* Mise à jour du champs d'une question
@@ -434,8 +158,9 @@ function QuizUpdate({
          return questionObject;
        })
      );
+     //TODO à voir entre id et index
       // Mise à jour du state errors
-     //  setErrorQuestion(indexQuestion);
+      setErrorQuestion(idQuestion);
    };    
 
    //* Mise à jour du champs d'une réponse
@@ -470,7 +195,7 @@ function QuizUpdate({
         })
       );
       // Mise à jour du state des erreurs
-      // setErrorAnswer(indexQuestion, indexAnswer);
+      setErrorAnswer(indexQuestion, indexAnswer);
     },
     []
   );
@@ -501,44 +226,181 @@ function QuizUpdate({
       })
     );
     // Mise à jour du state des erreurs
-    // setErrorRadio(indexQuestion);
+    setErrorRadio(indexQuestion);
     },
     []
   );
+
+   //* Mise à jour du state des erreurs si modification d'un champ question
+   const setErrorQuestion=(indexQuestion: number) => {
+    setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
+      ...errorInputMsg,
+      questions: errorInputMsg.questions.map((questionError, index) => {
+        if (index === indexQuestion) {
+          return {
+            ...questionError,
+            question: '',
+          };
+        }
+        return questionError;
+      }),
+    }));
+  };
+
+ //* Mise à jour du state des erreurs si modification d'un champ réponse
+ const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
+  setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
+    ...errorInputMsg,
+    questions: errorInputMsg.questions.map((questionError, index) => {
+      if (index === indexQuestion) {
+        return {
+          ...questionError,
+          answers: questionError.answers.map((answerError, answerIndex) => {
+            if (answerIndex === indexAnswer) {
+              return {
+                ...answerError,
+                answer: '',
+              };
+            }
+            return answerError;
+          }),
+        };
+      }
+      return questionError;
+    }),
+  }));
+ };
+
+  //* Mise à jour du state des erreurs si sélection d'un bouton radio
+ const setErrorRadio =(indexQuestion: number) => {
+  setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
+    ...errorInputMsg,
+    questions: errorInputMsg.questions.map((questionError, index) => {
+      if (index === indexQuestion) {
+        return {
+          ...questionError,
+          radioGroup: '',
+        };
+      }
+      return questionError;
+    }),
+  }));
+ };
+
+  //* Envoi du formulaire si aucune erreur
+ const handleFormSubmit = async (isAllowed: boolean) => {
+  if (isAllowed) {
+    // Envoi des données au back
+    // On affecte le state newQuiz à quiz
+    // On affecte un tablleau des states des questions à questions
+    try {
+      const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
+        quiz: updateQuiz,
+        questions: updateQuestions,
+      });
+      if (response.status !== 200) throw new Error();
+
+      // Rappel de la liste des quizs et mise à jour du state quizList
+      fetchQuizList();
+      // Vide le state des erreurs du backend
+      setErrorBackend('');
+      // On redirige vers la page de profile
+      /* navigate('/profile/quiz'); */
+    } catch (error) {
+      // Gestion des erreurs, si statut 400 envoi d'un message d'erreur
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          console.log('error.response',error.response);
+          const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier que vous êtes  bien connecté et que tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
+          console.log('newErrorMsg',newErrorMsg);
+          setErrorBackend(newErrorMsg);        }
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
+  }
+ };
 
   //* ENVOIE DU FORMULAIRE A l'API
   // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    //* Récupération des erreurs du formulaire à partir des states
+    // partie informations du quiz: state updateQuiz
+    // Erreurs des champs texte
+    const dataToValidate = {
+      title: updateQuiz.title,
+      description: updateQuiz.description,
+      thumbnail: updateQuiz.thumbnail,
+    };
+    // Erreur des menus déroulants
+    const menuSelectToValidate = {
+      tag_id: updateQuiz.tag_id,
+      level_id: updateQuiz.level_id,
+    };
+    // partie questions du quiz: state updateQuestions
+    const quizDataToValidate = [...updateQuestions];
 
-    //* Critères à respecter avant d'envoyer aux back les données
-    if (!updateQuiz.title || updateQuiz.title.length < 3) {
-      setErrorMessage(
-        'Vous devez ajouter un titre contenant au moins 3 caractères',
-      );
-    } else if (!updateQuiz.description || updateQuiz.description.length < 5) {
-      setErrorMessage(
-        'Vous devez ajouter une description contenant au moins 5 caractères',
-      );
-    } else {
-      // Envoi des données au back
-      // On affecte le state newQuiz à quiz
-      // On affecte un tablleau des states des questions à questions
-      try {
-        const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
-          quiz: updateQuiz,
-          questions: updateQuestions,
-        });
-        if (response.status !== 200) throw new Error();
+    //* Validation du formulaire
+    // Récupère la validations des champs texte et des menus déroulants
+    const fieldsErrors = validateTextFields(dataToValidate, validationRulesNewQuiz);
+    console.log('fieldsErrors',fieldsErrors);
+    
+    const menuSelectErrors = validateMenuSelect(menuSelectToValidate, validationRulesSelect);
 
-        // On met à jour le state quizList
-        fetchQuizList();
-        // On redirige vers la page de profile
-        navigate('/profile/quiz');
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    // Récupère la validation des questions, réponses et boutons radio
+    const questionsErrors = validateQuestions(quizDataToValidate);
+
+    //*Rassemble toutes les erreurs dans un nouvel objet
+    const errors = {
+      title: fieldsErrors.errors.title,
+      description: fieldsErrors.errors.description,
+      thumbnail: fieldsErrors.errors.thumbnail,
+      level_id: menuSelectErrors.errors.level_id,
+      tag_id: menuSelectErrors.errors.tag_id,
+      questions: questionsErrors.errors,
+    };
+    console.log('TOTAL !!!!! errors', errors);
+    // Mise à jour du state avec les messages d'erreurs du frontend
+    setErrorInputMsg(errors);
+
+     // eslint-disable-next-line no-unneeded-ternary
+     const isAllowToSubmit = (!fieldsErrors.hasError
+      && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
+
+    //*Gère la soumission du formulaire
+    handleFormSubmit(isAllowToSubmit);
+
+    
+    // //* Critères à respecter avant d'envoyer aux back les données
+    // if (!updateQuiz.title || updateQuiz.title.length < 3) {
+    //   setErrorMessage(
+    //     'Vous devez ajouter un titre contenant au moins 3 caractères',
+    //   );
+    // } else if (!updateQuiz.description || updateQuiz.description.length < 5) {
+    //   setErrorMessage(
+    //     'Vous devez ajouter une description contenant au moins 5 caractères',
+    //   );
+    // } else {
+    //   // Envoi des données au back
+    //   // On affecte le state newQuiz à quiz
+    //   // On affecte un tablleau des states des questions à questions
+    //   try {
+    //     const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
+    //       quiz: updateQuiz,
+    //       questions: updateQuestions,
+    //     });
+    //     if (response.status !== 200) throw new Error();
+
+    //     // On met à jour le state quizList
+    //     fetchQuizList();
+    //     // On redirige vers la page de profile
+    //     navigate('/profile/quiz');
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
   };
 
   return (
@@ -554,15 +416,22 @@ function QuizUpdate({
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
           {/* //? ======= Choix de la catégorie========== */}
-          <FormControl fullWidth>
+          <FormControl 
+          required
+          error={
+            errorInputMsg.tag_id !== undefined
+            && errorInputMsg.tag_id !== ''
+            }
+          >
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
             <Select
-              labelId="label-select-tag"
               id="select-tag"
+              className="select-tag"
+              name='tag_id'
+              labelId="label-select-tag"
               label="Catégorie"
               value={updateQuiz.tag_id}
               onChange={(event) => handleChangeQuizData(event, 'tag_id')}
-              className="select-tag"
             >
               <MenuItem disabled value="choose option">
                 Sélectionner une catégorie
@@ -573,18 +442,33 @@ function QuizUpdate({
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>
+              {
+              errorInputMsg.tag_id !== undefined
+              && errorInputMsg.tag_id !== ''
+                ? errorInputMsg.tag_id
+                : 'selectionner une catégorie'
+              }
+            </FormHelperText>
           </FormControl>
 
           {/* //? ======= Choix de la difficulté========== */}
-          <FormControl fullWidth>
+          <FormControl  
+            required
+            error={
+            errorInputMsg.level_id !== undefined
+            && errorInputMsg.level_id !== ''
+            }
+            >
             <InputLabel id="label-select-level">Difficulté</InputLabel>
             <Select
-              labelId="label-select-level"
               id="select-level"
+              className="select-level"
+              name="level_id"
+              labelId="label-select-level"
               label="Difficulté"
               value={updateQuiz.level_id}
               onChange={(event) => handleChangeQuizData(event, 'level_id')}
-              className="select-level"
             >
               <MenuItem disabled value="choose option">
                 Sélectionner
@@ -596,6 +480,14 @@ function QuizUpdate({
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>
+              {
+              errorInputMsg.level_id !== undefined
+              && errorInputMsg.level_id !== ''
+                ? errorInputMsg.level_id
+                : 'selectionner un niveau de difficulté'
+              }
+            </FormHelperText>
           </FormControl>
 
           {/* //? ======= Choix du titre ========== */}
@@ -603,8 +495,20 @@ function QuizUpdate({
             id="input-title"
             label="Titre du quiz"
             variant="outlined"
+            name="title"
             value={updateQuiz.title}
             onChange={(event) => handleChangeQuizData(event, 'title')}
+            fullWidth
+            error={
+              errorInputMsg.title !== undefined
+              && errorInputMsg.title !== ''
+            }
+            helperText={
+              errorInputMsg.title !== undefined
+              && errorInputMsg.title !== ''
+                ? errorInputMsg.title
+                : `${updateQuiz.title.length}/150 caractères maximum`
+            }
           />
 
           {/* //? ======= Choix de la description ========== */}
@@ -612,8 +516,22 @@ function QuizUpdate({
             id="input-description"
             label="Description du quiz"
             variant="outlined"
+            name="description"
             value={updateQuiz.description}
             onChange={(event) => handleChangeQuizData(event, 'description')}
+            fullWidth
+            multiline
+            rows={4}
+            error={
+              errorInputMsg.description !== undefined
+              && errorInputMsg.description !== ''
+            }
+            helperText={
+              errorInputMsg.description !== undefined
+              && errorInputMsg.description !== ''
+                ? errorInputMsg.description
+                : `${updateQuiz.description.length}/300 caractères maximum`
+            }
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
@@ -621,9 +539,20 @@ function QuizUpdate({
             id="input-thumbnail"
             label="Image du quiz"
             variant="outlined"
+            name="thumbnail"
             value={updateQuiz.thumbnail}
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
-            helperText="Coller l'url de l'image"
+            fullWidth
+            error={
+              errorInputMsg.thumbnail !== undefined
+              && errorInputMsg.thumbnail !== ''
+            }
+            helperText={
+              errorInputMsg.thumbnail !== undefined
+              && errorInputMsg.thumbnail !== ''
+                ? errorInputMsg.thumbnail
+                : 'Coller l\'url de l\'image'
+            }
           />
         </fieldset>
 
@@ -631,19 +560,21 @@ function QuizUpdate({
           {updateQuestions.map((question, index) => (
             <UpdateQuestion
               key={`question${index + 1}-id${question.id}`}
+              questionIndex={index}
               questionNumber={index + 1}
               currentQuestion={question}
+              currentQuestionError={errorInputMsg.questions[index]}
               onChangeQuestion={handleUpdateQuestion}
               handleUpdateRadioBtn={handleUpdateRadioBtn}
               handleUpdateAnswer={handleUpdateAnswer}
               />
         ))}         
         </fieldset>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <button type="submit" className="quiz__button">
           Modifier le Quiz
         </button>
       </form>
+      {errorBackend !== '' && <div className="error-message">{errorBackend}</div>}
     </div>
   );
 }

@@ -288,7 +288,8 @@ function App() {
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
     if (isLogged) {
-      fetchAverageScore();
+      //TODO: à revoir avec state reducer
+      // fetchAverageScore();
     } else {
       setUserAverageScore(null);
     }
