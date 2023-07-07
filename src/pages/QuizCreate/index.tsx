@@ -330,6 +330,7 @@ function QuizCreate({
         <fieldset className="quiz__parameter">
 
           {/* //? ======= Choix de la catégorie========== */}
+          {newQuiz.tag_id !== 0 && ( 
           <FormControl
             required
             error={
@@ -361,8 +362,10 @@ function QuizCreate({
               }
             </FormHelperText>
           </FormControl>
+          )}
 
           {/* //? ======= Choix de la difficulté========== */}
+          {newQuiz.level_id !== 0 && ( 
           <FormControl
             required
             error={
@@ -395,6 +398,7 @@ function QuizCreate({
               }
             </FormHelperText>
           </FormControl>
+          )}
 
           {/* //? ======= Choix du titre ========== */}
           <TextField

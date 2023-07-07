@@ -1,5 +1,5 @@
 import {
-  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback,
+  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback, SetStateAction,
 } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
@@ -77,10 +77,8 @@ function QuizUpdate({
     getQuizDetails(quizId);
   }, [quizId, getQuizDetails]);
 
-  //TODO à supprimer ?
-  // On exclu les clé étrangères présentes dans oneQuiz et on stocke les infos dans updatedOneQuiz
-  // on exclu quiz_id et question_id pour éviter erreur de violation de clé étrangère 
-  useEffect(() => {
+  //* Au chargement de la page après la récupérations des données du quiz
+    useEffect(() => {
     // Si oneQuiz existe, on créer une copie du state 
     if (oneQuiz.id !== 0) {
       const copyOneQuiz = {
@@ -91,8 +89,7 @@ function QuizUpdate({
           answers: question.answers.map(({ question_id, ...answer }) => answer),
         })),
       };
-      // On stocke les infos dans le state updateQuiz 
-      // on conserve uniquement les id pour user_id, level_id, tag_id(uniquement une catégorie MVP)
+      // On stocke les infos du quiz dans le state updateQuiz 
       setUpdateQuiz({
         title: copyOneQuiz.title,
         description: copyOneQuiz.description,
@@ -114,6 +111,20 @@ function QuizUpdate({
           }))
         }))        
       );
+      // On récupère les id des questions er réponses du quiz
+      setErrorInputMsg({
+        ...errorInputMsg,
+        questions: copyOneQuiz.questions.map((question)=>({
+          id: question.id,          
+          question:'',
+          radioGroup: '',
+          answers: question.answers.map((answer)=>({
+            id: answer.id,
+            answer:'',
+          }))
+        }))   
+      });   
+      
     }
   }, [oneQuiz]);
 
@@ -195,7 +206,7 @@ function QuizUpdate({
         })
       );
       // Mise à jour du state des erreurs
-      setErrorAnswer(indexQuestion, indexAnswer);
+      setErrorAnswer(idQuestion, idAnswer);
     },
     []
   );
@@ -226,7 +237,7 @@ function QuizUpdate({
       })
     );
     // Mise à jour du state des erreurs
-    setErrorRadio(indexQuestion);
+    setErrorRadio(idQuestion);
     },
     []
   );
@@ -416,6 +427,7 @@ function QuizUpdate({
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
           {/* //? ======= Choix de la catégorie========== */}
+          {updateQuiz.tag_id !== 0 && ( 
           <FormControl 
           required
           error={
@@ -451,8 +463,10 @@ function QuizUpdate({
               }
             </FormHelperText>
           </FormControl>
+          )}
 
           {/* //? ======= Choix de la difficulté========== */}
+          {updateQuiz.level_id !== 0 && ( 
           <FormControl  
             required
             error={
@@ -473,12 +487,22 @@ function QuizUpdate({
               <MenuItem disabled value="choose option">
                 Sélectionner
               </MenuItem>
-
               {levelsList.map((level) => (
                 <MenuItem key={level.id} value={level.id} className="levels-list">
                   {level.name}
                 </MenuItem>
               ))}
+              {/* {levelsList !== undefined && (
+              levelsList.map((level) => (
+                <MenuItem key={level.id} value={level.id} className="levels-list">
+                  {level.name}
+                </MenuItem>
+              ))
+              )} */}
+              
+              
+
+
             </Select>
             <FormHelperText>
               {
@@ -489,6 +513,7 @@ function QuizUpdate({
               }
             </FormHelperText>
           </FormControl>
+          )}
 
           {/* //? ======= Choix du titre ========== */}
           <TextField
@@ -555,11 +580,11 @@ function QuizUpdate({
             }
           />
         </fieldset>
-
+        {updateQuestions[0].id !==0 && (
         <fieldset className="quiz__questions">
           {updateQuestions.map((question, index) => (
             <UpdateQuestion
-              key={`question${index + 1}-id${question.id}`}
+              key={question.id}
               questionIndex={index}
               questionNumber={index + 1}
               currentQuestion={question}
@@ -570,6 +595,7 @@ function QuizUpdate({
               />
         ))}         
         </fieldset>
+        )}
         <button type="submit" className="quiz__button">
           Modifier le Quiz
         </button>
