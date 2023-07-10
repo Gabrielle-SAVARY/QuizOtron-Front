@@ -18,6 +18,7 @@ import { Question, Quiz } from '../../@types/newQuiz';
 import QuestionCreate from './QuestionCreate';
 import './styles.scss';
 import axios from 'axios';
+import QuizInfoTextInput from '../../components/QuizTextInput';
 // TODO supprimer les consoles log
 
 interface QuizCreateProps {
@@ -401,68 +402,33 @@ function QuizCreate({
           )}
 
           {/* //? ======= Choix du titre ========== */}
-          <TextField
-            id="input-title"
-            label="Titre du quiz"
-            variant="outlined"
-            name="title"
-            value={newQuiz.title}
-            onChange={(event) => handleChangeQuizData(event, 'title')}
-            fullWidth
-            error={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
-            }
-            helperText={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
-                ? errorInputMsg.title
-                : `${newQuiz.title.length}/150 caractères maximum`
-            }
+          <QuizInfoTextInput 
+            inputName='title'
+            inputLabel='titre'
+            inputValue={newQuiz.title}
+            inputError={errorInputMsg.title}
+            defaultMessage={`${newQuiz.title.length}/150 caractères maximum`}
+            handleChangeQuizData={handleChangeQuizData}
           />
-
+          
           {/* //? ======= Choix de la description ========== */}
-          <TextField
-            id="input-description"
-            label="Description du quiz"
-            variant="outlined"
-            name="description"
-            value={newQuiz.description}
-            onChange={(event) => handleChangeQuizData(event, 'description')}
-            fullWidth
-            multiline
-            rows={4}
-            error={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
-            }
-            helperText={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
-                ? errorInputMsg.description
-                : `${newQuiz.description.length}/300 caractères maximum`
-            }
+          <QuizInfoTextInput
+            inputName='description'
+            inputLabel='description'
+            inputValue={newQuiz.description}
+            inputError={errorInputMsg.description}
+            defaultMessage={`${newQuiz.description.length}/300 caractères maximum`}
+            handleChangeQuizData={handleChangeQuizData}
           />
-
+         
           {/* //? ======= Choix de l'url de l'image ========== */}
-          <TextField
-            id="input-thumbnail"
-            label="Image du quiz"
-            variant="outlined"
-            name="thumbnail"
-            value={newQuiz.thumbnail}
-            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
-            fullWidth
-            error={
-              errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
-            }
-            helperText={
-              errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
-                ? errorInputMsg.thumbnail
-                : 'Coller l\'url de l\'image'
-            }
+          <QuizInfoTextInput
+            inputName='thumbnail'
+            inputLabel='image'
+            inputValue={newQuiz.thumbnail}
+            inputError={errorInputMsg.thumbnail}
+            defaultMessage={`Coller l'url de l'image`}
+            handleChangeQuizData={handleChangeQuizData}
           />
         </fieldset>
         <fieldset className="quiz__questions">

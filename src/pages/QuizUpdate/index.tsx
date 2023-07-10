@@ -19,6 +19,7 @@ import { IerrorFormUpdateQuiz } from '../../@types/error';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '../../utils/validateFormField';
 import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizUpdate';
+import QuizInfoTextInput from '../../components/QuizTextInput';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -393,68 +394,33 @@ function QuizUpdate({
           )}
 
           {/* //? ======= Choix du titre ========== */}
-          <TextField
-            id="input-title"
-            label="Titre du quiz"
-            variant="outlined"
-            name="title"
-            value={updateQuiz.title}
-            onChange={(event) => handleChangeQuizData(event, 'title')}
-            fullWidth
-            error={
-              errorUpInputMsg.title !== undefined
-              && errorUpInputMsg.title !== ''
-            }
-            helperText={
-              errorUpInputMsg.title !== undefined
-              && errorUpInputMsg.title !== ''
-                ? errorUpInputMsg.title
-                : `${updateQuiz.title.length}/150 caractères maximum`
-            }
+          <QuizInfoTextInput
+            inputName='title'
+            inputLabel='titre'
+            inputValue={updateQuiz.title}
+            inputError={errorUpInputMsg.title}
+            defaultMessage={`${updateQuiz.title.length}/150 caractères maximum`}
+            handleChangeQuizData={handleChangeQuizData}
           />
 
           {/* //? ======= Choix de la description ========== */}
-          <TextField
-            id="input-description"
-            label="Description du quiz"
-            variant="outlined"
-            name="description"
-            value={updateQuiz.description}
-            onChange={(event) => handleChangeQuizData(event, 'description')}
-            fullWidth
-            multiline
-            rows={4}
-            error={
-              errorUpInputMsg.description !== undefined
-              && errorUpInputMsg.description !== ''
-            }
-            helperText={
-              errorUpInputMsg.description !== undefined
-              && errorUpInputMsg.description !== ''
-                ? errorUpInputMsg.description
-                : `${updateQuiz.description.length}/300 caractères maximum`
-            }
+          <QuizInfoTextInput
+            inputName='description'
+            inputLabel='description'
+            inputValue={updateQuiz.description}
+            inputError={errorUpInputMsg.description}
+            defaultMessage={`${updateQuiz.description.length}/300 caractères maximum`}
+            handleChangeQuizData={handleChangeQuizData}
           />
 
           {/* //? ======= Choix de l'url de l'image ========== */}
-          <TextField
-            id="input-thumbnail"
-            label="Image du quiz"
-            variant="outlined"
-            name="thumbnail"
-            value={updateQuiz.thumbnail}
-            onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
-            fullWidth
-            error={
-              errorUpInputMsg.thumbnail !== undefined
-              && errorUpInputMsg.thumbnail !== ''
-            }
-            helperText={
-              errorUpInputMsg.thumbnail !== undefined
-              && errorUpInputMsg.thumbnail !== ''
-                ? errorUpInputMsg.thumbnail
-                : 'Coller l\'url de l\'image'
-            }
+          <QuizInfoTextInput
+            inputName='thumbnail'
+            inputLabel='image'
+            inputValue={updateQuiz.thumbnail}
+            inputError={errorUpInputMsg.thumbnail}
+            defaultMessage={`Coller l'url de l'image`}
+            handleChangeQuizData={handleChangeQuizData}
           />
         </fieldset>
         {updateQuestions[0].id !==0 && (
