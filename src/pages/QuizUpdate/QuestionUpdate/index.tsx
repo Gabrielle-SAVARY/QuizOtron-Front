@@ -21,7 +21,7 @@ interface QuestionUpdateProps {
 function QuestionUpdate({
   questionIndex, questionNumber, currentQuestion,currentQuestionError, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
 }: QuestionUpdateProps) {
-  // console.log(`QUPDATE ${questionNumber}`);  
+  console.log(`QUPDATE ${questionNumber}`);  
   //* Mise à jour du state au remplissage du formulaire
   // answerNb: identifie si on renseigne une question ou une réponse
   // isRadioBtn: boolean vérifie si on est sur un bouton radio

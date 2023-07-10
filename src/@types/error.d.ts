@@ -5,7 +5,7 @@ export interface IerrorFormLogin {
   password: string;
 }
 
-// Erreurs  des inputs du formulaire de d'inscription/register-signUp
+// Erreurs des inputs du formulaire d'inscription/register-signUp
 export interface IerrorFormRegister {
   firstname: string;
   lastname: string;
@@ -14,11 +14,6 @@ export interface IerrorFormRegister {
   password: string;
   passwordConfirm: string;
 }
-// Type les messages d'erreurs  des inputs du formulaire de création de quiz
-/* export interface IerrorFormNewQuiz {
-  [key: string]: string;
-}
- */
 
 // Erreurs formulaire création d'un quiz
 export interface IerrorFormNewQuiz {
@@ -38,7 +33,7 @@ export interface AnswerError {
   answer: string
 }
 
-// Type les erreur formulaire mise à jour d'un quiz
+// Erreur formulaire lors de la mise à jour d'un quiz
 export interface IerrorFormUpdateQuiz {
   title: string;
   description: string;
@@ -48,21 +43,41 @@ export interface IerrorFormUpdateQuiz {
   questions: QuestionUpError[];
 }
 export interface QuestionUpError {
+  id: number
   question: string
   radioGroup: string
-  answers: AnswerError[]
+  answers: AnswerUpError[]
 }
 export interface AnswerUpError {
+  id: number
   answer: string
 }
 
 //*Types des règles de validations des formulaires
-// Type le tableau des règles de validation pour les formulaires
+// Champs texte
 export interface IValidationRule {
   field: string;
   validate: (value: string) => string;
 }
+// Menus déroulants
 export interface IValidationNumberRule {
   field: string;
   validate: (value: number) => string;
+}
+
+//*Types des résultats de la validation des formulaires
+// Type les résultats de la validation des champs texte
+export interface ValidationResult {
+  errors: { [key: string]: string };
+  hasError: boolean;
+}
+// Type les résultats de la validation des questions pour la création d'un quiz
+export interface ValidationQuestionResult {
+  errors:QuestionError[];
+  hasError: boolean;
+}
+// Type les résultats de la validation des questions pour la mise à jour d'un quiz
+export interface ValidationQuestionUpResult {
+  errors:QuestionUpError[];
+  hasError: boolean;
 }

@@ -1,17 +1,11 @@
-import { IValidationNumberRule, IValidationRule, QuestionError } from '../@types/error';
+import { IValidationNumberRule, IValidationRule, QuestionError, QuestionUpError, ValidationQuestionResult, ValidationQuestionUpResult, ValidationResult } from '../@types/error';
 import { Question } from '../@types/newQuiz';
+import { QuestionUp } from '../@types/quizUpdate';
 import { validateNotEmpty } from './validationsRules';
 // TODO supprimer les consoles log
-export interface ValidationResult {
-  errors: { [key: string]: string };
-  hasError: boolean;
-}
-export interface ValidationQuestionResult {
-  errors:QuestionError[];
-  hasError: boolean;
-}
 
-// Vérification des champs du formulaire
+
+// Vérification des champs texte
 export const validateTextFields = (
   stateData: { [key: string]: string },
   validationRules: IValidationRule[],
@@ -42,6 +36,7 @@ export const validateTextFields = (
   return { errors, hasError };
 };
 
+// Vérification des menus déroulants
 export const validateMenuSelect = (
   stateData: { [key: string]: number },
   validationRules: IValidationNumberRule[],
@@ -70,6 +65,8 @@ export const validateMenuSelect = (
   return { errors, hasError };
 };
 
+// Vérification des questions du formulaire de création d'un quiz
+// champs textes et groupe de boutons radio
 export const validateQuestions = (stateData: Question[]):ValidationQuestionResult => {
   let hasError = false;
   // Initialisation d'un objet vide qui contiendra les messages d'erreurs
@@ -116,3 +113,38 @@ export const validateQuestions = (stateData: Question[]):ValidationQuestionResul
 
   return { errors, hasError };
 };
+
+// Vérification des questions du formulaire de la mise à jour d'un quiz
+// champs textes et groupe de boutons radio
+export const validateQuestionsUp = (stateData: QuestionUp[]):ValidationQuestionUpResult => {
+  // Variable qui indique si une erreur est trouvée
+  let hasError = false;
+  // Objet qui contiendra les messages d'erreurs
+  const errors: QuestionUpError[] = stateData.map((question) => {
+    // Vérification du champs texte de la question et sélection d'un bouton radio
+    const questionError = validateNotEmpty(question.question);
+    const isRadioSelect = question.answers.some((answer) => answer.is_valid);
+    if (questionError !== '' || !isRadioSelect) {
+      hasError = true;
+    }
+    return {
+      id: question.id,
+      question: questionError,
+      radioGroup: isRadioSelect ? '' : 'Veuillez sélectionner la bonne réponse',
+      // Vérification de du champs texte de chaque réponse de la question
+      answers: question.answers.map((answer) => {
+        const answerError = validateNotEmpty(answer.answer);
+        if (answerError !== '') {
+          hasError = true;
+          return {
+            id: answer.id,
+            answer: answerError,
+          };
+        }
+        return answer;
+      }),
+    };
+  });
+  return { errors, hasError };
+};
+

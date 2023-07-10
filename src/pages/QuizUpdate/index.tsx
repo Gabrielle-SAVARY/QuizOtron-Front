@@ -1,6 +1,5 @@
 import {
-  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback, SetStateAction,
-} from 'react';
+  useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback} from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   FormControl, FormHelperText, InputLabel, MenuItem, TextField,
@@ -11,14 +10,15 @@ import { axiosInstance } from '../../utils/axios';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
-import { IUpdatedOneQuiz, QuestionUp, QuizUp } from '../../@types/quizUpdate';
+import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
 import UpdateQuestion from './QuestionUpdate';
 import './styles.scss';
 import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
 import axios from 'axios';
 import { IerrorFormUpdateQuiz } from '../../@types/error';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
-import { validateMenuSelect, validateQuestions, validateTextFields } from '../../utils/validateFormField';
+import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '../../utils/validateFormField';
+import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizUpdate';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -59,7 +59,7 @@ function QuizUpdate({
   const [errorBackend, setErrorBackend] = useState<string>('');
 
    // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
-   const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormUpdateQuiz>({
+   const [errorUpInputMsg, setErrorUpInputMsg] = useState<IerrorFormUpdateQuiz>({
     title: '',
     description: '',
     thumbnail: '',
@@ -112,8 +112,8 @@ function QuizUpdate({
         }))        
       );
       // On récupère les id des questions er réponses du quiz
-      setErrorInputMsg({
-        ...errorInputMsg,
+      setErrorUpInputMsg({
+        ...errorUpInputMsg,
         questions: copyOneQuiz.questions.map((question)=>({
           id: question.id,          
           question:'',
@@ -130,7 +130,7 @@ function QuizUpdate({
 
   
   //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // Mise à jour du state updateQuiz
+  // Mise à jour du state updateQuiz (infos du quiz)
   const handleChangeQuizData = (
     event:
     | SelectChangeEvent<number>
@@ -149,30 +149,21 @@ function QuizUpdate({
       }
       setUpdateQuiz(quizData);
        // Réinitialise le message d'erreur de l'input
-      setErrorInputMsg({ ...errorInputMsg, [field]: '' });
+      setErrorUpInputMsg({ ...errorUpInputMsg, [field]: '' });
     };
     
     //* Mise à jour du champs d'une question
-    const handleUpdateQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
-     // Récupère et type la cible de l'événement
-     const target = event.target as HTMLInputElement;
-     // Récupère la valeur de l'input et l'affecte à la copie du state
-     const newValue = target.value;
-     setUpdateQuestions((updateQuestions: QuestionUp[]) =>
-     updateQuestions.map((questionObject) => {
-         if (questionObject.id === idQuestion) {
-           return {
-             ...questionObject,
-             question: newValue,              
-           };
-         }
-         return questionObject;
-       })
-     );
-     //TODO à voir entre id et index
-      // Mise à jour du state errors
-      setErrorQuestion(idQuestion);
-   };    
+  const handleUpdateQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
+    // Récupère et type la cible de l'événement
+    const target = event.target as HTMLInputElement;
+    // Récupère la valeur de l'input et l'affecte à la copie du state
+    const newValue = target.value;
+    setUpdateQuestions((updateQuestions: QuestionUp[]) =>
+    updateQuestionUpValue(updateQuestions, idQuestion, newValue)
+    );
+    // Mise à jour du state errors
+    setErrorQuestion(idQuestion);
+  };    
 
    //* Mise à jour du champs d'une réponse
   const handleUpdateAnswer = useCallback(
@@ -186,24 +177,7 @@ function QuizUpdate({
       // Récupère la valeur de l'input 
       const newValue = target.value;
       // Mise à jour du state
-      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
-      updateQuestions.map((question) => {
-          if (question.id === idQuestion) {
-            return {
-              ...question,
-              answers: question.answers.map((answer) => {
-                if (answer.id === idAnswer) {
-                  return {
-                    ...answer,
-                    answer: newValue,
-                  };
-                }
-                return answer;
-              }),
-            };
-          }
-          return question;
-        })
+      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateAnswerValue(updateQuestions, idQuestion, idAnswer, newValue)
       );
       // Mise à jour du state des erreurs
       setErrorAnswer(idQuestion, idAnswer);
@@ -214,103 +188,40 @@ function QuizUpdate({
   //* Mise à jour sélection d'un bouton radio
   const handleUpdateRadioBtn = useCallback(
     (idQuestion: number,idAnswer: number) => {
-      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
-      updateQuestions.map((question) => {
-        if (question.id === idQuestion) {
-          return {
-            ...question,
-            answers: question.answers.map((answer) => {
-              if (answer.id === idAnswer) {
-                return {
-                  ...answer,
-                  is_valid: true,
-                };
-              }
-              return   {
-                ...answer,
-                is_valid: false,
-              };
-            }),
-          };
-        }
-        return question;
-      })
-    );
+      // Mise à jour du state
+      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateRadioBtn(updateQuestions, idQuestion, idAnswer)
+      );
     // Mise à jour du state des erreurs
     setErrorRadio(idQuestion);
     },
     []
   );
-
-   //* Mise à jour du state des erreurs si modification d'un champ question
-   const setErrorQuestion=(indexQuestion: number) => {
-    setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
-      ...errorInputMsg,
-      questions: errorInputMsg.questions.map((questionError, index) => {
-        if (index === indexQuestion) {
-          return {
-            ...questionError,
-            question: '',
-          };
-        }
-        return questionError;
-      }),
-    }));
+    //* Suppression du message d'erreur lors de la modification d'un champs
+   // Mise à jour du state des erreurs si modification d'une question
+  const setErrorQuestion=(idQuestion: number) => {
+    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateQuestionUpError(errorUpInputMsg, idQuestion));
   };
 
- //* Mise à jour du state des erreurs si modification d'un champ réponse
- const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
-  setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
-      if (index === indexQuestion) {
-        return {
-          ...questionError,
-          answers: questionError.answers.map((answerError, answerIndex) => {
-            if (answerIndex === indexAnswer) {
-              return {
-                ...answerError,
-                answer: '',
-              };
-            }
-            return answerError;
-          }),
-        };
-      }
-      return questionError;
-    }),
-  }));
- };
+ // Mise à jour du state des erreurs si modification d'une réponse
+  const setErrorAnswer =(idQuestion: number, idAnswer: number, ) => {
+    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateAnswerError(errorUpInputMsg, idQuestion, idAnswer));
+  };
 
-  //* Mise à jour du state des erreurs si sélection d'un bouton radio
- const setErrorRadio =(indexQuestion: number) => {
-  setErrorInputMsg((errorInputMsg: IerrorFormUpdateQuiz) => ({
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
-      if (index === indexQuestion) {
-        return {
-          ...questionError,
-          radioGroup: '',
-        };
-      }
-      return questionError;
-    }),
-  }));
- };
+  // Mise à jour du state des erreurs si sélection d'un bouton radio 
+  const setErrorRadio =(indexQuestion: number) => {
+    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateRadioBtnError(errorUpInputMsg, indexQuestion));  
+  };
 
   //* Envoi du formulaire si aucune erreur
- const handleFormSubmit = async (isAllowed: boolean) => {
-  if (isAllowed) {
+  const handleFormSubmit = async (isAllowed: boolean) => {
+    if (isAllowed) {
     // Envoi des données au back
-    // On affecte le state newQuiz à quiz
-    // On affecte un tablleau des states des questions à questions
     try {
       const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
         quiz: updateQuiz,
         questions: updateQuestions,
       });
       if (response.status !== 200) throw new Error();
-
       // Rappel de la liste des quizs et mise à jour du state quizList
       fetchQuizList();
       // Vide le state des erreurs du backend
@@ -318,11 +229,11 @@ function QuizUpdate({
       // On redirige vers la page de profile
       /* navigate('/profile/quiz'); */
     } catch (error) {
-      // Gestion des erreurs, si statut 400 envoi d'un message d'erreur
+      // Si statut 400 envoi d'un message d'erreur
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.status === 400) {
           console.log('error.response',error.response);
-          const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier que vous êtes  bien connecté et que tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
+          const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
           console.log('newErrorMsg',newErrorMsg);
           setErrorBackend(newErrorMsg);        }
       } else {
@@ -361,7 +272,7 @@ function QuizUpdate({
     const menuSelectErrors = validateMenuSelect(menuSelectToValidate, validationRulesSelect);
 
     // Récupère la validation des questions, réponses et boutons radio
-    const questionsErrors = validateQuestions(quizDataToValidate);
+    const questionsErrors = validateQuestionsUp(quizDataToValidate);
 
     //*Rassemble toutes les erreurs dans un nouvel objet
     const errors = {
@@ -374,44 +285,14 @@ function QuizUpdate({
     };
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
-    setErrorInputMsg(errors);
+    setErrorUpInputMsg(errors);
 
      // eslint-disable-next-line no-unneeded-ternary
      const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
 
     //*Gère la soumission du formulaire
-    handleFormSubmit(isAllowToSubmit);
-
-    
-    // //* Critères à respecter avant d'envoyer aux back les données
-    // if (!updateQuiz.title || updateQuiz.title.length < 3) {
-    //   setErrorMessage(
-    //     'Vous devez ajouter un titre contenant au moins 3 caractères',
-    //   );
-    // } else if (!updateQuiz.description || updateQuiz.description.length < 5) {
-    //   setErrorMessage(
-    //     'Vous devez ajouter une description contenant au moins 5 caractères',
-    //   );
-    // } else {
-    //   // Envoi des données au back
-    //   // On affecte le state newQuiz à quiz
-    //   // On affecte un tablleau des states des questions à questions
-    //   try {
-    //     const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
-    //       quiz: updateQuiz,
-    //       questions: updateQuestions,
-    //     });
-    //     if (response.status !== 200) throw new Error();
-
-    //     // On met à jour le state quizList
-    //     fetchQuizList();
-    //     // On redirige vers la page de profile
-    //     navigate('/profile/quiz');
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+    handleFormSubmit(isAllowToSubmit);    
   };
 
   return (
@@ -431,8 +312,8 @@ function QuizUpdate({
           <FormControl 
           required
           error={
-            errorInputMsg.tag_id !== undefined
-            && errorInputMsg.tag_id !== ''
+            errorUpInputMsg.tag_id !== undefined
+            && errorUpInputMsg.tag_id !== ''
             }
           >
             <InputLabel id="label-select-tag">Catégorie</InputLabel>
@@ -456,9 +337,9 @@ function QuizUpdate({
             </Select>
             <FormHelperText>
               {
-              errorInputMsg.tag_id !== undefined
-              && errorInputMsg.tag_id !== ''
-                ? errorInputMsg.tag_id
+              errorUpInputMsg.tag_id !== undefined
+              && errorUpInputMsg.tag_id !== ''
+                ? errorUpInputMsg.tag_id
                 : 'selectionner une catégorie'
               }
             </FormHelperText>
@@ -470,8 +351,8 @@ function QuizUpdate({
           <FormControl  
             required
             error={
-            errorInputMsg.level_id !== undefined
-            && errorInputMsg.level_id !== ''
+            errorUpInputMsg.level_id !== undefined
+            && errorUpInputMsg.level_id !== ''
             }
             >
             <InputLabel id="label-select-level">Difficulté</InputLabel>
@@ -492,23 +373,19 @@ function QuizUpdate({
                   {level.name}
                 </MenuItem>
               ))}
-              {/* {levelsList !== undefined && (
+             {levelsList !== undefined && (
               levelsList.map((level) => (
                 <MenuItem key={level.id} value={level.id} className="levels-list">
                   {level.name}
                 </MenuItem>
               ))
-              )} */}
-              
-              
-
-
+              )} 
             </Select>
             <FormHelperText>
               {
-              errorInputMsg.level_id !== undefined
-              && errorInputMsg.level_id !== ''
-                ? errorInputMsg.level_id
+              errorUpInputMsg.level_id !== undefined
+              && errorUpInputMsg.level_id !== ''
+                ? errorUpInputMsg.level_id
                 : 'selectionner un niveau de difficulté'
               }
             </FormHelperText>
@@ -525,13 +402,13 @@ function QuizUpdate({
             onChange={(event) => handleChangeQuizData(event, 'title')}
             fullWidth
             error={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
+              errorUpInputMsg.title !== undefined
+              && errorUpInputMsg.title !== ''
             }
             helperText={
-              errorInputMsg.title !== undefined
-              && errorInputMsg.title !== ''
-                ? errorInputMsg.title
+              errorUpInputMsg.title !== undefined
+              && errorUpInputMsg.title !== ''
+                ? errorUpInputMsg.title
                 : `${updateQuiz.title.length}/150 caractères maximum`
             }
           />
@@ -548,13 +425,13 @@ function QuizUpdate({
             multiline
             rows={4}
             error={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
+              errorUpInputMsg.description !== undefined
+              && errorUpInputMsg.description !== ''
             }
             helperText={
-              errorInputMsg.description !== undefined
-              && errorInputMsg.description !== ''
-                ? errorInputMsg.description
+              errorUpInputMsg.description !== undefined
+              && errorUpInputMsg.description !== ''
+                ? errorUpInputMsg.description
                 : `${updateQuiz.description.length}/300 caractères maximum`
             }
           />
@@ -569,13 +446,13 @@ function QuizUpdate({
             onChange={(event) => handleChangeQuizData(event, 'thumbnail')}
             fullWidth
             error={
-              errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
+              errorUpInputMsg.thumbnail !== undefined
+              && errorUpInputMsg.thumbnail !== ''
             }
             helperText={
-              errorInputMsg.thumbnail !== undefined
-              && errorInputMsg.thumbnail !== ''
-                ? errorInputMsg.thumbnail
+              errorUpInputMsg.thumbnail !== undefined
+              && errorUpInputMsg.thumbnail !== ''
+                ? errorUpInputMsg.thumbnail
                 : 'Coller l\'url de l\'image'
             }
           />
@@ -588,7 +465,7 @@ function QuizUpdate({
               questionIndex={index}
               questionNumber={index + 1}
               currentQuestion={question}
-              currentQuestionError={errorInputMsg.questions[index]}
+              currentQuestionError={errorUpInputMsg.questions[index]}
               onChangeQuestion={handleUpdateQuestion}
               handleUpdateRadioBtn={handleUpdateRadioBtn}
               handleUpdateAnswer={handleUpdateAnswer}

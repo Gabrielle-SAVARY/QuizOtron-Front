@@ -93,19 +93,24 @@ export const initialUpdateQuestions = (questionNumber: number) => Array.from(
 
 // Créer un objet de messages d'erreurs pour une question d'un nouveau quiz
 export const createQuestionUpErrorModel = () => ({
+  id:0,
   question: '',
   radioGroup: '',
   answers: [
     {
+      id:0,
       answer: '',
     },
     {
+      id:0,
       answer: '',
     },
     {
+      id:0,
       answer: '',
     },
     {
+      id:0,
       answer: '',
     },
   ],
