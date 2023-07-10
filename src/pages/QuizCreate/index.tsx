@@ -19,6 +19,7 @@ import QuestionCreate from './QuestionCreate';
 import './styles.scss';
 import axios from 'axios';
 import QuizInfoTextInput from '../../components/QuizTextInput';
+import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 // TODO supprimer les consoles log
 
 interface QuizCreateProps {
@@ -331,76 +332,29 @@ function QuizCreate({
         <fieldset className="quiz__parameter">
 
           {/* //? ======= Choix de la catégorie========== */}
-          {newQuiz.tag_id !== 0 && ( 
-          <FormControl
-            required
-            error={
-            errorInputMsg.tag_id !== undefined
-            && errorInputMsg.tag_id !== ''
-            }
-          >
-            <InputLabel id="label-select-tag">Catégorie</InputLabel>
-            <Select
-              id="select-tag"
-              className="select-tag"
-              name="tag_id"
-              labelId="label-select-tag"
-              label="Catégorie"
-              defaultValue="choose option"
-              onChange={(event) => handleChangeQuizData(event, 'tag_id')}
-            >
-              <MenuItem disabled value="choose option">Sélectionner une catégorie</MenuItem>
-              {tagsList.map((tag) => (
-                <MenuItem key={tag.id} value={tag.id} className="select-tag">{tag.name}</MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>
-              {
-              errorInputMsg.tag_id !== undefined
-              && errorInputMsg.tag_id !== ''
-                ? errorInputMsg.tag_id
-                : 'selectionner une catégorie'
-              }
-            </FormHelperText>
-          </FormControl>
-          )}
+          <QuizMenuDropDown
+          arrayList={tagsList}
+          formSituation='create quiz'
+          selectTheme='tag'
+          inputName="tag_id"
+          inputLabel='catégorie'
+          inputValue={newQuiz.tag_id}
+          inputError={errorInputMsg.tag_id}
+          handleChangeQuizData={handleChangeQuizData}
+          />
 
           {/* //? ======= Choix de la difficulté========== */}
-          {newQuiz.level_id !== 0 && ( 
-          <FormControl
-            required
-            error={
-            errorInputMsg.level_id !== undefined
-            && errorInputMsg.level_id !== ''
-            }
-          >
-            <InputLabel id="label-select-level">Difficulté</InputLabel>
-            <Select
-              id="select-level"
-              name="level_id"
-              label="Difficulté"
-              labelId="label-select-level"
-              defaultValue="choose option"
-              onChange={(event) => handleChangeQuizData(event, 'level_id')}   
-            >
-              <MenuItem disabled value="choose option">Sélectionner niveau de difficulté</MenuItem>
-              {
-                levelsList.map((level) => (
-                  <MenuItem key={level.id} value={level.id}>{level.name}</MenuItem>
-                ))
-              }
-            </Select>
-            <FormHelperText>
-              {
-              errorInputMsg.level_id !== undefined
-              && errorInputMsg.level_id !== ''
-                ? errorInputMsg.level_id
-                : 'selectionner un niveau de difficulté'
-              }
-            </FormHelperText>
-          </FormControl>
-          )}
-
+          <QuizMenuDropDown
+          arrayList={levelsList}
+          formSituation='create quiz'
+          selectTheme='level'
+          inputName="level_id"
+          inputLabel='niveau de difficulté'
+          inputValue={newQuiz.level_id}
+          inputError={errorInputMsg.level_id}
+          handleChangeQuizData={handleChangeQuizData}
+          />
+         
           {/* //? ======= Choix du titre ========== */}
           <QuizInfoTextInput 
             inputName='title'

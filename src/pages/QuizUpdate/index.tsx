@@ -20,6 +20,7 @@ import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/valid
 import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '../../utils/validateFormField';
 import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizUpdate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
+import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -309,90 +310,33 @@ function QuizUpdate({
       <form onSubmit={(event) => handleSubmit(event)}>
         <fieldset className="quiz__parameter">
           {/* //? ======= Choix de la catégorie========== */}
-          {updateQuiz.tag_id !== 0 && ( 
-          <FormControl 
-          required
-          error={
-            errorUpInputMsg.tag_id !== undefined
-            && errorUpInputMsg.tag_id !== ''
-            }
-          >
-            <InputLabel id="label-select-tag">Catégorie</InputLabel>
-            <Select
-              id="select-tag"
-              className="select-tag"
-              name='tag_id'
-              labelId="label-select-tag"
-              label="Catégorie"
-              value={updateQuiz.tag_id}
-              onChange={(event) => handleChangeQuizData(event, 'tag_id')}
-            >
-              <MenuItem disabled value="choose option">
-                Sélectionner une catégorie
-              </MenuItem>
-              {tagsList.map((tag) => (
-                <MenuItem key={tag.id} value={tag.id} className="tags-list">
-                  {tag.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>
-              {
-              errorUpInputMsg.tag_id !== undefined
-              && errorUpInputMsg.tag_id !== ''
-                ? errorUpInputMsg.tag_id
-                : 'selectionner une catégorie'
-              }
-            </FormHelperText>
-          </FormControl>
+          {updateQuiz.tag_id !== 0 && (
+            <QuizMenuDropDown
+            arrayList={tagsList}
+            formSituation='update quiz'
+            selectTheme='tag'
+            inputName="tag_id"
+            inputLabel='catégorie'
+            inputValue={updateQuiz.tag_id}
+            inputError={errorUpInputMsg.tag_id}
+            handleChangeQuizData={handleChangeQuizData}
+            />
           )}
-
+          
           {/* //? ======= Choix de la difficulté========== */}
-          {updateQuiz.level_id !== 0 && ( 
-          <FormControl  
-            required
-            error={
-            errorUpInputMsg.level_id !== undefined
-            && errorUpInputMsg.level_id !== ''
-            }
-            >
-            <InputLabel id="label-select-level">Difficulté</InputLabel>
-            <Select
-              id="select-level"
-              className="select-level"
-              name="level_id"
-              labelId="label-select-level"
-              label="Difficulté"
-              value={updateQuiz.level_id}
-              onChange={(event) => handleChangeQuizData(event, 'level_id')}
-            >
-              <MenuItem disabled value="choose option">
-                Sélectionner
-              </MenuItem>
-              {levelsList.map((level) => (
-                <MenuItem key={level.id} value={level.id} className="levels-list">
-                  {level.name}
-                </MenuItem>
-              ))}
-             {levelsList !== undefined && (
-              levelsList.map((level) => (
-                <MenuItem key={level.id} value={level.id} className="levels-list">
-                  {level.name}
-                </MenuItem>
-              ))
-              )} 
-            </Select>
-            <FormHelperText>
-              {
-              errorUpInputMsg.level_id !== undefined
-              && errorUpInputMsg.level_id !== ''
-                ? errorUpInputMsg.level_id
-                : 'selectionner un niveau de difficulté'
-              }
-            </FormHelperText>
-          </FormControl>
+          {updateQuiz.level_id !== 0 &&(
+            <QuizMenuDropDown
+            arrayList={levelsList}
+            formSituation='update quiz'
+            selectTheme='level'
+            inputName="level_id"
+            inputLabel='niveau de difficulté'
+            inputValue={updateQuiz.level_id}
+            inputError={errorUpInputMsg.level_id}
+            handleChangeQuizData={handleChangeQuizData}
+            />
           )}
-
+          
           {/* //? ======= Choix du titre ========== */}
           <QuizInfoTextInput
             inputName='title'
