@@ -1,11 +1,11 @@
-import { IValidationNumberRule, IValidationRule, QuestionError, QuestionUpError, ValidationQuestionResult, ValidationQuestionUpResult, ValidationResult } from '../@types/error';
+import { AnswerUpError, IValidationNumberRule, IValidationRule, QuestionError, QuestionUpError, ValidationQuestionResult, ValidationQuestionUpResult, ValidationResult } from '../@types/error';
 import { Question } from '../@types/newQuiz';
-import { QuestionUp } from '../@types/quizUpdate';
+import { AnswerUp, QuestionUp } from '../@types/quizUpdate';
 import { validateNotEmpty } from './validationsRules';
 // TODO supprimer les consoles log
 
 
-// Vérification des champs texte
+//* Vérification des champs texte
 export const validateTextFields = (
   stateData: { [key: string]: string },
   validationRules: IValidationRule[],
@@ -36,7 +36,7 @@ export const validateTextFields = (
   return { errors, hasError };
 };
 
-// Vérification des menus déroulants
+//* Vérification des menus déroulants
 export const validateMenuSelect = (
   stateData: { [key: string]: number },
   validationRules: IValidationNumberRule[],
@@ -65,7 +65,7 @@ export const validateMenuSelect = (
   return { errors, hasError };
 };
 
-// Vérification des questions du formulaire de création d'un quiz
+//* Vérification des questions du formulaire de création d'un quiz
 // champs textes et groupe de boutons radio
 export const validateQuestions = (stateData: Question[]):ValidationQuestionResult => {
   let hasError = false;
@@ -114,37 +114,50 @@ export const validateQuestions = (stateData: Question[]):ValidationQuestionResul
   return { errors, hasError };
 };
 
-// Vérification des questions du formulaire de la mise à jour d'un quiz
+//* Vérification des questions du formulaire de la mise à jour d'un quiz
 // champs textes et groupe de boutons radio
 export const validateQuestionsUp = (stateData: QuestionUp[]):ValidationQuestionUpResult => {
   // Variable qui indique si une erreur est trouvée
-  let hasError = false;
-  // Objet qui contiendra les messages d'erreurs
+  let hasError = false;  
+  // Tableau qui contient les erreur de chaque question
   const errors: QuestionUpError[] = stateData.map((question) => {
-    // Vérification du champs texte de la question et sélection d'un bouton radio
+    const radioGroupError = getRadioGroupError(question.answers);
     const questionError = validateNotEmpty(question.question);
-    const isRadioSelect = question.answers.some((answer) => answer.is_valid);
-    if (questionError !== '' || !isRadioSelect) {
+    if (questionError !== '' || !radioGroupError) {
       hasError = true;
     }
+    const { answerErrors, answerHasError } = getAnswerErrors(question.answers);
+    if (answerHasError) {
+      hasError = true;
+    }
+    // Retourne les erreurs de la question
     return {
       id: question.id,
       question: questionError,
-      radioGroup: isRadioSelect ? '' : 'Veuillez sélectionner la bonne réponse',
-      // Vérification de du champs texte de chaque réponse de la question
-      answers: question.answers.map((answer) => {
-        const answerError = validateNotEmpty(answer.answer);
-        if (answerError !== '') {
-          hasError = true;
-          return {
-            id: answer.id,
-            answer: answerError,
-          };
-        }
-        return answer;
-      }),
-    };
-  });
+      radioGroup: radioGroupError,
+      answers: answerErrors,      
+    };    
+  });  
   return { errors, hasError };
 };
-
+// Vérification de la sélection d'un seul bouton radio
+const getRadioGroupError = (answers: AnswerUp[]): string => {
+  const validAnswers = answers.filter((answer) => answer.is_valid);
+  const isRadioSelected = validAnswers.length === 1;
+  return isRadioSelected ? '' : 'Veuillez sélectionner la bonne réponse';
+};
+// Vérification des réponses
+const getAnswerErrors = (answers: AnswerUp[]): { answerErrors: AnswerUpError[], answerHasError: boolean } => {
+  let answerHasError = false;
+  const answerErrors: AnswerUpError[] =  answers.map((answer) => {
+    const answerError = validateNotEmpty(answer.answer);
+    if (answerError !== '') {
+      answerHasError = true;
+    }
+    return {
+      id: answer.id,
+      answer: answerError,
+    };
+  });
+  return { answerErrors, answerHasError };
+};

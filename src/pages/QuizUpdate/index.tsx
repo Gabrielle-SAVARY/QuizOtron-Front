@@ -11,7 +11,6 @@ import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
-import UpdateQuestion from './QuestionUpdate';
 import './styles.scss';
 import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
 import axios from 'axios';
@@ -21,6 +20,7 @@ import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '..
 import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizUpdate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
+import QuestionUpdate from './QuestionUpdate';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -215,9 +215,7 @@ function QuizUpdate({
   };
 
   //* Envoi du formulaire si aucune erreur
-  const handleFormSubmit = async (isAllowed: boolean) => {
-    if (isAllowed) {
-    // Envoi des données au back
+  const handleFormSubmit = async () => {
     try {
       const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
         quiz: updateQuiz,
@@ -242,8 +240,7 @@ function QuizUpdate({
         console.error(error);
       }
       throw error;
-    }
-  }
+    }  
  };
 
   //* ENVOIE DU FORMULAIRE A l'API
@@ -290,11 +287,13 @@ function QuizUpdate({
     setErrorUpInputMsg(errors);
 
      // eslint-disable-next-line no-unneeded-ternary
-     const isAllowToSubmit = (!fieldsErrors.hasError
-      && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
-
-    //*Gère la soumission du formulaire
-    handleFormSubmit(isAllowToSubmit);    
+     
+     //* Soumission du formulaire si aucune erreur
+    const isAllowToSubmit = (!fieldsErrors.hasError
+    && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
+    if (isAllowToSubmit){
+      handleFormSubmit();
+    }
   };
 
   return (
@@ -368,7 +367,7 @@ function QuizUpdate({
         {updateQuestions[0].id !==0 && (
         <fieldset className="quiz__questions">
           {updateQuestions.map((question, index) => (
-            <UpdateQuestion
+            <QuestionUpdate
               key={question.id}
               questionIndex={index}
               questionNumber={index + 1}
