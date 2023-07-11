@@ -11,22 +11,20 @@ interface QuizMenuDropDownProps {
   inputValue: number;
   inputError: string;
   defaultMessage: string;
-  handleChangeQuizData: ( event:
+  handleChange: ( event:
     SelectChangeEvent<number> |
     SelectChangeEvent<string> |
     ChangeEvent<HTMLInputElement |
     HTMLTextAreaElement>,
     field: string) => void;
-
 }
 
-function QuizMenuDropDown({arrayList,item, inputLabel,inputValue, inputError,defaultMessage, handleChangeQuizData
+function QuizMenuDropDown({arrayList,item, inputLabel,inputValue, inputError,defaultMessage, handleChange
 }: QuizMenuDropDownProps) {
   // Première lettre en majuscule du label
   const capitalizeInputLabel = inputLabel.charAt(0).toUpperCase() + inputLabel.slice(1);
-
+  // Nom de l'input Select
   const inputName = `${item}_id`
-
   
   return (
     <FormControl
@@ -45,7 +43,7 @@ function QuizMenuDropDown({arrayList,item, inputLabel,inputValue, inputError,def
         labelId={`label-select-${item}`}
         label={capitalizeInputLabel}
         value={inputValue}
-        onChange={(event) => handleChangeQuizData(event, inputName)}
+        onChange={(event) => handleChange(event, inputName)}
       >
         <MenuItem disabled value="0">{inputLabel}</MenuItem>
         {arrayList.map((item) => (
@@ -67,8 +65,7 @@ function QuizMenuDropDown({arrayList,item, inputLabel,inputValue, inputError,def
         }
       </FormHelperText>
     </FormControl>
-  );
- 
+  ); 
 }
 
 export default QuizMenuDropDown;
