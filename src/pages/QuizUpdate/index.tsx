@@ -313,13 +313,12 @@ function QuizUpdate({
           {updateQuiz.tag_id !== 0 && (
             <QuizMenuDropDown
             arrayList={tagsList}
-            formSituation='update quiz'
-            selectTheme='tag'
-            inputName="tag_id"
+            item='tag'
             inputLabel='catégorie'
             inputValue={updateQuiz.tag_id}
             inputError={errorUpInputMsg.tag_id}
-            handleChangeQuizData={handleChangeQuizData}
+            defaultMessage='Sélectionner une catégorie'
+            handleChange={handleChangeQuizData}
             />
           )}
           
@@ -327,13 +326,12 @@ function QuizUpdate({
           {updateQuiz.level_id !== 0 &&(
             <QuizMenuDropDown
             arrayList={levelsList}
-            formSituation='update quiz'
-            selectTheme='level'
-            inputName="level_id"
+            item='level'
             inputLabel='niveau de difficulté'
             inputValue={updateQuiz.level_id}
             inputError={errorUpInputMsg.level_id}
-            handleChangeQuizData={handleChangeQuizData}
+            defaultMessage='Sélectionner un niveau de difficulté'
+            handleChange={handleChangeQuizData}
             />
           )}
           

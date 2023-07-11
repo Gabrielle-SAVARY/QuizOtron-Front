@@ -334,25 +334,23 @@ function QuizCreate({
           {/* //? ======= Choix de la catégorie========== */}
           <QuizMenuDropDown
           arrayList={tagsList}
-          formSituation='create quiz'
-          selectTheme='tag'
-          inputName="tag_id"
+          item='tag'
           inputLabel='catégorie'
           inputValue={newQuiz.tag_id}
           inputError={errorInputMsg.tag_id}
-          handleChangeQuizData={handleChangeQuizData}
+          defaultMessage='Sélectionner une catégorie'
+          handleChange={handleChangeQuizData}
           />
 
           {/* //? ======= Choix de la difficulté========== */}
           <QuizMenuDropDown
           arrayList={levelsList}
-          formSituation='create quiz'
-          selectTheme='level'
-          inputName="level_id"
+          item='level'
           inputLabel='niveau de difficulté'
           inputValue={newQuiz.level_id}
           inputError={errorInputMsg.level_id}
-          handleChangeQuizData={handleChangeQuizData}
+          defaultMessage='Sélectionner un niveau de difficulté'
+          handleChange={handleChangeQuizData}
           />
          
           {/* //? ======= Choix du titre ========== */}
