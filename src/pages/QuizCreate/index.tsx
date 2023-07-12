@@ -191,7 +191,6 @@ function QuizCreate({
     // Récupère la validations des champs texte et des menus déroulants
     const fieldsErrors = validateTextFields(dataToValidate, validationRulesNewQuiz);
     const menuSelectErrors = validateMenuSelect(menuSelectToValidate, validationRulesSelect);
-
     // Récupère la validation des questions, réponses et boutons radio
     const questionsErrors = validateQuestions(quizDataToValidate);
 

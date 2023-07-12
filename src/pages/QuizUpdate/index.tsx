@@ -55,7 +55,9 @@ function QuizUpdate({
   const [updateQuestions, setUpdateQuestions] = useState<QuestionUp[]>(initialUpdateQuestions(numberOfQuestions));
 
   // Stocke le message d'erreur du backend lors d'une erreur 400
-  const [errorBackend, setErrorBackend] = useState<string>('');
+  const [errorFormUpdateQuiz, setErrorFormUpdateQuiz] = useState<string>('');
+  const [successUpdateQuiz, setSuccessUpdateQuiz] = useState<string>('');
+  console.log('successUpdateQuiz',successUpdateQuiz);
 
    // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
    const [errorsUpdateQuiz, setErrorsUpdateQuiz] = useState<IerrorFormUpdateQuiz>({
@@ -220,8 +222,11 @@ function QuizUpdate({
       if (response.status !== 200) throw new Error();
       // Rappel de la liste des quizs et mise à jour du state quizList
       fetchQuizList();
-      // Vide le state des erreurs du backend
-      setErrorBackend('');
+
+      // Message de succès de mise à jour du quiz
+      setSuccessUpdateQuiz('Le quiz a été mis à jour avec succès.');
+      console.log('successUpdateQuiz',successUpdateQuiz);
+
       // On redirige vers la page de profile
       /* navigate('/profile/quiz'); */
     } catch (error) {
@@ -229,9 +234,9 @@ function QuizUpdate({
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.status === 400) {
           console.log('error.response',error.response);
-          const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
-          console.log('newErrorMsg',newErrorMsg);
-          setErrorBackend(newErrorMsg);        }
+          const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";          
+          setErrorFormUpdateQuiz(newErrorMsg);
+        }
       } else {
         console.error(error);
       }
@@ -242,6 +247,11 @@ function QuizUpdate({
   //* Gère la validation des données et déclenche la soumission du formulaire
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Vide le state du message de succès
+    setSuccessUpdateQuiz('');
+    // Vide le state qui alerte de la présence d'erreru dans de formulaire 
+    setErrorFormUpdateQuiz('');
+
     //* Récupération des erreurs du formulaire à partir des states
     // partie informations du quiz: state updateQuiz
     // Erreurs des champs texte
@@ -260,11 +270,8 @@ function QuizUpdate({
 
     //* Validation du formulaire
     // Récupère la validations des champs texte et des menus déroulants
-    const fieldsErrors = validateTextFields(dataToValidate, validationRulesNewQuiz);
-    console.log('fieldsErrors',fieldsErrors);
-    
+    const fieldsErrors = validateTextFields(dataToValidate, validationRulesNewQuiz);    
     const menuSelectErrors = validateMenuSelect(menuSelectToValidate, validationRulesSelect);
-
     // Récupère la validation des questions, réponses et boutons radio
     const questionsErrors = validateQuestionsUp(quizDataToValidate);
 
@@ -285,9 +292,12 @@ function QuizUpdate({
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
     && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
+    console.log('isAllowToSubmit',isAllowToSubmit);
     if (isAllowToSubmit){
       handleFormSubmit();
-    };
+    }else {
+      setErrorFormUpdateQuiz('Il y a une ou des erreurs qui empêchent la soumission du formulaire. Veuillez vérifier les champs du formulaire, les erreurs seront indiquées en rouge.');
+    }
   };
 
   return (
@@ -377,7 +387,8 @@ function QuizUpdate({
           Modifier le Quiz
         </button>
       </form>
-      {errorBackend !== '' && <div className="error-message">{errorBackend}</div>}
+      {errorFormUpdateQuiz !== '' && <div className="error-message">{errorFormUpdateQuiz}</div>}
+      {successUpdateQuiz !== '' && <div className="success-message">{successUpdateQuiz}</div>}
     </div>
   );
 }

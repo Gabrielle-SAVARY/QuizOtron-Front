@@ -122,21 +122,24 @@ export const validateQuestionsUp = (stateData: QuestionUp[]):ValidationQuestionU
   const errors: QuestionUpError[] = stateData.map((question) => {
     const radioGroupError = getRadioGroupError(question.answers);
     const questionError = validateNotEmpty(question.question);
-    if (questionError !== '' || !radioGroupError) {
+    // Si une erreur est trouvée, on passe hasError à true
+    if (questionError !== '' || radioGroupError !== '') {
       hasError = true;
     }
-    const { answerErrors, answerHasError } = getAnswerErrors(question.answers);
-    if (answerHasError) {
+    // Vérification des réponses
+    const { answerErrors, answerHasError} = getAnswerErrors(question.answers);
+    // Si une erreur est trouvée, on passe hasError à true
+    if (answerHasError === true) {
       hasError = true;
     }
-    // Retourne les erreurs de la question
+    // Retourne les erreurs de la question dans l'objet errors
     return {
       id: question.id,
       question: questionError,
       radioGroup: radioGroupError,
       answers: answerErrors,      
     };    
-  });  
+  }); 
   return { errors, hasError };
 };
 // Vérification de la sélection d'un seul bouton radio
@@ -150,6 +153,7 @@ const getAnswerErrors = (answers: AnswerUp[]): { answerErrors: AnswerUpError[], 
   let answerHasError = false;
   const answerErrors: AnswerUpError[] =  answers.map((answer) => {
     const answerError = validateNotEmpty(answer.answer);
+    // Si une erreur est trouvée, on passe answerHasError à true
     if (answerError !== '') {
       answerHasError = true;
     }

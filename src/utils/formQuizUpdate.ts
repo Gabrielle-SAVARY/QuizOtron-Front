@@ -1,6 +1,7 @@
 import { IerrorFormUpdateQuiz } from "../@types/error";
 import { QuestionUp } from "../@types/quizUpdate";
-  //* Mises à jour des states lors de la modification des champs
+
+//* Mises à jour des states lors de la modification des champs
 // Mise à jour du state: changement d'une question
 export function updateQuestionUpValue(updateQuestions: QuestionUp[], idQuestion: number, newValue: string) {
   return updateQuestions.map((questionObject) => {

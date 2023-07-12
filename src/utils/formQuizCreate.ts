@@ -1,7 +1,7 @@
-import { IerrorFormNewQuiz, IerrorFormUpdateQuiz } from "../@types/error";
+import { IerrorFormNewQuiz } from "../@types/error";
 import { Question } from "../@types/newQuiz";
 
-  //* Mises à jour des states lors de la modification des champs
+//* Mises à jour des states lors de la modification des champs
 // Mise à jour du state: changement d'une question
 export function updateQuestionValue(newQuestions: Question[], indexQuestion: number, newValue: string) {
   return newQuestions.map((questionObject, index) => {
