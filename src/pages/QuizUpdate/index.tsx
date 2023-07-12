@@ -1,26 +1,23 @@
 import {
   useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback} from 'react';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {
-  FormControl, FormHelperText, InputLabel, MenuItem, TextField,
-} from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
+import axios from 'axios';
 import { axiosInstance } from '../../utils/axios';
+import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
+import { updateAnswerError, updateAnswerUpValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtnUp, updateRadioBtnUpError } from '../../utils/formQuizUpdate';
+import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
+import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '../../utils/validateFormField';
+import { IerrorFormUpdateQuiz } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
-import './styles.scss';
-import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
-import axios from 'axios';
-import { IerrorFormUpdateQuiz } from '../../@types/error';
-import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
-import { validateMenuSelect,  validateQuestionsUp, validateTextFields } from '../../utils/validateFormField';
-import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizUpdate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 import QuestionUpdate from './QuestionUpdate';
+import './styles.scss';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -33,7 +30,7 @@ interface QuizUpdateProps {
 function QuizUpdate({
   tagsList, levelsList, oneQuiz, getQuizDetails, fetchQuizList,
 }: QuizUpdateProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
@@ -131,8 +128,7 @@ function QuizUpdate({
   }, [oneQuiz]);
 
   
-  //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // Mise à jour du state updateQuiz (infos du quiz)
+  //* Mise à jour du state des infos du quiz lors de la modification des champs du formulaire
   const handleChangeQuizData = (
     event:
     | SelectChangeEvent<number>
@@ -151,35 +147,35 @@ function QuizUpdate({
       }
       setUpdateQuiz(quizData);
        // Réinitialise le message d'erreur de l'input
-      setErrorUpInputMsg({ ...errorUpInputMsg, [field]: '' });
+      setErrorUpInputMsg({
+         ...errorUpInputMsg,
+          [field]: '' 
+        });
     };
-    
-    //* Mise à jour du champs d'une question
+
+    //* Mise à jour du state des questions lors de la modification des champs du formulaire
+  // Modification du champs d'une question
   const handleUpdateQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
     // Récupère et type la cible de l'événement
     const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input et l'affecte à la copie du state
+    // Récupère la valeur de l'input et mise à jour du state 
     const newValue = target.value;
     setUpdateQuestions((updateQuestions: QuestionUp[]) =>
     updateQuestionUpValue(updateQuestions, idQuestion, newValue)
     );
     // Mise à jour du state errors
     setErrorQuestion(idQuestion);
-  };    
+  }; 
 
-   //* Mise à jour du champs d'une réponse
+  // Modification du champs d'une réponse
   const handleUpdateAnswer = useCallback(
-    (
-      event: SyntheticEvent<Element, Event>,
-      idQuestion: number,
-      idAnswer: number
-    ) => {
+    (event: SyntheticEvent<Element, Event>,idQuestion: number,idAnswer: number) => {
       // Récupère et type la cible de l'évenement
       const target = event.target as HTMLInputElement;
       // Récupère la valeur de l'input 
       const newValue = target.value;
-      // Mise à jour du state
-      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateAnswerValue(updateQuestions, idQuestion, idAnswer, newValue)
+      // Mise à jour du state des
+      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateAnswerUpValue(updateQuestions, idQuestion, idAnswer, newValue)
       );
       // Mise à jour du state des erreurs
       setErrorAnswer(idQuestion, idAnswer);
@@ -187,31 +183,31 @@ function QuizUpdate({
     []
   );
 
-  //* Mise à jour sélection d'un bouton radio
+  // Sélection d'un bouton radio
   const handleUpdateRadioBtn = useCallback(
     (idQuestion: number,idAnswer: number) => {
       // Mise à jour du state
-      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateRadioBtn(updateQuestions, idQuestion, idAnswer)
+      setUpdateQuestions((updateQuestions: QuestionUp[]) => updateRadioBtnUp(updateQuestions, idQuestion, idAnswer)
       );
     // Mise à jour du state des erreurs
     setErrorRadio(idQuestion);
-    },
-    []
+    },[]
   );
-    //* Suppression du message d'erreur lors de la modification d'un champs
-   // Mise à jour du state des erreurs si modification d'une question
+
+  //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs
+  // Modification d'un champ question
   const setErrorQuestion=(idQuestion: number) => {
     setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateQuestionUpError(errorUpInputMsg, idQuestion));
   };
 
- // Mise à jour du state des erreurs si modification d'une réponse
+ // Modification d'un champ réponse
   const setErrorAnswer =(idQuestion: number, idAnswer: number, ) => {
     setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateAnswerError(errorUpInputMsg, idQuestion, idAnswer));
   };
 
-  // Mise à jour du state des erreurs si sélection d'un bouton radio 
+  // Sélection d'un bouton radio
   const setErrorRadio =(indexQuestion: number) => {
-    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateRadioBtnError(errorUpInputMsg, indexQuestion));  
+    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateRadioBtnUpError(errorUpInputMsg, indexQuestion));  
   };
 
   //* Envoi du formulaire si aucune erreur
@@ -233,7 +229,7 @@ function QuizUpdate({
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.status === 400) {
           console.log('error.response',error.response);
-          const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
+          const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
           console.log('newErrorMsg',newErrorMsg);
           setErrorBackend(newErrorMsg);        }
       } else {
@@ -243,8 +239,7 @@ function QuizUpdate({
     }  
  };
 
-  //* ENVOIE DU FORMULAIRE A l'API
-  // TODO faire les vérifications des champs avant envoi du formulaire + feedback utilisateur
+  //* Gère la validation des données et déclenche la soumission du formulaire
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //* Récupération des erreurs du formulaire à partir des states
@@ -285,15 +280,14 @@ function QuizUpdate({
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
     setErrorUpInputMsg(errors);
-
-     // eslint-disable-next-line no-unneeded-ternary
-     
-     //* Soumission du formulaire si aucune erreur
+    
+    //* Soumission du formulaire si aucune erreur    
+    // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
     && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
     if (isAllowToSubmit){
       handleFormSubmit();
-    }
+    };
   };
 
   return (
@@ -364,12 +358,11 @@ function QuizUpdate({
             handleChangeQuizData={handleChangeQuizData}
           />
         </fieldset>
-        {updateQuestions[0].id !==0 && (
+        {updateQuestions[0].id !== 0 && (
         <fieldset className="quiz__questions">
           {updateQuestions.map((question, index) => (
             <QuestionUpdate
               key={question.id}
-              questionIndex={index}
               questionNumber={index + 1}
               currentQuestion={question}
               currentQuestionError={errorUpInputMsg.questions[index]}

@@ -9,7 +9,6 @@ import AnswerUpdate from '../AnswerUpdate';
 import { QuestionUpError } from '../../../@types/error';
 
 interface QuestionUpdateProps {
-  questionIndex:number
   questionNumber: number
   currentQuestion: QuestionUp
   currentQuestionError: QuestionUpError
@@ -19,9 +18,9 @@ interface QuestionUpdateProps {
 }
 
 function QuestionUpdate({
-  questionIndex, questionNumber, currentQuestion,currentQuestionError, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
+  questionNumber, currentQuestion,currentQuestionError, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
 }: QuestionUpdateProps) {
-  console.log(`QUPDATE ${questionNumber}`);  
+  // console.log(`QUPDATE ${questionNumber}`);  
   // TODO trouver solution pour éviter d'utiliser en key l'index de la réponse dans le map
 
   return (

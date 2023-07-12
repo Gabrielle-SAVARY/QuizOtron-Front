@@ -20,6 +20,7 @@ import './styles.scss';
 import axios from 'axios';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
+import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizCreate';
 // TODO supprimer les consoles log
 
 interface QuizCreateProps {
@@ -62,8 +63,7 @@ function QuizCreate({
   // Stocke le message d'erreur du backend suite à une erreur 400 lors de la soumission du formulaire 
   const [errorBackend, setErrorBackend] = useState<string>('');
 
-  //* -------- GESTION DE LA MISE A JOUR DES INPUTS --------
-  // Mise à jour de newQuiz: infos du quiz
+  //* Mise à jour du state des infos du quiz lors de la modification des champs du formulaire
   const handleChangeQuizData = (
     event: SelectChangeEvent<number> |
     SelectChangeEvent<string> |
@@ -83,31 +83,80 @@ function QuizCreate({
     // On met à jour le state newQuiz
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
-    setErrorInputMsg({ ...errorInputMsg, [field]: '' });
+    setErrorInputMsg({ 
+      ...errorInputMsg,
+       [field]: '' 
+      });
+  };
+
+  //* Mise à jour du state des questions lors de la modification des champs du formulaire
+  // Modification du champs d'une question
+  const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
+    // Récupère et type la cible de l'événement
+    const target = event.target as HTMLInputElement;
+    // Récupère la valeur de l'input et mise à jour du state
+    const newValue = target.value;
+    setNewQuestions((newQuestions: Question[]) => updateQuestionValue(newQuestions, indexQuestion, newValue));
+    // Mise à jour du state errors
+    setErrorQuestion(indexQuestion);
+  };    
+
+  // Modification du champs d'une réponse
+  const handleChangeAnswer = useCallback(
+    (event: SyntheticEvent<Element, Event>,indexQuestion: number,indexAnswer: number) => {
+    // Récupère et type la cible de l'évenement
+    const target = event.target as HTMLInputElement;
+    // Récupère la valeur de l'input et mise à jour du state 
+    const newValue = target.value;
+    setNewQuestions((newQuestions: Question[]) => updateAnswerValue(newQuestions, indexQuestion, indexAnswer, newValue));
+    // Mise à jour du state des erreurs
+    setErrorAnswer(indexQuestion, indexAnswer);
+    },[]
+  );
+
+  // Sélection d'un bouton radio
+  const handleChangeRadioBtn = useCallback((indexQuestion: number,indexAnswer: number) => {
+    // Mise à jour du state 
+    setNewQuestions((newQuestions: Question[]) => updateRadioBtn(newQuestions, indexQuestion, indexAnswer));
+    // Mise à jour du state des erreurs
+    setErrorRadio(indexQuestion);
+    },
+    []
+  );
+
+  //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs
+  // Modification d'un champ question
+  const setErrorQuestion=(indexQuestion: number) => {
+    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateQuestionUpError(errorInputMsg, indexQuestion));
+  };
+
+ // Modification d'un champ réponse
+  const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
+    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateAnswerError(errorInputMsg, indexQuestion, indexAnswer));
+  };
+
+  // Sélection d'un bouton radio
+  const setErrorRadio =(indexQuestion: number) => {
+    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateRadioBtnError(errorInputMsg, indexQuestion));
   };
 
   
   //* Envoi du formulaire si aucune erreur
-  const handleFormSubmit = async (isAllowed: boolean) => {
-    if (isAllowed) {
-      // Envoi des données au back
-      // On affecte le state newQuiz à quiz
-      // On affecte un tablleau des states des questions à questions
+  const handleFormSubmit = async () => {
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
           questions: newQuestions,
         });
         if (response.status !== 200) throw new Error();
-
-        // Rappel API de la liste des quiz pour mettre à jour le state et les données
+        // Rappel de la liste des quizs et mise à jour du state quizList
         fetchQuizList();
         // Vide le state des erreurs du backend
         setErrorBackend('');
         // Redirige vers la page de profile
-        navigate('/profile/quiz');
+        // navigate('/profile/quiz');
       } catch (error) {
-        // Gestion des erreurs, si statut 400 envoi d'un message d'erreur
+        // Si statut 400 envoi d'un message d'erreur
         if (axios.isAxiosError(error)) {
           if (error.response && error.response.status === 400) {
             const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier que vous êtes  bien connecté et que tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
@@ -115,8 +164,7 @@ function QuizCreate({
         } else {
           console.error(error);
         }
-        throw error;
-      }
+        throw error;      
     }
   };
 
@@ -159,163 +207,15 @@ function QuizCreate({
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
     setErrorInputMsg(errors);
+    
+     //* Soumission du formulaire si aucune erreur
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
-
-    //*Gère la soumission du formulaire
-    handleFormSubmit(isAllowToSubmit);
+    if (isAllowToSubmit){
+      handleFormSubmit();
+    };
   };
-
-  //* Mise à jour du state des erreurs si modification d'un champ question
-  const setErrorQuestion=(indexQuestion: number) => {
-    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
-      ...errorInputMsg,
-      questions: errorInputMsg.questions.map((questionError, index) => {
-        if (index === indexQuestion) {
-          return {
-            ...questionError,
-            question: '',
-          };
-        }
-        return questionError;
-      }),
-    }));
-  };
-
- //* Mise à jour du state des erreurs si modification d'un champ réponse
- const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
-  setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
-      if (index === indexQuestion) {
-        return {
-          ...questionError,
-          answers: questionError.answers.map((answerError, answerIndex) => {
-            if (answerIndex === indexAnswer) {
-              return {
-                ...answerError,
-                answer: '',
-              };
-            }
-            return answerError;
-          }),
-        };
-      }
-      return questionError;
-    }),
-  }));
- };
-
-  //* Mise à jour du state des erreurs si sélection d'un bouton radio
- const setErrorRadio =(indexQuestion: number) => {
-  setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => ({
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
-      if (index === indexQuestion) {
-        return {
-          ...questionError,
-          radioGroup: '',
-        };
-      }
-      return questionError;
-    }),
-  }));
- };
-
-   //* Mise à jour du champs d'une question
-   const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-       // Récupère et type la cible de l'événement
-       const target = event.target as HTMLInputElement;
-       // Récupère la valeur de l'input et l'affecte à la copie du state
-       const newValue = target.value;
-       console.log('indexQuestion',indexQuestion);
-       setNewQuestions((newQuestions: Question[]) =>
-         newQuestions.map((questionObject, questionIndex) => {
-           if (questionIndex === indexQuestion) {
-             return {
-               ...questionObject,
-               question: newValue,              
-             };
-           }
-           return questionObject;
-         })
-       );
-        // Mise à jour du state errors
-        setErrorQuestion(indexQuestion);
-     };    
-
-  //* Mise à jour du champs d'une réponse
-  const handleChangeAnswer = useCallback(
-  (
-    event: SyntheticEvent<Element, Event>,
-    indexQuestion: number,
-    indexAnswer: number
-  ) => {
-    // Récupère et type la cible de l'évenement
-    const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input 
-    const newValue = target.value;
-    // Mise à jour du state
-    setNewQuestions((newQuestions: Question[]) =>
-      newQuestions.map((question, questionIndex) => {
-        if (questionIndex === indexQuestion) {
-          return {
-            ...question,
-            answers: question.answers.map((answer, answerIndex) => {
-              if (answerIndex === indexAnswer) {
-                return {
-                  ...answer,
-                  answer: newValue,
-                };
-              }
-              return answer;
-            }),
-          };
-        }
-        return question;
-      })
-    );
-    // Mise à jour du state des erreurs
-    setErrorAnswer(indexQuestion, indexAnswer);
-  },
-  []
-);
-
-//* Mise à jour sélection d'un bouton radio
-  const handleChangeRadioBtn = useCallback(
-    (
-      indexQuestion: number,
-      indexAnswer: number
-    ) => {
-      setNewQuestions((newQuestions: Question[]) =>
-      newQuestions.map((question, questionIndex) => {
-        if (questionIndex === indexQuestion) {
-          return {
-            ...question,
-            answers: question.answers.map((answer, answerIndex) => {
-              if (answerIndex === indexAnswer) {
-                return {
-                  ...answer,
-                  is_valid: true,
-                };
-              }
-              return   {
-                ...answer,
-                is_valid: false,
-              };
-            }),
-          };
-        }
-        return question;
-      })
-    );
-    // Mise à jour du state des erreurs
-    setErrorRadio(indexQuestion);
-    },
-    []
-  );
-  
 
   return (
     <div className="quiz__creation">

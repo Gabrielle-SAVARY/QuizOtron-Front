@@ -4,7 +4,6 @@ import { AnswerUp, QuestionUp } from '../@types/quizUpdate';
 import { validateNotEmpty } from './validationsRules';
 // TODO supprimer les consoles log
 
-
 //* Vérification des champs texte
 export const validateTextFields = (
   stateData: { [key: string]: string },
