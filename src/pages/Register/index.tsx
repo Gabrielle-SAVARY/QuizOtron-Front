@@ -27,7 +27,7 @@ function Register() {
   // Récupère les messages d'erreur suite requête au backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
-  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormRegister>({
+  const [errorsRegister, setErrorsRegister] = useState<IerrorFormRegister>({
     firstname: '',
     lastname: '',
     pseudo: '',
@@ -48,7 +48,7 @@ function Register() {
       }),
     );
     // Réinitialise le message d'erreur de l'input
-    setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
+    setErrorsRegister({ ...errorsRegister, [fieldName]: '' });
   };
 
   // Soumission du formulaire si aucune erreur
@@ -74,7 +74,7 @@ function Register() {
     const errors = validateTextFields(dataToValidate, validationRulesSignup);
 
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
+    setErrorsRegister((prevState) => ({ ...prevState, ...errors.errors }));
     const isAllowToSubmit = !errors.hasError;
     // Gère la soumission du formulaire
     handleFormSubmit(isAllowToSubmit);
@@ -105,90 +105,90 @@ function Register() {
           <input
             type="text"
             placeholder="Prénom"
-            className={`form__input ${errorInputMsg.firstname !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.firstname !== '' ? 'error-input' : ''}`}
             value={firstname}
             onChange={handleChangeField}
             name="firstname"
           />
-          {errorInputMsg.firstname !== ''
+          {errorsRegister.firstname !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.firstname}
+              {errorsRegister.firstname}
             </div>
             )}
           <label htmlFor="Nom" className="form__label">Nom</label>
           <input
             type="text"
             placeholder="Nom"
-            className={`form__input ${errorInputMsg.lastname !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.lastname !== '' ? 'error-input' : ''}`}
             value={lastname}
             onChange={handleChangeField}
             name="lastname"
           />
-          {errorInputMsg.lastname !== ''
+          {errorsRegister.lastname !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.lastname}
+              {errorsRegister.lastname}
             </div>
             )}
           <label htmlFor="Pseudo" className="form__label">Pseudo</label>
           <input
             type="text"
             placeholder="Pseudo"
-            className={`form__input ${errorInputMsg.pseudo !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.pseudo !== '' ? 'error-input' : ''}`}
             value={pseudo}
             onChange={handleChangeField}
             name="pseudo"
           />
-          {errorInputMsg.pseudo !== ''
+          {errorsRegister.pseudo !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.pseudo}
+              {errorsRegister.pseudo}
             </div>
             )}
           <label htmlFor="email" className="form__label">Email</label>
           <input
             type="email"
             placeholder="Email"
-            className={`form__input ${errorInputMsg.email !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.email !== '' ? 'error-input' : ''}`}
             value={email}
             onChange={handleChangeField}
             name="email"
           />
-          {errorInputMsg.email !== ''
+          {errorsRegister.email !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.email}
+              {errorsRegister.email}
             </div>
             )}
           <label htmlFor="password" className="form__label">Mot de passe</label>
           <input
             type="password"
             placeholder="Mot de passe"
-            className={`form__input ${errorInputMsg.password !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.password !== '' ? 'error-input' : ''}`}
             value={password}
             onChange={handleChangeField}
             name="password"
           />
-          {errorInputMsg.password !== ''
+          {errorsRegister.password !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.password}
+              {errorsRegister.password}
             </div>
             )}
           <label htmlFor="password" className="form__label">Confirmation du mot de passe</label>
           <input
             type="password"
             placeholder="Confirmation mot de passe"
-            className={`form__input ${errorInputMsg.passwordConfirm !== '' ? 'error-input' : ''}`}
+            className={`form__input ${errorsRegister.passwordConfirm !== '' ? 'error-input' : ''}`}
             value={passwordConfirm}
             onChange={handleChangeField}
             name="passwordConfirm"
           />
-          {errorInputMsg.passwordConfirm !== ''
+          {errorsRegister.passwordConfirm !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.passwordConfirm}
+              {errorsRegister.passwordConfirm}
             </div>
             )}
 

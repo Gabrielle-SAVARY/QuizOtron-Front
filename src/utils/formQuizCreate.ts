@@ -61,10 +61,10 @@ export function updateRadioBtn(newQuestions:Question[] , indexQuestion: number, 
 }
   //* Mises à jour des states pour supprimer le message d'erreur lors de la modification du champs
   // Mise à jour du state des erreurs si modification d'une question
-export function updateQuestionUpError(errorInputMsg: IerrorFormNewQuiz, indexQuestion: number) {
+export function updateQuestionUpError(errorsNewQuiz: IerrorFormNewQuiz, indexQuestion: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
+    ...errorsNewQuiz,
+    questions: errorsNewQuiz.questions.map((questionError, index) => {
       if (indexQuestion === index) {
         return {
           ...questionError,
@@ -77,10 +77,10 @@ export function updateQuestionUpError(errorInputMsg: IerrorFormNewQuiz, indexQue
 }
 
  // Mise à jour du state des erreurs si modification d'une réponse
-export function updateAnswerError(errorInputMsg: IerrorFormNewQuiz, indexQuestion: number, indexAnswer: number) {
+export function updateAnswerError(errorsNewQuiz: IerrorFormNewQuiz, indexQuestion: number, indexAnswer: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
+    ...errorsNewQuiz,
+    questions: errorsNewQuiz.questions.map((questionError, index) => {
       if (indexQuestion === index) {
         return {
           ...questionError,
@@ -101,10 +101,10 @@ export function updateAnswerError(errorInputMsg: IerrorFormNewQuiz, indexQuestio
 }
 
   // Mise à jour du state des erreurs si sélection d'un bouton radio 
-export function updateRadioBtnError(errorInputMsg: IerrorFormNewQuiz, indexQuestion: number) {
+export function updateRadioBtnError(errorsNewQuiz: IerrorFormNewQuiz, indexQuestion: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError, index) => {
+    ...errorsNewQuiz,
+    questions: errorsNewQuiz.questions.map((questionError, index) => {
       if (indexQuestion === index) {
         return {
           ...questionError,

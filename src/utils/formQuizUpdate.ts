@@ -60,10 +60,10 @@ export function updateRadioBtnUp(updateQuestions:QuestionUp[] , idQuestion: numb
 }
   //* Mises à jour des states pour supprimer le message d'erreur lors de la modification du champs
   // Mise à jour du state des erreurs si modification d'une question
-export function updateQuestionUpError(errorInputMsg: IerrorFormUpdateQuiz, idQuestion: number) {
+export function updateQuestionUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError) => {
+    ...errorsUpdateQuiz,
+    questions: errorsUpdateQuiz.questions.map((questionError) => {
       if (questionError.id === idQuestion) {
         return {
           ...questionError,
@@ -76,10 +76,10 @@ export function updateQuestionUpError(errorInputMsg: IerrorFormUpdateQuiz, idQue
 }
 
  // Mise à jour du state des erreurs si modification d'une réponse
-export function updateAnswerError(errorInputMsg: IerrorFormUpdateQuiz, idQuestion: number, idAnswer: number) {
+export function updateAnswerError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number, idAnswer: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError) => {
+    ...errorsUpdateQuiz,
+    questions: errorsUpdateQuiz.questions.map((questionError) => {
       if (questionError.id === idQuestion) {
         return {
           ...questionError,
@@ -100,10 +100,10 @@ export function updateAnswerError(errorInputMsg: IerrorFormUpdateQuiz, idQuestio
 }
 
   // Mise à jour du state des erreurs si sélection d'un bouton radio 
-export function updateRadioBtnUpError(errorInputMsg: IerrorFormUpdateQuiz, idQuestion: number) {
+export function updateRadioBtnUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number) {
   return {
-    ...errorInputMsg,
-    questions: errorInputMsg.questions.map((questionError) => {
+    ...errorsUpdateQuiz,
+    questions: errorsUpdateQuiz.questions.map((questionError) => {
       if (questionError.id === idQuestion) {
         return {
           ...questionError,

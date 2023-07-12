@@ -51,7 +51,7 @@ function QuizCreate({
   const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions(numberOfQuestions));
   
   // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
-  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormNewQuiz>({
+  const [errorsNewQuiz, setErrorsNewQuiz] = useState<IerrorFormNewQuiz>({
     title: '',
     description: '',
     thumbnail: '',
@@ -83,8 +83,8 @@ function QuizCreate({
     // On met à jour le state newQuiz
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
-    setErrorInputMsg({ 
-      ...errorInputMsg,
+    setErrorsNewQuiz({ 
+      ...errorsNewQuiz,
        [field]: '' 
       });
   };
@@ -127,17 +127,17 @@ function QuizCreate({
   //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs
   // Modification d'un champ question
   const setErrorQuestion=(indexQuestion: number) => {
-    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateQuestionUpError(errorInputMsg, indexQuestion));
+    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateQuestionUpError(errorsNewQuiz, indexQuestion));
   };
 
  // Modification d'un champ réponse
   const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
-    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateAnswerError(errorInputMsg, indexQuestion, indexAnswer));
+    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateAnswerError(errorsNewQuiz, indexQuestion, indexAnswer));
   };
 
   // Sélection d'un bouton radio
   const setErrorRadio =(indexQuestion: number) => {
-    setErrorInputMsg((errorInputMsg: IerrorFormNewQuiz) => updateRadioBtnError(errorInputMsg, indexQuestion));
+    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateRadioBtnError(errorsNewQuiz, indexQuestion));
   };
 
   
@@ -206,7 +206,7 @@ function QuizCreate({
     };
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
-    setErrorInputMsg(errors);
+    setErrorsNewQuiz(errors);
     
      //* Soumission du formulaire si aucune erreur
     // eslint-disable-next-line no-unneeded-ternary
@@ -237,7 +237,7 @@ function QuizCreate({
           item='tag'
           inputLabel='catégorie'
           inputValue={newQuiz.tag_id}
-          inputError={errorInputMsg.tag_id}
+          inputError={errorsNewQuiz.tag_id}
           defaultMessage='Sélectionner une catégorie'
           handleChange={handleChangeQuizData}
           />
@@ -248,7 +248,7 @@ function QuizCreate({
           item='level'
           inputLabel='niveau de difficulté'
           inputValue={newQuiz.level_id}
-          inputError={errorInputMsg.level_id}
+          inputError={errorsNewQuiz.level_id}
           defaultMessage='Sélectionner un niveau de difficulté'
           handleChange={handleChangeQuizData}
           />
@@ -258,7 +258,7 @@ function QuizCreate({
             inputName='title'
             inputLabel='titre'
             inputValue={newQuiz.title}
-            inputError={errorInputMsg.title}
+            inputError={errorsNewQuiz.title}
             defaultMessage={`${newQuiz.title.length}/150 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -268,7 +268,7 @@ function QuizCreate({
             inputName='description'
             inputLabel='description'
             inputValue={newQuiz.description}
-            inputError={errorInputMsg.description}
+            inputError={errorsNewQuiz.description}
             defaultMessage={`${newQuiz.description.length}/300 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -278,7 +278,7 @@ function QuizCreate({
             inputName='thumbnail'
             inputLabel='image'
             inputValue={newQuiz.thumbnail}
-            inputError={errorInputMsg.thumbnail}
+            inputError={errorsNewQuiz.thumbnail}
             defaultMessage={`Coller l'url de l'image`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -289,7 +289,7 @@ function QuizCreate({
               key={`question${index + 1}`}
               questionIndex={index}
               currentQuestion={question}
-              currentQuestionError={errorInputMsg.questions[index]}
+              currentQuestionError={errorsNewQuiz.questions[index]}
               onChangeQuestion={handleChangeQuestion}
               handleChangeAnswer={handleChangeAnswer}
               handleChangeRadioBtn={handleChangeRadioBtn}

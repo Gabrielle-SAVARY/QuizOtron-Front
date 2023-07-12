@@ -58,7 +58,7 @@ function QuizUpdate({
   const [errorBackend, setErrorBackend] = useState<string>('');
 
    // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
-   const [errorUpInputMsg, setErrorUpInputMsg] = useState<IerrorFormUpdateQuiz>({
+   const [errorsUpdateQuiz, setErrorsUpdateQuiz] = useState<IerrorFormUpdateQuiz>({
     title: '',
     description: '',
     thumbnail: '',
@@ -111,8 +111,8 @@ function QuizUpdate({
         }))        
       );
       // On récupère les id des questions er réponses du quiz
-      setErrorUpInputMsg({
-        ...errorUpInputMsg,
+      setErrorsUpdateQuiz({
+        ...errorsUpdateQuiz,
         questions: copyOneQuiz.questions.map((question)=>({
           id: question.id,          
           question:'',
@@ -147,8 +147,8 @@ function QuizUpdate({
       }
       setUpdateQuiz(quizData);
        // Réinitialise le message d'erreur de l'input
-      setErrorUpInputMsg({
-         ...errorUpInputMsg,
+       setErrorsUpdateQuiz({
+         ...errorsUpdateQuiz,
           [field]: '' 
         });
     };
@@ -197,17 +197,17 @@ function QuizUpdate({
   //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs
   // Modification d'un champ question
   const setErrorQuestion=(idQuestion: number) => {
-    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateQuestionUpError(errorUpInputMsg, idQuestion));
+    setErrorsUpdateQuiz((errorsUpdateQuiz: IerrorFormUpdateQuiz) => updateQuestionUpError(errorsUpdateQuiz, idQuestion));
   };
 
  // Modification d'un champ réponse
   const setErrorAnswer =(idQuestion: number, idAnswer: number, ) => {
-    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateAnswerError(errorUpInputMsg, idQuestion, idAnswer));
+    setErrorsUpdateQuiz((errorsUpdateQuiz: IerrorFormUpdateQuiz) => updateAnswerError(errorsUpdateQuiz, idQuestion, idAnswer));
   };
 
   // Sélection d'un bouton radio
   const setErrorRadio =(indexQuestion: number) => {
-    setErrorUpInputMsg((errorUpInputMsg: IerrorFormUpdateQuiz) => updateRadioBtnUpError(errorUpInputMsg, indexQuestion));  
+    setErrorsUpdateQuiz((errorsUpdateQuiz: IerrorFormUpdateQuiz) => updateRadioBtnUpError(errorsUpdateQuiz, indexQuestion));  
   };
 
   //* Envoi du formulaire si aucune erreur
@@ -279,7 +279,7 @@ function QuizUpdate({
     };
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
-    setErrorUpInputMsg(errors);
+    setErrorsUpdateQuiz(errors);
     
     //* Soumission du formulaire si aucune erreur    
     // eslint-disable-next-line no-unneeded-ternary
@@ -309,7 +309,7 @@ function QuizUpdate({
             item='tag'
             inputLabel='catégorie'
             inputValue={updateQuiz.tag_id}
-            inputError={errorUpInputMsg.tag_id}
+            inputError={errorsUpdateQuiz.tag_id}
             defaultMessage='Sélectionner une catégorie'
             handleChange={handleChangeQuizData}
             />
@@ -322,7 +322,7 @@ function QuizUpdate({
             item='level'
             inputLabel='niveau de difficulté'
             inputValue={updateQuiz.level_id}
-            inputError={errorUpInputMsg.level_id}
+            inputError={errorsUpdateQuiz.level_id}
             defaultMessage='Sélectionner un niveau de difficulté'
             handleChange={handleChangeQuizData}
             />
@@ -333,7 +333,7 @@ function QuizUpdate({
             inputName='title'
             inputLabel='titre'
             inputValue={updateQuiz.title}
-            inputError={errorUpInputMsg.title}
+            inputError={errorsUpdateQuiz.title}
             defaultMessage={`${updateQuiz.title.length}/150 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -343,7 +343,7 @@ function QuizUpdate({
             inputName='description'
             inputLabel='description'
             inputValue={updateQuiz.description}
-            inputError={errorUpInputMsg.description}
+            inputError={errorsUpdateQuiz.description}
             defaultMessage={`${updateQuiz.description.length}/300 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -353,7 +353,7 @@ function QuizUpdate({
             inputName='thumbnail'
             inputLabel='image'
             inputValue={updateQuiz.thumbnail}
-            inputError={errorUpInputMsg.thumbnail}
+            inputError={errorsUpdateQuiz.thumbnail}
             defaultMessage={`Coller l'url de l'image`}
             handleChangeQuizData={handleChangeQuizData}
           />
@@ -365,7 +365,7 @@ function QuizUpdate({
               key={question.id}
               questionNumber={index + 1}
               currentQuestion={question}
-              currentQuestionError={errorUpInputMsg.questions[index]}
+              currentQuestionError={errorsUpdateQuiz.questions[index]}
               onChangeQuestion={handleUpdateQuestion}
               handleUpdateRadioBtn={handleUpdateRadioBtn}
               handleUpdateAnswer={handleUpdateAnswer}

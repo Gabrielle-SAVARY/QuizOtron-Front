@@ -27,7 +27,7 @@ function Login() {
   // Récupère les messages d'erreur suite requête POST du backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
-  const [errorInputMsg, setErrorInputMsg] = useState<IerrorFormLogin>({
+  const [errorsLogin, setErrorsLogin] = useState<IerrorFormLogin>({
     email: '',
     password: '',
   });
@@ -63,7 +63,7 @@ function Login() {
       }),
     );
     // Réinitialise le message d'erreur de l'input
-    setErrorInputMsg({ ...errorInputMsg, [fieldName]: '' });
+    setErrorsLogin({ ...errorsLogin, [fieldName]: '' });
   };
 
   //* Envoi du formulaire au backend si aucune erreur
@@ -92,7 +92,7 @@ function Login() {
     console.log('errors', errors);
     //TODO vérifer errors et le prevState copié dans le nouveau state?
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorInputMsg((prevState) => ({ ...prevState, ...errors.errors }));
+    setErrorsLogin((prevState) => ({ ...prevState, ...errors.errors }));
 
     const isAllowToSubmit = !errors.hasError;
 
@@ -114,30 +114,30 @@ function Login() {
             <input
               type="email"
               placeholder="Email"
-              className={`form__input ${errorInputMsg.email !== '' ? 'error-input' : ''}`}
+              className={`form__input ${errorsLogin.email !== '' ? 'error-input' : ''}`}
               value={email}
               onChange={handleChangeField}
               name="email"
             />
-            {errorInputMsg.email !== ''
+            {errorsLogin.email !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.email}
+              {errorsLogin.email}
             </div>
             )}
             <label htmlFor="password" className="form__label">Mot de passe</label>
             <input
               type="password"
               placeholder="Mot de passe"
-              className={`form__input ${errorInputMsg.password !== '' ? 'error-input' : ''}`}
+              className={`form__input ${errorsLogin.password !== '' ? 'error-input' : ''}`}
               value={password}
               onChange={handleChangeField}
               name="password"
             />
-            {errorInputMsg.password !== ''
+            {errorsLogin.password !== ''
             && (
             <div className="error-msg">
-              {errorInputMsg.password}
+              {errorsLogin.password}
             </div>
             )}
             {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
