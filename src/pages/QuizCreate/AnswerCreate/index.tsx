@@ -24,8 +24,8 @@ const AnswerCreate = memo(
   }: AnswerCreateProps) => {
     console.log(`${questionIndex} Answer${answerIndex}`);
     return (
-      <div className="question-choice">
-        <div className="answer_container" id={`q${questionIndex + 1}Answer${answerIndex + 1}`}>
+      <div className="answer-create__question-choice">
+        <div className="answer-create__container" id={`q${questionIndex + 1}Answer${answerIndex + 1}`}>
           <span className="answer_radio-button">
             <FormControlLabel
               value={`answer${answerIndex + 1}`}
@@ -34,7 +34,7 @@ const AnswerCreate = memo(
               onChange={() => onChangeRadioBtn(questionIndex, answerIndex)}
             />
           </span>
-          <span className="answer_input-text">
+          <span className="answer-create__input-text">
             <TextField
               id={`answer${answerIndex + 1}-q${questionIndex + 1}`}
               label={`Réponse ${answerIndex + 1}`}

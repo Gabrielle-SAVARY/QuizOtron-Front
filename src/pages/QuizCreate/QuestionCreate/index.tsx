@@ -22,8 +22,8 @@ function QuestionCreate({
 }:QuestionCreateProps){
   console.log(`QCREATE ${questionIndex}`);  
   return (
-    <div className="question_container" id={`question${questionIndex + 1}`}>
-      <h3 className="question__number">
+    <div className="question-create__container" id={`question${questionIndex + 1}`}>
+      <h3 className="question-create__number">
         Question n°
         {questionIndex + 1}
         /{numberOfQuestions}

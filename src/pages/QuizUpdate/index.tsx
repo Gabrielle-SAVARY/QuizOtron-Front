@@ -1,7 +1,7 @@
 import {
   useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback} from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axios';
@@ -31,7 +31,6 @@ interface QuizUpdateProps {
 function QuizUpdate({
   tagsList, levelsList, oneQuiz, getQuizDetails, fetchQuizList,
 }: QuizUpdateProps) {
-  // const navigate = useNavigate();
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
@@ -55,10 +54,10 @@ function QuizUpdate({
   // Stock le tableau des questions et des réponses du quiz
   const [updateQuestions, setUpdateQuestions] = useState<QuestionUp[]>(initialUpdateQuestions(numberOfQuestions));
 
-  // Stocke le message d'erreur du backend lors d'une erreur 400
-  const [errorFormUpdateQuiz, setErrorFormUpdateQuiz] = useState<string>('');
+  // Alerte présence d'erreur avant envoi ou erreur 400 du backend 
+  const [errorWarnUpdateQuiz, setErrorWarnUpdateQuiz] = useState<string>('');
+  // Stocke le message de succès de mise à jour du quiz
   const [successUpdateQuiz, setSuccessUpdateQuiz] = useState<string>('');
-  console.log('successUpdateQuiz',successUpdateQuiz);
 
    // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
    const [errorsUpdateQuiz, setErrorsUpdateQuiz] = useState<IerrorFormUpdateQuiz>({
@@ -221,22 +220,17 @@ function QuizUpdate({
         questions: updateQuestions,
       });
       if (response.status !== 200) throw new Error();
-      // Rappel de la liste des quizs et mise à jour du state quizList
+      // Rappel de la liste des quizs pour mise à jour du state quizList
       fetchQuizList();
-
-      // Message de succès de mise à jour du quiz
+      // Message de succès: mise à jour du quiz
       setSuccessUpdateQuiz('Le quiz a été mis à jour avec succès.');
-      console.log('successUpdateQuiz',successUpdateQuiz);
-
-      // On redirige vers la page de profile
-      /* navigate('/profile/quiz'); */
     } catch (error) {
       // Si statut 400 envoi d'un message d'erreur
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.status === 400) {
           console.log('error.response',error.response);
           const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";          
-          setErrorFormUpdateQuiz(newErrorMsg);
+          setErrorWarnUpdateQuiz(newErrorMsg);
         }
       } else {
         console.error(error);
@@ -248,11 +242,9 @@ function QuizUpdate({
   //* Gère la validation des données et déclenche la soumission du formulaire
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Vide le state du message de succès
+    //* Vide le state du message de succès + state alerte des erreurs
     setSuccessUpdateQuiz('');
-    // Vide le state qui alerte de la présence d'erreru dans de formulaire 
-    setErrorFormUpdateQuiz('');
-
+    setErrorWarnUpdateQuiz('');
     //* Récupération des erreurs du formulaire à partir des states
     // partie informations du quiz: state updateQuiz
     // Erreurs des champs texte
@@ -297,7 +289,7 @@ function QuizUpdate({
     if (isAllowToSubmit){
       handleFormSubmit();
     }else {
-      setErrorFormUpdateQuiz('Il y a une ou des erreurs qui empêchent la soumission du formulaire. Veuillez vérifier les champs du formulaire, les erreurs seront indiquées en rouge.');
+      setErrorWarnUpdateQuiz('Il y a une ou des erreurs qui empêchent la soumission du formulaire. Veuillez vérifier les champs du formulaire, les erreurs seront indiquées en rouge.');
     }
   };
 
@@ -396,14 +388,13 @@ function QuizUpdate({
         </form>
         </>
       )}
-      {errorFormUpdateQuiz !== '' && <div className="error-message">{errorFormUpdateQuiz}</div>}
+      {errorWarnUpdateQuiz !== '' && <div className="error-message">{errorWarnUpdateQuiz}</div>}
       {successUpdateQuiz !== '' &&
         <div className="success-message">
-          {successUpdateQuiz}
-          
+          {successUpdateQuiz}          
           <Link to="/profile/quiz">
           Retour à la gestion des quiz.
-        </Link>
+          </Link>
         </div>
       }
     </div>

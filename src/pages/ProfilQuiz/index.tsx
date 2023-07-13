@@ -85,7 +85,7 @@ function ProfilQuiz({
       <div className="quiz__add-Btn">
         <Button
           variant="contained"
-          color="success"
+          color="primary"
           startIcon={<AddIcon />}
           component={NavLink}
           to="/profile/quiz/creer-quiz"
