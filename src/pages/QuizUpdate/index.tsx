@@ -18,6 +18,7 @@ import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 import QuestionUpdate from './QuestionUpdate';
 import './styles.scss';
+import { FiArrowLeft } from 'react-icons/fi';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -301,94 +302,110 @@ function QuizUpdate({
   };
 
   return (
-    <div className="quiz__update">
-      <div className="quiz__header">
-        <h3>Mise à jour du quiz</h3>
+    <div className="quiz-update">
+      {updateQuestions[0].id === 0 ? (
+        <div className="quiz-update__loading">Chargement du formulaire...</div>
+      ) : (
+        <>
+      <div className="quiz-update__header">
         <Link to="/profile/quiz">
-          <button type="button" className="quiz__button">
-            Quitter
+          <button type="button" className="quiz-update__btn-exit">
+          <FiArrowLeft/> Retour
           </button>
         </Link>
+        <h3 className="quiz-update__header-title">Mise à jour du quiz</h3>
       </div>
-      <form onSubmit={(event) => handleSubmit(event)}>
-        <fieldset className="quiz__parameter">
-          {/* //? ======= Choix de la catégorie========== */}
-          {updateQuiz.tag_id !== 0 && (
-            <QuizMenuDropDown
-            arrayList={tagsList}
-            item='tag'
-            inputLabel='catégorie'
-            inputValue={updateQuiz.tag_id}
-            inputError={errorsUpdateQuiz.tag_id}
-            defaultMessage='Sélectionner une catégorie'
-            handleChange={handleChangeQuizData}
-            />
-          )}
-          
-          {/* //? ======= Choix de la difficulté========== */}
-          {updateQuiz.level_id !== 0 &&(
-            <QuizMenuDropDown
-            arrayList={levelsList}
-            item='level'
-            inputLabel='niveau de difficulté'
-            inputValue={updateQuiz.level_id}
-            inputError={errorsUpdateQuiz.level_id}
-            defaultMessage='Sélectionner un niveau de difficulté'
-            handleChange={handleChangeQuizData}
-            />
-          )}
-          
-          {/* //? ======= Choix du titre ========== */}
-          <QuizInfoTextInput
-            inputName='title'
-            inputLabel='titre'
-            inputValue={updateQuiz.title}
-            inputError={errorsUpdateQuiz.title}
-            defaultMessage={`${updateQuiz.title.length}/150 caractères maximum`}
-            handleChangeQuizData={handleChangeQuizData}
-          />
-
-          {/* //? ======= Choix de la description ========== */}
-          <QuizInfoTextInput
-            inputName='description'
-            inputLabel='description'
-            inputValue={updateQuiz.description}
-            inputError={errorsUpdateQuiz.description}
-            defaultMessage={`${updateQuiz.description.length}/300 caractères maximum`}
-            handleChangeQuizData={handleChangeQuizData}
-          />
-
-          {/* //? ======= Choix de l'url de l'image ========== */}
-          <QuizInfoTextInput
-            inputName='thumbnail'
-            inputLabel='image'
-            inputValue={updateQuiz.thumbnail}
-            inputError={errorsUpdateQuiz.thumbnail}
-            defaultMessage={`Coller l'url de l'image`}
-            handleChangeQuizData={handleChangeQuizData}
-          />
-        </fieldset>
-        {updateQuestions[0].id !== 0 && (
-        <fieldset className="quiz__questions">
-          {updateQuestions.map((question, index) => (
-            <QuestionUpdate
-              key={question.id}
-              questionNumber={index + 1}
-              currentQuestion={question}
-              currentQuestionError={errorsUpdateQuiz.questions[index]}
-              onChangeQuestion={handleUpdateQuestion}
-              handleUpdateRadioBtn={handleUpdateRadioBtn}
-              handleUpdateAnswer={handleUpdateAnswer}
+        <form
+          className="quiz-update__form" 
+          onSubmit={(event) => handleSubmit(event)}>
+          <fieldset className="quiz-update__parameter">
+            {/* //? ======= Choix de la catégorie========== */}
+            {updateQuiz.tag_id !== 0 && (
+              <QuizMenuDropDown
+                arrayList={tagsList}
+                item='tag'
+                inputLabel='catégorie'
+                inputValue={updateQuiz.tag_id}
+                inputError={errorsUpdateQuiz.tag_id}
+                defaultMessage='Sélectionner une catégorie'
+                handleChange={handleChangeQuizData}
               />
-        ))}         
-        </fieldset>
-        )}
-        <button type="submit" className="quiz__button">
-          Modifier le Quiz
-        </button>
-      </form>
+            )}
+
+            {/* //? ======= Choix de la difficulté========== */}
+            {updateQuiz.level_id !== 0 && (
+              <QuizMenuDropDown
+                arrayList={levelsList}
+                item='level'
+                inputLabel='niveau de difficulté'
+                inputValue={updateQuiz.level_id}
+                inputError={errorsUpdateQuiz.level_id}
+                defaultMessage='Sélectionner un niveau de difficulté'
+                handleChange={handleChangeQuizData}
+              />
+            )}
+
+            {/* //? ======= Choix du titre ========== */}
+            <QuizInfoTextInput
+              inputName='title'
+              inputLabel='titre'
+              inputValue={updateQuiz.title}
+              inputError={errorsUpdateQuiz.title}
+              defaultMessage={`${updateQuiz.title.length}/150 caractères maximum`}
+              handleChangeQuizData={handleChangeQuizData}
+            />
+
+            {/* //? ======= Choix de la description ========== */}
+            <QuizInfoTextInput
+              inputName='description'
+              inputLabel='description'
+              inputValue={updateQuiz.description}
+              inputError={errorsUpdateQuiz.description}
+              defaultMessage={`${updateQuiz.description.length}/300 caractères maximum`}
+              handleChangeQuizData={handleChangeQuizData}
+            />
+
+            {/* //? ======= Choix de l'url de l'image ========== */}
+            <QuizInfoTextInput
+              inputName='thumbnail'
+              inputLabel='image'
+              inputValue={updateQuiz.thumbnail}
+              inputError={errorsUpdateQuiz.thumbnail}
+              defaultMessage={`Coller l'url de l'image`}
+              handleChangeQuizData={handleChangeQuizData}
+            />
+          </fieldset>
+          {updateQuestions[0].id !== 0 && (
+            <fieldset className="quiz__questions">
+              {updateQuestions.map((question, index) => (
+                <QuestionUpdate
+                  key={question.id}
+                  questionNumber={index + 1}
+                  currentQuestion={question}
+                  currentQuestionError={errorsUpdateQuiz.questions[index]}
+                  onChangeQuestion={handleUpdateQuestion}
+                  handleUpdateRadioBtn={handleUpdateRadioBtn}
+                  handleUpdateAnswer={handleUpdateAnswer}
+                />
+              ))}
+            </fieldset>
+          )}
+          <button type="submit" className="quiz-update__btn-submit">
+            Modifier le Quiz
+          </button>
+        </form>
+        </>
+      )}
       {errorFormUpdateQuiz !== '' && <div className="error-message">{errorFormUpdateQuiz}</div>}
-      {successUpdateQuiz !== '' && <div className="success-message">{successUpdateQuiz}</div>}
+      {successUpdateQuiz !== '' &&
+        <div className="success-message">
+          {successUpdateQuiz}
+          
+          <Link to="/profile/quiz">
+          Retour à la gestion des quiz.
+        </Link>
+        </div>
+      }
     </div>
   );
 }

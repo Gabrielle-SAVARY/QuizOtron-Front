@@ -1,70 +1,110 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-.quiz__update {
+.quiz-update {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255,0.8), rgba(255, 210, 228,0.6), rgba(255, 189, 189,0.6), rgba(255, 172, 134,0.6), rgba(255, 172, 134,0.6), rgba(255, 164, 108,0.6), rgba(255, 157, 78,0.6), rgba(254, 152, 42,0.6), rgba(250, 134, 54,0.6), rgba(243, 117, 63,0.6), rgba(233, 101, 73,0.6), rgba(221, 87, 81,0.8));
+  padding: 1.5rem;
+  @include mixin.breakpoint(desktop) {
+   padding: 1.5rem vars.$headerHeight;
+  }
+
+  &__loading{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  &__header {
+    font-size: 1.5rem;
+    width: 100%;
+    padding: 1rem;
+    &-title{
+      font-family: 'Poppins', cursive;
+      font-size: 1.5rem;
+      flex-grow: 1;
+      text-align: center;
+      padding: 4rem 0 1.5rem 0;      
+      @include mixin.breakpoint(desktop) {
+        font-size: 2rem;
+        margin-top: 1rem;
+        padding: 1.5rem 0;
+       }
+    }
+  }
+  &__btn-exit{
+    font-family: 'Poppins', sans-serif;
+    outline: 0;
+    border: 0;
+    padding: 0.5rem;  
+    background: vars.$main-primary-color;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.9rem;
+    position: absolute;
+    top: 5.5rem;
+    left: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: hsl(210, 89%, 35%);
+    }
+    @include mixin.breakpoint(desktop) {
+      top: 8rem;
+      left: 4rem;
+     }
+  }
+  &__form{
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    @include mixin.breakpoint(desktop) {
+      width: 70%;
+      max-width: 800px;
+    }
+    @include mixin.breakpoint(desktopXL) {
+      width: 55%;
+      max-width: 800px;
+    }
+  }
+  &__parameter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
+  }
+  &__btn-submit {
+    font-family: 'Poppins', sans-serif;
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background: vars.$main-secondary-color;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    &:hover {
+      background: vars.$secondary-light-color;
+    }
+  }
 }
 
-.quiz__parameter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-bottom: 1rem;
-  gap: 1.5rem;
-}
-
-.quiz__selector {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  height: 2rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.quiz__header {
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  flex-direction: column;
-}
-.quiz__button {
-  font-family: 'Poppins', sans-serif;
-  outline: 0;
-  border: 0;
-  padding: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  background: vars.$main-primary-color;
-  border-radius: 0.5rem;
-  width: 100%;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.answer_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-}
-
-.answer_radio-button {
-  margin-right: 0.5rem;
-}
-
-.question__title {
-  padding-bottom: 1rem;
-  padding-top: 0.5rem;
-}
-
-.question__number {
-  margin-top: 2rem;
-}
 
 
 

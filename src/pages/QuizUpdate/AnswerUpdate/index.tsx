@@ -30,18 +30,27 @@ const AnswerUpdate = memo(
   }: AnswerUpdateProps) => {
     // console.log(`${questionNumber} Answer${answerNumber}`);
     return (
-      <div className="question-choice">
-        <div className="answer_container" id={`q${questionNumber}Answer${answerNumber}-${answerId}`}>
-          <span className="answer_radio-button">
+      <div className="answer-update__question-choice">
+        <div className="answer-update__container" id={`q${questionNumber}Answer${answerNumber}-${answerId}`}>
+          <span className="answer-update__radio-btn">
             <FormControlLabel
               value={answerId}
-              control={<Radio />}
+              control={<Radio 
+                sx={{
+                  color: 'gray',
+                  '&.Mui-checked': {
+                    color: 'orange',
+                  },
+                }} 
+              />}
               label=""
               checked={answer.is_valid}
               onChange={() => onChangeRadioBtn(questionId, answerId)}
+              
+              
             />
           </span>
-          <span className="answer_input-text">
+          <span className="answer-update__input-text">
             <TextField
               id={`answer-${answerNumber}-${answerId}`}
               label={`Réponse ${answerNumber}`}

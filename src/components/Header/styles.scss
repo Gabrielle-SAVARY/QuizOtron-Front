@@ -22,7 +22,7 @@
   padding: 0px 2rem;
   height: vars.$headerHeight;
   @include mixin.breakpoint(desktop) {
-    padding: 0px 4rem; 
+    padding: 0px vars.$headerHeight; 
     justify-content: space-between;
   }
 }

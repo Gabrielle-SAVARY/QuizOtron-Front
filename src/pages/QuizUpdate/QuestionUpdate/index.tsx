@@ -3,10 +3,11 @@ import {
   FormLabel, RadioGroup, TextField,
 } from '@mui/material';
 import { SyntheticEvent } from 'react';
+import { numberOfQuestions } from '../../../utils/createModels';
 import { QuestionUp } from '../../../@types/quizUpdate';
-import './styles.scss';
-import AnswerUpdate from '../AnswerUpdate';
 import { QuestionUpError } from '../../../@types/error';
+import AnswerUpdate from '../AnswerUpdate';
+import './styles.scss';
 
 interface QuestionUpdateProps {
   questionNumber: number
@@ -24,10 +25,10 @@ function QuestionUpdate({
   // TODO trouver solution pour éviter d'utiliser en key l'index de la réponse dans le map
 
   return (
-    <div className="question_container" id={`question${questionNumber}`}>
-      <h3 className="question__number">
-        Question n°
-        {questionNumber}
+    <div className="question-update__container" id={`question${questionNumber}`}>
+      <h3 className="question-update__number">
+        question n°
+        {questionNumber}/{numberOfQuestions}
       </h3>
       <TextField
         fullWidth
@@ -51,8 +52,9 @@ function QuestionUpdate({
       <FormControl 
         error={currentQuestionError.radioGroup !== undefined
         && currentQuestionError.radioGroup !== ''}
+        fullWidth
       >
-      <FormLabel id="demo-radio-buttons-group-label" 
+      <FormLabel id="demo-radio-buttons-group-label"       
       sx={{ pt: 2 }}>
         Ecrivez les 4 choix de réponses et sélectionner la bonne réponse à la question
       </FormLabel>

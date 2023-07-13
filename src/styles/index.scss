@@ -10,8 +10,9 @@
 }
 
 body {
-  font-family: 'Comic Neue', cursive;
-  font-weight: 700;
+  font-family: 'Poppins', cursive;
+  line-height: 20px;
+  font-weight: 400;
   overflow-x: hidden;
   width: 100vw;
   max-width: 100%;
@@ -26,7 +27,7 @@ section {
 }
 
 button {
-  font-family: 'Comic Neue', cursive;
+  font-family: 'Poppins', cursive;
   font-weight: 700;
 }
 
@@ -36,7 +37,15 @@ button {
   color: white;
   background: rgba(203, 24, 24, 0.757);
   border-radius: 5px;
-  width: 80%;
+  width: 100%;
+  @include mixin.breakpoint(desktop) {
+    width: 70%;
+    max-width: 800px;
+  }
+  @include mixin.breakpoint(desktopXL) {
+    width: 55%;
+    max-width: 800px;
+  }
 }
 // ERREURS
 // erreur sur un input de fomulaire
@@ -54,9 +63,9 @@ button {
   font-size: 0.75rem;
   margin-top: 8px;
   height: 1rem;
-  width: 100%;
   text-align: left;
   vertical-align: middle;
+  width: 100%;
 }
 
 .success-message {
@@ -65,5 +74,24 @@ button {
   color: white;
   background: rgba(62, 169, 81, 0.757);
   border-radius: 5px;
-  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap:0.8rem;
+  width: 100%;
+   @include mixin.breakpoint(desktop) {
+      width: 70%;
+      max-width: 800px;
+    }
+    @include mixin.breakpoint(desktopXL) {
+      width: 55%;
+      max-width: 800px;
+    }
+}
+.success-message a {
+  color: hsl(131, 46%, 15%);
+}
+.success-message a:hover {
+  text-decoration: underline;
 }

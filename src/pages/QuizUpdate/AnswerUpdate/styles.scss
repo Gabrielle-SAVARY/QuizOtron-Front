@@ -1,13 +1,16 @@
 @use '../../../styles/mixin';
 @use '../../../styles/vars';
 
-.question__number {
-    margin-bottom: 1rem;
+.answer-update__question-choice {
+    margin: 1rem 0;
 }
-.answer_container {
+.answer-update__container {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    
 }
-.answer_input-text {
+.answer-update__input-text {
     width: 100%;
-flex-grow: 1;
+    flex-grow: 1;
 }

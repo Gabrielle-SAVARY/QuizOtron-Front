@@ -2,10 +2,11 @@ import {
   FormControl, RadioGroup, TextField, FormLabel,
 } from '@mui/material';
 import { SyntheticEvent} from 'react';
+import { numberOfQuestions } from '../../../utils/createModels';
 import {QuestionError } from '../../../@types/error';
 import { Question } from '../../../@types/newQuiz';
-import './styles.scss';
 import AnswerCreate from '../AnswerCreate';
+import './styles.scss';
 
 interface QuestionCreateProps {
   questionIndex: number
@@ -25,7 +26,7 @@ function QuestionCreate({
       <h3 className="question__number">
         Question n°
         {questionIndex + 1}
-        /10
+        /{numberOfQuestions}
       </h3>
       <TextField
         fullWidth

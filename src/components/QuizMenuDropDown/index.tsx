@@ -41,7 +41,7 @@ function QuizMenuDropDown({arrayList,item, inputLabel,inputValue, inputError,def
         className={`select-${item}`}
         name={inputName}
         labelId={`label-select-${item}`}
-        label={capitalizeInputLabel}
+        label={capitalizeInputLabel}        
         value={inputValue}
         onChange={(event) => handleChange(event, inputName)}
       >
