@@ -1,5 +1,6 @@
 import {  useState, ChangeEvent, FormEvent, useCallback, SyntheticEvent} from 'react';
 import { Link} from 'react-router-dom';
+import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
@@ -86,15 +87,17 @@ function QuizCreate({
 
   //* Mise à jour du state des questions lors de la modification des champs du formulaire
   // Modification du champs d'une question
-  const handleChangeQuestion = (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-    // Récupère et type la cible de l'événement
-    const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input et mise à jour du state
-    const newValue = target.value;
-    setNewQuestions((newQuestions: Question[]) => updateQuestionValue(newQuestions, indexQuestion, newValue));
-    // Mise à jour du state errors
-    setErrorQuestion(indexQuestion);
-  };    
+  const handleChangeQuestion = useCallback( 
+    (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
+      // Récupère et type la cible de l'événement
+      const target = event.target as HTMLInputElement;
+      // Récupère la valeur de l'input et mise à jour du state
+      const newValue = target.value;
+      setNewQuestions((newQuestions: Question[]) => updateQuestionValue(newQuestions, indexQuestion, newValue));
+      // Mise à jour du state errors
+      setErrorQuestion(indexQuestion);
+    },[]
+  );    
 
   // Modification du champs d'une réponse
   const handleChangeAnswer = useCallback(
@@ -115,8 +118,7 @@ function QuizCreate({
     setNewQuestions((newQuestions: Question[]) => updateRadioBtn(newQuestions, indexQuestion, indexAnswer));
     // Mise à jour du state des erreurs
     setErrorRadio(indexQuestion);
-    },
-    []
+    },[]
   );
 
   //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs

@@ -307,6 +307,7 @@ function QuizUpdate({
           </button>
         </Link>
         <h3 className="quiz-update__header-title">Mise à jour du quiz</h3>
+        <p>tous les champs sont obligatoires</p>
       </div>
         <form
           className="quiz-update__form" 

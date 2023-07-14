@@ -13,8 +13,7 @@ interface AnswerCreateProps {
     indexQuestion: number, answerNumber: number) => void;
 }
 
-const AnswerCreate = memo(
-  ({
+const AnswerCreate = memo(({
     questionIndex,
     answerIndex,
     answer,
