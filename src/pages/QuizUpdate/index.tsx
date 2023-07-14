@@ -157,17 +157,19 @@ function QuizUpdate({
 
     //* Mise à jour du state des questions lors de la modification des champs du formulaire
   // Modification du champs d'une question
-  const handleUpdateQuestion = (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
-    // Récupère et type la cible de l'événement
-    const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input et mise à jour du state 
-    const newValue = target.value;
-    setUpdateQuestions((updateQuestions: QuestionUp[]) =>
-    updateQuestionUpValue(updateQuestions, idQuestion, newValue)
-    );
-    // Mise à jour du state errors
-    setErrorQuestion(idQuestion);
-  }; 
+  const handleUpdateQuestion = useCallback(
+    (event: SyntheticEvent<Element, Event>, idQuestion: number) => {
+      // Récupère et type la cible de l'événement
+      const target = event.target as HTMLInputElement;
+      // Récupère la valeur de l'input et mise à jour du state 
+      const newValue = target.value;
+      setUpdateQuestions((updateQuestions: QuestionUp[]) =>
+      updateQuestionUpValue(updateQuestions, idQuestion, newValue)
+      );
+      // Mise à jour du state errors
+      setErrorQuestion(idQuestion);
+    },[]
+  );
 
   // Modification du champs d'une réponse
   const handleUpdateAnswer = useCallback(
@@ -181,8 +183,7 @@ function QuizUpdate({
       );
       // Mise à jour du state des erreurs
       setErrorAnswer(idQuestion, idAnswer);
-    },
-    []
+    },[]
   );
 
   // Sélection d'un bouton radio

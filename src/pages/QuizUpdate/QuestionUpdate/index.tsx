@@ -2,7 +2,7 @@ import {
   FormControl,
   FormLabel, RadioGroup, TextField,
 } from '@mui/material';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, memo } from 'react';
 import { numberOfQuestions } from '../../../utils/createModels';
 import { QuestionUp } from '../../../@types/quizUpdate';
 import { QuestionUpError } from '../../../@types/error';
@@ -18,10 +18,16 @@ interface QuestionUpdateProps {
   handleUpdateAnswer: (event: SyntheticEvent<Element, Event>, idQuestion: number, idAnswer: number) => void
 }
 
-function QuestionUpdate({
-  questionNumber, currentQuestion,currentQuestionError, onChangeQuestion, handleUpdateRadioBtn, handleUpdateAnswer,
-}: QuestionUpdateProps) {
-  // console.log(`QUPDATE ${questionNumber}`);  
+const QuestionUpdate = memo(
+  ({
+  questionNumber,
+  currentQuestion,
+  currentQuestionError,
+   onChangeQuestion,
+   handleUpdateRadioBtn, 
+   handleUpdateAnswer,
+}: QuestionUpdateProps) => {
+  console.log(`QUPDATE ${questionNumber}`);  
   // TODO trouver solution pour éviter d'utiliser en key l'index de la réponse dans le map
 
   return (
@@ -85,5 +91,6 @@ function QuestionUpdate({
 
   );
 }
+);
 
 export default QuestionUpdate;

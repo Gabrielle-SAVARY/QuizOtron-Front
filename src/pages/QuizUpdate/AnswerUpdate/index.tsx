@@ -28,7 +28,7 @@ const AnswerUpdate = memo(
     onChangeRadioBtn,
     onChangeAnswer,
   }: AnswerUpdateProps) => {
-    // console.log(`${questionNumber} Answer${answerNumber}`);
+    console.log(`${questionNumber} Answer${answerNumber}`);
     return (
       <div className="answer-update__question-choice">
         <div className="answer-update__container" id={`q${questionNumber}Answer${answerNumber}-${answerId}`}>
