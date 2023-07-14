@@ -31,6 +31,7 @@ function QuizCreate({
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
+  console.log('userId',userId);
     // Alerte présence d'erreur avant envoi ou erreur 400 du backend 
     const [errorWarnCreateQuiz, setErrorWarnCreateQuiz] = useState<string>('');
     // Stocke le message de succès de mise à jour du quiz
@@ -140,6 +141,8 @@ function QuizCreate({
   
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async () => {
+    console.log('USERID', userId);
+    console.log('newQuiz',newQuiz);
       try {
         const response = await axiosInstance.post('/quiz/user/create', {
           quiz: newQuiz,
