@@ -95,3 +95,38 @@ button {
 .success-message a:hover {
   text-decoration: underline;
 }
+
+//* Modification des styles des composants MUI de formulaire
+// Div contenant MUI Texfield - champs texte
+.css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
+  font-family:'Poppins', cursive !important;
+}
+// Div contenant MUI Text area
+.css-8ewcdo-MuiInputBase-root-MuiOutlinedInput-root{
+  font-family:'Poppins', cursive !important;
+}
+// Div contenant MUI Select
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+  font-family:'Poppins', cursive !important;
+}
+// Item de la liste du MUI select (balsie <li>)
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
+  font-family:'Poppins', cursive !important;
+}
+// MUI label des inputs (au dessus du champs)
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+  font-family:'Poppins', cursive !important;
+}
+// MUI FormLabel (au dessus du group des réponses)
+.css-1ieylo2-MuiFormLabel-root{
+  font-family:'Poppins', cursive !important;
+  font-size: 0.9rem !important;
+}
+// MUI FormLAbel (aide à la saisie à l'intérieur du champs)
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  font-family:'Poppins', cursive !important;
+}
+// MuFormHelperText des inputs (en dessous du champs)
+.css-1wc848c-MuiFormHelperText-root{
+  font-family:'Poppins', cursive !important;
+}
