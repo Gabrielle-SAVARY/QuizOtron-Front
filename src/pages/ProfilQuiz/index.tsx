@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Tooltip,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,6 +19,7 @@ import Card from '../../components/Card';
 import { IQuizList } from '../../@types/quizList';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
+import BtnExit from '../../components/BtnExit';
 
 interface ProfilQuizProps {
   quizList: IQuizList[]
@@ -81,7 +83,7 @@ function ProfilQuiz({
   return (
     <div className="quiz__management">
       <h1 className="quiz__title">Gérer mes Quiz</h1>
-
+      <BtnExit redirectionLink='/profile'/>
       <div className="quiz__add-Btn">
         <Button
           variant="contained"
@@ -102,6 +104,7 @@ function ProfilQuiz({
           {userQuiz.map((quiz) => (
             <div className="card-wrapper" key={quiz.id}>
               <div className="card-buttons">
+                <Tooltip title="Supprimer" arrow>
                 <IconButton
                   aria-label="delete"
                   className="delete-button"
@@ -111,17 +114,20 @@ function ProfilQuiz({
                 >
                   <DeleteIcon fontSize="inherit" />
                 </IconButton>
+                </Tooltip>
 
+                <Tooltip title="Modifier" arrow>
                 <IconButton
                   aria-label="edit"
                   className="edit-button"
-                  color="primary"
+                  sx={{ color: '#fc9100' }}
                   size="large"
                   component={Link}
                   to={`/profile/quiz/modifier-quiz/${quiz.id}`}
                 >
                   <ModeEditIcon fontSize="inherit" />
                 </IconButton>
+                </Tooltip>
 
                 <Dialog
                   open={showModal}

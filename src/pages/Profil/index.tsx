@@ -85,7 +85,7 @@ function Profil({ userAverageScore }: ProfilProps) {
             {' '}
             {'>'}
           </NavLink>
-          <button type="button" className="profil__quiz--disconnect" onClick={handleLogout}>
+          <button type="button" className="profil__quiz--disconnect btn-primary" onClick={handleLogout}>
             Déconnexion
           </button>
 

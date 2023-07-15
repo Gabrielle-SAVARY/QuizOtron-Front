@@ -1,6 +1,7 @@
 import { IScoreHistory } from '../../@types/quizHistory';
-import './styles.scss';
+import BtnExit from '../../components/BtnExit';
 import CardHistory from '../../components/CardHistory';
+import './styles.scss';
 
 interface ProfilHistoryProps {
   quizHistory: IScoreHistory[];
@@ -10,6 +11,7 @@ function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
   return (
     <div>
       <h1 className="quiz__title">Mon historique</h1>
+      <BtnExit redirectionLink='/profile'/>
       <div className="cardhistory__container">
         {quizHistory.map((score) => (
           <CardHistory

@@ -4,7 +4,6 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
-import { FiArrowLeft } from 'react-icons/fi';
 import { initialNewQuestions, initialQuestionErrors, numberOfQuestions} from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
@@ -13,6 +12,7 @@ import { IerrorFormNewQuiz} from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
+import BtnExit from '../../components/BtnExit';
 import QuestionCreate from './QuestionCreate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
@@ -225,11 +225,7 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <h3 className="quiz-create__header-title">Créer un quiz</h3>
-        <Link to="/profile/quiz">
-          <button type="button" className="quiz-create__btn-exit">
-          <FiArrowLeft/>Retour
-          </button>
-        </Link>
+        <BtnExit redirectionLink='/profile/quiz'/>
       <p>tous les champs sont obligatoires</p>
       </div>
       <form

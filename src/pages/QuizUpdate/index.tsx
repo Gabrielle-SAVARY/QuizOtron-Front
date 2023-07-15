@@ -1,6 +1,8 @@
 import {
   useState, useEffect, ChangeEvent, FormEvent, SyntheticEvent, useCallback} from 'react';
-import { SelectChangeEvent } from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import { SelectChangeEvent, } from '@mui/material/Select';
 import { useParams, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import axios from 'axios';
@@ -14,11 +16,11 @@ import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
+import BtnExit from '../../components/BtnExit';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 import QuestionUpdate from './QuestionUpdate';
 import './styles.scss';
-import { FiArrowLeft } from 'react-icons/fi';
 
 interface QuizUpdateProps {
   tagsList: ITag[];
@@ -297,15 +299,23 @@ function QuizUpdate({
   return (
     <div className="quiz-update">
       {updateQuestions[0].id === 0 ? (
-        <div className="quiz-update__loading">Chargement du formulaire...</div>
+        <>
+          <div className="quiz-update__loading">
+            <p>Chargement du formulaire</p>
+            <Box sx={{ size: 40 }}>
+              <CircularProgress sx={{ color:"#dd5751"} }/>
+            </Box>
+          </div>
+        </>
       ) : (
         <>
       <div className="quiz-update__header">
-        <Link to="/profile/quiz">
+      <BtnExit redirectionLink='/profile/quiz'/>
+        {/* <Link to="/profile/quiz">
           <button type="button" className="quiz-update__btn-exit">
           <FiArrowLeft/> Retour
           </button>
-        </Link>
+        </Link> */}
         <h3 className="quiz-update__header-title">Mise à jour du quiz</h3>
         <p>tous les champs sont obligatoires</p>
       </div>
@@ -385,7 +395,7 @@ function QuizUpdate({
             </fieldset>
           )}
           <button type="submit" className="quiz-update__btn-submit">
-            Modifier le Quiz
+            Modifier le quiz
           </button>
         </form>
         </>

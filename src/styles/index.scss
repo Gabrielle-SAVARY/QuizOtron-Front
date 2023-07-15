@@ -96,6 +96,42 @@ button {
   text-decoration: underline;
 }
 
+.btn-primary {
+  outline: 0;
+  border: 0;
+  padding: 6px 1rem;
+  background: vars.$main-primary-color;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color .17s ease,color .17s ease;
+  &:hover {
+    background-color: hsl(210, 89%, 35%);
+  }
+}
+
+.btn-secondary {
+  outline: 0;
+  border: 0;
+  padding: 1rem;
+  background: vars.$main-secondary-color;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  cursor: pointer;
+  transition: background-color .17s ease,color .17s ease;
+  &:hover {
+    background: vars.$secondary-light-color;
+  }
+}
+
+
 //* Modification des styles des composants MUI de formulaire
 // Div contenant MUI Texfield - champs texte
 .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{

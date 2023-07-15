@@ -1,5 +1,6 @@
 import Card from '../../components/Card';
 import { IQuizList } from '../../@types/quizList';
+import BtnExit from '../../components/BtnExit';
 import './styles.scss';
 
 interface ProfilQuizProps {
@@ -13,7 +14,7 @@ function ProfilFavorites({
   return (
     <div className="quiz__favoris">
       <h1 className="quiz__title">Mes quiz favoris</h1>
-
+      <BtnExit redirectionLink='/profile'/>
       <div>
         {userFavoritesQuiz && (
 

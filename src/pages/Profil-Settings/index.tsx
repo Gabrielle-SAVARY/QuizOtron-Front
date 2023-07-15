@@ -6,6 +6,7 @@ import {
   update,
   updatePassword,
 } from '../../store/reducers/user';
+import BtnExit from '../../components/BtnExit';
 import './styles.scss';
 
 function ProfilSettings() {
@@ -69,7 +70,7 @@ function ProfilSettings() {
   return (
     <div className="profil-settings">
       <p className="profil-settings__update">Mise à jour de votre profil</p>
-
+      <BtnExit redirectionLink='/profile'/>
       <form
         action="submit"
         className="form"

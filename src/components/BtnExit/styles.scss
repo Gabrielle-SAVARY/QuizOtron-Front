@@ -1,0 +1,30 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.btn-Exit{
+  outline: 0;
+    border: none;
+    padding: 0.5rem;  
+    border-radius: 50%;
+    background: vars.$primary-dark-color;
+    color: #fff;
+    position: absolute;
+    top: 5.5rem;
+    left: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;    
+    cursor: pointer;
+    transition: background-color .17s ease,color .17s ease;
+    &:hover {
+      background-color: hsl(210, 89%, 35%);
+    }
+    @include mixin.breakpoint(desktop) {
+      top: 6rem;
+      left: 4rem;
+     }
+  }
+    
+
+

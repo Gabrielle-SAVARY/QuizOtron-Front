@@ -37,36 +37,11 @@
     align-items: center;
     flex-direction: column;
     gap: 1.5rem;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 5%;
     margin-bottom: 1rem;
     padding: 1rem;
     width: 100%;  
-  }
-  &__btn-exit{
-    font-family: 'Poppins', sans-serif;
-    outline: 0;
-    border: 0;
-    padding: 0.5rem;  
-    background: vars.$main-primary-color;
-    border-radius: 0.5rem;
-    color: #fff;
-    font-size: 0.9rem;
-    position: absolute;
-    top: 5.5rem;
-    left: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    &:hover {
-      background-color: hsl(210, 89%, 35%);
-    }
-    @include mixin.breakpoint(desktop) {
-      top: 8rem;
-      left: 4rem;
-     }
   }
   &__form{
     width: 100%;
@@ -84,7 +59,6 @@
     }
   }
   &__btn-submit {
-    font-family: 'Poppins', sans-serif;
     outline: 0;
     border: 0;
     padding: 1rem;
@@ -93,8 +67,10 @@
     background: vars.$main-secondary-color;
     border-radius: 0.5rem;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    line-height: 1rem;
     cursor: pointer;
+    transition: background-color .17s ease,color .17s ease;
     &:hover {
       background: vars.$secondary-light-color;
     }

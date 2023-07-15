@@ -83,22 +83,6 @@
   }
 }
 
-.profil__quiz--disconnect {
-  background-color: vars.$main-primary-color;
-  color: white;
-  border-radius: 0.5rem;
-  padding: 0.25rem;
-  font-size: 1.2rem;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.5s;
-}
-
-.profil__quiz--disconnect:hover {
-  text-decoration: underline;
-}
-
 .profil__quiz--delete {
   background: red;
   font-size: 0.75rem;
