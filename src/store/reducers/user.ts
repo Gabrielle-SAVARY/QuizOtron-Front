@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError, isAxiosError } from 'axios';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
@@ -11,6 +11,7 @@ interface UserState {
   isRegistered: boolean
   userId: number
   errorMessages: string
+  successMessage: string
 
   credentials: {
     firstname: string
@@ -19,11 +20,14 @@ interface UserState {
     email: string;
     password: string;
     passwordConfirm: string;
-    oldPassword: string,
+
   }
   updateCredentials: {
     pseudoUpdate: string;
     emailUpdate: string;
+    oldPassword: string,
+    password: string;
+    passwordConfirm: string;
   }
 }
 
@@ -33,6 +37,7 @@ export const initialState: UserState = {
   isRegistered: false,
   userId: 0,
   errorMessages: '',
+  successMessage: '',
 
   credentials: {
     firstname: '',
@@ -41,11 +46,13 @@ export const initialState: UserState = {
     email: '',
     password: '',
     passwordConfirm: '',
-    oldPassword: '',
   },
   updateCredentials: {
     pseudoUpdate: '',
     emailUpdate: '',
+    oldPassword: '',
+    password: '',
+    passwordConfirm: '',
   },
 };
 
@@ -76,18 +83,15 @@ export const register = createAppAsyncThunk(
   async (_, thunkAPI) => {
     // récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-
     // récupère les states qui correspondent aux inputs du formulaire register
     const {
       email, pseudo, firstname, lastname, password, passwordConfirm,
     } = state.user.credentials;
-
     try {
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.post('/signup', {
         email, pseudo, firstname, lastname, password, passwordConfirm,
       });
-
       return data as IAuthentification;
     } catch (error) {
       // Gestion des erreurs
@@ -111,7 +115,6 @@ export const login = createAppAsyncThunk(
   async (_, thunkAPI) => {
     // récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-
     // récupère les states qui correspondent aux inputs du formulaire
     const { email, password } = state.user.credentials;
     try {
@@ -123,6 +126,8 @@ export const login = createAppAsyncThunk(
     } catch (error) {
       // Gestion des erreurs
       // si statut de la réponse est 400 alors on retourne les messages d'erreurs
+      console.log('error',error);
+      
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.status === 400) {
           const dataError: string = error.response?.data;
@@ -153,20 +158,37 @@ export const findUser = createAppAsyncThunk(
 //* ACTION: déconnexion utilisateur
 export const logout = createAction('user/LOGOUT');
 
-//* ACTION: mise à jour: email ou pseudo de l'utilisateur
+// ACTION: mise à jour: email ou pseudo de l'utilisateur
 export const update = createAppAsyncThunk(
   'user/UPDATE',
   async (_, thunkAPI) => {
     // récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-
     // récupère les states qui correspondent aux inputs du formulaire
     const { emailUpdate, pseudoUpdate } = state.user.updateCredentials;
-
-    // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.patch('/profile/settings/update', { email: emailUpdate, pseudo: pseudoUpdate });
-
-    return data as IAuthentification;
+    try {
+      // Appel API avec envoi des données du formulaire
+      const { data } = await axiosInstance.patch('/profile/settings/update', { email: emailUpdate, pseudo: pseudoUpdate });
+      return data as IAuthentification;
+    } catch (error: any | AxiosError) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        const errorResponse: string = `Le serveur a répondu avec le code ${error.response.status}, veuillez contacter le support technique. ERREUR: ${error.response.data}`;
+        return thunkAPI.rejectWithValue(errorResponse);
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.log(error.request);
+        const errorRequest: string = `Pas de réponse du serveur suite à la requête. Veuillez contacter le support technique.`;
+        return thunkAPI.rejectWithValue(errorRequest);
+      } else if (axios.isAxiosError(error)) {
+        console.log(error.message);
+        const errorMessage: string = `Une erreur est survenue sur la requête. Veuillez contacter le support technique.`;
+        return thunkAPI.rejectWithValue(errorMessage);
+      } 
+      console.log(error.config);
+      throw error;
+    }
   },
 );
 
@@ -176,14 +198,31 @@ export const updatePassword = createAppAsyncThunk(
   async (_, thunkAPI) => {
     // récupère l'intégralité du state depuis le store
     const state = thunkAPI.getState();
-
     // récupère les states qui correspondent aux inputs du formulaire
-    const { oldPassword, password, passwordConfirm } = state.user.credentials;
-
-    // Appel API avec envoie des données du formulaire
-    const { data } = await axiosInstance.patch('/profile/settings/update', { password, passwordConfirm, oldPassword });
-
-    return data as IAuthentification;
+    const { oldPassword, password, passwordConfirm } = state.user.updateCredentials;
+    try {
+      // Appel API avec envoie des données du formulaire
+      const { data } = await axiosInstance.patch('/profile/settings/update', { password, passwordConfirm, oldPassword });
+      return data as IAuthentification;
+    } catch (error: any | AxiosError) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);        
+        const errorResponse: string = `Le serveur a répondu avec le code ${error.response.status}, veuillez contacter le support technique. ERREUR: ${error.response.data}`;
+        return thunkAPI.rejectWithValue(errorResponse);
+      } else if (axios.isAxiosError(error) && error.request) {
+        console.log(error.request);
+        const errorRequest: string = `Pas de réponse du serveur suite à la requête. Veuillez contacter le support technique.`;
+        return thunkAPI.rejectWithValue(errorRequest);
+      } else if (axios.isAxiosError(error)) {
+        console.log(error.message);
+        const errorMessage: string = `Une erreur est survenue sur la requête. Veuillez contacter le support technique.`;
+        return thunkAPI.rejectWithValue(errorMessage);
+      } 
+      console.log(error.config);
+      throw error;
+    }
   },
 );
 
@@ -196,7 +235,6 @@ export const deleteUser = createAppAsyncThunk(
     const { data } = await axiosInstance.delete('/profile/settings/delete');
     // suppression du token stocké dans le localStorage
     localStorage.removeItem('token');
-
     return data as IAuthentification;
   },
 );
@@ -204,32 +242,45 @@ export const deleteUser = createAppAsyncThunk(
 const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCredentialsField, (state, action) => {
+      // Récupération des valeurs des champs de formulaire
       const { propertyKey, value } = action.payload;
       state.credentials[propertyKey] = value;
+      // Réinitialisation des messages d'erreur
       state.errorMessages = '';
     })
     .addCase(clearInputsAndErrors, (state) => {
+      // Réinitialisation des states (vider les champs du formulaire login/register)
       state.credentials.email = '';
       state.credentials.pseudo = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
-      state.credentials.oldPassword = '';
       state.errorMessages = '';
     })
     .addCase(updateProfilField, (state, action) => {
+      // Récupération des valeurs des champs de formulaire
       const { propertyUpdate, value } = action.payload;
       state.updateCredentials[propertyUpdate] = value;
+      // Réinitialisation des messages d'erreur et de succès
+      state.errorMessages = '';
+      state.successMessage = '';
     })
     .addCase(update.fulfilled, (state) => {
+      // Mise à jour des state credentials
       state.credentials.email = state.updateCredentials.emailUpdate;
       state.credentials.pseudo = state.updateCredentials.pseudoUpdate;
+      // Message de succès
+      state.successMessage = 'Votre compte a bien été mis à jour';
+    })
+    .addCase(update.rejected, (state, action) => {
+      // Récupère les messages d'erreur
+      const payload = action.payload as string;
+      state.errorMessages = payload;
     })
     .addCase(register.fulfilled, (state, action) => {
       state.isRegistered = action.payload.isRegistered;
-
-      // Je réinitialise les credentials
+      // Réinitialisation des state des mots de passe
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
     })
@@ -238,24 +289,24 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(register.rejected, (state, action) => {
       state.isRegistered = false;
+      // Récupère les messages d'erreur
       const payload = action.payload as string;
       state.errorMessages = payload;
     })
     .addCase(login.fulfilled, (state, action) => {
-      // J'enregistre les informations retournées par mon API
+      // Récupère les informations retournées par l'API
       const payload = action.payload as IAuthentification;
       state.isLogged = payload.isLogged;
       state.token = payload.token;
       state.userId = payload.id;
-
       state.credentials.pseudo = payload.pseudo;
       state.credentials.firstname = payload.firstname;
       state.credentials.lastname = payload.lastname;
-
-      // Je réinitialise les credentials
+      // Réinitialisation du state du mot de passe
       state.credentials.password = '';
     })
     .addCase(login.rejected, (state, action) => {
+      // Récupère les messages d'erreur
       const payload = action.payload as string;
       state.errorMessages = payload;
     })
@@ -263,38 +314,46 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isLogged = action.payload;
     })
     .addCase(findUser.fulfilled, (state, action) => {
+      // Récupère les informations retournées par l'API
       state.userId = action.payload.id;
       state.credentials.pseudo = action.payload.pseudo;
       state.credentials.email = action.payload.email;
       state.credentials.firstname = action.payload.firstname;
       state.credentials.lastname = action.payload.lastname;
-
       state.updateCredentials.emailUpdate = action.payload.email;
       state.updateCredentials.pseudoUpdate = action.payload.pseudo;
     })
     .addCase(logout, (state) => {
+      // Réinitialisation des states
       state.isLogged = false;
-      state.updateCredentials.pseudoUpdate = '';
+      state.credentials.email = '';
       state.credentials.pseudo = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';
       state.updateCredentials.emailUpdate = '';
-      state.credentials.email = '';
+      state.updateCredentials.pseudoUpdate = '';      
       state.token = '';
       state.userId = 0;
-
-      // Quand l'utilisateur se déconnecte je supprime les données du localStorage
+      // Suppression des données du localStorage
       localStorage.removeItem('token');
     })
     .addCase(updatePassword.fulfilled, (state) => {
-      state.credentials.oldPassword = '';
-      state.credentials.password = '';
-      state.credentials.passwordConfirm = '';
+      // Réinitialisation des states
+      state.updateCredentials.oldPassword = '';
+      state.updateCredentials.password = '';
+      state.updateCredentials.passwordConfirm = '';
+      // Message de succès
+      state.successMessage = 'Votre mot de passe a bien été mis à jour';
+    })
+    .addCase(updatePassword.rejected, (state, action) => {
+      // Récupère les messages d'erreur
+      const payload = action.payload as string;
+      state.errorMessages = payload;
     })
     .addCase(deleteUser.fulfilled, (state) => {
-      // on déconnecte l'utilisateur
+      // Déconnexion de l'utilisateur
       state.isLogged = false;
-      // on supprime les informations du state
+      // Réinitialisation des states
       state.token = '';
       state.credentials.firstname = '';
       state.credentials.lastname = '';

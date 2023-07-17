@@ -21,8 +21,8 @@
       background-color: hsl(210, 89%, 35%);
     }
     @include mixin.breakpoint(desktop) {
-      top: 6rem;
-      left: 4rem;
+      top: 6.5rem;
+      left: 4.5rem;
      }
   }
     

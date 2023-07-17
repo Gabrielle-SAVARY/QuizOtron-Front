@@ -15,6 +15,15 @@ export interface IerrorFormRegister {
   passwordConfirm: string;
 }
 
+// Erreurs des inputs de mise à jour du profil utilisateur
+export interface IerrorFormUserUpdate {
+  emailUpdate: string;
+  pseudoUpdate: string;
+  oldPassword: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 // Erreurs formulaire création d'un quiz
 export interface IerrorFormNewQuiz {
   title: string;

@@ -158,6 +158,35 @@ export const validationRulesSignup: IValidationRule[] = [
   },
 ];
 
+// formulaire mise à jour des informations de l'utilisateur
+export const validationRulesUserUpdate: IValidationRule[] = [
+  {
+    field: 'emailUpdate',
+    validate: validateEmail,
+  },
+  {
+    field: 'pseudoUpdate',
+    validate: validatePseudo,
+  },
+];
+
+// formulaire mise à jour du mot de passe utilisateur
+export const validationRulesPasswordUpdate: IValidationRule[] = [
+  {
+    field: 'oldPassword',
+    validate: validatePassword,
+  },
+  {
+    field: 'password',
+    validate: validatePassword,
+  },
+  {
+    field: 'passwordConfirm',
+    validate: validatePasswordConfirm,
+  },
+];
+
+
 // formulaire newQuiz/création d'un quiz
 export const validationRulesNewQuiz: IValidationRule[] = [
   {

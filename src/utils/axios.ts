@@ -6,7 +6,6 @@ export const axiosInstance = axios.create({
 
 });
 
-// TODO erreur de type
 // ajout du token dans le header (champs Authorization) de chaque requête
 axiosInstance.interceptors.request.use((config) => {
   const tokenStorage = localStorage.getItem('token');
