@@ -2,27 +2,26 @@
 @use '../../styles/vars';
 
 .btn-Exit{
-  outline: 0;
+    outline: 0;
     border: none;
     padding: 0.5rem;  
     border-radius: 50%;
     background: vars.$primary-dark-color;
     color: #fff;
-    position: absolute;
-    top: 5.5rem;
-    left: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px;    
+    margin-left: 16px;
+    width: 36px;
     cursor: pointer;
     transition: background-color .17s ease,color .17s ease;
     &:hover {
       background-color: hsl(210, 89%, 35%);
     }
     @include mixin.breakpoint(desktop) {
+      position: absolute;
       top: 6.5rem;
-      left: 4.5rem;
+      left: 5.5rem
      }
   }
     

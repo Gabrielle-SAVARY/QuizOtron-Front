@@ -122,8 +122,8 @@ function ProfilSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <h2 className="profil-settings__header-title">Mise à jour de votre profil</h2>
-        <BtnExit redirectionLink='/profile'/>
+        <BtnExit/>
+        <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
       </div>
       {successMessage !== '' && <div className="success-message">{successMessage}</div>}
       <form

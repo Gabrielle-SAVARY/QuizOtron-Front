@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: 'Poppins', cursive;
+  font-family: vars.$mainFont;
   line-height: 20px;
   font-weight: 400;
   overflow-x: hidden;
@@ -27,7 +27,7 @@ section {
 }
 
 button {
-  font-family: 'Poppins', cursive;
+  font-family: vars.$mainFont;
   font-weight: 700;
 }
 
@@ -134,34 +134,40 @@ button {
 //* Modification des styles des composants MUI de formulaire
 // Div contenant MUI Texfield - champs texte
 .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // Div contenant MUI Text area
 .css-8ewcdo-MuiInputBase-root-MuiOutlinedInput-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // Div contenant MUI Select
 .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // Item de la liste du MUI select (balsie <li>)
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // MUI label des inputs (au dessus du champs)
 .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // MUI FormLabel (au dessus du group des réponses)
 .css-1ieylo2-MuiFormLabel-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
   font-size: 0.9rem !important;
 }
 // MUI FormLAbel (aide à la saisie à l'intérieur du champs)
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
 }
 // MuFormHelperText des inputs (en dessous du champs)
 .css-1wc848c-MuiFormHelperText-root{
-  font-family:'Poppins', cursive !important;
+  font-family: vars.$mainFont !important;
+}
+
+// Modification des styles des composants MUI de boutons
+// Bouton créer un quiz (gérer mes quiz: /profile/quiz)
+.css-sghohy-MuiButtonBase-root-MuiButton-root{
+  font-family: vars.$mainFont !important;
 }

@@ -310,13 +310,10 @@ function QuizUpdate({
       ) : (
         <>
       <div className="quiz-update__header">
-      <BtnExit redirectionLink='/profile/quiz'/>
-        {/* <Link to="/profile/quiz">
-          <button type="button" className="quiz-update__btn-exit">
-          <FiArrowLeft/> Retour
-          </button>
-        </Link> */}
-        <h3 className="quiz-update__header-title">Mise à jour du quiz</h3>
+        <div className="quiz-update__header-main">
+          <BtnExit/>
+          <h2 className="quiz-update__header-main__title">Mise à jour du quiz</h2>
+        </div>
         <p>tous les champs sont obligatoires</p>
       </div>
         <form

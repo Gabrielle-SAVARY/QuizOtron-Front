@@ -82,9 +82,11 @@ function ProfilQuiz({
 
   return (
     <div className="quiz__management">
-      <h1 className="quiz__title">Gérer mes Quiz</h1>
-      <BtnExit redirectionLink='/profile'/>
-      <div className="quiz__add-Btn">
+      <div className="quiz__management__header">
+      <BtnExit/>        
+      <h1 className="quiz__management__header-title">Gérer mes Quiz</h1>
+      </div>
+      <div className="quiz__management__add-Btn">
         <Button
           variant="contained"
           color="primary"
@@ -97,7 +99,7 @@ function ProfilQuiz({
       </div>
 
       <div>
-        <h2 className="quiz__subtitle">Liste des mes quiz</h2>
+        <h2 className="quiz__management__subtitle">Liste des mes quiz</h2>
         {userQuiz && (
 
         <div className="quiz__content-list">

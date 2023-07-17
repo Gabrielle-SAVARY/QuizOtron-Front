@@ -2,29 +2,47 @@
 @use '../../styles/vars';
 
 .quiz__management{
-  padding: 3.5rem;
+  padding: 1.5rem;
   @include mixin.breakpoint(desktop) {
    padding: 1.5rem vars.$headerHeight;
   }
+  &__header{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    &-title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+      text-align: center;
+      color: vars.$primary-dark-color;
+      width: calc(100% - (42px)); 
+      @include mixin.breakpoint(desktop) {
+        font-size: 2rem;
+        padding: 1.5rem 0;
+        width: 100%;
+       }
+    }
+  }
+  &__add-Btn {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  &__subtitle {
+    font-size: 1.25rem;
+    padding: 1.5rem;
+    color: vars.$main-primary-color;
+    text-align: center;
+    @include mixin.breakpoint(desktop) {
+      font-size: 1.5rem;
+      padding: 1.5rem 0;
+     }
+  }
 }
 
-.quiz__title {
-  font-size: 1.5rem;
-  font-weight: 500;
-  padding-top: 1rem;
-  margin-bottom: 1rem;
-  color: vars.$primary-dark-color;
-  text-align: center;
-}
 
-.quiz__subtitle {
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 1.5rem;
-  color: vars.$main-primary-color;
-  text-align: center;
-  font-weight: 500;
-}
 .quiz__content-list{
   display: flex;
   flex-direction: column; 
@@ -60,11 +78,6 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
 }
 
-.quiz__add-Btn {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 2rem;
-}
 
 
 

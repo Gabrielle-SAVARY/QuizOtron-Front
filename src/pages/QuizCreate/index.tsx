@@ -224,9 +224,11 @@ function QuizCreate({
   return (
     <div className="quiz-create">
       <div className="quiz-create__header">
-        <h3 className="quiz-create__header-title">Créer un quiz</h3>
-        <BtnExit redirectionLink='/profile/quiz'/>
-      <p>tous les champs sont obligatoires</p>
+        <div className="quiz-create__header-main">
+          <BtnExit/>
+          <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
+        </div>
+        <p>tous les champs sont obligatoires</p>
       </div>
       <form
         className="quiz-create__form" 

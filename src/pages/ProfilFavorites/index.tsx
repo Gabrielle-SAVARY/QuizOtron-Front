@@ -14,7 +14,7 @@ function ProfilFavorites({
   return (
     <div className="quiz__favoris">
       <h1 className="quiz__title">Mes quiz favoris</h1>
-      <BtnExit redirectionLink='/profile'/>
+      <BtnExit/>
       <div>
         {userFavoritesQuiz && (
 
