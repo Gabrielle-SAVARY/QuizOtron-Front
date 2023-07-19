@@ -1,0 +1,102 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+//TODO: refaire les classes css login et register (conflit de nom)
+
+.login-page {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  &__wrapper {   
+    max-width: 25rem;
+    margin: vars.$headerHeight auto;
+    padding: 1rem 2.5rem;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 12px;
+    background-color: #fff;
+  }
+
+  &__isLogged {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__button {
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: vars.$main-primary-color;
+    border-radius: 0.5rem;
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+.form {
+  max-width: 22.5rem;
+
+
+  &__logo-img {
+    width: 250px;
+    height: auto;
+    margin: 1.5rem 0;
+  }
+
+  &__label {
+    display: block;
+    text-align: left;
+    padding-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top: 15px;
+  }
+
+  &__input {
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    font-size: 0.9rem;
+    border-radius: 0.7rem;
+  }
+
+  &-login__button {
+    text-transform: uppercase;
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    background: vars.$main-primary-color;
+    border-radius: 0.5rem;
+    width: 100%;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.5s;
+    margin-top: 2.5rem;
+
+    &:hover {
+      background: vars.$main-secondary-color;
+      transition: 0.5s;
+    }
+  }
+
+  &__message {
+    margin: 0.9rem 0 0;
+    color: #a1a1a1;
+    font-size: 0.9rem;
+  }
+
+  &__inscription {
+    color: vars.$main-primary-color;
+    padding: 0.5rem;
+    &:hover {
+      color: vars.$main-secondary-color;
+      transition: 0.5s;
+    }
+  }
+}

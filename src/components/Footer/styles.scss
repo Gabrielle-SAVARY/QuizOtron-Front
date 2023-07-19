@@ -1,0 +1,91 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+/*==================== FOOTER ========================*/
+
+.footer {
+  flex-shrink: 0;
+  background-color: vars.$main-primary-color;
+  color: #fff;
+  width: 100vw;
+
+  &__contact {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.75rem;
+    &-logo{
+      &-img{
+        width: 125px;
+        height: auto;
+      }
+    }
+  }
+
+  &__contact-title {
+    padding-bottom: 0.2rem;
+    font-weight: bold;
+  }
+
+  &__contact-mail {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+  }
+}
+
+/* FOOTER DARK: SITEMAP + MENTIONS */
+.footer-dark {
+  background-color: vars.$primary-dark-color;
+  padding: 1.5rem;
+  text-align: center;
+
+  &__nav-list {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 0.7rem;
+
+    @include mixin.breakpoint(desktop) {
+      flex-flow: row wrap;
+      justify-content: center;
+      gap: 5rem;
+    }
+  }
+
+  &__nav-item {
+    color: #fff;
+
+    &:hover {
+      color: vars.$main-secondary-color;
+    }
+  }
+
+  &__mentions {
+    font-size: 0.7rem;
+  }
+
+  &__mention-list {
+    padding: 1.5rem;
+  }
+
+  &__mention-item {
+    border-right: 1px solid #cfcfcf;
+    color: #cfcfcf;
+    padding: 0 5px;
+    text-decoration: underline;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      color: vars.$main-secondary-color;
+    }
+  }
+}
+
+.footer__contact-mail-text {
+  padding-left: 0.5rem;
+  color: #fff;
+}

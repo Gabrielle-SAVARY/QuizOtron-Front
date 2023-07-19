@@ -1,0 +1,101 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+.header__link-btn{
+  &-text{
+    display: none;    
+    font-weight: bold;
+
+    @include mixin.breakpoint(desktop) {
+      display: block;
+      margin-left: 8px;
+    }
+  }
+// LINK redirection vers'/connexion': utilisateur déconnecté
+// mobile: icone 
+// desktop: "connexion"
+  &__login{
+    // style commun login/profile
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 8px;
+    cursor: pointer;
+    // style login
+    border-radius: 50%;
+    border:none;
+    color: vars.$primary-dark-color;
+    &:hover {
+      background-color: vars.$primary-dark-color;
+      color:  #fff;
+      transition: ease-in-out 0.5s;  
+    }
+    &--active {
+    background: vars.$primary-dark-color;  
+    color: #fff; 
+    }
+      @include mixin.breakpoint(desktop) {
+        // style commun login/profile
+        width: auto;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        // style login
+        border-radius: 8px;
+        border: 1.5px solid vars.$primary-dark-color;
+        background-color: #fff;
+        color: vars.$primary-dark-color; 
+      &--active {
+        background-color: vars.$primary-dark-color; 
+        color: #fff;  
+      }
+    }   
+  }
+
+// LINK redirection vers'/profile': utilisateur connecté
+// mobile: icone 
+// desktop: icone + pseudo"
+    &__profile{
+      // style commun login/profile
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-end;
+      border-radius: 50%;
+      padding: 8px;
+      cursor: pointer;
+/*       transition: ease-in-out 0.5s; */
+      // style profile
+      background-color: vars.$main-primary-color;
+      color: #fff;
+    &:hover {
+      background-color: vars.$secondary-light-color;
+      color:  #fff; 
+     transition: ease-in-out 0.5s; 
+    }
+    &--active {
+      background:vars.$main-secondary-color;
+      color:  #fff; 
+    }
+      @include mixin.breakpoint(desktop) {
+        // style commun login/profile
+        width: auto;
+        font-size: 1rem;
+        font-weight: 500;   
+        cursor: pointer;
+        // style profile
+        border-radius: 8px;
+        background-color: vars.$main-primary-color;
+        color:  #fff;    
+      &--active {
+        background:vars.$main-secondary-color;
+        color:  #fff ; 
+      }
+    } 
+  }
+}
+
+
+
+

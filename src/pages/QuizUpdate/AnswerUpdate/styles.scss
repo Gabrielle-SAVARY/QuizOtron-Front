@@ -1,0 +1,15 @@
+@use '../../../styles/mixin';
+@use '../../../styles/vars';
+
+.answer-update__question-choice {
+    margin: 1rem 0;
+}
+.answer-update__container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;    
+}
+.answer-update__input-text {
+    width: 100%;
+    flex-grow: 1;
+}

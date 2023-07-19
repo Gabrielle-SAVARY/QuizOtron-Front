@@ -1,0 +1,105 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.profil-settings{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1.5rem;
+  @include mixin.breakpoint(desktop) {
+   padding: 1.5rem vars.$headerHeight;
+  }
+  &__header{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    &-title{
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+      text-align: center;
+      width: calc(100% - (42px)); 
+      @include mixin.breakpoint(desktop) {
+        font-size: 2rem;
+        padding: 1.5rem 0;        
+      }
+    }
+  }
+  &__form{
+    margin-bottom: 0 auto 2rem;
+    width: 100%;
+    @include mixin.breakpoint(tablet) {
+    width: 70%;
+    }
+    @include mixin.breakpoint(desktop) {
+      width: 35%;
+    }
+    @include mixin.breakpoint(desktopXL) {
+      width: 25%;
+    }
+    &-label {
+      display: block;
+      padding-top: 0.8rem;
+      font-size: 1rem;
+    }
+    &-input {
+      border: 0;
+      outline: 0;
+      background: #f2f2f2;
+      border-radius: 0.7rem;
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 0.9rem;
+      font-family: vars.$mainFont;
+    }
+    &__btn-submit {
+      outline: 0;
+      border: 0;
+      padding: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      background: vars.$main-primary-color;
+      border-radius: 0.5rem;
+      width: 100%;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.5s;
+      &:hover {
+        background-color: vars.$secondary-light-color;
+        transition: 0.5s;   
+      }   
+    }
+  }
+  &__toggle {
+    outline: 0;
+    border: 0;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background: #fff; 
+    border-radius: 0.5rem;
+    width: 100%;
+    color: vars.$primary-dark-color;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.5s;   
+    &:hover {
+      background: vars.$primary-dark-color;
+      color: #fff;  
+      transition: 0.5s;   
+    }
+    @include mixin.breakpoint(tablet) {
+      width: 70%;
+      }
+      @include mixin.breakpoint(desktop) {
+        width: 35%;
+      }
+      @include mixin.breakpoint(desktopXL) {
+        width: 25%;
+      }
+  }
+}

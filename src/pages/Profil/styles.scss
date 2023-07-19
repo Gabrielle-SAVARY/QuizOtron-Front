@@ -1,0 +1,97 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.profil {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  &__user {
+    background-color: vars.$main-primary-color;
+    border-radius: 1rem;
+    padding: 3rem;
+    color: white;
+  }
+
+  &__user-stat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  &__user-title {
+    font-size: 2rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
+  }
+
+  &__update:hover {
+    transition: 0.5s;
+    transform: rotate(360deg);
+  }
+
+  &__settings {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-left: 1px solid black;
+    margin-left: 1rem;
+
+    @include mixin.breakpoint(desktop) {
+      width: 80%;
+    }
+  }
+
+  &__quiz {
+    background-color: vars.$main-primary-color;
+    color: white;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.5s;
+  }
+  &__quiz:hover {
+    text-decoration: underline;
+  }
+}
+
+.profil__quiz--delete {
+  background: red;
+  font-size: 0.75rem;
+  color: white;
+  padding: 0.25rem;
+  border-radius: 1rem;
+}
+
+.profil__score {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}

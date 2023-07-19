@@ -1,0 +1,320 @@
+/*==================== FONT ========================*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/*==================== COLORS ========================*/
+:root {
+  --main-primary-color: #0d72da;
+  --primary-dark-color: #003051;
+  --primary-light-color: #3f7caf;
+  --main-secondary-color: #fc9100;
+  --secondary-light-color: #ffb116;
+  --secondary-light2-color: #ffebc4;
+  --main-third-color: #dd5751;
+  --valid-answer-color: #3ea951;
+  --wrong-answer-color: #eb3c33;
+}
+
+/*==================== STYLE ========================*/
+* {
+  box-sizing: border-box;
+
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/*==================== LINK ========================*/
+/*LINK TEXT*/
+/* unvisited link */
+.a__text {
+  color: #fff;
+}
+/* mouse over link */
+.a__text:hover {
+  color: var(--main-secondary-color);
+  font-weight: 600;
+}
+
+
+section {
+  padding: 1rem;
+  margin: 1rem 1.5rem;
+}
+
+.header {
+  background-color: var(--main-primary-color);
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  width: 100vw;
+}
+
+.header__nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.header__title {
+  font-size: 2rem;
+  color: white;
+}
+
+.section1__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+/*==================== SECTION TODAY'S QUIZ ========================*/
+
+.section2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--secondary-light2-color);
+  border-radius: 1rem;
+}
+
+
+.section__title {
+  text-align: center;
+  font-size: 1.5rem;
+  background-color: var(--main-primary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+/*==================== TODAY'S QUIZ CARD ========================*/
+/* media queries' differences between TODAY'S QUIZ CARD Dand  QUIZ CARD*/
+.quiz__card-day {
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  margin: 1rem 0;
+  transition: 0.2s ease-in-out;
+
+}
+
+.quiz__card-day:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 10px 20px 2px var(--secondary-light-color);
+}
+
+
+/*==================== SECTION POLULAR QUIZ ========================*/
+
+.section3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 3rem;
+}
+
+.section3__title {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+
+/*==================== QUIZ CARD ========================*/
+/* media queries' differences between TODAY'S QUIZ CARD Dand  QUIZ CARD*/
+.quiz__card {
+  background-color: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  margin: 1rem 0;
+  transition: 0.2s ease-in-out;
+}
+
+.quiz__card:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 10px 20px 2px var(--main-primary-color);
+}
+
+.card-header__img {
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.card__title {
+  text-align: center;
+  font-size: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.card-body {
+  padding: 0 0.5rem;
+}
+
+.card-body__tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.card-body__categorie {
+  background: linear-gradient(
+    to bottom,
+    var(--secondary-light-color),
+    var(--main-secondary-color)
+  );
+  color: white;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.card-body__difficulty {
+  background: linear-gradient(
+    to bottom,
+    var(--secondary-light-color),
+    var(--main-secondary-color)
+  );
+  color: white;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.card-body__tag2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body__autor {
+  display: flex;
+  align-items: center;
+}
+
+
+/*==================== FOOTER ========================*/
+
+.footer {
+  background-color: var(--main-primary-color);
+  width: 100vw;
+  color: white; 
+  padding-top: 1rem;
+  margin: 1rem 1.5rem 0 1.5rem;
+}
+
+.footer__contact {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.5rem;
+}
+.footer__contact-logo {
+
+}
+.footer__contact-mail {
+  display: flex;
+  flex-flow: row;
+  align-items: center
+
+}
+
+
+
+/* FOOTER DARK: SITEMAP + MENTIONS */
+.footer-dark {
+  background-color: var(--primary-dark-color);
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.footer-dark__site-map{
+  font-size: 1rem;
+  padding-top: 0.5rem;
+  display: flex;
+  flex-flow: column;
+  justify-content: center
+}
+
+.site-map__nav-list {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100vw;
+}
+.site-map__nav-list li {
+  width: 8rem;
+  padding-right: 0.3rem;
+  padding-bottom: 0.5rem;;
+
+}
+
+.footer-dark__mentions a::after{
+  content: " | ";
+  margin: 0 2px;
+}
+.footer-dark__mentions-copyright {
+padding-top: 0.5rem;
+}
+
+
+/*==================== MEDIA QUERIES ========================*/
+
+
+
+@media screen and (min-width: 768px) {
+  .quiz__card-day {
+    max-width: 70%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .quiz__card-day {
+    max-width: 70%;
+  }
+  .quiz__card {
+    max-width: 40%;
+  }
+  .section3__list-quiz {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+ .site-map__nav-list {
+  flex-flow: row wrap;
+  justify-content: center;
+  } 
+}
+
+@media screen and (min-width: 1600px) {
+  .quiz__card-day {
+    max-width: 100%;
+  }
+  .quiz__card {
+    max-width: 30%;
+  }
+  section {
+    display: flex;
+    flex-direction: column;
+    margin: 0 15rem 0 15rem;
+  }
+  .site-map__nav-list {
+    flex-flow: row wrap;
+    justify-content: center;
+    } 
+
+}

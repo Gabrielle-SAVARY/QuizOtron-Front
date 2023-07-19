@@ -1,0 +1,19 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+
+.page404 {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page404__title {
+  font-size: 8rem;
+  padding-bottom: 5rem;
+}
+
+.page404__text {
+  font-size: 2rem;
+}
