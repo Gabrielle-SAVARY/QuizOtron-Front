@@ -67,37 +67,28 @@ function Login() {
   };
 
   //* Envoi du formulaire au backend si aucune erreur
-  const handleFormSubmit = (isAllowed:boolean) => {
-    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
-    // et on vérifie sa longueur
-    // Si vide alors pas d'erreur: faire la requête POST au backend
-    /*     console.log('Object.keys(errors)', Object.keys(errors));
-    if (Object.keys(errors).length === 0) {
-      dispatch(login());
-    } */
-    if (isAllowed) {
-      dispatch(login());
-    }
+  const handleFormSubmit = () => {
+    dispatch(login());
   };
 
-  //* Soumission du formulaire de connexion
+  //* Vérification et autorisation de soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
     const dataToValidate = { email, password };
-
     // Résultat de la validation des champs du formulaire
-    // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateTextFields(dataToValidate, validationRulesLogin);
-    console.log('errors', errors);
-    //TODO vérifer errors et le prevState copié dans le nouveau state?
-    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorsLogin((prevState) => ({ ...prevState, ...errors.errors }));
-
-    const isAllowToSubmit = !errors.hasError;
-
-    // Gère la soumission du formulaire
-    handleFormSubmit(isAllowToSubmit);
+    const loginForm = validateTextFields(dataToValidate, validationRulesLogin);
+    const errors : IerrorFormLogin = {
+      email: loginForm.errors.email,
+      password: loginForm.errors.password,
+    }
+      // Mise à jour du state avec les messages d'erreurs 
+    setErrorsLogin(errors);
+    // Autorisation de soumission du formulaire
+    const isAllowToSubmit = !loginForm.hasError;
+    if (isAllowToSubmit) {
+      handleFormSubmit();
+    }
   };
 
   return (
@@ -140,10 +131,10 @@ function Login() {
               {errorsLogin.password}
             </div>
             )}
-            {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
             <button type="submit" className="form-login__button">
               Connexion
             </button>
+            {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
 
             <p className="form__message">
               Pas encore de compte?

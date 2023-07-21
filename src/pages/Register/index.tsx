@@ -6,12 +6,12 @@ import {
   changeCredentialsField,
   register,
 } from '../../store/reducers/user';
-import Logo from '../../components/Logo';
-import logoQuizotron from '../../assets/img/logoQuizotron.png';
-import { IerrorFormRegister } from '../../@types/error';
-import './styles.scss';
 import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesSignup } from '../../utils/validationsRules';
+import { IerrorFormRegister } from '../../@types/error';
+import Logo from '../../components/Logo';
+import logoQuizotron from '../../assets/img/logoQuizotron.png';
+import './styles.scss';
 
 function Register() {
   const dispatch = useAppDispatch();
@@ -26,6 +26,7 @@ function Register() {
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
   // Récupère les messages d'erreur suite requête au backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
+ 
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
   const [errorsRegister, setErrorsRegister] = useState<IerrorFormRegister>({
     firstname: '',
@@ -35,12 +36,12 @@ function Register() {
     password: '',
     passwordConfirm: '',
   });
-  // Met à jour le state avec la valur des inputs du formulaire
-  const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value;
-    // récupère name de l'input et le type la donnée
-    const fieldName = event.target.name as KeysOfCredentials;
 
+  //* Met à jour le state avec la valeur des inputs du formulaire
+  const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
+    // Récupère la valeur et le name de l'input puis on type la donnée
+    const newValue = event.target.value;
+    const fieldName = event.target.name as KeysOfCredentials;
     dispatch(
       changeCredentialsField({
         propertyKey: fieldName,
@@ -51,42 +52,53 @@ function Register() {
     setErrorsRegister({ ...errorsRegister, [fieldName]: '' });
   };
 
-  // Soumission du formulaire si aucune erreur
-  const handleFormSubmit = (isAllowed:boolean) => {
-    // Renvoi un tableau contenant les clés (propriétés) de l'objet errors
-    // et on vérifie sa longueur
-    // Si vide alors pas d'erreur: faire la requête POST au backend
-    if (isAllowed) {
-      dispatch(register());
-    }
+  //* Soumission du formulaire
+  const handleFormSubmit = () => {
+    dispatch(register());
   };
 
-  // Soumission du formulaire d'inscription
+  //* Vérification et autorisation de soumission du formulaire
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
     const dataToValidate = {
       firstname, lastname, email, pseudo, password, passwordConfirm,
     };
-
     // Résultat de la validation des champs du formulaire
-    // errors: objet vide ou contient les messages d'erreurs
-    const errors = validateTextFields(dataToValidate, validationRulesSignup);
-
-    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
-    setErrorsRegister((prevState) => ({ ...prevState, ...errors.errors }));
-    const isAllowToSubmit = !errors.hasError;
-    // Gère la soumission du formulaire
-    handleFormSubmit(isAllowToSubmit);
+    const registerForm = validateTextFields(dataToValidate, validationRulesSignup);
+    const errors :IerrorFormRegister = {
+      firstname: registerForm.errors.firstname,
+      lastname: registerForm.errors.lastname,      
+      email: registerForm.errors.email,      
+      pseudo: registerForm.errors.pseudo,
+      password: registerForm.errors.password,
+      passwordConfirm: registerForm.errors.passwordConfirm,
+    }
+    // Mise à jour du state avec les messages d'erreurs 
+    setErrorsRegister(errors);
+    // Vérification que le nouveau mot de passe et sa confirmation sont identiques
+    if(password !== passwordConfirm){
+      setErrorsRegister((prevState) => ({
+        ...prevState,
+        password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
+        passwordConfirm: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
+      }));
+      registerForm.hasError = true;
+    }
+    // Autorisation de soumission du formulaire
+    const isAllowToSubmit = !registerForm.hasError;
+    if(isAllowToSubmit){
+      handleFormSubmit();
+    }
   };
 
   return (
     <div className="register-page">
       {isRegistered && (
       <div className="register-page__isLogged">
-        <p>Vous êtes inscrit, veuillez vous connecter.</p>
+        <p className="success-message">Vous êtes inscrit, veuillez vous connecter.</p>
         <p className="form__message">
-          Déjà un compte?
+          Vous avez déjà un compte?
           <NavLink to="/connexion" className="form__inscription">
             Connexion
           </NavLink>
@@ -192,11 +204,14 @@ function Register() {
             </div>
             )}
 
-          {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
           <button type="submit" className="form__button">
             Inscription
           </button>
-
+          {errorMessages !== '' && 
+            <div className="error-message ">
+              {errorMessages}
+            </div>
+          }
           <p className="form__message">
             Déjà un compte?
             <NavLink to="/connexion" className="form__inscription">

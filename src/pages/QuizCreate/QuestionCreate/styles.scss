@@ -13,7 +13,7 @@
     color: vars.$main-primary-color;
     text-align: center;
     padding: 1rem 0;
-    font-family: 'Bangers', cursive;
+    font-family: vars.$secondaryFont;
     font-size: 2.5rem;  
     @include mixin.breakpoint(desktop) {
         font-size: 3rem; 

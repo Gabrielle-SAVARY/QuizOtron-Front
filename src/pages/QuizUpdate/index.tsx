@@ -311,7 +311,7 @@ function QuizUpdate({
         <>
       <div className="quiz-update__header">
         <div className="quiz-update__header-main">
-          <BtnExit/>
+          <BtnExit redirectionLink={'/profile/quiz'}/>
           <h2 className="quiz-update__header-main__title">Mise à jour du quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
@@ -394,18 +394,21 @@ function QuizUpdate({
           <button type="submit" className="quiz-update__btn-submit">
             Modifier le quiz
           </button>
+        {errorWarnUpdateQuiz !== '' && 
+          <div className="error-message">{errorWarnUpdateQuiz}
+          </div>
+        }
+        {successUpdateQuiz !== '' &&
+          <div className="success-message">
+            {successUpdateQuiz}          
+            <Link to="/profile/quiz">
+            Retour à la gestion des quiz.
+            </Link>
+          </div>
+        }
         </form>
         </>
       )}
-      {errorWarnUpdateQuiz !== '' && <div className="error-message">{errorWarnUpdateQuiz}</div>}
-      {successUpdateQuiz !== '' &&
-        <div className="success-message">
-          {successUpdateQuiz}          
-          <Link to="/profile/quiz">
-          Retour à la gestion des quiz.
-          </Link>
-        </div>
-      }
     </div>
   );
 }

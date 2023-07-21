@@ -1,109 +1,162 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-.quizgame__container {
+.quizgame {
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
-
-  &-title {
-    font-size: 1.5rem;
+  padding: 1.5rem;
+  @include mixin.breakpoint(desktop) {
+   padding: 1.5rem vars.$headerHeight;
+  }
+  &__title {
+    margin: 1rem 0 1rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
+    font-size: 2.5rem;
+    line-height: 2.75rem;
     text-transform: uppercase;
     font-weight: 500;
     padding-top: 1rem;
-    margin-bottom: 1rem;
     color: vars.$primary-dark-color;
-    text-align: center;
+    font-family: vars.$secondaryFont;
   }
-}
-// SCORE PENDANT LE QUIZ
-.quizgame__score {
-  font-size: 1.3rem;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: vars.$main-third-color;
-  margin-top: 0.75rem;
-  display: inline;
-}
-// Validation de la réponse de l'utilisateur
-.validate {
-  border: none;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-}
-.btn {
-  background-color: vars.$main-primary-color;
-  outline: 0;
-  border: 0;
-  padding: 1rem;
-  margin-top: 1rem;
-  border-radius: 0.5rem;
-  // width: 50%;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  &:hover {
-    background: vars.$secondary-light-color;
+  &__scoreboard {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: vars.$main-secondary-color;
     color: #fff;
-  }
-}
-
-// QUESTIONS
-.quizgame__question {
-  background-color: vars.$primary-dark-color;
-  margin: 1rem;
-  padding: 2rem;
-  border-radius: 1rem;
-  &-info {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
-  &-Nb {
-    color: white;
     font-size: 1.3rem;
-    font-weight: 500;
-    padding: 1rem;
+    text-transform: uppercase;
+    &__score {
+      margin-top: 0.5rem;
+      padding: 0.3rem;
+      text-align: center;
+      background-color: vars.$primary-dark-color;
+      color: vars.$main-third-color;
+      font-family: vars.$secondaryFont;
+    }
   }
-  &-text {
-    color: white;
-    font-size: 1.2rem;
-    padding: 1rem;
+  &__question {
+    background-color: vars.$primary-dark-color;
+    margin: 1rem 0 1rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    @include mixin.breakpoint(tablet) {
+      width: 60%;
+    }
+    &-info {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem;
+    }
+    &-number {
+      font-family: vars.$secondaryFont;
+      font-size: 1.75rem; 
+      text-align: center;
+      color:  vars.$main-secondary-color;
+      margin-bottom: 1rem;
+    }
+    &-text {
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  }
+  &__answer{
+    &-btn {
+      outline: 0;
+      border: 0;
+      padding: 1rem;
+      margin-top: 1rem;
+      background: vars.$main-primary-color;
+      border-radius: 0.5rem;
+      width: 100%;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      &:hover {
+        background: vars.$secondary-light-color;
+        color: #fff;
+      }
+      // désactive les boutons après le click de l'utilisateur
+      &:disabled {
+        pointer-events: none;
+      }
+    }
+  }
+  &__validate {
+    border: none;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    &-btn {
+      background-color: #fff;
+      outline: 0;
+      border: 0;
+      padding: 1rem;
+      margin-top: 3rem;
+      border-radius: 0.5rem;
+      color: vars.$main-primary-color;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      &:hover {
+        background: vars.$secondary-light-color;
+        color: #fff;
+      }
+    }
+  }
+
+  // FIN DU QUIZ
+  &__end {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    &-text {
+      margin-top: 1rem;
+      font-weight: 500;
+      font-size: 1.3rem;
+      color: vars.$main-primary-color;
+    }
+    &-score {
+      display: inline;
+      margin-top: 0.5rem;
+      &-Nb {
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        color: vars.$main-third-color;
+        display: inline;
+      }
+    }
+    &-img {
+      width: 80%;
+      max-width: 800px;
+      height: 200px;
+      margin: 1rem auto;
+    }
+  }
+  // BOUTON DE REDIRECTION
+  &__redirectionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem;
   }
 }
 
-// BOUTONS DE REPONSES DU QUIZ
-.quizgame__answerBtn {
-  outline: 0;
-  border: 0;
-  padding: 1rem;
-  margin-top: 1rem;
-  background: vars.$main-primary-color;
-  border-radius: 0.5rem;
-  width: 100%;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  &:hover {
-    background: vars.$secondary-light-color;
-    color: #fff;
-  }
-  // désactive les boutons après le click de l'utilisateur
-  &:disabled {
-    pointer-events: none;
-  }
-}
 
 //  Classes ajoutées après le click de l'utilisateur
 // réponse de l'utilisateur
@@ -122,41 +175,8 @@
   background-color: vars.$wrong-answer-color;
 }
 
-// FIN DU QUIZ
-.quizgame__end {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  &-text {
-    margin-top: 1rem;
-    font-weight: 500;
-    font-size: 1.3rem;
-    color: vars.$main-primary-color;
-  }
-  &-score {
-    display: inline;
-    margin-top: 0.5rem;
-    &-Nb {
-      font-size: 1.3rem;
-      text-transform: uppercase;
-      font-weight: 500;
-      color: vars.$main-third-color;
-      display: inline;
-    }
-  }
-  &-img {
-    width: 80%;
-    max-width: 800px;
-    height: 200px;
-    margin: 1rem auto;
-  }
-}
 
-// BOUTON DE REDIRECTION
-.quizgame__redirectionBtn {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  margin: 1rem;
-}
+
+
+
+

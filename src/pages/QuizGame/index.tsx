@@ -120,20 +120,24 @@ function QuizGame({
   return (
     <div>
       {currentQuiz && (
-        <div className="quizgame__container">
-          <h1 className="quizgame__container-title">{currentQuiz.title}</h1>
-
+        <div className="quizgame">
+          <h2 className="quizgame__title">
+            {currentQuiz.title}
+          </h2>
           {questionIndex < currentQuiz.questions.length
             ? (
               <>
-                <h2 className="quizgame__score">
-                  {`Score: ${score} ${score > 1 ? 'points' : 'point'}`}
-                </h2>
+                <div className="quizgame__scoreboard">
+                  <span>Score</span>
+                  <h3 className="quizgame__scoreboard__score">
+                  {`${score} ${score > 1 ? 'points' : 'point'}`}
+                  </h3>
+                </div>
                 <div className="quizgame__question">
                   <div className="quizgame__question-info">
-                    <h2 className="quizgame__question-Nb">
+                    <h3 className="quizgame__question-number">
                       {`Question n° ${questionIndex + 1}/10`}
-                    </h2>
+                    </h3>
                     <h3 className="quizgame__question-text">{currentQuiz.questions[questionIndex].question}</h3>
                   </div>
                   <div className="quizgame__answer">
@@ -150,7 +154,7 @@ function QuizGame({
                           key={answer.id}
                           onClick={() => handleAnswerClicked(answer.id)}
                           className={classnames(
-                            'quizgame__answerBtn',
+                            'quizgame__answer-btn',
                             {
                               valid: isAnswerSubmit && answer.is_valid,
                               invalid: isAnswerSubmit && !isSelectAnswerValid
@@ -164,9 +168,9 @@ function QuizGame({
                         </button>
                       ))}
                     </Stack>
-                    <div className="validate">
-                      <button type="button" className="btn" onClick={() => handleAnswerSubmit()} style={validateAnswerBtnStyle}>Valider la réponse</button>
-                      <button type="button" className="btn" onClick={() => handleNextQuestion()} style={nextBtnStyle}>{nextBtnText}</button>
+                    <div className="quizgame__validate">
+                      <button type="button" className="quizgame__validate-btn" onClick={() => handleAnswerSubmit()} style={validateAnswerBtnStyle}>Valider la réponse</button>
+                      <button type="button" className="quizgame__validate-btn" onClick={() => handleNextQuestion()} style={nextBtnStyle}>{nextBtnText}</button>
                     </div>
                   </div>
                 </div>

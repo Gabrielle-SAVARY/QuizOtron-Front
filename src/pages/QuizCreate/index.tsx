@@ -225,7 +225,7 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <div className="quiz-create__header-main">
-          <BtnExit/>
+          <BtnExit redirectionLink={'/profile/quiz'}/>
           <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
@@ -301,8 +301,11 @@ function QuizCreate({
           ))}
         </fieldset>
         <button type="submit" className="quiz-create__btn-submit">Créer le Quiz</button>
-      </form>
-        {errorWarnCreateQuiz !== '' && <div className="error-message">{errorWarnCreateQuiz}</div>}
+        {errorWarnCreateQuiz !== '' && 
+          <div className="error-message">
+            {errorWarnCreateQuiz}
+          </div>
+        }
         {successCreateQuiz !== '' &&
         <div className="success-message">
           {successCreateQuiz}          
@@ -310,7 +313,8 @@ function QuizCreate({
           Retour à la gestion des quiz.
           </Link>
         </div>
-      }
+        }
+      </form>
     </div>
   );
 }

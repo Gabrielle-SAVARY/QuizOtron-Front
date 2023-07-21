@@ -92,10 +92,11 @@ function ProfilSettings() {
   //* Vérification et autorisation de soumission du formulaire
   const handleSubmitPassword = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const passwordsToValidate = {oldPassword, password, passwordConfirm};
-    console.log('passwordsToValidate',passwordsToValidate);
+    // Données du state à valider avant envoi au backend
+    const passwordsToValidate = {oldPassword, password, passwordConfirm};  
+    // Résultat de la validation des champs du formulaire  
     const errors = validateTextFields(passwordsToValidate, validationRulesPasswordUpdate);
-    console.log('errors PASSWORD',errors.errors);
+    // Mise à jour du state avec les messages d'erreurs
     setErrorsUserUpdate((prevState) => ({
     ...prevState,
     oldPassword: errors.errors.oldPassword,
@@ -113,7 +114,6 @@ function ProfilSettings() {
     }
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
-    console.log('isAllowToSubmit',isAllowToSubmit);
     if (isAllowToSubmit){
       handleUpdatePassword();
     }
@@ -122,10 +122,14 @@ function ProfilSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <BtnExit/>
+        <BtnExit redirectionLink={'/profile'}/>
         <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
       </div>
-      {successMessage !== '' && <div className="success-message">{successMessage}</div>}
+      {successMessage !== '' && 
+        <div className="success-message">
+          {successMessage}
+        </div>
+      }
       <form
         action="submit"
         className="profil-settings__form"
