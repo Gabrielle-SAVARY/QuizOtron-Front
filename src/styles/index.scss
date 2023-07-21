@@ -38,14 +38,7 @@ button {
   background: rgba(203, 24, 24, 0.757);
   border-radius: 5px;
   width: 100%;
-  @include mixin.breakpoint(desktop) {
-    width: 70%;
-    max-width: 800px;
-  }
-  @include mixin.breakpoint(desktopXL) {
-    width: 55%;
-    max-width: 800px;
-  }
+  text-align: center;
 }
 // ERREURS
 // erreur sur un input de fomulaire
@@ -65,6 +58,7 @@ button {
   text-align: left;
   vertical-align: middle;
   width: 100%;
+
 }
 
 .success-message {
@@ -79,14 +73,6 @@ button {
   align-items: center;
   gap:0.8rem;
   width: 100%;
-   @include mixin.breakpoint(desktop) {
-      width: 70%;
-      max-width: 800px;
-    }
-    @include mixin.breakpoint(desktopXL) {
-      width: 55%;
-      max-width: 800px;
-    }
 }
 .success-message a {
   color: hsl(131, 46%, 15%);

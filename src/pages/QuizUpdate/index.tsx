@@ -394,18 +394,21 @@ function QuizUpdate({
           <button type="submit" className="quiz-update__btn-submit">
             Modifier le quiz
           </button>
+        {errorWarnUpdateQuiz !== '' && 
+          <div className="error-message">{errorWarnUpdateQuiz}
+          </div>
+        }
+        {successUpdateQuiz !== '' &&
+          <div className="success-message">
+            {successUpdateQuiz}          
+            <Link to="/profile/quiz">
+            Retour à la gestion des quiz.
+            </Link>
+          </div>
+        }
         </form>
         </>
       )}
-      {errorWarnUpdateQuiz !== '' && <div className="error-message">{errorWarnUpdateQuiz}</div>}
-      {successUpdateQuiz !== '' &&
-        <div className="success-message">
-          {successUpdateQuiz}          
-          <Link to="/profile/quiz">
-          Retour à la gestion des quiz.
-          </Link>
-        </div>
-      }
     </div>
   );
 }

@@ -304,6 +304,8 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = payload.lastname;
       // Réinitialisation du state du mot de passe
       state.credentials.password = '';
+      // Réinitialisation 
+      state.isRegistered = false;
     })
     .addCase(login.rejected, (state, action) => {
       // Récupère les messages d'erreur
