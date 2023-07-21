@@ -65,9 +65,17 @@ function Register() {
       firstname, lastname, email, pseudo, password, passwordConfirm,
     };
     // Résultat de la validation des champs du formulaire
-    const errors = validateTextFields(dataToValidate, validationRulesSignup);
+    const registerForm = validateTextFields(dataToValidate, validationRulesSignup);
+    const errors :IerrorFormRegister = {
+      firstname: registerForm.errors.firstname,
+      lastname: registerForm.errors.lastname,      
+      email: registerForm.errors.email,      
+      pseudo: registerForm.errors.pseudo,
+      password: registerForm.errors.password,
+      passwordConfirm: registerForm.errors.passwordConfirm,
+    }
     // Mise à jour du state avec les messages d'erreurs 
-    setErrorsRegister((prevState) => ({ ...prevState, ...errors.errors }));
+    setErrorsRegister(errors);
     // Vérification que le nouveau mot de passe et sa confirmation sont identiques
     if(password !== passwordConfirm){
       setErrorsRegister((prevState) => ({
@@ -75,10 +83,10 @@ function Register() {
         password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
         passwordConfirm: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
       }));
-      errors.hasError = true;
+      registerForm.hasError = true;
     }
     // Autorisation de soumission du formulaire
-    const isAllowToSubmit = !errors.hasError;
+    const isAllowToSubmit = !registerForm.hasError;
     if(isAllowToSubmit){
       handleFormSubmit();
     }

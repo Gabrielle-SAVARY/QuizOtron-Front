@@ -77,13 +77,15 @@ function Login() {
     // Données du state à valider avant envoi au backend
     const dataToValidate = { email, password };
     // Résultat de la validation des champs du formulaire
-    const errors = validateTextFields(dataToValidate, validationRulesLogin);
-    console.log('errors', errors);
-    //TODO vérifer errors et le prevState copié dans le nouveau state?
+    const loginForm = validateTextFields(dataToValidate, validationRulesLogin);
+    const errors : IerrorFormLogin={
+      email: loginForm.errors.email,
+      password: loginForm.errors.password,
+    }
       // Mise à jour du state avec les messages d'erreurs 
-    setErrorsLogin((prevState) => ({ ...prevState, ...errors.errors }));
+    setErrorsLogin(errors);
     // Autorisation de soumission du formulaire
-    const isAllowToSubmit = !errors.hasError;
+    const isAllowToSubmit = !loginForm.hasError;
     if (isAllowToSubmit) {
       handleFormSubmit();
     }
