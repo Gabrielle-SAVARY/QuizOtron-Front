@@ -311,7 +311,7 @@ function QuizUpdate({
         <>
       <div className="quiz-update__header">
         <div className="quiz-update__header-main">
-          <BtnExit/>
+          <BtnExit redirectionLink={'/profile/quiz'}/>
           <h2 className="quiz-update__header-main__title">Mise à jour du quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>

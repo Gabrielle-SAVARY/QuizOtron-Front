@@ -78,7 +78,7 @@ function Login() {
     const dataToValidate = { email, password };
     // Résultat de la validation des champs du formulaire
     const loginForm = validateTextFields(dataToValidate, validationRulesLogin);
-    const errors : IerrorFormLogin={
+    const errors : IerrorFormLogin = {
       email: loginForm.errors.email,
       password: loginForm.errors.password,
     }
