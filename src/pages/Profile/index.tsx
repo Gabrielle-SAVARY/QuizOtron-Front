@@ -14,11 +14,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { deleteUser, logout } from '../../store/reducers/user';
 import './styles.scss';
 
-interface ProfilProps {
+interface ProfileProps {
   userAverageScore: number | null;
 }
 
-function Profil({ userAverageScore }: ProfilProps) {
+function Profile({ userAverageScore }: ProfileProps) {
   const dispatch = useAppDispatch();
   //* STATE
   // Récupère le pseudo de l'utilisateur connecté
@@ -48,50 +48,50 @@ function Profil({ userAverageScore }: ProfilProps) {
   };
 
   return (
-    <div className="profil">
+    <div className="profile">
 
-      <h1 className="profil__title">
-        Bienvenue sur ton profile
+      <h1 className="profile__title">
+        Bienvenue sur ton profil
       </h1>
-      <div className="profil__container">
-        <div className="profil__user">
-          <div className="profil__user-stat">
-            <h2 className="profil__user-title">{pseudo}</h2>
-            <NavLink to="/profile/parametres" className="profil__update">
+      <div className="profile__container">
+        <div className="profile__user">
+          <div className="profile__user-stat">
+            <h2 className="profile__user-title">{pseudo}</h2>
+            <NavLink to="/profil/parametres" className="profile__update">
               <IoSettingsOutline style={{ fontSize: '34px', color: 'white' }} />
             </NavLink>
           </div>
           <p>
             Moyenne des scores :
           </p>
-          <p className="profil__score">
+          <p className="profile__score">
             {userAverageScore}
             /10
           </p>
         </div>
-        <div className="profil__settings">
-          <NavLink to="/profile/quiz" className="profil__quiz">
+        <div className="profile__settings">
+          <NavLink to="/profil/quiz" className="profile__quiz">
             Gérer mes quiz
             {' '}
             {'>'}
           </NavLink>
-          <NavLink to="/profile/favoris" className="profil__quiz">
+          <NavLink to="/profil/favoris" className="profile__quiz">
             Mes quiz favoris
             {' '}
             {'>'}
           </NavLink>
-          <NavLink to="/profile/historique" className="profil__quiz">
+          <NavLink to="/profil/historique" className="profile__quiz">
             Mon historique
             {' '}
             {'>'}
           </NavLink>
-          <button type="button" className="profil__quiz--disconnect btn-primary" onClick={handleLogout}>
+          <button type="button" className="profile__quiz--disconnect btn-primary" onClick={handleLogout}>
             Déconnexion
           </button>
 
           <button
             type="button"
-            className="profil__quiz profil__quiz--delete"
+            className="profile__quiz profile__quiz--delete"
             onClick={handleOpenModalAccount}
           >
             Supprimer mon compte
@@ -128,4 +128,4 @@ function Profil({ userAverageScore }: ProfilProps) {
   );
 }
 
-export default Profil;
+export default Profile;

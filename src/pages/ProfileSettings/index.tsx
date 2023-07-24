@@ -12,7 +12,7 @@ import { validationRulesPasswordUpdate, validationRulesUserUpdate } from '../../
 import { IerrorFormUserUpdate } from '../../@types/error';
 import './styles.scss';
 
-function ProfilSettings() {
+function ProfileSettings() {
   const dispatch = useAppDispatch();
   //* STATE
   const emailUpdate = useAppSelector((state) => state.user.updateCredentials.emailUpdate);
@@ -122,7 +122,7 @@ function ProfilSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <BtnExit redirectionLink={'/profile'}/>
+        <BtnExit redirectionLink={'/profil'}/>
         <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
       </div>
       {successMessage !== '' && 
@@ -239,4 +239,4 @@ function ProfilSettings() {
   );
 }
 
-export default ProfilSettings;
+export default ProfileSettings;

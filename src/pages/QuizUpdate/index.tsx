@@ -218,7 +218,7 @@ function QuizUpdate({
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async () => {
     try {
-      const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
+      const response = await axiosInstance.patch(`profile/quiz/${quizId}`, {
         quiz: updateQuiz,
         questions: updateQuestions,
       });
@@ -311,7 +311,7 @@ function QuizUpdate({
         <>
       <div className="quiz-update__header">
         <div className="quiz-update__header-main">
-          <BtnExit redirectionLink={'/profile/quiz'}/>
+          <BtnExit redirectionLink={'/profil/quiz'}/>
           <h2 className="quiz-update__header-main__title">Mise à jour du quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
@@ -401,7 +401,7 @@ function QuizUpdate({
         {successUpdateQuiz !== '' &&
           <div className="success-message">
             {successUpdateQuiz}          
-            <Link to="/profile/quiz">
+            <Link to="/profil/quiz">
             Retour à la gestion des quiz.
             </Link>
           </div>

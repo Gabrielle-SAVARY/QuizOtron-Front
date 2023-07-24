@@ -17,7 +17,7 @@ function ProfileLink({ isUserLogged, userPseudo }: ProfileBtnProps) {
   // Classe du lien
   const classNameLinkBtn = isUserLogged ? 'header__link-btn__profile' : 'header__link-btn__login';
   // redirection vers une route
-  const redirectLink = isUserLogged ? '/profile' : '/connexion';
+  const redirectLink = isUserLogged ? '/profil' : '/connexion';
   // Texte acoller à l'icone
   const asideTextLink = isUserLogged ? userPseudo : 'Se connecter';
 

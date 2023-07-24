@@ -31,7 +31,7 @@ function Footer() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/quiz" className="footer-dark__nav-item">
+              <NavLink to="/liste-quiz" className="footer-dark__nav-item">
                 Liste des quiz
               </NavLink>
             </li>
@@ -49,9 +49,6 @@ function Footer() {
             </NavLink>
             <NavLink to="/donnees-personnelles" className="footer-dark__mention-item">
               Données personnelles
-            </NavLink>
-            <NavLink to="/cookie" className="footer-dark__mention-item">
-              Cookie
             </NavLink>
           </div>
           <div className="footer-dark__mentions-copyright">

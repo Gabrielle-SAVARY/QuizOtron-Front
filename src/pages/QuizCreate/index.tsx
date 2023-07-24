@@ -144,7 +144,7 @@ function QuizCreate({
     console.log('USERID', userId);
     console.log('newQuiz',newQuiz);
       try {
-        const response = await axiosInstance.post('/quiz/user/create', {
+        const response = await axiosInstance.post('profile/quiz/', {
           quiz: newQuiz,
           questions: newQuestions,
         });
@@ -225,7 +225,7 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <div className="quiz-create__header-main">
-          <BtnExit redirectionLink={'/profile/quiz'}/>
+          <BtnExit redirectionLink={'/profil/quiz'}/>
           <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
@@ -309,7 +309,7 @@ function QuizCreate({
         {successCreateQuiz !== '' &&
         <div className="success-message">
           {successCreateQuiz}          
-          <Link to="/profile/quiz">
+          <Link to="/profil/quiz">
           Retour à la gestion des quiz.
           </Link>
         </div>
