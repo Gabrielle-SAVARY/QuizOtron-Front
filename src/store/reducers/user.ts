@@ -168,7 +168,7 @@ export const update = createAppAsyncThunk(
     const { emailUpdate, pseudoUpdate } = state.user.updateCredentials;
     try {
       // Appel API avec envoi des données du formulaire
-      const { data } = await axiosInstance.patch('/profile/settings/update', { email: emailUpdate, pseudo: pseudoUpdate });
+      const { data } = await axiosInstance.patch('/profile', { email: emailUpdate, pseudo: pseudoUpdate });
       return data as IAuthentification;
     } catch (error: any | AxiosError) {
       if (axios.isAxiosError(error) && error.response) {
@@ -202,7 +202,7 @@ export const updatePassword = createAppAsyncThunk(
     const { oldPassword, password, passwordConfirm } = state.user.updateCredentials;
     try {
       // Appel API avec envoie des données du formulaire
-      const { data } = await axiosInstance.patch('/profile/settings/update', { password, passwordConfirm, oldPassword });
+      const { data } = await axiosInstance.patch('/profile', { password, passwordConfirm, oldPassword });
       return data as IAuthentification;
     } catch (error: any | AxiosError) {
       if (axios.isAxiosError(error) && error.response) {
@@ -232,7 +232,7 @@ export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {
     // Appel API pour exécuter la fonction delete
-    const { data } = await axiosInstance.delete('/profile/settings/delete');
+    const { data } = await axiosInstance.delete('/profile');
     // suppression du token stocké dans le localStorage
     localStorage.removeItem('token');
     return data as IAuthentification;

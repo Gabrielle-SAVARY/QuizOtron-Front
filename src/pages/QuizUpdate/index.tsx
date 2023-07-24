@@ -218,7 +218,7 @@ function QuizUpdate({
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async () => {
     try {
-      const response = await axiosInstance.patch(`/quiz/user/update/${quizId}`, {
+      const response = await axiosInstance.patch(`profile/quiz/${quizId}`, {
         quiz: updateQuiz,
         questions: updateQuestions,
       });

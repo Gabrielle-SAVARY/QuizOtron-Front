@@ -144,7 +144,7 @@ function QuizCreate({
     console.log('USERID', userId);
     console.log('newQuiz',newQuiz);
       try {
-        const response = await axiosInstance.post('/quiz/user/create', {
+        const response = await axiosInstance.post('profile/quiz/', {
           quiz: newQuiz,
           questions: newQuestions,
         });

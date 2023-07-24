@@ -61,7 +61,7 @@ function ProfilQuiz({
   //* Appel API: suppression d'un quiz
   const handleDeleteQuiz = async (cardId: number) => {
     try {
-      const response = await axiosInstance.delete(`/quiz/user/delete/${cardId}`);
+      const response = await axiosInstance.delete(`/profile/quiz/${cardId}`);
       // Si pas de réponse 200 envoi erreur
       if (response.status !== 200) {
         throw new Error();

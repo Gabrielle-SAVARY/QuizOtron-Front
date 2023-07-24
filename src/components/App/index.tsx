@@ -208,7 +208,7 @@ function App() {
   //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
   const addQuizToFavorite = async (quizId:number) => {
     try {
-      const response = await axiosInstance.post('/profile/favorites/add', { quiz_id: quizId });
+      const response = await axiosInstance.post('/profile/favorites', { quiz_id: quizId });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to favorite');
       }
@@ -228,7 +228,7 @@ function App() {
   //* Appel API: supprime un quiz des favoris de l'utilisateur connecté
   const deleteQuizToFavorite = async (quizId:number) => {
     try {
-      const response = await axiosInstance.delete('/profile/favorites/delete', { data: { quiz_id: quizId } });
+      const response = await axiosInstance.delete('/profile/favorites', { data: { quiz_id: quizId } });
       if (response.status !== 200) {
         throw new Error('Failed to add quiz to favorite');
       }
