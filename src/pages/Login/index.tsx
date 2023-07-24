@@ -46,7 +46,7 @@ function Login() {
   //* Redirection vers la page profil, si l'utilisateur est connecté
   useEffect(() => {
     if (isLogged) {
-      navigate('/profile');
+      navigate('/profil');
     }
   }, [isLogged, navigate]);
 

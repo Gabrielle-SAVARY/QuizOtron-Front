@@ -11,10 +11,10 @@ import Home from '../../pages/Home';
 import Layout from '../Layout';
 import Login from '../../pages/Login';
 import NotFound from '../NotFound';
-import Profil from '../../pages/Profil';
+import Profile from '../../pages/Profile';
 import ProtectedRoute from '../ProtectedRoute';
-import ProfilSettings from '../../pages/Profil-Settings';
-import ProfilQuiz from '../../pages/ProfilQuiz';
+import ProfileSettings from '../../pages/ProfileSettings';
+import ProfileQuiz from '../../pages/ProfileQuiz';
 import Register from '../../pages/Register';
 import Quiz from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';
@@ -25,8 +25,8 @@ import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 import About from '../../pages/AboutUs';
-import ProfilFavorites from '../../pages/ProfilFavorites';
-import ProfilHistory from '../../pages/Profil-History';
+import ProfileFavorites from '../../pages/ProfileFavorites';
+import ProfileHistory from '../../pages/ProfileHistory';
 import { IScoreHistory } from '../../@types/quizHistory';
 
 function App() {
@@ -311,7 +311,7 @@ function App() {
 )}
         />
         <Route
-          path="/quiz"
+          path="/liste-quiz"
           element={(
             <Quiz
               quizList={quizList}
@@ -347,34 +347,26 @@ function App() {
           element={<About />}
         />
         <Route
-          path="/profile"
+          path="/profil"
           element={(
             <ProtectedRoute>
-              <Profil userAverageScore={userAverageScore} />
+              <Profile userAverageScore={userAverageScore} />
             </ProtectedRoute>
           )}
         />
         <Route
-          path="/profile/parametres"
+          path="/profil/parametres"
           element={(
             <ProtectedRoute>
-              <ProfilSettings />
+              <ProfileSettings />
             </ProtectedRoute>
           )}
-        />
+        />       
         <Route
-          path="/profile/historique"
+          path="/profil/quiz"
           element={(
             <ProtectedRoute>
-              <ProfilHistory quizHistory={quizHistory} />
-            </ProtectedRoute>
-          )}
-        />
-        <Route
-          path="/profile/quiz"
-          element={(
-            <ProtectedRoute>
-              <ProfilQuiz
+              <ProfileQuiz
                 quizList={quizList}
                 setQuizList={setQuizList}
                 userFavoritesQuiz={userFavoritesQuiz}
@@ -385,7 +377,7 @@ function App() {
           )}
         />
         <Route
-          path="/profile/quiz/creer-quiz"
+          path="/profil/quiz/creer-quiz"
           element={(
             <ProtectedRoute>
               <QuizCreate
@@ -397,7 +389,7 @@ function App() {
           )}
         />
         <Route
-          path="/profile/quiz/modifier-quiz/:id"
+          path="/profil/quiz/modifier-quiz/:id"
           element={(
             <ProtectedRoute>
               <QuizUpdate
@@ -411,14 +403,22 @@ function App() {
           )}
         />
         <Route
-          path="/profile/favoris"
+          path="/profil/favoris"
           element={(
             <ProtectedRoute>
-              <ProfilFavorites
+              <ProfileFavorites
                 userFavoritesQuiz={userFavoritesQuiz}
                 addQuizToFavorite={addQuizToFavorite}
                 deleteQuizToFavorite={deleteQuizToFavorite}
               />
+            </ProtectedRoute>
+          )}
+        />
+         <Route
+          path="/profil/historique"
+          element={(
+            <ProtectedRoute>
+              <ProfileHistory quizHistory={quizHistory} />
             </ProtectedRoute>
           )}
         />

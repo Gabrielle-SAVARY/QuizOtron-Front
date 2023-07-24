@@ -65,7 +65,7 @@ function Header() {
         <nav className="header__nav" style={navigationDisplay}>
           <ul className="header__nav-list">
             <li className="header__nav-list__items"><NavLink to="/" className={menuLink} onClick={handleCloseToggleMenu}>Accueil</NavLink></li>
-            <li className="header__nav-list__items"><NavLink to="/quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
+            <li className="header__nav-list__items"><NavLink to="/liste-quiz" className={menuLink} onClick={handleCloseToggleMenu}>Liste des quiz</NavLink></li>
           </ul>
         </nav>
         <ProfileLink isUserLogged={isLogged} userPseudo={pseudo} />

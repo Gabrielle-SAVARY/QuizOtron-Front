@@ -3,18 +3,18 @@ import { IQuizList } from '../../@types/quizList';
 import BtnExit from '../../components/BtnExit';
 import './styles.scss';
 
-interface ProfilQuizProps {
+interface ProfileFavoritesProps {
   userFavoritesQuiz: IQuizList[]
   addQuizToFavorite: (quizId: number) => void;
   deleteQuizToFavorite: (quizId: number) => void;
 }
-function ProfilFavorites({
+function ProfileFavorites({
   userFavoritesQuiz, addQuizToFavorite, deleteQuizToFavorite,
-}: ProfilQuizProps) {
+}: ProfileFavoritesProps) {
   return (
     <div className="quiz-favoris">
       <div className="quiz-favoris__header">
-        <BtnExit redirectionLink={'/profile'}/>
+        <BtnExit redirectionLink={'/profil'}/>
         <h1 className="quiz-favoris__header-title">Mes quiz favoris</h1>
       </div>
       <div>
@@ -41,4 +41,4 @@ function ProfilFavorites({
   );
 }
 
-export default ProfilFavorites;
+export default ProfileFavorites;

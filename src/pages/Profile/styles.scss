@@ -1,7 +1,7 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-.profil {
+.profile {
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -83,7 +83,7 @@
   }
 }
 
-.profil__quiz--delete {
+.profile__quiz--delete {
   background: red;
   font-size: 0.75rem;
   color: white;
@@ -91,7 +91,7 @@
   border-radius: 1rem;
 }
 
-.profil__score {
+.profile__score {
   margin-top: 1rem;
   font-size: 1.5rem;
 }

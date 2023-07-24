@@ -3,15 +3,15 @@ import BtnExit from '../../components/BtnExit';
 import CardHistory from '../../components/CardHistory';
 import './styles.scss';
 
-interface ProfilHistoryProps {
+interface ProfileHistoryProps {
   quizHistory: IScoreHistory[];
 }
 
-function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
+function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
   return (
     <div>
       <h1 className="quiz__title">Mon historique</h1>
-      <BtnExit redirectionLink={'/profile'}/>
+      <BtnExit redirectionLink={'/profil'}/>
       <div className="cardhistory__container">
         {quizHistory.map((score) => (
           <CardHistory
@@ -26,4 +26,4 @@ function ProfilHistory({ quizHistory }: ProfilHistoryProps) {
   );
 }
 
-export default ProfilHistory;
+export default ProfileHistory;

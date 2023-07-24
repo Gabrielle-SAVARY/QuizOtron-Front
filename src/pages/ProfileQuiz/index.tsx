@@ -21,16 +21,16 @@ import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
 import BtnExit from '../../components/BtnExit';
 
-interface ProfilQuizProps {
+interface ProfileQuizProps {
   quizList: IQuizList[]
   setQuizList: (quizList: IQuizList[]) => void
   userFavoritesQuiz: IQuizList[]
   addQuizToFavorite: (quizId: number) => void
   deleteQuizToFavorite: (quizId: number) => void
 }
-function ProfilQuiz({
+function ProfileQuiz({
   quizList, setQuizList, userFavoritesQuiz, addQuizToFavorite, deleteQuizToFavorite,
-}: ProfilQuizProps) {
+}: ProfileQuizProps) {
   //* STATE
   // Récupère le pseudo dans le reducer user
   const pseudo = useAppSelector((state) => state.user.credentials.pseudo);
@@ -83,7 +83,7 @@ function ProfilQuiz({
   return (
     <div className="quiz__management">
       <div className="quiz__management__header">
-        <BtnExit redirectionLink={'/profile'}/>       
+        <BtnExit redirectionLink={'/profil'}/>       
         <h1 className="quiz__management__header-title">Gérer mes Quiz</h1>
       </div>
       <div className="quiz__management__add-Btn">
@@ -92,7 +92,7 @@ function ProfilQuiz({
           color="primary"
           startIcon={<AddIcon />}
           component={NavLink}
-          to="/profile/quiz/creer-quiz"
+          to="/profil/quiz/creer-quiz"
         >
           Créer un quiz
         </Button>
@@ -125,7 +125,7 @@ function ProfilQuiz({
                   sx={{ color: '#fc9100' }}
                   size="large"
                   component={Link}
-                  to={`/profile/quiz/modifier-quiz/${quiz.id}`}
+                  to={`/profil/quiz/modifier-quiz/${quiz.id}`}
                 >
                   <ModeEditIcon fontSize="inherit" />
                 </IconButton>
@@ -178,4 +178,4 @@ function ProfilQuiz({
   );
 }
 
-export default ProfilQuiz;
+export default ProfileQuiz;
