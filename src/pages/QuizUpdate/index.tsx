@@ -5,8 +5,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { SelectChangeEvent, } from '@mui/material/Select';
 import { useParams, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
-import axios from 'axios';
 import { axiosInstance } from '../../utils/axios';
+import { CustomAxiosError, handleAxiosErrors } from '../../utils/axiosError';
 import { initialQuestionUpErrors, initialUpdateQuestions, numberOfQuestions } from '../../utils/createModels';
 import { updateAnswerError, updateAnswerUpValue, updateQuestionUpError, updateQuestionUpValue, updateRadioBtnUp, updateRadioBtnUpError } from '../../utils/formQuizUpdate';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
@@ -226,20 +226,24 @@ function QuizUpdate({
       // Rappel de la liste des quizs pour mise à jour du state quizList
       fetchQuizList();
       // Message de succès: mise à jour du quiz
-      setSuccessUpdateQuiz('Le quiz a été mis à jour avec succès.');
+      const newSuccessMsg: string = response.data.message;
+      setSuccessUpdateQuiz(newSuccessMsg);
     } catch (error) {
-      // Si statut 400 envoi d'un message d'erreur
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 400) {
-          console.log('error.response',error.response);
-          const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";          
-          setErrorWarnUpdateQuiz(newErrorMsg);
-        }
-      } else {
-        console.error(error);
-      }
-      throw error;
+      const errorAxios = handleAxiosErrors(error as CustomAxiosError);
+      setErrorWarnUpdateQuiz(errorAxios);
     }  
+    // } catch (error) {
+    //   // Si statut 400 envoi d'un message d'erreur
+    //   if (axios.isAxiosError(error)) {
+    //     if (error.response && error.response.status === 400) {
+    //       const newErrorMsg = "Une erreur s'est produite lors de la mise à jour du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";          
+    //       setErrorWarnUpdateQuiz(newErrorMsg);
+    //     }
+    //   } else {
+    //     console.error(error);
+    //   }
+    //   throw error;
+    // }  
  };
 
   //* Gère la validation des données et déclenche la soumission du formulaire
@@ -292,7 +296,7 @@ function QuizUpdate({
     if (isAllowToSubmit){
       handleFormSubmit();
     }else {
-      setErrorWarnUpdateQuiz('Il y a une ou des erreurs qui empêchent la soumission du formulaire. Veuillez vérifier les champs du formulaire, les erreurs seront indiquées en rouge.');
+      setErrorWarnUpdateQuiz('Des erreurs empêchent la soumission du formulaire. Veuillez corriger les erreurs indiquées en rouge.');
     }
   };
 

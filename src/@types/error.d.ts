@@ -90,3 +90,8 @@ export interface ValidationQuestionUpResult {
   errors:QuestionUpError[];
   hasError: boolean;
 }
+
+export interface dataError {
+  message:string;
+  statusCode: number;
+}

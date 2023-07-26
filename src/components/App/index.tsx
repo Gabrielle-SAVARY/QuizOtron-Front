@@ -80,6 +80,11 @@ function App() {
   useEffect(() => {
     // On recherche dans le local storage si un token existe
     const tokenDataStr = localStorage.getItem('token');
+    if(!tokenDataStr){
+      console.log('coucou');
+      setErrorMessage("Merci de vous connecter.")
+      
+    }
     const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
 
     if (tokenData) {
@@ -111,14 +116,10 @@ function App() {
   const fetchQuizList = useCallback(async () => {
     try {
       const response = await axiosInstance.get('/quiz');
-      // Si pas de réponse 200 envoi erreur
-      if (response.status !== 200) {
-        throw new Error();
-      }
-      // met à jour le state avec les données envoyées par l'API
       setQuizList(response.data);
     } catch (error) {
-      console.log(error);
+      console.log('error',error);
+      // setErrorMessage(error);
     }
   }, []);
 
@@ -252,7 +253,7 @@ function App() {
         }
         // Récupère les données de la réponse
         const { data } = response;
-        console.log('data', data);
+        // console.log('data', data);
 
         // Mise à jour du state avec les données inversées de la réponse
         setQuizHistory(data);
@@ -267,7 +268,6 @@ function App() {
       setQuizHistory([]);
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
 
   useEffect(() => {
@@ -293,7 +293,6 @@ function App() {
     } else {
       setUserAverageScore(null);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged, quizHistory]);
 
   return (

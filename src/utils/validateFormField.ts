@@ -28,7 +28,6 @@ export const validateTextFields = (
     } else {
       errors[field] = '';
     }
-    console.log('error validateTextFields', error);
   });
 
   // Si pas d'erreur, on renvoi un objet vide
