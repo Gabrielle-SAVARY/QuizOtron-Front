@@ -48,7 +48,7 @@ function ProfileSettings() {
       }),
     );
     // Réinitialise le message d'erreur de l'input
-    if(errorsUserUpdate[fieldName] !== ''){
+    if (errorsUserUpdate[fieldName] !== '') {
       setErrorsUserUpdate({ ...errorsUserUpdate, [fieldName]: '' });
     }
   };
@@ -61,12 +61,12 @@ function ProfileSettings() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
-    const dataToValidate = {emailUpdate, pseudoUpdate};
-    console.log('dataToValidate',dataToValidate);
+    const dataToValidate = { emailUpdate, pseudoUpdate };
+    console.log('dataToValidate', dataToValidate);
     // Résultat de la validation des champs du formulaire
     const errors = validateTextFields(dataToValidate, validationRulesUserUpdate);
-    console.log('errors',errors.errors);
-     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
+    console.log('errors', errors.errors);
+    // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorsUserUpdate((prevState) => ({
       ...prevState,
       emailUpdate: errors.errors.emailUpdate,
@@ -74,9 +74,9 @@ function ProfileSettings() {
     }));
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
-    console.log('isAllowToSubmit',isAllowToSubmit);
+    console.log('isAllowToSubmit', isAllowToSubmit);
     handleUpdate();
-    if (isAllowToSubmit){
+    if (isAllowToSubmit) {
       handleUpdate();
     }
   };
@@ -93,18 +93,18 @@ function ProfileSettings() {
   const handleSubmitPassword = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
-    const passwordsToValidate = {oldPassword, password, passwordConfirm};  
-    // Résultat de la validation des champs du formulaire  
+    const passwordsToValidate = { oldPassword, password, passwordConfirm };
+    // Résultat de la validation des champs du formulaire
     const errors = validateTextFields(passwordsToValidate, validationRulesPasswordUpdate);
     // Mise à jour du state avec les messages d'erreurs
     setErrorsUserUpdate((prevState) => ({
-    ...prevState,
-    oldPassword: errors.errors.oldPassword,
-    password: errors.errors.password,
-    passwordConfirm: errors.errors.passwordConfirm,
+      ...prevState,
+      oldPassword: errors.errors.oldPassword,
+      password: errors.errors.password,
+      passwordConfirm: errors.errors.passwordConfirm,
     }));
     // Vérification que le nouveau mot de passe et sa confirmation sont identiques
-    if(password !== passwordConfirm){
+    if (password !== passwordConfirm) {
       setErrorsUserUpdate((prevState) => ({
         ...prevState,
         password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
@@ -114,7 +114,7 @@ function ProfileSettings() {
     }
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
-    if (isAllowToSubmit){
+    if (isAllowToSubmit) {
       handleUpdatePassword();
     }
   };
@@ -122,14 +122,15 @@ function ProfileSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <BtnExit redirectionLink={'/profil'}/>
+        <BtnExit redirectionLink="/profil" />
         <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
       </div>
-      {successMessage !== '' && 
+      {successMessage !== ''
+        && (
         <div className="success-message">
           {successMessage}
         </div>
-      }
+        )}
       <form
         action="submit"
         className="profil-settings__form"
@@ -144,7 +145,7 @@ function ProfileSettings() {
           onChange={handleChangeField}
           name="emailUpdate"
         />
-         {errorsUserUpdate.emailUpdate !== ''
+        {errorsUserUpdate.emailUpdate !== ''
             && (
             <div className="error-msg">
               {errorsUserUpdate.emailUpdate}
@@ -161,18 +162,18 @@ function ProfileSettings() {
         />
         {errorsUserUpdate.pseudoUpdate !== ''
          && (
-            <div className="error-msg">
-              {errorsUserUpdate.pseudoUpdate}
-            </div>
-        )}
-        <button type="submit" className="profil-settings__form__btn-submit" >
+         <div className="error-msg">
+           {errorsUserUpdate.pseudoUpdate}
+         </div>
+         )}
+        <button type="submit" className="profil-settings__form__btn-submit">
           Modifier mes informations
         </button>
       </form>
-        
-        <button type="button" className="profil-settings__toggle" onClick={toggleVisibility}>
-          Changer votre de mot de passe ?
-        </button>
+
+      <button type="button" className="profil-settings__toggle" onClick={toggleVisibility}>
+        Changer votre de mot de passe ?
+      </button>
       <form
         action="submit"
         className="profil-settings__form"
@@ -191,15 +192,15 @@ function ProfileSettings() {
             />
             {errorsUserUpdate.oldPassword !== ''
               && (
-                  <div className="error-msg">
-                    {errorsUserUpdate.oldPassword}
-                  </div>
+              <div className="error-msg">
+                {errorsUserUpdate.oldPassword}
+              </div>
               )}
             <label htmlFor="" className="profil-settings__form-label">Nouveau mot de passe</label>
             <input
               type="password"
               placeholder="Nouveau mot de passe"
-              className={`profil-settings__form-input ${errorsUserUpdate.password!== '' ? 'error-input' : ''}`}
+              className={`profil-settings__form-input ${errorsUserUpdate.password !== '' ? 'error-input' : ''}`}
               value={password}
               onChange={handleChangeField}
               name="password"
@@ -209,12 +210,12 @@ function ProfileSettings() {
                 <div className="error-msg">
                   {errorsUserUpdate.password}
                 </div>
-            )}
+              )}
             <label htmlFor="" className="profil-settings__form-label">Confirmer le nouveau mot de passe</label>
             <input
               type="password"
               placeholder="Confirmer le nouveau mot de passe"
-              className={`profil-settings__form-input ${errorsUserUpdate.passwordConfirm!== '' ? 'error-input' : ''}`}
+              className={`profil-settings__form-input ${errorsUserUpdate.passwordConfirm !== '' ? 'error-input' : ''}`}
               value={passwordConfirm}
               onChange={handleChangeField}
               name="passwordConfirm"
@@ -224,17 +225,19 @@ function ProfileSettings() {
                 <div className="error-msg">
                   {errorsUserUpdate.passwordConfirm}
                 </div>
-            )}
+              )}
             <button type="submit" className="profil-settings__form__btn-submit">
               Modifier mon mot de passe
             </button>
           </div>
         )}
       </form>
-      {errorMessages !== '' &&
-       <div className="error-message">{errorMessages}
+      {errorMessages !== ''
+       && (
+       <div className="error-message">
+         {errorMessages}
        </div>
-      }
+       )}
     </div>
   );
 }

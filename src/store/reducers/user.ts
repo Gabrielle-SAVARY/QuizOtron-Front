@@ -1,13 +1,12 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { axiosInstance } from '../../utils/axios';
-import { CustomAxiosError,handleAxiosErrors,handleReducerErrors } from '../../utils/axiosError';
+import { CustomAxiosError, handleAxiosErrors, handleReducerErrors } from '../../utils/axiosError';
 import { dataError } from '../../@types/error';
-import { 
+import {
   IAuthentification,
-  UserState
+  UserState,
 } from '../../@types/user';
-
 
 export const initialState: UserState = {
   isRegistered: false,
@@ -39,7 +38,7 @@ export type KeysOfUpdateCredentials = keyof UserState['updateCredentials'];
 export type KeysOfCredentials = keyof UserState['credentials'];
 
 // Réinitialisation du state et suppression du token stocké dans le localStorage
-function resetState(state : UserState) {  
+function resetState(state : UserState) {
   state.credentials = { ...initialState.credentials };
   state.updateCredentials = { ...initialState.updateCredentials };
   state.isLogged = false;
@@ -52,9 +51,9 @@ function resetState(state : UserState) {
 }
 
 // Gestion des erreurs
-function handleRejected(state : UserState, action : any){
+function handleRejected(state : UserState, action : any) {
   const payload = action.payload as dataError;
-  state.errorMessages = payload.message
+  state.errorMessages = payload.message;
 }
 
 //* ACTION: met à jour la  valeur des champs des inputs de formulaire logiin/register
@@ -96,8 +95,8 @@ export const register = createAppAsyncThunk(
         email, pseudo, firstname, lastname, password, passwordConfirm,
       });
       return data as IAuthentification;
-    } catch (error) {      
-      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
+    } catch (error) {
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI);
     }
   },
 );
@@ -116,8 +115,8 @@ export const login = createAppAsyncThunk(
       // Stocke dans le localStorage
       localStorage.setItem('token', JSON.stringify(data.token));
       return data as IAuthentification;
-    } catch (error) {      
-      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
+    } catch (error) {
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI);
     }
   },
 );
@@ -134,8 +133,8 @@ export const findUser = createAppAsyncThunk(
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.get('/profile');
       return data as IAuthentification;
-    } catch (error) {      
-      return handleAxiosErrors(error as CustomAxiosError)
+    } catch (error) {
+      return handleAxiosErrors(error as CustomAxiosError);
     }
   },
 );
@@ -152,8 +151,8 @@ export const update = createAppAsyncThunk(
       // Appel API avec envoi des données du formulaire
       const { data } = await axiosInstance.patch('/profile', { email: emailUpdate, pseudo: pseudoUpdate });
       return data as IAuthentification;
-    } catch (error) {      
-      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
+    } catch (error) {
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI);
     }
   },
 );
@@ -170,8 +169,8 @@ export const updatePassword = createAppAsyncThunk(
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.patch('/profile', { password, passwordConfirm, oldPassword });
       return data as IAuthentification;
-    } catch (error) {      
-      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
+    } catch (error) {
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI);
     }
   },
 );
@@ -183,12 +182,12 @@ export const deleteUser = createAppAsyncThunk(
   async () => {
     try {
     // Appel API pour exécuter la fonction delete
-      const {data } = await axiosInstance.delete('/profile');
-    // suppression du token stocké dans le localStorage
+      const { data } = await axiosInstance.delete('/profile');
+      // suppression du token stocké dans le localStorage
       localStorage.removeItem('token');
-      return data.message as string
-    } catch (error) {      
-      return handleAxiosErrors(error as CustomAxiosError)
+      return data.message as string;
+    } catch (error) {
+      return handleAxiosErrors(error as CustomAxiosError);
     }
   },
 );
@@ -242,7 +241,7 @@ const userReducer = createReducer(initialState, (builder) => {
     //* addCase login
     .addCase(login.fulfilled, (state, action) => {
       // Récupère les informations retournées par l'API
-      const payload = action.payload as IAuthentification;      
+      const payload = action.payload as IAuthentification;
       state.isLogged = payload.isLogged;
       state.token = payload.token;
       state.userId = payload.id;
@@ -251,7 +250,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.credentials.lastname = payload.lastname;
       // Réinitialisation du state du mot de passe
       state.credentials.password = '';
-      // Réinitialisation 
+      // Réinitialisation
       state.isRegistered = false;
     })
     .addCase(login.rejected, handleRejected)
@@ -263,7 +262,7 @@ const userReducer = createReducer(initialState, (builder) => {
     //* addCase findUser
     .addCase(findUser.fulfilled, (state, action) => {
       // Récupère les informations retournées par l'API
-      const payload = action.payload as IAuthentification;   
+      const payload = action.payload as IAuthentification;
       state.userId = payload.id;
       state.credentials.pseudo = payload.pseudo;
       state.credentials.email = payload.email;
@@ -284,9 +283,9 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(updatePassword.rejected, handleRejected)
     //* addCase deleteUser
-    .addCase(deleteUser.fulfilled, (state, action)=>{
-      resetState(state)
-      state.successMessage = action.payload 
+    .addCase(deleteUser.fulfilled, (state, action) => {
+      resetState(state);
+      state.successMessage = action.payload;
     })
     .addCase(deleteUser.rejected, handleRejected);
 });

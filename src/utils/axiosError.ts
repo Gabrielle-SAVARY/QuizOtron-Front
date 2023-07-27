@@ -1,5 +1,5 @@
-import axios from "axios";
-import { dataError } from "../@types/error";
+import axios from 'axios';
+import { dataError } from '../@types/error';
 
 export interface CustomAxiosError extends Error {
   response?: {
@@ -15,20 +15,20 @@ interface IThunkApi {
 export const handleReducerErrors = (error: CustomAxiosError, thunkAPI: IThunkApi) => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      const dataError = error.response.data;
-      return thunkAPI.rejectWithValue(dataError);
+      const newError = error.response.data;
+      return thunkAPI.rejectWithValue(newError);
     }
-  } 
-  return thunkAPI.rejectWithValue("Un problème sur le serveur est survenu, merci de contacter le service technique.");
-}
+  }
+  return thunkAPI.rejectWithValue('Un problème sur le serveur est survenu, merci de contacter le service technique.');
+};
 
 // Fonction pour gérer les erreurs des requêtes axios
 export const handleAxiosErrors = (error: CustomAxiosError) => {
-  let newErrorMsg = "Un problème sur le serveur est survenu, merci de contacter le service technique."
+  let newErrorMsg = 'Un problème sur le serveur est survenu, merci de contacter le service technique.';
   if (axios.isAxiosError(error)) {
     if (error.response) {
-       newErrorMsg = error.response.data.message;
+      newErrorMsg = error.response.data.message;
     }
-  } 
+  }
   return newErrorMsg;
-}
+};

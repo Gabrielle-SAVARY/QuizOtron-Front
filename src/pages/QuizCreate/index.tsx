@@ -1,14 +1,23 @@
-import {  useState, ChangeEvent, FormEvent, useCallback, SyntheticEvent} from 'react';
-import { Link} from 'react-router-dom';
+import {
+  useState, ChangeEvent, FormEvent, useCallback, SyntheticEvent,
+} from 'react';
+import { Link } from 'react-router-dom';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
 import { CustomAxiosError, handleAxiosErrors } from '../../utils/axiosError';
-import { initialNewQuestions, initialQuestionErrors, numberOfQuestions} from '../../utils/createModels';
+import { initialNewQuestions, initialQuestionErrors, numberOfQuestions } from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
-import { updateAnswerError, updateAnswerValue, updateQuestionUpError, updateQuestionValue, updateRadioBtn, updateRadioBtnError } from '../../utils/formQuizCreate';
-import { IerrorFormNewQuiz} from '../../@types/error';
+import {
+  updateAnswerError,
+  updateAnswerValue,
+  updateQuestionUpError,
+  updateQuestionValue,
+  updateRadioBtn,
+  updateRadioBtnError,
+} from '../../utils/formQuizCreate';
+import { IerrorFormNewQuiz } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
@@ -31,12 +40,11 @@ function QuizCreate({
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-  console.log('userId',userId);
-    // Alerte présence d'erreur avant envoi ou erreur 400 du backend 
-    const [errorWarnCreateQuiz, setErrorWarnCreateQuiz] = useState<string>('');
-    // Stocke le message de succès de mise à jour du quiz
-    const [successCreateQuiz, setSuccessCreateQuiz] = useState<string>('');
-  
+  // Alerte présence d'erreur avant envoi ou erreur 400 du backend
+  const [errorWarnCreateQuiz, setErrorWarnCreateQuiz] = useState<string>('');
+  // Stocke le message de succès de mise à jour du quiz
+  const [successCreateQuiz, setSuccessCreateQuiz] = useState<string>('');
+
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
     title: '',
@@ -46,10 +54,12 @@ function QuizCreate({
     user_id: userId,
     tag_id: 0,
   });
-  
+
   // Stock le tableau des questions et des réponses du quiz
-  const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions(numberOfQuestions));
-  
+  const [newQuestions, setNewQuestions] = useState<Question[]>(initialNewQuestions(
+    numberOfQuestions,
+  ));
+
   // Stock les messages d'erreur du frontend suite à la validation des champs du formulaire
   const [errorsNewQuiz, setErrorsNewQuiz] = useState<IerrorFormNewQuiz>({
     title: '',
@@ -80,63 +90,82 @@ function QuizCreate({
     // On met à jour le state newQuiz
     setNewQuiz(quizData);
     // Réinitialise le message d'erreur de l'input
-    setErrorsNewQuiz({ 
+    setErrorsNewQuiz({
       ...errorsNewQuiz,
-       [field]: '' 
-      });
+      [field]: '',
+    });
+  };
+
+  //* Mises à jour du state des erreurs:
+  //* suppression du message d'erreur lors de la modification d'un champs
+  // Modification d'un champ question
+  const setErrorQuestion = (indexQuestion: number) => {
+    setErrorsNewQuiz((newErrors: IerrorFormNewQuiz) => updateQuestionUpError(
+      newErrors,
+      indexQuestion,
+    ));
+  };
+  // Modification d'un champ réponse
+  const setErrorAnswer = (indexQuestion: number, indexAnswer: number) => {
+    setErrorsNewQuiz((newErrors: IerrorFormNewQuiz) => updateAnswerError(
+      newErrors,
+      indexQuestion,
+      indexAnswer,
+    ));
+  };
+  // Sélection d'un bouton radio
+  const setErrorRadio = (indexQuestion: number) => {
+    setErrorsNewQuiz((newErrors: IerrorFormNewQuiz) => updateRadioBtnError(
+      newErrors,
+      indexQuestion,
+    ));
   };
 
   //* Mise à jour du state des questions lors de la modification des champs du formulaire
   // Modification du champs d'une question
-  const handleChangeQuestion = useCallback( 
-    (event: SyntheticEvent<Element, Event>, indexQuestion: number) => {
-      // Récupère et type la cible de l'événement
-      const target = event.target as HTMLInputElement;
-      // Récupère la valeur de l'input et mise à jour du state
-      const newValue = target.value;
-      setNewQuestions((newQuestions: Question[]) => updateQuestionValue(newQuestions, indexQuestion, newValue));
-      // Mise à jour du state errors
-      setErrorQuestion(indexQuestion);
-    },[]
-  );    
+  const handleChangeQuestion = useCallback((event: SyntheticEvent<Element,
+  Event>, indexQuestion: number) => {
+    // Récupère et type la cible de l'événement
+    const target = event.target as HTMLInputElement;
+    // Récupère la valeur de l'input et mise à jour du state
+    const newValue = target.value;
+    setNewQuestions((newQuizQuestions: Question[]) => updateQuestionValue(
+      newQuizQuestions,
+      indexQuestion,
+      newValue,
+    ));
+    // Mise à jour du state errors
+    setErrorQuestion(indexQuestion);
+  }, []);
 
   // Modification du champs d'une réponse
-  const handleChangeAnswer = useCallback(
-    (event: SyntheticEvent<Element, Event>,indexQuestion: number,indexAnswer: number) => {
+  const handleChangeAnswer = useCallback((event: SyntheticEvent<Element,
+  Event>, indexQuestion: number, indexAnswer: number) => {
     // Récupère et type la cible de l'évenement
     const target = event.target as HTMLInputElement;
-    // Récupère la valeur de l'input et mise à jour du state 
+    // Récupère la valeur de l'input et mise à jour du state
     const newValue = target.value;
-    setNewQuestions((newQuestions: Question[]) => updateAnswerValue(newQuestions, indexQuestion, indexAnswer, newValue));
+    setNewQuestions((newQuizQuestions: Question[]) => updateAnswerValue(
+      newQuizQuestions,
+      indexQuestion,
+      indexAnswer,
+      newValue,
+    ));
     // Mise à jour du state des erreurs
     setErrorAnswer(indexQuestion, indexAnswer);
-    },[]
-  );
+  }, []);
 
   // Sélection d'un bouton radio
-  const handleChangeRadioBtn = useCallback((indexQuestion: number,indexAnswer: number) => {
-    // Mise à jour du state 
-    setNewQuestions((newQuestions: Question[]) => updateRadioBtn(newQuestions, indexQuestion, indexAnswer));
+  const handleChangeRadioBtn = useCallback((indexQuestion: number, indexAnswer: number) => {
+    // Mise à jour du state
+    setNewQuestions((newQuizQuestions: Question[]) => updateRadioBtn(
+      newQuizQuestions,
+      indexQuestion,
+      indexAnswer,
+    ));
     // Mise à jour du state des erreurs
     setErrorRadio(indexQuestion);
-    },[]
-  );
-
-  //* Mises à jour du state des erreurs: suppression du message d'erreur lors de la modification d'un champs
-  // Modification d'un champ question
-  const setErrorQuestion=(indexQuestion: number) => {
-    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateQuestionUpError(errorsNewQuiz, indexQuestion));
-  };
-
- // Modification d'un champ réponse
-  const setErrorAnswer =(indexQuestion: number, indexAnswer: number, ) => {
-    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateAnswerError(errorsNewQuiz, indexQuestion, indexAnswer));
-  };
-
-  // Sélection d'un bouton radio
-  const setErrorRadio =(indexQuestion: number) => {
-    setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateRadioBtnError(errorsNewQuiz, indexQuestion));
-  };
+  }, []);
 
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async () => {
@@ -153,19 +182,8 @@ function QuizCreate({
       setSuccessCreateQuiz(newSuccessMsg);
     } catch (error) {
       const errorAxios = handleAxiosErrors(error as CustomAxiosError);
-      setErrorWarnCreateQuiz(errorAxios);            
+      setErrorWarnCreateQuiz(errorAxios);
     }
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       if (error.response && error.response.status === 400) {
-  //         const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
-  //         setErrorWarnCreateQuiz(newErrorMsg);        
-  //       }
-  //     } else {
-  //       console.error(error);
-  //     }
-  //     throw error;      
-  // }
   };
 
   //* Gère la validation des données et déclenche la soumission du formulaire
@@ -197,7 +215,7 @@ function QuizCreate({
     // Récupère la validation des questions, réponses et boutons radio
     const questionsErrors = validateQuestions(quizDataToValidate);
 
-    //*Rassemble toutes les erreurs dans un nouvel objet
+    //* Rassemble toutes les erreurs dans un nouvel objet
     const errors = {
       title: fieldsErrors.errors.title,
       description: fieldsErrors.errors.description,
@@ -209,14 +227,14 @@ function QuizCreate({
     console.log('TOTAL !!!!! errors', errors);
     // Mise à jour du state avec les messages d'erreurs du frontend
     setErrorsNewQuiz(errors);
-    
-     //* Soumission du formulaire si aucune erreur
+
+    //* Soumission du formulaire si aucune erreur
     // eslint-disable-next-line no-unneeded-ternary
     const isAllowToSubmit = (!fieldsErrors.hasError
       && !menuSelectErrors.hasError && !questionsErrors.hasError) ? true : false;
-    if (isAllowToSubmit){
+    if (isAllowToSubmit) {
       handleFormSubmit();
-    }else {
+    } else {
       setErrorWarnCreateQuiz('Des erreurs empêchent la soumission du formulaire. Veuillez corriger les erreurs indiquées en rouge.');
     }
   };
@@ -225,65 +243,66 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <div className="quiz-create__header-main">
-          <BtnExit redirectionLink={'/profil/quiz'}/>
+          <BtnExit redirectionLink="/profil/quiz" />
           <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
       </div>
       <form
-        className="quiz-create__form" 
-        onSubmit={(event) => handleSubmit(event)}>
+        className="quiz-create__form"
+        onSubmit={(event) => handleSubmit(event)}
+      >
         <fieldset className="quiz-create__parameter">
 
           {/* //? ======= Choix de la catégorie========== */}
           <QuizMenuDropDown
-          arrayList={tagsList}
-          item='tag'
-          inputLabel='catégorie'
-          inputValue={newQuiz.tag_id}
-          inputError={errorsNewQuiz.tag_id}
-          defaultMessage='Sélectionner une catégorie'
-          handleChange={handleChangeQuizData}
+            arrayList={tagsList}
+            item="tag"
+            inputLabel="catégorie"
+            inputValue={newQuiz.tag_id}
+            inputError={errorsNewQuiz.tag_id}
+            defaultMessage="Sélectionner une catégorie"
+            handleChange={handleChangeQuizData}
           />
 
           {/* //? ======= Choix de la difficulté========== */}
           <QuizMenuDropDown
-          arrayList={levelsList}
-          item='level'
-          inputLabel='niveau de difficulté'
-          inputValue={newQuiz.level_id}
-          inputError={errorsNewQuiz.level_id}
-          defaultMessage='Sélectionner un niveau de difficulté'
-          handleChange={handleChangeQuizData}
+            arrayList={levelsList}
+            item="level"
+            inputLabel="niveau de difficulté"
+            inputValue={newQuiz.level_id}
+            inputError={errorsNewQuiz.level_id}
+            defaultMessage="Sélectionner un niveau de difficulté"
+            handleChange={handleChangeQuizData}
           />
-         
+
           {/* //? ======= Choix du titre ========== */}
-          <QuizInfoTextInput 
-            inputName='title'
-            inputLabel='titre'
+          <QuizInfoTextInput
+            inputName="title"
+            inputLabel="titre"
             inputValue={newQuiz.title}
             inputError={errorsNewQuiz.title}
             defaultMessage={`${newQuiz.title.length}/150 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
-          
+
           {/* //? ======= Choix de la description ========== */}
           <QuizInfoTextInput
-            inputName='description'
-            inputLabel='description'
+            inputName="description"
+            inputLabel="description"
             inputValue={newQuiz.description}
             inputError={errorsNewQuiz.description}
             defaultMessage={`${newQuiz.description.length}/300 caractères maximum`}
             handleChangeQuizData={handleChangeQuizData}
           />
-         
+
           {/* //? ======= Choix de l'url de l'image ========== */}
           <QuizInfoTextInput
-            inputName='thumbnail'
-            inputLabel='image'
+            inputName="thumbnail"
+            inputLabel="image"
             inputValue={newQuiz.thumbnail}
             inputError={errorsNewQuiz.thumbnail}
-            defaultMessage={`Coller l'url de l'image`}
+            defaultMessage={'Coller l\'url de l\'image'}
             handleChangeQuizData={handleChangeQuizData}
           />
         </fieldset>
@@ -301,19 +320,21 @@ function QuizCreate({
           ))}
         </fieldset>
         <button type="submit" className="quiz-create__btn-submit">Créer le Quiz</button>
-        {errorWarnCreateQuiz !== '' && 
+        {errorWarnCreateQuiz !== ''
+          && (
           <div className="error-message">
             {errorWarnCreateQuiz}
           </div>
-        }
-        {successCreateQuiz !== '' &&
+          )}
+        {successCreateQuiz !== ''
+        && (
         <div className="success-message">
-          {successCreateQuiz}          
+          {successCreateQuiz}
           <Link to="/profil/quiz">
-          Retour à la gestion des quiz.
+            Retour à la gestion des quiz.
           </Link>
         </div>
-        }
+        )}
       </form>
     </div>
   );

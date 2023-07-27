@@ -83,7 +83,7 @@ function ProfileQuiz({
   return (
     <div className="quiz__management">
       <div className="quiz__management__header">
-        <BtnExit redirectionLink={'/profil'}/>       
+        <BtnExit redirectionLink="/profil" />
         <h1 className="quiz__management__header-title">Gérer mes Quiz</h1>
       </div>
       <div className="quiz__management__add-Btn">
@@ -107,28 +107,28 @@ function ProfileQuiz({
             <div className="card-wrapper" key={quiz.id}>
               <div className="card-buttons">
                 <Tooltip title="Supprimer" arrow>
-                <IconButton
-                  aria-label="delete"
-                  className="delete-button"
-                  color="error"
-                  size="large"
-                  onClick={handleOpenModal}
-                >
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    className="delete-button"
+                    color="error"
+                    size="large"
+                    onClick={handleOpenModal}
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
                 </Tooltip>
 
                 <Tooltip title="Modifier" arrow>
-                <IconButton
-                  aria-label="edit"
-                  className="edit-button"
-                  sx={{ color: '#fc9100' }}
-                  size="large"
-                  component={Link}
-                  to={`/profil/quiz/modifier-quiz/${quiz.id}`}
-                >
-                  <ModeEditIcon fontSize="inherit" />
-                </IconButton>
+                  <IconButton
+                    aria-label="edit"
+                    className="edit-button"
+                    sx={{ color: '#fc9100' }}
+                    size="large"
+                    component={Link}
+                    to={`/profil/quiz/modifier-quiz/${quiz.id}`}
+                  >
+                    <ModeEditIcon fontSize="inherit" />
+                  </IconButton>
                 </Tooltip>
 
                 <Dialog

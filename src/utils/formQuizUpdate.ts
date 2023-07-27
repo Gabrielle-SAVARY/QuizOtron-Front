@@ -1,9 +1,13 @@
-import { IerrorFormUpdateQuiz } from "../@types/error";
-import { QuestionUp } from "../@types/quizUpdate";
+import { IerrorFormUpdateQuiz } from '../@types/error';
+import { QuestionUp } from '../@types/quizUpdate';
 
 //* Mises à jour des states lors de la modification des champs
 // Mise à jour du state: changement d'une question
-export function updateQuestionUpValue(updateQuestions: QuestionUp[], idQuestion: number, newValue: string) {
+export function updateQuestionUpValue(
+  updateQuestions: QuestionUp[],
+  idQuestion: number,
+  newValue: string,
+) {
   return updateQuestions.map((questionObject) => {
     if (questionObject.id === idQuestion) {
       return {
@@ -16,7 +20,12 @@ export function updateQuestionUpValue(updateQuestions: QuestionUp[], idQuestion:
 }
 
 // Mise à jour du state: changement d'une réponse
-export function updateAnswerUpValue(updateQuestions:QuestionUp[] , idQuestion: number, idAnswer: number, newValue:string) {
+export function updateAnswerUpValue(
+  updateQuestions:QuestionUp[],
+  idQuestion: number,
+  idAnswer: number,
+  newValue:string,
+) {
   return updateQuestions.map((question) => {
     if (question.id === idQuestion) {
       return {
@@ -37,7 +46,11 @@ export function updateAnswerUpValue(updateQuestions:QuestionUp[] , idQuestion: n
 }
 
 // Mise à jour du state: changement d'un bouton radio
-export function updateRadioBtnUp(updateQuestions:QuestionUp[] , idQuestion: number, idAnswer: number) {
+export function updateRadioBtnUp(
+  updateQuestions:QuestionUp[],
+  idQuestion: number,
+  idAnswer: number,
+) {
   return updateQuestions.map((question) => {
     if (question.id === idQuestion) {
       return {
@@ -49,7 +62,7 @@ export function updateRadioBtnUp(updateQuestions:QuestionUp[] , idQuestion: numb
               is_valid: true,
             };
           }
-          return   {
+          return {
             ...answer,
             is_valid: false,
           };
@@ -59,8 +72,8 @@ export function updateRadioBtnUp(updateQuestions:QuestionUp[] , idQuestion: numb
     return question;
   });
 }
-  //* Mises à jour des states pour supprimer le message d'erreur lors de la modification du champs
-  // Mise à jour du state des erreurs si modification d'une question
+//* Mises à jour des states pour supprimer le message d'erreur lors de la modification du champs
+// Mise à jour du state des erreurs si modification d'une question
 export function updateQuestionUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number) {
   return {
     ...errorsUpdateQuiz,
@@ -76,8 +89,12 @@ export function updateQuestionUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, id
   };
 }
 
- // Mise à jour du state des erreurs si modification d'une réponse
-export function updateAnswerError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number, idAnswer: number) {
+// Mise à jour du state des erreurs si modification d'une réponse
+export function updateAnswerError(
+  errorsUpdateQuiz: IerrorFormUpdateQuiz,
+  idQuestion: number,
+  idAnswer: number,
+) {
   return {
     ...errorsUpdateQuiz,
     questions: errorsUpdateQuiz.questions.map((questionError) => {
@@ -100,7 +117,7 @@ export function updateAnswerError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQues
   };
 }
 
-  // Mise à jour du state des erreurs si sélection d'un bouton radio 
+// Mise à jour du state des erreurs si sélection d'un bouton radio
 export function updateRadioBtnUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, idQuestion: number) {
   return {
     ...errorsUpdateQuiz,
@@ -113,5 +130,5 @@ export function updateRadioBtnUpError(errorsUpdateQuiz: IerrorFormUpdateQuiz, id
       }
       return questionError;
     }),
-  }
+  };
 }

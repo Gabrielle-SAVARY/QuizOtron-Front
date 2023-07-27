@@ -28,6 +28,7 @@ import About from '../../pages/AboutUs';
 import ProfileFavorites from '../../pages/ProfileFavorites';
 import ProfileHistory from '../../pages/ProfileHistory';
 import { IScoreHistory } from '../../@types/quizHistory';
+import { dataError } from '../../@types/error';
 
 function App() {
   const navigate = useNavigate();
@@ -80,35 +81,28 @@ function App() {
   useEffect(() => {
     // On recherche dans le local storage si un token existe
     const tokenDataStr = localStorage.getItem('token');
-    if(!tokenDataStr){
-      console.log('coucou');
-      setErrorMessage("Merci de vous connecter.")
-      
-    }
     const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
+    if (!tokenData) {
+      console.log('erreur useffect maintien connexion');
+      setErrorMessage('Merci de vous connecter.');
+      dispatch(checkIsLogged(false));
+      return;
+    }
+    const { exp } = jwtDecode(tokenData) as {
+      exp: number;
+    };
+    // On calcule le timestamp de la date et heure actuelle
+    const now = Math.floor(Date.now() / 1000);
 
-    if (tokenData) {
-      try {
-        // Si un token existe, on vérifie s'il n'est pas expiré
-        const { exp } = jwtDecode(tokenData) as {
-          exp: number;
-        };
-        // On calcule le timestamp de la date et heure actuelle
-        const now = Math.floor(Date.now() / 1000);
-
-        // Si le token est expiré: déconnexion utilisateur + on supprime le token du localStorage
-        if (now >= exp) {
-          dispatch(checkIsLogged(false));
-          localStorage.removeItem('token');
-        } else {
-          // Si le token est valide: on passe isLogged à true
-          // on cherche l'utilisateur et on met à jour les states de l'utilsiateur
-          dispatch(checkIsLogged(true));
-          dispatch(findUser());
-        }
-      } catch (error) {
-        console.error(error);
-      }
+    // Si le token est expiré: déconnexion utilisateur + on supprime le token du localStorage
+    if (now >= exp) {
+      dispatch(checkIsLogged(false));
+      localStorage.removeItem('token');
+    } else {
+      // Si le token est valide: on passe isLogged à true
+      // on cherche l'utilisateur et on met à jour les states de l'utilsiateur
+      dispatch(checkIsLogged(true));
+      dispatch(findUser());
     }
   }, [dispatch, isLogged]);
 
@@ -118,46 +112,42 @@ function App() {
       const response = await axiosInstance.get('/quiz');
       setQuizList(response.data);
     } catch (error) {
-      console.log('error',error);
-      // setErrorMessage(error);
+      const detailsError = error as dataError;
+      setErrorMessage(`Problème de connexion avec le back : ${detailsError.message}`);
     }
   }, []);
 
+  //* Appel API: récupère la liste des catégories/tags
+  const fetchTags = async () => {
+    try {
+      const response = await axiosInstance.get('/tag');
+      setTagsList(response.data);
+    } catch (error) {
+      const detailsError = error as dataError;
+      setErrorMessage(`Problème de connexion avec le back : ${detailsError.message}`);
+    }
+  };
+
+  //* Appel API: récupère la liste des levels/niveaux
+  const fetchLevels = async () => {
+    try {
+      const response = await axiosInstance.get('/level');
+      // Si pas de réponse 200 envoi erreur
+      if (response.status !== 200) {
+        throw new Error();
+      }
+      // met à jour le state avec les données envoyées par l'API
+      setLevelsList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     // Récupère la liste des quiz au chargement de la page
     fetchQuizList();
-
-    //* Appel API: récupère la liste des catégories/tags
-    const fetchTags = async () => {
-      try {
-        const response = await axiosInstance.get('/tag');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // met à jour le state avec les données envoyées par l'API
-        setTagsList(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     // Récupère la liste des catégorie au chargement de la page
     fetchTags();
-
-    //* Appel API: récupère la liste des levels/niveaux
-    const fetchLevels = async () => {
-      try {
-        const response = await axiosInstance.get('/level');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // met à jour le state avec les données envoyées par l'API
-        setLevelsList(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // Récupère la liste des niveaux au chargement de la page
     fetchLevels();
   }, [fetchQuizList]);
 
@@ -267,7 +257,6 @@ function App() {
     } else {
       setQuizHistory([]);
     }
-
   }, [isLogged]);
 
   useEffect(() => {
@@ -288,7 +277,7 @@ function App() {
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
     if (isLogged) {
-      //TODO: à revoir avec state reducer
+      // TODO: à revoir avec state reducer
       // fetchAverageScore();
     } else {
       setUserAverageScore(null);
@@ -296,7 +285,7 @@ function App() {
   }, [isLogged, quizHistory]);
 
   return (
-    <Layout>
+    <Layout errorMessage={errorMessage} setErrorMessage={setErrorMessage}>
       <Routes>
         <Route
           path="/"
@@ -360,7 +349,7 @@ function App() {
               <ProfileSettings />
             </ProtectedRoute>
           )}
-        />       
+        />
         <Route
           path="/profil/quiz"
           element={(
@@ -413,7 +402,7 @@ function App() {
             </ProtectedRoute>
           )}
         />
-         <Route
+        <Route
           path="/profil/historique"
           element={(
             <ProtectedRoute>

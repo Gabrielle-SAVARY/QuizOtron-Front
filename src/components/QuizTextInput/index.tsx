@@ -7,12 +7,15 @@ interface QuizInfoTextInputProps {
   inputValue: string;
   inputError: string;
   defaultMessage: string;
-  handleChangeQuizData: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => void;
-
+  handleChangeQuizData: (event: React.ChangeEvent<HTMLInputElement
+  | HTMLTextAreaElement>, field: string) => void;
 }
 
-function QuizInfoTextInput({inputName, inputLabel,inputValue, inputError,defaultMessage, handleChangeQuizData
-}: QuizInfoTextInputProps) {
+function QuizInfoTextInput(
+  {
+    inputName, inputLabel, inputValue, inputError, defaultMessage, handleChangeQuizData,
+  }: QuizInfoTextInputProps,
+) {
   // Première lettre en majuscule du label
   const capitalizeInputLabel = inputLabel.charAt(0).toUpperCase() + inputLabel.slice(1);
 

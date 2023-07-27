@@ -53,12 +53,8 @@
         "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
       }
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "projectDependencies": false
-      }
-    ],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": true}],
+
     "import/prefer-default-export": "off"
   }
   
