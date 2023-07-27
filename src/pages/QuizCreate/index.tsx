@@ -1,9 +1,9 @@
 import {  useState, ChangeEvent, FormEvent, useCallback, SyntheticEvent} from 'react';
 import { Link} from 'react-router-dom';
 import { SelectChangeEvent } from '@mui/material/Select';
-import axios from 'axios';
-import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
+import { CustomAxiosError, handleAxiosErrors } from '../../utils/axiosError';
 import { initialNewQuestions, initialQuestionErrors, numberOfQuestions} from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
@@ -138,34 +138,34 @@ function QuizCreate({
     setErrorsNewQuiz((errorsNewQuiz: IerrorFormNewQuiz) => updateRadioBtnError(errorsNewQuiz, indexQuestion));
   };
 
-  
   //* Envoi du formulaire si aucune erreur
   const handleFormSubmit = async () => {
-    console.log('USERID', userId);
-    console.log('newQuiz',newQuiz);
-      try {
-        const response = await axiosInstance.post('profile/quiz/', {
-          quiz: newQuiz,
-          questions: newQuestions,
-        });
-        if (response.status !== 200) throw new Error();
-        // Rappel de la liste des quizs pour mise à jour du state quizList
-        fetchQuizList();
-        // Message de succès: création du quiz
-        setSuccessCreateQuiz('Le quiz a été créé avec succès.');
-      } catch (error) {
-        // Si statut 400 envoi d'un message d'erreur
-        if (axios.isAxiosError(error)) {
-          if (error.response && error.response.status === 400) {
-            console.log('error.response',error.response);
-            const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
-            setErrorWarnCreateQuiz(newErrorMsg);        
-          }
-        } else {
-          console.error(error);
-        }
-        throw error;      
+    try {
+      const response = await axiosInstance.post('profile/quiz/', {
+        quiz: newQuiz,
+        questions: newQuestions,
+      });
+      if (response.status !== 200) throw new Error();
+      // Rappel de la liste des quizs pour mise à jour du state quizList
+      fetchQuizList();
+      // Message de succès: création du quiz
+      const newSuccessMsg: string = response.data.message;
+      setSuccessCreateQuiz(newSuccessMsg);
+    } catch (error) {
+      const errorAxios = handleAxiosErrors(error as CustomAxiosError);
+      setErrorWarnCreateQuiz(errorAxios);            
     }
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       if (error.response && error.response.status === 400) {
+  //         const newErrorMsg = "Une erreur s'est produite lors de la création du quiz. Vérifier tous les champs du formulaires sont remplis ou sélectionnés. Si l'erreur persiste veuillez contacter le support.";
+  //         setErrorWarnCreateQuiz(newErrorMsg);        
+  //       }
+  //     } else {
+  //       console.error(error);
+  //     }
+  //     throw error;      
+  // }
   };
 
   //* Gère la validation des données et déclenche la soumission du formulaire
@@ -217,7 +217,7 @@ function QuizCreate({
     if (isAllowToSubmit){
       handleFormSubmit();
     }else {
-      setErrorWarnCreateQuiz('Il y a une ou des erreurs qui empêchent la soumission du formulaire. Veuillez vérifier les champs du formulaire, les erreurs seront indiquées en rouge.');
+      setErrorWarnCreateQuiz('Des erreurs empêchent la soumission du formulaire. Veuillez corriger les erreurs indiquées en rouge.');
     }
   };
 

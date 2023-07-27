@@ -1,44 +1,19 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import axios, { AxiosError, isAxiosError } from 'axios';
 import { createAppAsyncThunk } from '../../utils/redux';
-import { IAuthentification } from '../../@types/user';
 import { axiosInstance } from '../../utils/axios';
-// TODO vérifier import car utilisé dans le reducer
+import { CustomAxiosError,handleAxiosErrors,handleReducerErrors } from '../../utils/axiosError';
+import { dataError } from '../../@types/error';
+import { 
+  IAuthentification,
+  UserState
+} from '../../@types/user';
 
-interface UserState {
-  isLogged: boolean;
-  token: string;
-  isRegistered: boolean
-  userId: number
-  errorMessages: string
-  successMessage: string
-
-  credentials: {
-    firstname: string
-    lastname: string
-    pseudo: string;
-    email: string;
-    password: string;
-    passwordConfirm: string;
-
-  }
-  updateCredentials: {
-    pseudoUpdate: string;
-    emailUpdate: string;
-    oldPassword: string,
-    password: string;
-    passwordConfirm: string;
-  }
-}
 
 export const initialState: UserState = {
+  isRegistered: false,
   isLogged: false,
   token: '',
-  isRegistered: false,
   userId: 0,
-  errorMessages: '',
-  successMessage: '',
-
   credentials: {
     firstname: '',
     lastname: '',
@@ -54,10 +29,33 @@ export const initialState: UserState = {
     password: '',
     passwordConfirm: '',
   },
+  errorMessages: '',
+  successMessage: '',
 };
 
-//* Type qui récupère les clé de l'objet du state.credentials
+// Type qui récupère les clé de l'objet du state.updateCredentials
+export type KeysOfUpdateCredentials = keyof UserState['updateCredentials'];
+// Type qui récupère les clé de l'objet du state.credentials
 export type KeysOfCredentials = keyof UserState['credentials'];
+
+// Réinitialisation du state et suppression du token stocké dans le localStorage
+function resetState(state : UserState) {  
+  state.credentials = { ...initialState.credentials };
+  state.updateCredentials = { ...initialState.updateCredentials };
+  state.isLogged = false;
+  state.token = '';
+  state.userId = 0;
+  state.isRegistered = false;
+  state.errorMessages = '';
+  state.successMessage = '';
+  localStorage.removeItem('token');
+}
+
+// Gestion des erreurs
+function handleRejected(state : UserState, action : any){
+  const payload = action.payload as dataError;
+  state.errorMessages = payload.message
+}
 
 //* ACTION: met à jour la  valeur des champs des inputs de formulaire logiin/register
 // propertyKey: type  du champs field
@@ -70,8 +68,13 @@ export const changeCredentialsField = createAction<{
 // par défaut va vider le contenu du state errorMessages
 export const clearInputsAndErrors = createAction('user/CLEAR_INPUTS_AND_ERRORS');
 
-//* Type qui récupère les clé de l'objet du state.updateCredentials
-export type KeysOfUpdateCredentials = keyof UserState['updateCredentials'];
+//* ACTION: vérifier si l'utilisateur est connecté (si le token existe)
+export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
+
+//* ACTION: déconnexion utilisateur
+export const logout = createAction('user/LOGOUT');
+
+//* ACTION : met à jour la valeur des champs des inputs de formulaire updateProfil et updatePassword
 export const updateProfilField = createAction<{
   propertyUpdate: KeysOfUpdateCredentials
   value: string
@@ -93,18 +96,8 @@ export const register = createAppAsyncThunk(
         email, pseudo, firstname, lastname, password, passwordConfirm,
       });
       return data as IAuthentification;
-    } catch (error) {
-      // Gestion des erreurs
-      // si statut de la réponse est 400 alors on retourne les messages d'erreurs
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 400) {
-          const dataError: string = error.response?.data;
-          return thunkAPI.rejectWithValue(dataError);
-        }
-      } else {
-        console.error(error);
-      }
-      throw error;
+    } catch (error) {      
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
     }
   },
 );
@@ -123,26 +116,11 @@ export const login = createAppAsyncThunk(
       // Stocke dans le localStorage
       localStorage.setItem('token', JSON.stringify(data.token));
       return data as IAuthentification;
-    } catch (error) {
-      // Gestion des erreurs
-      // si statut de la réponse est 400 alors on retourne les messages d'erreurs
-      console.log('error',error);
-      
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 400) {
-          const dataError: string = error.response?.data;
-          return thunkAPI.rejectWithValue(dataError);
-        }
-      } else {
-        console.error(error);
-      }
-      throw error;
+    } catch (error) {      
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
     }
   },
 );
-
-//* ACTION: vérifier si l'utilisateur est connecté (si le token existe)
-export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 
 //* ACTION: trouver un utilisateur
 // TODO typer l'ation ?
@@ -150,13 +128,17 @@ export const checkIsLogged = createAction<boolean>('user/CHECK_IS_LOGGED');
 export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
   async () => {
-    const { data } = await axiosInstance.get('/profile');
-    return data as IAuthentification;
+    // const { data } = await axiosInstance.get('/profile');
+    // return data as IAuthentification;
+    try {
+      // Appel API avec envoie des données du formulaire
+      const { data } = await axiosInstance.get('/profile');
+      return data as IAuthentification;
+    } catch (error) {      
+      return handleAxiosErrors(error as CustomAxiosError)
+    }
   },
 );
-
-//* ACTION: déconnexion utilisateur
-export const logout = createAction('user/LOGOUT');
 
 // ACTION: mise à jour: email ou pseudo de l'utilisateur
 export const update = createAppAsyncThunk(
@@ -170,29 +152,13 @@ export const update = createAppAsyncThunk(
       // Appel API avec envoi des données du formulaire
       const { data } = await axiosInstance.patch('/profile', { email: emailUpdate, pseudo: pseudoUpdate });
       return data as IAuthentification;
-    } catch (error: any | AxiosError) {
-      if (axios.isAxiosError(error) && error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-        const errorResponse: string = `Le serveur a répondu avec le code ${error.response.status}, veuillez contacter le support technique. ERREUR: ${error.response.data}`;
-        return thunkAPI.rejectWithValue(errorResponse);
-      } else if (axios.isAxiosError(error) && error.request) {
-        console.log(error.request);
-        const errorRequest: string = `Pas de réponse du serveur suite à la requête. Veuillez contacter le support technique.`;
-        return thunkAPI.rejectWithValue(errorRequest);
-      } else if (axios.isAxiosError(error)) {
-        console.log(error.message);
-        const errorMessage: string = `Une erreur est survenue sur la requête. Veuillez contacter le support technique.`;
-        return thunkAPI.rejectWithValue(errorMessage);
-      } 
-      console.log(error.config);
-      throw error;
+    } catch (error) {      
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
     }
   },
 );
 
-//* ACTION: mise à jour du mot de passe utilisateur
+// ACTION: mise à jour du mot de passe utilisateur
 export const updatePassword = createAppAsyncThunk(
   'user/UPDATE_PASSWORD',
   async (_, thunkAPI) => {
@@ -204,43 +170,32 @@ export const updatePassword = createAppAsyncThunk(
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.patch('/profile', { password, passwordConfirm, oldPassword });
       return data as IAuthentification;
-    } catch (error: any | AxiosError) {
-      if (axios.isAxiosError(error) && error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);        
-        const errorResponse: string = `Le serveur a répondu avec le code ${error.response.status}, veuillez contacter le support technique. ERREUR: ${error.response.data}`;
-        return thunkAPI.rejectWithValue(errorResponse);
-      } else if (axios.isAxiosError(error) && error.request) {
-        console.log(error.request);
-        const errorRequest: string = `Pas de réponse du serveur suite à la requête. Veuillez contacter le support technique.`;
-        return thunkAPI.rejectWithValue(errorRequest);
-      } else if (axios.isAxiosError(error)) {
-        console.log(error.message);
-        const errorMessage: string = `Une erreur est survenue sur la requête. Veuillez contacter le support technique.`;
-        return thunkAPI.rejectWithValue(errorMessage);
-      } 
-      console.log(error.config);
-      throw error;
+    } catch (error) {      
+      return handleReducerErrors(error as CustomAxiosError, thunkAPI)
     }
   },
 );
 
-//* ACTION: supprimer utilisateur
+// ACTION: supprimer utilisateur
 // TODO feedback user à faire
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {
+    try {
     // Appel API pour exécuter la fonction delete
-    const { data } = await axiosInstance.delete('/profile');
+      const {data } = await axiosInstance.delete('/profile');
     // suppression du token stocké dans le localStorage
-    localStorage.removeItem('token');
-    return data as IAuthentification;
+      localStorage.removeItem('token');
+      return data.message as string
+    } catch (error) {      
+      return handleAxiosErrors(error as CustomAxiosError)
+    }
   },
 );
 
 const userReducer = createReducer(initialState, (builder) => {
   builder
+    //* addCase changeCredentialsField
     .addCase(changeCredentialsField, (state, action) => {
       // Récupération des valeurs des champs de formulaire
       const { propertyKey, value } = action.payload;
@@ -248,16 +203,13 @@ const userReducer = createReducer(initialState, (builder) => {
       // Réinitialisation des messages d'erreur
       state.errorMessages = '';
     })
+    //* addCase clearInputsAndErrors
     .addCase(clearInputsAndErrors, (state) => {
       // Réinitialisation des states (vider les champs du formulaire login/register)
-      state.credentials.email = '';
-      state.credentials.pseudo = '';
-      state.credentials.firstname = '';
-      state.credentials.lastname = '';
-      state.credentials.password = '';
-      state.credentials.passwordConfirm = '';
+      state.credentials = initialState.credentials;
       state.errorMessages = '';
     })
+    //* addCase update (formulaires updateProfil et updatePassword)
     .addCase(updateProfilField, (state, action) => {
       // Récupération des valeurs des champs de formulaire
       const { propertyUpdate, value } = action.payload;
@@ -266,6 +218,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.errorMessages = '';
       state.successMessage = '';
     })
+    //* addCase update
     .addCase(update.fulfilled, (state) => {
       // Mise à jour des state credentials
       state.credentials.email = state.updateCredentials.emailUpdate;
@@ -273,13 +226,11 @@ const userReducer = createReducer(initialState, (builder) => {
       // Message de succès
       state.successMessage = 'Votre compte a bien été mis à jour';
     })
-    .addCase(update.rejected, (state, action) => {
-      // Récupère les messages d'erreur
-      const payload = action.payload as string;
-      state.errorMessages = payload;
-    })
+    .addCase(update.rejected, handleRejected)
+    //* addCase register
     .addCase(register.fulfilled, (state, action) => {
-      state.isRegistered = action.payload.isRegistered;
+      const payload = action.payload as IAuthentification;
+      state.isRegistered = payload.isRegistered;
       // Réinitialisation des state des mots de passe
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
@@ -287,15 +238,11 @@ const userReducer = createReducer(initialState, (builder) => {
     .addCase(register.pending, (state) => {
       state.isRegistered = false;
     })
-    .addCase(register.rejected, (state, action) => {
-      state.isRegistered = false;
-      // Récupère les messages d'erreur
-      const payload = action.payload as string;
-      state.errorMessages = payload;
-    })
+    .addCase(register.rejected, handleRejected)
+    //* addCase login
     .addCase(login.fulfilled, (state, action) => {
       // Récupère les informations retournées par l'API
-      const payload = action.payload as IAuthentification;
+      const payload = action.payload as IAuthentification;      
       state.isLogged = payload.isLogged;
       state.token = payload.token;
       state.userId = payload.id;
@@ -307,64 +254,41 @@ const userReducer = createReducer(initialState, (builder) => {
       // Réinitialisation 
       state.isRegistered = false;
     })
-    .addCase(login.rejected, (state, action) => {
-      // Récupère les messages d'erreur
-      const payload = action.payload as string;
-      state.errorMessages = payload;
-    })
+    .addCase(login.rejected, handleRejected)
+
+    //* addCase checkIsLogged
     .addCase(checkIsLogged, (state, action) => {
       state.isLogged = action.payload;
     })
+    //* addCase findUser
     .addCase(findUser.fulfilled, (state, action) => {
       // Récupère les informations retournées par l'API
-      state.userId = action.payload.id;
-      state.credentials.pseudo = action.payload.pseudo;
-      state.credentials.email = action.payload.email;
-      state.credentials.firstname = action.payload.firstname;
-      state.credentials.lastname = action.payload.lastname;
-      state.updateCredentials.emailUpdate = action.payload.email;
-      state.updateCredentials.pseudoUpdate = action.payload.pseudo;
+      const payload = action.payload as IAuthentification;   
+      state.userId = payload.id;
+      state.credentials.pseudo = payload.pseudo;
+      state.credentials.email = payload.email;
+      state.credentials.firstname = payload.firstname;
+      state.credentials.lastname = payload.lastname;
+      state.updateCredentials.emailUpdate = payload.email;
+      state.updateCredentials.pseudoUpdate = payload.pseudo;
     })
-    .addCase(logout, (state) => {
-      // Réinitialisation des states
-      state.isLogged = false;
-      state.credentials.email = '';
-      state.credentials.pseudo = '';
-      state.credentials.firstname = '';
-      state.credentials.lastname = '';
-      state.updateCredentials.emailUpdate = '';
-      state.updateCredentials.pseudoUpdate = '';      
-      state.token = '';
-      state.userId = 0;
-      // Suppression des données du localStorage
-      localStorage.removeItem('token');
-    })
+    .addCase(findUser.rejected, handleRejected)
+    //* addCase logout
+    .addCase(logout, resetState)
+    //* addCase updatePassword
     .addCase(updatePassword.fulfilled, (state) => {
       // Réinitialisation des states
-      state.updateCredentials.oldPassword = '';
-      state.updateCredentials.password = '';
-      state.updateCredentials.passwordConfirm = '';
+      state.updateCredentials = initialState.updateCredentials;
       // Message de succès
       state.successMessage = 'Votre mot de passe a bien été mis à jour';
     })
-    .addCase(updatePassword.rejected, (state, action) => {
-      // Récupère les messages d'erreur
-      const payload = action.payload as string;
-      state.errorMessages = payload;
+    .addCase(updatePassword.rejected, handleRejected)
+    //* addCase deleteUser
+    .addCase(deleteUser.fulfilled, (state, action)=>{
+      resetState(state)
+      state.successMessage = action.payload 
     })
-    .addCase(deleteUser.fulfilled, (state) => {
-      // Déconnexion de l'utilisateur
-      state.isLogged = false;
-      // Réinitialisation des states
-      state.token = '';
-      state.credentials.firstname = '';
-      state.credentials.lastname = '';
-      state.updateCredentials.emailUpdate = '';
-      state.credentials.email = '';
-      state.updateCredentials.pseudoUpdate = '';
-      state.credentials.pseudo = '';
-      state.userId = 0;
-    });
+    .addCase(deleteUser.rejected, handleRejected);
 });
 
 export default userReducer;
