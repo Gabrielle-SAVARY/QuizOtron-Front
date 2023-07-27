@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
-import { CustomAxiosError, handleAxiosErrors } from '../../utils/axiosError';
+import { handleAxiosErrors } from '../../utils/axiosError';
 import { initialNewQuestions, initialQuestionErrors, numberOfQuestions } from '../../utils/createModels';
 import { validationRulesNewQuiz, validationRulesSelect } from '../../utils/validationsRules';
 import { validateTextFields, validateMenuSelect, validateQuestions } from '../../utils/validateFormField';
@@ -17,7 +17,7 @@ import {
   updateRadioBtn,
   updateRadioBtnError,
 } from '../../utils/formQuizCreate';
-import { IerrorFormNewQuiz } from '../../@types/error';
+import { IAxiosError, IerrorFormNewQuiz } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
@@ -181,7 +181,7 @@ function QuizCreate({
       const newSuccessMsg: string = response.data.message;
       setSuccessCreateQuiz(newSuccessMsg);
     } catch (error) {
-      const errorAxios = handleAxiosErrors(error as CustomAxiosError);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
       setErrorWarnCreateQuiz(errorAxios);
     }
   };

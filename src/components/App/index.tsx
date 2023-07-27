@@ -4,14 +4,17 @@ import {
 import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { axiosInstance } from '../../utils/axios';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
+import { axiosInstance } from '../../utils/axios';
 import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
 import Layout from '../Layout';
 import Login from '../../pages/Login';
 import NotFound from '../NotFound';
+import About from '../../pages/AboutUs';
 import Profile from '../../pages/Profile';
+import ProfileFavorites from '../../pages/ProfileFavorites';
+import ProfileHistory from '../../pages/ProfileHistory';
 import ProtectedRoute from '../ProtectedRoute';
 import ProfileSettings from '../../pages/ProfileSettings';
 import ProfileQuiz from '../../pages/ProfileQuiz';
@@ -19,16 +22,13 @@ import Register from '../../pages/Register';
 import Quiz from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';
 import QuizUpdate from '../../pages/QuizUpdate';
+import { IScoreHistory } from '../../@types/quizHistory';
 import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
+import { IAxiosError } from '../../@types/error';
 import './styles.scss';
-import About from '../../pages/AboutUs';
-import ProfileFavorites from '../../pages/ProfileFavorites';
-import ProfileHistory from '../../pages/ProfileHistory';
-import { IScoreHistory } from '../../@types/quizHistory';
-import { dataError } from '../../@types/error';
 
 function App() {
   const navigate = useNavigate();
@@ -83,8 +83,6 @@ function App() {
     const tokenDataStr = localStorage.getItem('token');
     const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
     if (!tokenData) {
-      console.log('erreur useffect maintien connexion');
-      setErrorMessage('Merci de vous connecter.');
       dispatch(checkIsLogged(false));
       return;
     }
@@ -112,8 +110,8 @@ function App() {
       const response = await axiosInstance.get('/quiz');
       setQuizList(response.data);
     } catch (error) {
-      const detailsError = error as dataError;
-      setErrorMessage(`Problème de connexion avec le back : ${detailsError.message}`);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
     }
   }, []);
 
@@ -123,8 +121,8 @@ function App() {
       const response = await axiosInstance.get('/tag');
       setTagsList(response.data);
     } catch (error) {
-      const detailsError = error as dataError;
-      setErrorMessage(`Problème de connexion avec le back : ${detailsError.message}`);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
     }
   };
 
@@ -132,14 +130,11 @@ function App() {
   const fetchLevels = async () => {
     try {
       const response = await axiosInstance.get('/level');
-      // Si pas de réponse 200 envoi erreur
-      if (response.status !== 200) {
-        throw new Error();
-      }
       // met à jour le state avec les données envoyées par l'API
       setLevelsList(response.data);
     } catch (error) {
-      console.log(error);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
     }
   };
   useEffect(() => {
@@ -156,18 +151,13 @@ function App() {
   const getQuizDetails = useCallback(async (id: number) => {
     try {
       const response = await axiosInstance.get(`/quiz/${id}`);
-      if (response.status !== 200) {
-        throw new Error('Failed to fetch quiz details');
-      }
       const { data } = response;
-      if (data) {
-        // Met à jour le state avec les données du quiz
-        setOneQuiz(data);
-      } else {
-        navigate('/404');
-      }
+      // Met à jour le state avec les données du quiz
+      setOneQuiz(data);
     } catch (error) {
-      console.log(error);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
+      navigate('/404');
     }
   }, [navigate]);
 
@@ -176,16 +166,12 @@ function App() {
     const fetchUserFavoritesQuiz = async () => {
       try {
         const response = await axiosInstance.get('/profile/favorites');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        // récupère les données de la réponse
         const { data } = response;
         // Mise à jour du state des quiz favoris au format de la liste des quiz
         setUserFavoritesQuiz(data.favorites);
       } catch (error) {
-        console.log(error);
+        const detailsError = error as IAxiosError;
+        setErrorMessage(detailsError.response.data.message);
       }
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
@@ -196,15 +182,40 @@ function App() {
     }
   }, [isLogged, quizList]);
 
+  // // Mouss
+  // const getFavoriteQuiz = useCallback(
+  //   async () => {
+  //     try {
+  //       const response = await axiosInstance.get('/profile/favorites');
+  //       const { data } = response;
+  //       return data.favorites;
+  //     } catch (error) {
+  //       const detailsError = error as IAxiosError;
+  //       setErrorMessage(detailsError.response.data.message);
+  //       return [];
+  //     }
+  //   },
+  //   [],
+  // );
+  //   //* Appel API: récupère la liste quiz favoris de l'utilisateur connecté
+  // useEffect(
+  //   () => {
+  //     setUserFavoritesQuiz([]);
+  //     if (isLogged) {
+  //       const favorites: IQuizFavorites = getFavoriteQuiz();
+  //       setUserFavoritesQuiz([favorites]);
+  //     }
+  //   },
+  //   [isLogged, getFavoriteQuiz],
+  // );
+
   //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
   const addQuizToFavorite = async (quizId:number) => {
     try {
       const response = await axiosInstance.post('/profile/favorites', { quiz_id: quizId });
-      if (response.status !== 200) {
-        throw new Error('Failed to add quiz to favorite');
-      }
       // récupère les données de la réponse (message du back)
       const { data } = response;
+      setErrorMessage(data.response.data.message);
 
       // Ajout du quiz aux quiz favoris dans le state (on récupère le quiz puis ajout)
       const addedQuiz = quizList.find((quiz) => quiz.id === quizId);
@@ -212,7 +223,8 @@ function App() {
         setUserFavoritesQuiz([...userFavoritesQuiz, addedQuiz]);
       }
     } catch (error) {
-      console.log(error);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
     }
   };
 
@@ -220,15 +232,16 @@ function App() {
   const deleteQuizToFavorite = async (quizId:number) => {
     try {
       const response = await axiosInstance.delete('/profile/favorites', { data: { quiz_id: quizId } });
-      if (response.status !== 200) {
-        throw new Error('Failed to add quiz to favorite');
-      }
+
       const { data } = response;
+
       // Suppression du quiz des quiz favoris dans le state (on exclu le quiz en filtrant)
       const filteredFavoritesQuiz = userFavoritesQuiz.filter((quiz) => quiz.id !== quizId);
       setUserFavoritesQuiz(filteredFavoritesQuiz);
+      setErrorMessage(data.response.data.message);
     } catch (error) {
-      console.log(error);
+      const detailsError = error as IAxiosError;
+      setErrorMessage(detailsError.response.data.message);
     }
   };
 
@@ -237,18 +250,13 @@ function App() {
     const fetchQuizHistory = async () => {
       try {
         const response = await axiosInstance.get('/profile/history');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
         // Récupère les données de la réponse
         const { data } = response;
-        // console.log('data', data);
-
         // Mise à jour du state avec les données inversées de la réponse
         setQuizHistory(data);
       } catch (error) {
-        console.log(error);
+        const detailsError = error as IAxiosError;
+        setErrorMessage(detailsError.response.data.message);
       }
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
@@ -259,30 +267,30 @@ function App() {
     }
   }, [isLogged]);
 
-  useEffect(() => {
-    //* Appel API: récupère la moyenne des scores aux quiz joué par l'utilisateur connecté
-    const fetchAverageScore = async () => {
-      try {
-        const response = await axiosInstance.get('/profile/score');
-        // Si pas de réponse 200 envoi erreur
-        if (response.status !== 200) {
-          throw new Error();
-        }
-        const { data } = response;
-        const averageNumber = Number(data[0].averageScore);
-        setUserAverageScore(averageNumber);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
-    if (isLogged) {
-      // TODO: à revoir avec state reducer
-      // fetchAverageScore();
-    } else {
-      setUserAverageScore(null);
-    }
-  }, [isLogged, quizHistory]);
+  // useEffect(() => {
+  //   //* Appel API: récupère la moyenne des scores aux quiz joué par l'utilisateur connecté
+  //   const fetchAverageScore = async () => {
+  //     try {
+  //       const response = await axiosInstance.get('/profile/score');
+  //       // Si pas de réponse 200 envoi erreur
+  //       if (response.status !== 200) {
+  //         throw new Error();
+  //       }
+  //       const { data } = response;
+  //       const averageNumber = Number(data[0].averageScore);
+  //       setUserAverageScore(averageNumber);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
+  //   if (isLogged) {
+  //     // TODO: à revoir avec state reducer
+  //     fetchAverageScore();
+  //   } else {
+  //     setUserAverageScore(null);
+  //   }
+  // }, [isLogged, quizHistory]);
 
   return (
     <Layout errorMessage={errorMessage} setErrorMessage={setErrorMessage}>
