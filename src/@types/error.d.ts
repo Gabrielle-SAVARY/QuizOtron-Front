@@ -1,4 +1,4 @@
-//*Types des messages d'erreurs des inputs de formulaires
+//* Types des messages d'erreurs des inputs de formulaires
 // Erreurs formulaire de connexion/login
 export interface IerrorFormLogin {
   email: string;
@@ -62,7 +62,7 @@ export interface AnswerUpError {
   answer: string
 }
 
-//*Types des règles de validations des formulaires
+//* Types des règles de validations des formulaires
 // Champs texte
 export interface IValidationRule {
   field: string;
@@ -74,7 +74,7 @@ export interface IValidationNumberRule {
   validate: (value: number) => string;
 }
 
-//*Types des résultats de la validation des formulaires
+//* Types des résultats de la validation des formulaires
 // Type les résultats de la validation des champs texte
 export interface ValidationResult {
   errors: { [key: string]: string };
@@ -91,7 +91,11 @@ export interface ValidationQuestionUpResult {
   hasError: boolean;
 }
 
-export interface dataError {
-  message:string;
-  statusCode: number;
+export interface IAxiosError {
+  response: {
+    data: {
+      message:string;
+      statusCode: number;
+    };
+  };
 }

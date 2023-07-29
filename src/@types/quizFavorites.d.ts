@@ -15,7 +15,7 @@ export interface IGetFavorites {
   favorites:QuizFavorites[]
 }
 
-export interface IQuizFavorites {
+export interface QuizFavorites {
   id: number
   title: string
   description: string

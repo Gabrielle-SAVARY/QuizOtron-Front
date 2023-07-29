@@ -43,7 +43,7 @@ function Login() {
     handleClearInputsandErrors();
   }, [dispatch, isLogged]);
 
-  //* Redirection vers la page profil, si l'utilisateur est connecté
+  // //* Redirection vers la page profil, si l'utilisateur est connecté
   useEffect(() => {
     if (isLogged) {
       navigate('/profil');
@@ -81,8 +81,8 @@ function Login() {
     const errors : IerrorFormLogin = {
       email: loginForm.errors.email,
       password: loginForm.errors.password,
-    }
-      // Mise à jour du state avec les messages d'erreurs 
+    };
+    // Mise à jour du state avec les messages d'erreurs
     setErrorsLogin(errors);
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !loginForm.hasError;

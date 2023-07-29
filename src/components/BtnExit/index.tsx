@@ -1,19 +1,19 @@
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './styles.scss';
 import { FiArrowLeft } from 'react-icons/fi';
 
-
 interface BtnExitProps {
-  redirectionLink: string; 
+  redirectionLink: string;
 }
-
-function BtnExit({ redirectionLink}: BtnExitProps) {  
+function BtnExit({ redirectionLink }: BtnExitProps) {
   const navigate = useNavigate();
   return (
-    <button type="button" className='btn-Exit'
-    onClick={() => navigate(redirectionLink)}
+    <button
+      type="button"
+      className="btn-Exit"
+      onClick={() => navigate(redirectionLink)}
     >
-    <FiArrowLeft size={20}/>
+      <FiArrowLeft size={20} />
     </button>
   );
 }

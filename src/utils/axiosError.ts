@@ -1,34 +1,29 @@
-import axios from "axios";
-import { dataError } from "../@types/error";
-
-export interface CustomAxiosError extends Error {
-  response?: {
-    data: dataError;
-  };
-}
+import axios from 'axios';
+import { IAxiosError } from '../@types/error';
 
 interface IThunkApi {
   rejectWithValue: (textValu: string) => any;
 }
 
 // Fonction pour gérer les erreurs des requêtes axios du reducer
-export const handleReducerErrors = (error: CustomAxiosError, thunkAPI: IThunkApi) => {
+export const handleReducerErrors = (error: IAxiosError, thunkAPI: IThunkApi) => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      const dataError = error.response.data;
-      return thunkAPI.rejectWithValue(dataError);
+      const newError = error.response.data;
+      return thunkAPI.rejectWithValue(newError);
     }
-  } 
-  return thunkAPI.rejectWithValue("Un problème sur le serveur est survenu, merci de contacter le service technique.");
-}
+  }
+  return thunkAPI.rejectWithValue('Un problème sur le serveur est survenu, merci de contacter le service technique.');
+};
 
 // Fonction pour gérer les erreurs des requêtes axios
-export const handleAxiosErrors = (error: CustomAxiosError) => {
-  let newErrorMsg = "Un problème sur le serveur est survenu, merci de contacter le service technique."
+export const handleAxiosErrors = (error: IAxiosError) => {
+  let newErrorMsg = 'Un problème sur le serveur est survenu, merci de contacter le service technique.';
   if (axios.isAxiosError(error)) {
     if (error.response) {
-       newErrorMsg = error.response.data.message;
+      const detailsError = error as IAxiosError;
+      newErrorMsg = detailsError.response.data.message;
     }
-  } 
+  }
   return newErrorMsg;
-}
+};

@@ -11,7 +11,7 @@ function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
   return (
     <div>
       <h1 className="quiz__title">Mon historique</h1>
-      <BtnExit redirectionLink={'/profil'}/>
+      <BtnExit redirectionLink="/profil" />
       <div className="cardhistory__container">
         {quizHistory.map((score) => (
           <CardHistory

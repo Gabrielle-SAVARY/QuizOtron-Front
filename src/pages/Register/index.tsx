@@ -26,7 +26,7 @@ function Register() {
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
   // Récupère les messages d'erreur suite requête au backend
   const errorMessages = useAppSelector((state) => state.user.errorMessages);
- 
+
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
   const [errorsRegister, setErrorsRegister] = useState<IerrorFormRegister>({
     firstname: '',
@@ -68,16 +68,16 @@ function Register() {
     const registerForm = validateTextFields(dataToValidate, validationRulesSignup);
     const errors :IerrorFormRegister = {
       firstname: registerForm.errors.firstname,
-      lastname: registerForm.errors.lastname,      
-      email: registerForm.errors.email,      
+      lastname: registerForm.errors.lastname,
+      email: registerForm.errors.email,
       pseudo: registerForm.errors.pseudo,
       password: registerForm.errors.password,
       passwordConfirm: registerForm.errors.passwordConfirm,
-    }
-    // Mise à jour du state avec les messages d'erreurs 
+    };
+    // Mise à jour du state avec les messages d'erreurs
     setErrorsRegister(errors);
     // Vérification que le nouveau mot de passe et sa confirmation sont identiques
-    if(password !== passwordConfirm){
+    if (password !== passwordConfirm) {
       setErrorsRegister((prevState) => ({
         ...prevState,
         password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
@@ -87,7 +87,7 @@ function Register() {
     }
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !registerForm.hasError;
-    if(isAllowToSubmit){
+    if (isAllowToSubmit) {
       handleFormSubmit();
     }
   };
@@ -207,11 +207,12 @@ function Register() {
           <button type="submit" className="form__button">
             Inscription
           </button>
-          {errorMessages !== '' && 
+          {errorMessages !== ''
+            && (
             <div className="error-message ">
               {errorMessages}
             </div>
-          }
+            )}
           <p className="form__message">
             Déjà un compte?
             <NavLink to="/connexion" className="form__inscription">

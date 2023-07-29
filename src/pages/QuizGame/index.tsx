@@ -130,7 +130,7 @@ function QuizGame({
                 <div className="quizgame__scoreboard">
                   <span>Score</span>
                   <h3 className="quizgame__scoreboard__score">
-                  {`${score} ${score > 1 ? 'points' : 'point'}`}
+                    {`${score} ${score > 1 ? 'points' : 'point'}`}
                   </h3>
                 </div>
                 <div className="quizgame__question">

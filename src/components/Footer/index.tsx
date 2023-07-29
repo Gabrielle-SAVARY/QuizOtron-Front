@@ -1,10 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { MdEmail } from 'react-icons/md';
+import { useAppSelector } from '../../hooks/redux';
 import Logo from '../Logo';
 import logoQuizotronWhite from '../../assets/img/logo_quizotron_white.png';
 import './styles.scss';
 
 function Footer() {
+  // Vérifie si l'utilisateur est connecté
+  const isLogged = useAppSelector((state) => state.user.isLogged);
   return (
     <footer className="footer">
       <div className="footer__contact">
@@ -36,9 +39,16 @@ function Footer() {
               </NavLink>
             </li>
             <li>
+              {!isLogged && (
               <NavLink to="/connexion" className="footer-dark__nav-item">
                 Connexion
               </NavLink>
+              )}
+              {isLogged && (
+              <NavLink to="/profil" className="footer-dark__nav-item">
+                Profil
+              </NavLink>
+              )}
             </li>
           </ul>
         </div>

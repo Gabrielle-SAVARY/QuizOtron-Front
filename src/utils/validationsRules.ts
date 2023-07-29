@@ -186,7 +186,6 @@ export const validationRulesPasswordUpdate: IValidationRule[] = [
   },
 ];
 
-
 // formulaire newQuiz/création d'un quiz
 export const validationRulesNewQuiz: IValidationRule[] = [
   {
