@@ -29,6 +29,7 @@ import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import { IAxiosError } from '../../@types/error';
 import './styles.scss';
+import { handleAxiosErrors } from '../../utils/axiosError';
 
 function App() {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ function App() {
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
   // Stocke message d'erreur
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
   // Liste des quiz (informations pour une Card)
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
@@ -110,8 +112,8 @@ function App() {
       const response = await axiosInstance.get('/quiz');
       setQuizList(response.data);
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
     }
   }, []);
 
@@ -121,8 +123,8 @@ function App() {
       const response = await axiosInstance.get('/tag');
       setTagsList(response.data);
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
     }
   };
 
@@ -133,8 +135,8 @@ function App() {
       // met à jour le state avec les données envoyées par l'API
       setLevelsList(response.data);
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
     }
   };
   useEffect(() => {
@@ -151,12 +153,10 @@ function App() {
   const getQuizDetails = useCallback(async (id: number) => {
     try {
       const response = await axiosInstance.get(`/quiz/${id}`);
-      const { data } = response;
-      // Met à jour le state avec les données du quiz
-      setOneQuiz(data);
+      setOneQuiz(response.data);
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
       navigate('/404');
     }
   }, [navigate]);
@@ -170,8 +170,8 @@ function App() {
         // Mise à jour du state des quiz favoris au format de la liste des quiz
         setUserFavoritesQuiz(data.favorites);
       } catch (error) {
-        const detailsError = error as IAxiosError;
-        setErrorMessage(detailsError.response.data.message);
+        const errorAxios = handleAxiosErrors(error as IAxiosError);
+        setErrorMessage(errorAxios);
       }
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
@@ -182,49 +182,23 @@ function App() {
     }
   }, [isLogged, quizList]);
 
-  // // Mouss
-  // const getFavoriteQuiz = useCallback(
-  //   async () => {
-  //     try {
-  //       const response = await axiosInstance.get('/profile/favorites');
-  //       const { data } = response;
-  //       return data.favorites;
-  //     } catch (error) {
-  //       const detailsError = error as IAxiosError;
-  //       setErrorMessage(detailsError.response.data.message);
-  //       return [];
-  //     }
-  //   },
-  //   [],
-  // );
-  //   //* Appel API: récupère la liste quiz favoris de l'utilisateur connecté
-  // useEffect(
-  //   () => {
-  //     setUserFavoritesQuiz([]);
-  //     if (isLogged) {
-  //       const favorites: IQuizFavorites = getFavoriteQuiz();
-  //       setUserFavoritesQuiz([favorites]);
-  //     }
-  //   },
-  //   [isLogged, getFavoriteQuiz],
-  // );
-
   //* Appel API: ajoute un quiz aux favoris de l'utilisateur connecté
   const addQuizToFavorite = async (quizId:number) => {
     try {
       const response = await axiosInstance.post('/profile/favorites', { quiz_id: quizId });
-      // récupère les données de la réponse (message du back)
-      const { data } = response;
-      setErrorMessage(data.response.data.message);
-
+      // récupère le message du back
+      const newMessage: string = response.data.message;
       // Ajout du quiz aux quiz favoris dans le state (on récupère le quiz puis ajout)
       const addedQuiz = quizList.find((quiz) => quiz.id === quizId);
       if (addedQuiz) {
         setUserFavoritesQuiz([...userFavoritesQuiz, addedQuiz]);
+        setSuccessMessage(newMessage);
       }
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
+      // setErrorMessage('une erreur est survenue, impossible d\'ajouter le quiz à vos favoris');
+      // setErrorMessage(detailsError.response.data.message);
     }
   };
 
@@ -232,16 +206,17 @@ function App() {
   const deleteQuizToFavorite = async (quizId:number) => {
     try {
       const response = await axiosInstance.delete('/profile/favorites', { data: { quiz_id: quizId } });
-
-      const { data } = response;
-
+      // récupère le message du back
+      const newMessage: string = response.data.message;
       // Suppression du quiz des quiz favoris dans le state (on exclu le quiz en filtrant)
       const filteredFavoritesQuiz = userFavoritesQuiz.filter((quiz) => quiz.id !== quizId);
-      setUserFavoritesQuiz(filteredFavoritesQuiz);
-      setErrorMessage(data.response.data.message);
+      if (filteredFavoritesQuiz) {
+        setUserFavoritesQuiz(filteredFavoritesQuiz);
+        setSuccessMessage(newMessage);
+      }
     } catch (error) {
-      const detailsError = error as IAxiosError;
-      setErrorMessage(detailsError.response.data.message);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
     }
   };
 
@@ -255,8 +230,8 @@ function App() {
         // Mise à jour du state avec les données inversées de la réponse
         setQuizHistory(data);
       } catch (error) {
-        const detailsError = error as IAxiosError;
-        setErrorMessage(detailsError.response.data.message);
+        const errorAxios = handleAxiosErrors(error as IAxiosError);
+        setErrorMessage(errorAxios);
       }
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
@@ -293,7 +268,12 @@ function App() {
   // }, [isLogged, quizHistory]);
 
   return (
-    <Layout errorMessage={errorMessage} setErrorMessage={setErrorMessage}>
+    <Layout
+      errorMessage={errorMessage}
+      setErrorMessage={setErrorMessage}
+      successMessage={successMessage}
+      setSuccessMessage={setSuccessMessage}
+    >
       <Routes>
         <Route
           path="/"

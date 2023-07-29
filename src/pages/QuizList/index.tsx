@@ -193,7 +193,8 @@ function Quiz({
         </div>
       </div>
       <h1 className="quiz-list__title">Liste des quiz</h1>
-      {quizFilter && (
+      {quizFilter.length === 0 && (<p className="quiz-list__not-found">Aucun quiz ne correspond à votre recherche</p>)}
+      {quizFilter.length !== 0 && (
         <div className="quiz-list__items">
           {quizFilter.map((quiz) => (
             <Card

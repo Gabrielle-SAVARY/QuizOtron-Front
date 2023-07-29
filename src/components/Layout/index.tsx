@@ -8,9 +8,13 @@ import 'react-toastify/dist/ReactToastify.css';
 interface LayoutProps {
   errorMessage: string;
   setErrorMessage: (value: string) => void;
+  successMessage: string;
+  setSuccessMessage: (value: string) => void;
   children: React.ReactNode
 }
-function Layout({ errorMessage, setErrorMessage, children }: LayoutProps) {
+function Layout({
+  errorMessage, setErrorMessage, successMessage, setSuccessMessage, children,
+}: LayoutProps) {
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage, {
@@ -26,6 +30,21 @@ function Layout({ errorMessage, setErrorMessage, children }: LayoutProps) {
       setErrorMessage('');
     }
   }, [errorMessage, setErrorMessage]);
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      setSuccessMessage('');
+    }
+  }, [successMessage, setSuccessMessage]);
 
   return (
     <div className="app__container">

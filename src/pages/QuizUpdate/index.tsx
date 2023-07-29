@@ -134,7 +134,8 @@ function QuizUpdate({
         })),
       });
     }
-  }, [errorsUpdateQuiz, oneQuiz, userId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oneQuiz]);
 
   //* Mise à jour du state des infos du quiz lors de la modification des champs du formulaire
   const handleChangeQuizData = (

@@ -71,10 +71,9 @@ const QuestionUpdate = memo(({
         <fieldset>
           {currentQuestion.answers.map((answer, index) => (
             <AnswerUpdate
-              key={`answer${index}-${answer.id}`}
+              key={`answer${index + 1}-${answer.id}`}
               questionNumber={questionNumber}
               questionId={currentQuestion.id}
-              answerIndex={index}
               answerNumber={index + 1}
               answerId={answer.id}
               answer={answer}
