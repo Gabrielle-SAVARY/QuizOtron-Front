@@ -1,0 +1,45 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.home__card{
+  width: 240px;
+  height: 320px;
+  border-radius: 8px;
+  margin: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0.1rem 1rem vars.$main-secondary-color;
+    overflow: hidden;
+  }
+  &__header{
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.5rem;
+    &__header-img{
+      width: 100%; 
+      object-fit: cover;
+    }
+  }
+  &__content{
+    height: 170px;
+    padding: 0.5rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    &-title{
+      font-family: vars.$secondaryFont;
+      font-size: 1.5rem;
+      color: vars.$main-secondary-color;
+    }
+    &-text{
+      padding-top: 8px;
+      font-size: 0.8rem;
+      color: vars.$main-primary-color;
+    }
+  }
+
+}

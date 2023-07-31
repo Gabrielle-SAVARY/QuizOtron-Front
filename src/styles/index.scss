@@ -11,19 +11,10 @@
 
 body {
   font-family: vars.$mainFont;
-  line-height: 20px;
   font-weight: 400;
   overflow-x: hidden;
   width: 100vw;
   max-width: 100%;
-}
-
-/*==================== SECTION ========================*/
-
-section {
-  padding: 1rem;
-  margin: 1rem 1.5rem;
-  background: url('../assets/img/bg_quiz.jpg');
 }
 
 button {

@@ -3,34 +3,68 @@
 
 .home {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-
-  &__title {
-    font-size: 2rem;
-    margin-bottom: 3rem;
+  flex-grow: 1;
+  &__hero{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    @include mixin.breakpoint(desktop) {
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 1.5rem vars.$headerHeight;
+    }
+    &__description {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.5rem;
+      @include mixin.breakpoint(desktop) {
+        width:60% ;
+      }
+      &__title {
+        font-size: 2rem;
+        line-height: 3rem;
+        margin-bottom: 3rem;
+        text-align: center;
+        color:vars.$main-primary-color;
+      }
+      &__text{
+        line-height: 1.3rem;
+        text-align: justify;
+      }
+    }
+  
+    &__random-quiz{  
+      flex-grow: 1;
+      &__container{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
   }
 
-  &__description {
-    background-color: white;
+  &__cards{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 2rem;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255,0.6), rgba(217, 216, 245,0.6), rgba(173, 179, 236,0.9), rgb(120, 145, 227), #0d72da);
+    &__container{
+      padding: 2rem;
+      border-radius: 0.5rem;
+      background-image: linear-gradient(to bottom, #ffffff, #d9d8f5, #adb3ec, #7791e3, #0d72da);
+    }
   }
 }
 
-.home__dailyquiz {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-}
 
-.home__subtitle {
-  text-align: center;
-  color: white;
-  background-color: vars.$main-primary-color;
-  font-size: 1.5rem;
-  padding: 1.1rem;
-  margin: 0 5rem;
-  border-radius: 1rem;
-}
+
