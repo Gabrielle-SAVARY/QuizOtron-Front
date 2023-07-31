@@ -41,21 +41,17 @@
      }
   }
 }
-
-
 .quiz__content-list{
   display: flex;
   flex-direction: column; 
   justify-content: center;
   align-items: center;
-
   @include mixin.breakpoint(desktop) {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
   }
 }
-
 .card-wrapper{
   position:relative;
   width: 330px;
@@ -64,8 +60,7 @@
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(2px);
 -webkit-backdrop-filter: blur(2px);
-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    // background-color: rgba(13, 114, 218, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   color:#ffebc4;
   border-radius: 8px;
 }

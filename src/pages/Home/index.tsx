@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { IQuizList } from '../../@types/quizList';
 import Card from '../../components/Card';
+import CardHome from '../../components/CardHome';
+import home1 from '../../assets/img/home_img1.png';
+import home2 from '../../assets/img/home_img2.png';
+import home3 from '../../assets/img/home_img3.png';
 import './styles.scss';
 
 interface HomeProps {
@@ -48,65 +52,65 @@ function Home({
   }, [quizList]);
 
   return (
-    <div className="home__bg">
-      <div className="home">
-        <h1 className="home__title">
-          Prenez une pause, faite un quiz sur Quiz&apos;O&apos;Tron!
-        </h1>
-        <p className="home__description">
-          Bienvenue sur notre site de quiz, l&apos;endroit idéal pour mettre à
-          l&apos;épreuve vos connaissances et vous divertir! Que vous soyez un
-          passionné de trivia, un amateur de culture générale ou simplement à la
-          recherche d&apos;une façon amusante de tester vos compétences, notre
-          site de quiz est fait pour vous.
-        </p>
-        <p className="home__description">
-          Plongez dans notre vaste collection de quiz stimulants couvrant une
-          multitude de sujets passionnants. Que ce soit l&apos;histoire, la
-          science, la géographie, le cinéma, la musique, le sport ou bien
-          d&apos;autres domaines, vous trouverez ici des quiz qui éveilleront
-          votre curiosité et vous permettront d&apos;en apprendre davantage.
-        </p>
-        <p className="home__description">
-          Nous proposons des quiz adaptés à tous les niveaux, que vous soyez
-          débutant ou expert. Vous pouvez choisir parmi des quiz à choix
-          multiples, des questions ouvertes, des images à deviner, et bien plus
-          encore. Mettez vos méninges à l&apos;épreuve et défiez vos amis pour
-          voir qui obtiendra le meilleur score.
-        </p>
-        <p className="home__description">
-          Notre site de quiz est conçu pour offrir une expérience conviviale et
-          intuitive. Vous pouvez créer un compte pour suivre votre progression,
-          enregistrer vos scores et accéder à des fonctionnalités exclusives.
-        </p>
-        <p className="home__description">
-          Que vous cherchiez à vous divertir, à apprendre de nouvelles choses ou
-          à relever des défis intellectuels, notre site de quiz est là pour
-          vous. Préparez-vous à tester vos connaissances, à découvrir des faits
-          fascinants et à vous amuser en vous plongeant dans l&apos;univers
-          captivant des quiz.
-        </p>
-        <p className="home__description">
-          Rejoignez-nous dès maintenant et commencez votre aventure passionnante
-          avec les quiz les plus captivants du web!
-        </p>
+    <div className="home">
+      <div className="home__hero">
+        <div className="home__hero__description">
+          <h1 className="home__hero__description__title">
+            Prenez une pause, faite un quiz sur Quiz&apos;O&apos;Tron!
+          </h1>
+          <p className="home__hero__description__text">
+            Bienvenue sur Quiz&apos;O&apos;Tron, l&apos;endroit idéal pour mettre à
+            l&apos;épreuve vos connaissances et vous divertir !
+          </p>
+          <p className="home__hero__description__text">
+            Que vous soyez un passionné de trivia,
+            un amateur de culture générale ou vous avez simplement
+            envi de combler l&apos;ennui, relevez le défi de répondre à nos quiz.
+          </p>
+        </div>
+        <section className="home__hero__random-quiz">
+          <div className="home__hero__random-quiz__container">
+            {randomQuiz.id === 0
+              ? (<p>Un problème est survenu, impossible d&apos;afficher le quiz</p>)
+              : (
+                <Card
+                  id={randomQuiz.id}
+                  title={randomQuiz.title}
+                  thumbnail={randomQuiz.thumbnail}
+                  level={randomQuiz.level.name}
+                  author={randomQuiz.author.pseudo}
+                  tags={randomQuiz.tags}
+                  userFavoritesQuiz={userFavoritesQuiz}
+                  addQuizToFavorite={addQuizToFavorite}
+                  deleteQuizToFavorite={deleteQuizToFavorite}
+                />
+              )}
+          </div>
+        </section>
       </div>
-      <div className="home__dailyquiz">
-        <h2 className="home__subtitle">Quiz du jour!</h2>
-        <Card
-          id={randomQuiz.id}
-          title={randomQuiz.title}
-          thumbnail={randomQuiz.thumbnail}
-          level={randomQuiz.level.name}
-          author={randomQuiz.author.pseudo}
-          tags={randomQuiz.tags}
-          userFavoritesQuiz={userFavoritesQuiz}
-          addQuizToFavorite={addQuizToFavorite}
-          deleteQuizToFavorite={deleteQuizToFavorite}
+      <section className="home__cards">
+        <CardHome
+          redirectLink="/liste-quiz"
+          thumbnail={home1}
+          imgAlt="dés avec des points d'interrogations"
+          title="Choisissez un quiz dans notre liste"
+          content="Sélectionner un quiz parmis les catégories et niveaux de diifficullté"
         />
-
-      </div>
-
+        <CardHome
+          redirectLink="/liste-quiz"
+          thumbnail={home2}
+          imgAlt="reprise du mot quiz du logo de Quiz'O'Tron "
+          title="Amusez-vous et défiez vos connaissances"
+          content="Essayer d'obtenir un score parfait en répondant aux 10 questions du quiz"
+        />
+        <CardHome
+          redirectLink="/connexion"
+          thumbnail={home3}
+          imgAlt="symbole de connexion utilisateur"
+          title="Connectez-vous à votre compte"
+          content="Accédez à de nouvelles fonctionnalités et statistiques: quiz favoris, score utilisateur et historique"
+        />
+      </section>
     </div>
   );
 }
