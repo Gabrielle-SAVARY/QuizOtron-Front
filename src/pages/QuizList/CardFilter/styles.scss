@@ -1,22 +1,23 @@
 @use '../../../styles/mixin';
 @use '../../../styles/vars';
 
-.cardFilter__btn {
-  background-color: transparent;
+.cardFilter {
+  background-color: #fff;
   border: none;
-  color: white;
+  color: vars.$primary-dark-color;
   cursor: pointer;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  padding: 2px;
+  &:hover {
+    color: vars.$main-secondary-color;
+    border: 2px solid vars.$main-secondary-color;
+  }
 }
 
-.cardFilter__btn:hover {
-  color: vars.$secondary-light-color;
-/*   border-color: vars.$secondary-light-color; */
-}
 
 .card-filter--selected{
   color: vars.$main-secondary-color;
+  // border: 2px solid vars.$main-secondary-color;
 }
 
-/* .cardFilter__btn--active {
-  color: vars.$secondary-light-color;
-} */

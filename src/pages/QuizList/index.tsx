@@ -141,23 +141,23 @@ function Quiz({
 
   return (
     <div className="quiz-list">
-      <div className="quiz-list__container">
+      <div className="quiz-list__filters">
         <SearchBar
           quizList={quizList}
           setQuizFilter={setQuizFilter}
         />
-        <button type="button" onClick={handleFilter} className="filter__btn">
+        <button type="button" onClick={handleFilter} className="quiz-list__filters__show-filter-btn">
           Filtrer les quiz
           <TuneIcon />
         </button>
         <div className={filteredQuiz}>
-          <button type="button" onClick={handleResetFilter} className="reset__btn">
+          <button type="button" onClick={handleResetFilter} className="quiz-list__filters__reset-filter-btn">
             Effacer les filtres
           </button>
-          <div className="quiz-list__filter">
-            <h2 className="quiz-list__text">Catégories</h2>
+          <div className="quiz-list__filters-cards">
+            <h2 className="quiz-list__filters-cards__title">Catégories</h2>
             {tagsList && (
-            <div className="card-filter tags-list">
+            <div className="quiz-list__filters-cards card-filter tags-list">
               {tagsList.map((tag) => (
                 <CardFilter
                   key={tag.id}
@@ -172,10 +172,10 @@ function Quiz({
             </div>
             )}
           </div>
-          <div className="quiz-list__filter">
-            <p className="quiz-list__text">Difficulté</p>
+          <div className="quiz-list__filters-cards">
+            <h2 className="quiz-list__filters-cards__title">Difficulté</h2>
             {levelsList && (
-              <div className="card-filter levels-list">
+              <div className="quiz-list__filters-cards card-filter levels-list">
                 {levelsList.map((level) => (
                   <CardFilter
                     key={level.id}

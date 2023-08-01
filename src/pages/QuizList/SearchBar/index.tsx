@@ -54,19 +54,16 @@ function SearchBar({ quizList, setQuizFilter }: SearchBarProps) {
   };
 
   return (
-    <div className="quiz-list__filter">
-      <h2 className="quiz-list__text">
-        Recherche
-      </h2>
-      <div className="filter__search">
+    <div className="search-filter">
+      <div className="search-filter__searchbar">
         <form action="submit" onSubmit={handleSubmitSearch}>
           <input
             type="text"
             placeholder="Rechercher un quiz"
-            className="filter__search-input"
+            className="search-filter__searchbar__text"
             onChange={(event) => handleChange(event)}
           />
-          <button type="submit" className="filter__search-btn">
+          <button type="submit" className="search-filter__searchbar__btn">
             Rechercher
           </button>
         </form>

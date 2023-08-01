@@ -2,28 +2,7 @@
 @use '../../styles/vars';
 
 .quiz-list {
-  &__title {
-    font-size: 1.5rem;
-    line-height: 1.75rem;
-    padding-top: 1rem;
-    margin-bottom: 2rem;
-    color: vars.$primary-dark-color;
-    text-align: center;
-  }
-  &__items {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    @include mixin.breakpoint(desktop) {
-      flex-flow: row wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-    }
-  }
-  &__container {
+  &__filters {
     background-color: vars.$primary-dark-color;
     color: white;
     display: flex;
@@ -32,16 +11,79 @@
     align-items: center;
     padding-top: 1rem;
     text-align: center;
+
+    &__show-filter-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: vars.$main-primary-color;
+      border: none;
+      border-radius: 1rem;
+      color: white;
+      padding: 0.5rem 1rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        background-color: vars.$main-secondary-color;
+        transform: scale(1.05);
+      }
+    }
+    &__reset-filter-btn {
+      background-color: #fff;
+      border: none;
+      border-radius: 1rem;
+      color: vars.$wrong-answer-color;
+      padding: 0.5rem 1rem;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        background-color: vars.$wrong-answer-color;
+        color: #fff;
+        transform: scale(1.05);
+      }
+    }
+    &-cards{
+      padding: 0.8rem;
+      &__title {
+        font-family: vars.$secondaryFont;
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
+    }
   }
-  &__filter {
-    padding-bottom: 2rem;
+
+  &__title {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
   }
-  &__text {
-    padding-bottom: 1rem;
-    font-size: 1.25rem;
-    text-decoration: underline;
-    text-transform: uppercase;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    @include mixin.breakpoint(desktop) {
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
   }
+
+  // &__text {
+  //   padding-bottom: 1rem;
+  //   font-size: 1.25rem;
+  //   text-decoration: underline;
+  //   text-transform: uppercase;
+  // }
   &__not-found {
     font-size: 1.2rem;
     padding-top: 1rem;
@@ -55,12 +97,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-
+  border-radius: 1rem;
+  gap: 0.3rem;
   @include mixin.breakpoint(desktop) {
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
   }
 }
 
@@ -73,54 +115,11 @@
   display: block;
 }
 
-.filter__btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: vars.$main-primary-color;
-  border: none;
-  border-radius: 1rem;
-  color: white;
-  padding: 0.5rem 1rem;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.filter__btn:hover {
-  background-color: vars.$main-secondary-color;
-  transform: scale(1.05);
-}
-
-.reset__btn {
-  background-color: #fff;
-  border: none;
-  border-radius: 1rem;
-  color: vars.$wrong-answer-color;
-  padding: 0.5rem 1rem;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.reset__btn:hover {
-  background-color: vars.$wrong-answer-color;
-  color: #fff;
-  transform: scale(1.05);
-}
-
 .card-tag {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid #fff;
-  border-radius: 1rem;
-  margin-bottom: 0.5rem;
-  height: 8rem;
-  width: 8rem;
   text-transform: capitalize;
 }
 
@@ -129,11 +128,5 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border: 2px solid #fff;
-  border-radius: 1rem;
-  margin-bottom: 0.5rem;
-  height: 4rem;
-  width: 8rem;
-  gap: 0.5rem;
   text-transform: capitalize;
 }
