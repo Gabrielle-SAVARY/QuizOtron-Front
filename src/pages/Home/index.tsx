@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAppSelector } from '../../hooks/redux';
 import { IQuizList } from '../../@types/quizList';
 import Card from '../../components/Card';
 import CardHome from '../../components/CardHome';
@@ -17,7 +18,10 @@ interface HomeProps {
 function Home({
   quizList, userFavoritesQuiz, addQuizToFavorite, deleteQuizToFavorite,
 }: HomeProps) {
-  // STATE Stocke un quiz aléatoire
+  //* STATE
+  // Vérifie si l'utilisateur est connecté
+  const isLogged = useAppSelector((state) => state.user.isLogged);
+  // Stocke un quiz aléatoire
   const [randomQuiz, setRandomQuiz] = useState<IQuizList>({
     id: 0,
     title: '',
@@ -104,7 +108,7 @@ function Home({
           content="Essayer d'obtenir un score parfait en répondant aux 10 questions du quiz"
         />
         <CardHome
-          redirectLink="/connexion"
+          redirectLink={isLogged ? '/profil' : '/connexion'}
           thumbnail={home3}
           imgAlt="symbole de connexion utilisateur"
           title="Connectez-vous à votre compte"

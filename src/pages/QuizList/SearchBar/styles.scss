@@ -1,38 +1,51 @@
 @use '../../../styles/mixin';
 @use '../../../styles/vars';
 
-.quiz-list {
-
-  &__filter {
-    padding-bottom: 2rem;
-  }
-  &__text {
-    padding-bottom: 1rem;
-    font-size: 1.25rem;
-    text-decoration: underline;
-    text-transform: uppercase;
-  }
-
-}
-
-.filter__search-input {
-  padding: 1rem;
-  border: none;
-  border-top-left-radius: 1rem;
-  border-bottom-left-radius: 1rem;
-  font-family: vars.$mainFont;
-}
-
-.filter__search-btn {
-  padding:1rem;
-  border: none;
-  background-color: vars.$main-primary-color;
-  color: white;
-  border-top-right-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  cursor: pointer;
-}
-
-.filter__search-btn:hover{
-  background-color: vars.$main-secondary-color;
+.search-filter {
+  width: 100%;
+  padding: 1.5rem;
+    &__searchbar{
+      width: 100%;
+      &__form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        &__text-input{
+          flex-grow: 1;
+          max-width: 70%;
+          height:2.75rem;
+          border: none;
+          border-top-left-radius: 1rem;
+          border-bottom-left-radius: 1rem;
+          font-family: vars.$mainFont;
+          padding: 0.8rem;
+          &:focus{
+            outline: none;
+          }
+          @include mixin.breakpoint(tablet) {
+            max-width: 50%;
+          }
+        }
+        &__btn{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height:2.75rem;
+          width: 3rem;
+          background-color: vars.$main-primary-color;
+          color: white;
+          border: none;
+          border-top-right-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          cursor: pointer;
+          transition: 0.3s;
+          &:hover{
+            background-color: vars.$main-secondary-color;
+            transition: 0.3s;
+          }
+        }
+      }
+    }
 }
