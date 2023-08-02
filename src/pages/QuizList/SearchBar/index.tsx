@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PiMagnifyingGlass, PiMagnifyingGlassBold } from 'react-icons/pi';
 import { IQuizList } from '../../../@types/quizList';
 import './styles.scss';
 
@@ -56,15 +57,15 @@ function SearchBar({ quizList, setQuizFilter }: SearchBarProps) {
   return (
     <div className="search-filter">
       <div className="search-filter__searchbar">
-        <form action="submit" onSubmit={handleSubmitSearch}>
+        <form action="submit" onSubmit={handleSubmitSearch} className="search-filter__searchbar__form">
           <input
             type="text"
             placeholder="Rechercher un quiz"
-            className="search-filter__searchbar__text"
+            className="search-filter__searchbar__form__text-input"
             onChange={(event) => handleChange(event)}
           />
-          <button type="submit" className="search-filter__searchbar__btn">
-            Rechercher
+          <button type="submit" className="search-filter__searchbar__form__btn">
+            <PiMagnifyingGlassBold size="24px" />
           </button>
         </form>
       </div>

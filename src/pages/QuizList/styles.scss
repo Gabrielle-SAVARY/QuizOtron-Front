@@ -11,47 +11,70 @@
     align-items: center;
     padding-top: 1rem;
     text-align: center;
-
-    &__show-filter-btn {
+    &__control-btns{
       display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: vars.$main-primary-color;
-      border: none;
-      border-radius: 1rem;
-      color: white;
-      padding: 0.5rem 1rem;
-      gap: 1rem;
+      flex-direction: row;
       margin-bottom: 1rem;
-      transition: all 0.3s ease-in-out;
-      cursor: pointer;
-      &:hover {
-        background-color: vars.$main-secondary-color;
-        transform: scale(1.05);
+      &__show-filters-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: vars.$main-primary-color;
+        border: none;
+        border-radius: 1rem 0  0 1rem;
+        color: white;
+        padding: 0.5rem 1rem;
+        gap: 1rem;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        &:hover {
+          background-color: vars.$main-secondary-color;
+          transform: scale(1.05);
+        }
       }
-    }
-    &__reset-filter-btn {
-      background-color: #fff;
-      border: none;
-      border-radius: 1rem;
-      color: vars.$wrong-answer-color;
-      padding: 0.5rem 1rem;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      transition: all 0.3s ease-in-out;
-      cursor: pointer;
-      &:hover {
+      &__reset-filters-btn {
         background-color: vars.$wrong-answer-color;
+        border: none;
+        border-radius: 0 1rem  1rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: #fff;
-        transform: scale(1.05);
+        padding: 0.5rem 1rem;   
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        &:hover {
+          transform: scale(1.05);
+        }
       }
     }
-    &-cards{
-      padding: 0.8rem;
-      &__title {
-        font-family: vars.$secondaryFont;
-        font-size: 1.5rem;
-        font-weight: 300;
+    &-btns{
+      display: none;
+      &--open{
+        transition: all 0.5s ease-in-out;
+        display: block;
+
+        &__box {
+          padding: 1rem;
+          &-title {
+            font-family: vars.$secondaryFont;
+            font-size: 1.5rem;
+            font-weight: 400;
+          }
+          &-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            @include mixin.breakpoint(desktop) {
+              flex-flow: row wrap;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
       }
     }
   }
@@ -64,12 +87,23 @@
     color: vars.$primary-dark-color;
     text-align: center;
   }
-
-  &__items {
+  &__result{
+    padding-left: 2rem;
+    @include mixin.breakpoint(desktop) {
+      padding-left: 6rem;
+    }
+    &-number{
+      color: vars.$main-primary-color;
+      padding-left: 4px;
+      font-weight: 500;
+    }
+  }
+  &__quiz-filtered {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 1.5rem;
     @include mixin.breakpoint(desktop) {
       flex-flow: row wrap;
       justify-content: center;
@@ -77,56 +111,12 @@
       gap: 2rem;
     }
   }
-
-  // &__text {
-  //   padding-bottom: 1rem;
-  //   font-size: 1.25rem;
-  //   text-decoration: underline;
-  //   text-transform: uppercase;
-  // }
   &__not-found {
     font-size: 1.2rem;
     padding-top: 1rem;
     margin-bottom: 2rem;
-
     text-align: center;
   }
 }
 
-.card-filter {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 1rem;
-  gap: 0.3rem;
-  @include mixin.breakpoint(desktop) {
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-  }
-}
 
-.quiz-filtered {
-  display: none;
-}
-
-.quiz-filtered--open {
-  transition: all 0.5s ease-in-out;
-  display: block;
-}
-
-.card-tag {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-transform: capitalize;
-}
-
-.card-level {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  text-transform: capitalize;
-}
