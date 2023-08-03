@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { PiMagnifyingGlass, PiMagnifyingGlassBold } from 'react-icons/pi';
+import React, { useState } from 'react';
+import { PiMagnifyingGlassBold } from 'react-icons/pi';
 import { IQuizList } from '../../../@types/quizList';
 import './styles.scss';
 
 interface SearchBarProps {
   quizList: IQuizList[]
   setQuizFilter: (quiz: IQuizList[]) => void
-
 }
 
 function SearchBar({ quizList, setQuizFilter }: SearchBarProps) {
@@ -24,25 +23,27 @@ function SearchBar({ quizList, setQuizFilter }: SearchBarProps) {
     }
   };
 
+  //* Permet de supprimer les accents d'une chaîne de caractères
+  const removeAccents = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
   //* Filtre les quiz en fonction de la recherche
-  //* Permet d'ignorer un mot clé si il est supprimé de la recherche (string vide)
-  // Pour chaque quiz, on supprime les espaces pour chaque keyword du tableau query
-  // Si le mot clé n'est pas vide : on fait la recherche
-  // On vérifie pour chaque critère du quiz si le mot clé est présent
-  // Si oui (renvoie true): on retourne le quiz
-  // Si le mot clé est vide: on ne fait pas de recherche pour ce mot clé
   const search = (quizArray: IQuizList[], userQuery: string[]) => {
     if (userQuery.length === 0) {
       return quizArray;
     }
+    // Préparation de la requête utilisateur: suppression des accents, espaces et mise en minuscule
+    const normalizedQuery = userQuery.map((keyword) => removeAccents(keyword.trim().toLowerCase()));
+    // Pour chaque mot clé non vide, on filtre sur les quiz
+    // on filtre en supprimant les accents, espaces et en mettant en minuscule
+    // Si le mot clé est présent dans un champs du quiz, on retourne le quiz
     return quizArray.filter(
-      (quiz) => userQuery.some(
-        (keyword) => keyword.trim() !== '' && (
-          quiz.title.toLowerCase().includes(keyword.toLowerCase())
-          || quiz.description.toLowerCase().includes(keyword.toLowerCase())
-          || quiz.level.name.toLowerCase().includes(keyword.toLowerCase())
-          || quiz.tags.some((tag) => tag.name.toLowerCase().includes(keyword.toLowerCase()))
-          || quiz.author.pseudo.toLowerCase().includes(keyword.toLowerCase())
+      (quiz) => normalizedQuery.some(
+        (keyword) => keyword !== '' && (
+          removeAccents(quiz.title.toLowerCase()).includes(keyword)
+          || removeAccents(quiz.description.toLowerCase()).includes(keyword)
+          || removeAccents(quiz.level.name.toLowerCase()).includes(keyword)
+          || quiz.tags.some((tag) => removeAccents(tag.name.toLowerCase()).includes(keyword))
+          || removeAccents(quiz.author.pseudo.toLowerCase()).includes(keyword)
         ),
       ),
     );
