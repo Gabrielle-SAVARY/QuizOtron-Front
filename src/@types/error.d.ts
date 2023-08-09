@@ -93,9 +93,11 @@ export interface ValidationQuestionUpResult {
 
 export interface IAxiosError {
   response: {
-    data: {
-      message:string;
-      statusCode: number;
-    };
+    data: IError;
   };
+}
+
+export interface IError {
+  message:string;
+  statusCode: number;
 }

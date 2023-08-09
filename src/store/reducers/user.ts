@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { axiosInstance } from '../../utils/axios';
-import { IAxiosError } from '../../@types/error';
+import { IAxiosError, IError } from '../../@types/error';
 import { handleAxiosErrors, handleReducerErrors } from '../../utils/axiosError';
 import {
   IAuthentification,
@@ -257,7 +257,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isRegistered = false;
     })
     .addCase(login.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
 

@@ -103,7 +103,7 @@ function QuizUpdate({
         title: copyOneQuiz.title,
         description: copyOneQuiz.description,
         thumbnail: copyOneQuiz.thumbnail,
-        level_id: copyOneQuiz.level_id,
+        level_id: copyOneQuiz.level.id,
         user_id: userId,
         tag_id: copyOneQuiz.tags[0].id,
       });
