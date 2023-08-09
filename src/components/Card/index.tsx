@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
-import { IQuizList, TagQList } from '../../@types/quizList';
+import { ITag } from '../../@types/tag';
+import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 
 interface CardProps {
@@ -11,7 +12,7 @@ interface CardProps {
   thumbnail: string;
   level: string;
   author: string;
-  tags: TagQList[];
+  tags: ITag[];
   userFavoritesQuiz: IQuizList[];
   addQuizToFavorite: (quizId: number) => void;
   deleteQuizToFavorite: (quizId: number) => void;

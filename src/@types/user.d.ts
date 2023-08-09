@@ -40,5 +40,3 @@ export interface IAuthentification {
   oldPassword: string;
   newPassword: string;
 }
-
-

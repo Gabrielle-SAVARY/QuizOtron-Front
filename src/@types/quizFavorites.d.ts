@@ -1,3 +1,7 @@
+import { IAuthor } from './quizList';
+import { ILevel } from './level';
+import { ITag } from './tag';
+
 // Type résultat requête tous les quiz favoris de l'utilisateur connecté "/profile/favorites"
 export interface IGetFavorites {
   id: number
@@ -20,8 +24,9 @@ export interface QuizFavorites {
   title: string
   description: string
   thumbnail: string
-  level_id: number
-  user_id: number
+  level: ILevel
+  author: IAuthor
+  tags: ITag[]
   favorite: Favorite
 }
 

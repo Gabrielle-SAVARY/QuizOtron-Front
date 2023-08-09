@@ -123,8 +123,6 @@ export const login = createAppAsyncThunk(
 export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
   async () => {
-    // const { data } = await axiosInstance.get('/profile');
-    // return data as IAuthentification;
     try {
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.get('/profile');
@@ -222,7 +220,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.successMessage = 'Votre compte a bien été mis à jour';
     })
     .addCase(update.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase register
@@ -278,7 +276,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.updateCredentials.pseudoUpdate = payload.pseudo;
     })
     .addCase(findUser.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase logout
@@ -291,7 +289,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.successMessage = 'Votre mot de passe a bien été mis à jour';
     })
     .addCase(updatePassword.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase deleteUser

@@ -75,7 +75,6 @@ function ProfileSettings() {
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
     console.log('isAllowToSubmit', isAllowToSubmit);
-    handleUpdate();
     if (isAllowToSubmit) {
       handleUpdate();
     }
