@@ -11,4 +11,7 @@ export interface IQuizHistory {
   title: string
   description: string
   thumbnail: string
+  level: ILevel
+  author: IAuthor
+  tags: ITag[]
 }
