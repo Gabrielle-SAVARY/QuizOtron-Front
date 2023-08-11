@@ -201,7 +201,7 @@ function Quiz({
       <h1 className="quiz-list__title">Liste des quiz</h1>
       <p className="quiz-list__result">
         <span>Résultat:</span>
-        <span className="quiz-list__found-number">
+        <span className="quiz-list__result-number">
           {`${quizNumber} quiz`}
         </span>
       </p>
