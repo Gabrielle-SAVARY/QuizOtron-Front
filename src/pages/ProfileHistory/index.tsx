@@ -11,10 +11,11 @@ function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
   return (
 
     <div className="profile-history">
-      <div className="quiz-favoris__header">
+      <div className="profile-history__header">
         <BtnExit redirectionLink="/profil" />
-        <h1 className="profile-history__header-title profile-page-title">Mon historique</h1>
+        <h1 className="profile-history__header-title profile-page-title">Historique des scores</h1>
       </div>
+      <h2 className="profile-history__header-subtitle">Liste des scores des 10 derniers quiz joués</h2>
       <div className="profile-history__container">
         {quizHistory.map((score) => (
           <CardHistory

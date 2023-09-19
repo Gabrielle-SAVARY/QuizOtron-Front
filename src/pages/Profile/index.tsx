@@ -57,7 +57,7 @@ function Profile({ userAverageScore }: ProfileProps) {
               {'Mes quiz favoris >'}
             </NavLink>
             <NavLink to="/profil/historique" className="profile__navigation-link">
-              {'Mon historique >'}
+              {'Historique des scores >'}
             </NavLink>
             <button type="button" className="profile__navigation__btn-log-out" onClick={handleLogout}>
               Déconnexion
