@@ -84,7 +84,7 @@ function ProfileQuiz({
     <div className="quiz__management">
       <div className="quiz__management__header">
         <BtnExit redirectionLink="/profil" />
-        <h1 className="quiz__management__header-title">Gérer mes Quiz</h1>
+        <h1 className="quiz__management__header-title profile-page-title">Gérer mes Quiz</h1>
       </div>
       <div className="quiz__management__add-Btn">
         <Button
@@ -99,7 +99,7 @@ function ProfileQuiz({
       </div>
 
       <div>
-        <h2 className="quiz__management__subtitle">Liste des mes quiz</h2>
+        <h2 className="quiz__management__subtitle">Liste de mes quiz</h2>
         {userQuiz && (
 
         <div className="quiz__content-list">

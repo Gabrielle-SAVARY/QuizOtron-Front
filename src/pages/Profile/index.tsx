@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IoSettingsOutline } from 'react-icons/io5';
+import { IoSettingsSharp } from 'react-icons/io5';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -50,36 +50,38 @@ function Profile({ userAverageScore }: ProfileProps) {
   return (
     <div className="profile">
       <div className="profile__wrapper">
-        <h1 className="profile__title">
+        <h1 className="profile__title profile-page-title">
           Bienvenue sur ton profil
         </h1>
         <div className="profile__container">
-          <div className="profile__user">
-            <div className="profile__user-stat">
-              <h2 className="profile__user-title">{pseudo}</h2>
-              <NavLink to="/profil/parametres" className="profile__update">
-                <IoSettingsOutline style={{ fontSize: '34px', color: 'white' }} />
+          <div className="profile__header">
+            <div className="profile__header__user">
+              <h2 className="profile__header__user-pseudo">{pseudo}</h2>
+              <NavLink to="/profil/parametres" className="profile__update" title="paramètres">
+                <IoSettingsSharp style={{ fontSize: '36px', color: '#0d72da' }} />
               </NavLink>
             </div>
-            <p>
-              Moyenne des scores :
-            </p>
-            <p className="profile__score">
-              {userAverageScore}
-              /10
-            </p>
+            <div className="profile__header__score">
+              <p>
+                Moyenne des scores :
+              </p>
+              <p className="profile__header__score-average">
+                {userAverageScore}
+                /10
+              </p>
+            </div>
           </div>
-          <div className="profile__settings">
-            <NavLink to="/profil/quiz" className="profile__quiz">
+          <div className="profile__navigation">
+            <NavLink to="/profil/quiz" className="profile__navigation-link">
               {'Gérer mes quiz >'}
             </NavLink>
-            <NavLink to="/profil/favoris" className="profile__quiz">
+            <NavLink to="/profil/favoris" className="profile__navigation-link">
               {'Mes quiz favoris >'}
             </NavLink>
-            <NavLink to="/profil/historique" className="profile__quiz">
+            <NavLink to="/profil/historique" className="profile__navigation-link">
               {'Mon historique >'}
             </NavLink>
-            <button type="button" className="profile__quiz--disconnect btn-primary" onClick={handleLogout}>
+            <button type="button" className="profile__navigation__btn-log-out" onClick={handleLogout}>
               Déconnexion
             </button>
             <button

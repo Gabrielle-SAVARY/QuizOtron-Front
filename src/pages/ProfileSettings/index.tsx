@@ -122,7 +122,7 @@ function ProfileSettings() {
     <div className="profil-settings">
       <div className="profil-settings__header">
         <BtnExit redirectionLink="/profil" />
-        <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
+        <h2 className="profil-settings__header-title profile-page-title">Mise à jour du profil</h2>
       </div>
       {successMessage !== ''
         && (

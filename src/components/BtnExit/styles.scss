@@ -6,7 +6,8 @@
     border: none;
     padding: 0.5rem;  
     border-radius: 50%;
-    background: vars.$primary-dark-color;
+    // background: vars.$primary-dark-color;
+    background-color: vars.$main-secondary-color;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -16,7 +17,8 @@
     cursor: pointer;
     transition: background-color .17s ease,color .17s ease;
     &:hover {
-      background-color: hsl(210, 89%, 35%);
+      // background-color: hsl(210, 89%, 35%);
+      background: vars.$secondary-light-color;
     }
     @include mixin.breakpoint(desktop) {
       position: absolute;

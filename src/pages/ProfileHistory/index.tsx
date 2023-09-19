@@ -10,7 +10,7 @@ interface ProfileHistoryProps {
 function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
   return (
     <div>
-      <h1 className="quiz__title">Mon historique</h1>
+      <h1 className="quiz__title profile-page-title">Mon historique</h1>
       <BtnExit redirectionLink="/profil" />
       <div className="cardhistory__container">
         {quizHistory.map((score) => (
