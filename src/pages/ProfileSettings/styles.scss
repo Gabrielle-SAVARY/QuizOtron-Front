@@ -102,4 +102,14 @@
         width: 25%;
       }
   }
+  &__btn-delete-account{
+    border:none;
+    background: vars.$wrong-answer-color;    
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    padding: 15px 25px;
+    margin: 2rem 0;
+
+  }
 }

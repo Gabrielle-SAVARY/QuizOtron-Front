@@ -1,15 +1,27 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfUpdateCredentials,
   updateProfilField,
   update,
   updatePassword,
+  deleteUser,
 } from '../../store/reducers/user';
 import BtnExit from '../../components/BtnExit';
 import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesPasswordUpdate, validationRulesUserUpdate } from '../../utils/validationsRules';
 import { IerrorFormUserUpdate } from '../../@types/error';
+
 import './styles.scss';
 
 function ProfileSettings() {
@@ -35,6 +47,24 @@ function ProfileSettings() {
     password: '',
     passwordConfirm: '',
   });
+
+  // Ouvre et ferme la modale pour la confirmation de suppression d'un compte utilisateur
+  const [showModalAccount, setShowModalAccount] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  //* Ouvre la modale de confirmation pour la suppression d'un compte utilisateur
+  const handleOpenModalAccount = () => {
+    setShowModalAccount(true);
+  };
+
+  //* Ferme la modale de confirmation pour la suppression d'un quiz
+  const handleCloseModalAccount = () => {
+    setShowModalAccount(false);
+  };
+    //* Supprime le compte utilisateur
+  const handleDeleteUser = () => {
+    dispatch(deleteUser());
+  };
 
   //* Met à jour le state avec la valeur des inputs pour les 2 formulaires
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -122,7 +152,7 @@ function ProfileSettings() {
     <div className="profil-settings">
       <div className="profil-settings__header">
         <BtnExit redirectionLink="/profil" />
-        <h2 className="profil-settings__header-title profile-page-title">Mise à jour du profil</h2>
+        <h2 className="profil-settings__header-title profile-page-title">Paramètres du compte</h2>
       </div>
       {successMessage !== ''
         && (
@@ -237,6 +267,38 @@ function ProfileSettings() {
          {errorMessages}
        </div>
        )}
+
+      <button
+        type="button"
+        className="profil-settings__btn-delete-account"
+        onClick={handleOpenModalAccount}
+      >
+        Supprimer mon compte
+      </button>
+      <Dialog
+        open={showModalAccount}
+        onClose={handleCloseModalAccount}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Voulez-vous vraiment supprimer votre compte ?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description2">
+            Attention cette action est irréversible
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModalAccount} variant="contained">Annuler</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            onClick={handleDeleteUser}
+            variant="contained"
+            color="error"
+          >
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
   );
 }
