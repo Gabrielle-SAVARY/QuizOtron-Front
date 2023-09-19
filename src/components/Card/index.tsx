@@ -105,7 +105,7 @@ function Card({
                 ))}
               </span>
               )}
-              <span className="card-body__difficulty">{level}</span>
+              <span className="card-body__level">{level}</span>
             </div>
             <div className="card-body__tag2">
               <div className="card-body__autor">

@@ -9,15 +9,21 @@ interface ProfileHistoryProps {
 
 function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
   return (
-    <div>
-      <h1 className="quiz__title profile-page-title">Mon historique</h1>
-      <BtnExit redirectionLink="/profil" />
-      <div className="cardhistory__container">
+
+    <div className="profile-history">
+      <div className="quiz-favoris__header">
+        <BtnExit redirectionLink="/profil" />
+        <h1 className="profile-history__header-title profile-page-title">Mon historique</h1>
+      </div>
+      <div className="profile-history__container">
         {quizHistory.map((score) => (
           <CardHistory
             key={score.id}
             cardThumbnail={score.quiz.thumbnail}
             cardTitle={score.quiz.title}
+            cardTags={score.quiz.tags}
+            cardLevel={score.quiz.level.name}
+            cardAuthor={score.quiz.author.pseudo}
             cardScore={score.quiz_score}
           />
         ))}
