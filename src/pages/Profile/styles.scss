@@ -19,23 +19,23 @@
     flex-direction: column;
     justify-content: start;
     width: 100%;
-
-    @include mixin.breakpoint(tablet) {
-      max-width: 70%;
-    }
+    background-color: vars.$main-secondary-color;
+    border-radius: 1rem;
 
     @include mixin.breakpoint(desktop) {
       max-width: 70%;
+      min-width: 900px;
     }
   }
 
   &__title {
-    font-size: 1.5rem;
+    font-size: 2rem;
+    font-weight: 500;
     line-height: 1.75rem;
-    padding-top: 1rem;
-    margin-bottom: 1rem;
-    color: vars.$primary-dark-color;
-    text-align: center;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+    color:#fff;
+    text-align: center;  
   }
 
   &__container {
@@ -43,17 +43,18 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background-color: vars.$main-secondary-color;
-
     padding: 1rem;
-    border-radius: 1rem;
 
     @include mixin.breakpoint(desktop) {
       flex-direction: row;
+      align-items: flex-start;
+
     }
   }
 
   &__header {
+    display: flex;
+    flex-direction: column;
     background-color: vars.$main-secondary-color;
     border-radius: 1rem;
     padding: 1rem;
@@ -62,9 +63,11 @@
     @include mixin.breakpoint(desktop) {
       height: 100%;
       width: 40%;
+      min-width: 500px;
+      flex-grow: 1;
     }
 
-    &__user{
+    &__user {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -72,12 +75,12 @@
       margin-bottom: 2rem;
       font-size: 2rem;
 
-      
       &-pseudo {
         font-size: 2rem;
       }
 
     }
+
     &__score {
       margin-top: 1rem;
       display: flex;
@@ -87,15 +90,22 @@
       gap: 1rem;
       font-size: 1.5rem;
 
-      &-average{
+      &-average {
         font-weight: bold;
-      }      
+      }
+
+      @include mixin.breakpoint(desktop) {
+        flex-grow: 1;
+        align-items: center;
+      }
     }
-    
+
   }
-  &__update{
+
+  &__update {
     padding: 2px;
   }
+
   &__update:hover {
     transition: 0.5s;
     transform: rotate(360deg);
@@ -111,14 +121,13 @@
     gap: 1rem;
     margin-top: 2rem;
     padding: 1rem;
-    // border-left: 1px solid black;
-    // margin-left: 1rem;
 
     @include mixin.breakpoint(desktop) {
       margin-top: 0;
       width: 60%;
 
     }
+
     &-link {
       width: 100%;
       display: flex;
@@ -131,18 +140,20 @@
       font-size: 1.2rem;
       cursor: pointer;
       transition: 0.5s;
-      @include mixin.breakpoint(desktop) {
 
+      @include mixin.breakpoint(desktop) {
         width: 85%;
-  
+        min-width: 230px;
+        max-width: 650px;
+
       }
     }
-  
+
     &-link:hover {
-      filter: brightness(1.3);   
+      filter: brightness(1.3);
     }
 
-    &__btn-log-out{
+    &__btn-log-out {
       outline: 0;
       border: 0;
       font-family: vars.$mainFont;
@@ -151,24 +162,21 @@
       border-radius: 0.5rem;
       color: #fff;
       font-weight: 400;
-      font-size: 1rem;   
+      font-size: 1rem;
       text-align: center;
       cursor: pointer;
       border: 3px solid vars.$primary-dark-color;
       margin-top: 2rem;
 
-  
-      &:hover {        
+
+      &:hover {
         background-color: #fff;
         color: vars.$primary-dark-color;
-        
 
- 
-      }  
+
+
+      }
     }
   }
 
 }
-
-
-

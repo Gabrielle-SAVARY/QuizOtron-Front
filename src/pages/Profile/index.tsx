@@ -1,4 +1,5 @@
 import { IoSettingsSharp } from 'react-icons/io5';
+import { BsFillEmojiSmileFill } from 'react-icons/bs';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -25,12 +26,14 @@ function Profile({ userAverageScore }: ProfileProps) {
   return (
     <div className="profile">
       <div className="profile__wrapper">
-        <h1 className="profile__title profile-page-title">
+        <h1 className="profile__title">
           Bienvenue sur ton profil
         </h1>
         <div className="profile__container">
           <div className="profile__header">
             <div className="profile__header__user">
+              <BsFillEmojiSmileFill style={{ fontSize: '66px', color: '#003051' }} />
+
               <h2 className="profile__header__user-pseudo">{pseudo}</h2>
               <NavLink to="/profil/parametres" className="profile__update" title="paramètres">
                 <IoSettingsSharp style={{ fontSize: '36px', color: '#0d72da' }} />
