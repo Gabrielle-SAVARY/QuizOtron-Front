@@ -1,14 +1,14 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
-.legal-notice {
+.confidentiality {
   padding: 2rem;  
   @include mixin.breakpoint(desktop) {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1.5rem vars.$headerHeight;   
+    padding: 1.5rem vars.$headerHeight;  
   }
   
   &__container{
@@ -42,9 +42,18 @@
     line-height: 1.2;
     font-size: 0.9rem;
     text-align: justify;
+
+    &-subtitle{
+      font-weight: 500;
+      padding-top: 0.5rem;
+    }
+  }
+  &__list{
+    list-style-type: disc;
+    padding: 0.25rem 0 0.5rem 2rem;
   }
 
-  &__link{
+  &__editor__contact-mail-link{
     color:vars.$main-secondary-color;
     line-height: 1.2;
     font-size: 0.9rem;
@@ -53,4 +62,5 @@
 
 
 }
+
 

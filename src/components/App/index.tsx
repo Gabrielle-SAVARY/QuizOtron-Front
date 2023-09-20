@@ -12,6 +12,7 @@ import Layout from '../Layout';
 import Login from '../../pages/Login';
 import NotFound from '../NotFound';
 import About from '../../pages/AboutUs';
+import Confidentiality from '../../pages/Confidentiality';
 import LegalNotice from '../../pages/LegalNotice';
 import Profile from '../../pages/Profile';
 import ProfileFavorites from '../../pages/ProfileFavorites';
@@ -326,6 +327,10 @@ function App() {
         <Route
           path="/mentions-legales"
           element={<LegalNotice />}
+        />
+        <Route
+          path="/politique-confidentialite"
+          element={<Confidentiality />}
         />
         <Route
           path="/profil"
