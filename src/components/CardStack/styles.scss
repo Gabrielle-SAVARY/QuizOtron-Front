@@ -1,0 +1,58 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.stack__card{
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  margin: 1rem;
+  padding: 0.5rem 0.5rem 0;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.3);
+  @include mixin.breakpoint(desktop) {
+    height: 120px;
+    width: 120px;
+
+  }
+  &__header{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+
+    @include mixin.breakpoint(desktop) {
+      height: 80px;
+    }
+
+    &-img{
+      object-fit: cover;
+      margin:0.5rem;
+    }
+  }
+
+  &__content{
+    height: 30px;
+    padding-top: 0.5rem;
+    text-align: center;
+
+    @include mixin.breakpoint(desktop) {
+      height: 40px;
+    }
+
+    &-title{
+      font-family: vars.$mainFont;
+      color: vars.$primary-dark-color;
+      font-size: 0.7rem;
+      font-weight: 500;
+
+      @include mixin.breakpoint(desktop) {
+        font-size: 0.9rem;
+      }
+    }
+
+    &-text{
+      padding-top: 8px;
+      font-size: 0.8rem;
+      color: vars.$main-primary-color;
+    }
+  }
+}

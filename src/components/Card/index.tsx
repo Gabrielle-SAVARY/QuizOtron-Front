@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
