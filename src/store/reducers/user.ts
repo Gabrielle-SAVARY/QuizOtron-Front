@@ -235,7 +235,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isRegistered = false;
     })
     .addCase(register.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
 
