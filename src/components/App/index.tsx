@@ -12,6 +12,7 @@ import Layout from '../Layout';
 import Login from '../../pages/Login';
 import NotFound from '../NotFound';
 import About from '../../pages/AboutUs';
+import LegalNotice from '../../pages/LegalNotice';
 import Profile from '../../pages/Profile';
 import ProfileFavorites from '../../pages/ProfileFavorites';
 import ProfileHistory from '../../pages/ProfileHistory';
@@ -321,6 +322,10 @@ function App() {
         <Route
           path="/apropos"
           element={<About />}
+        />
+        <Route
+          path="/mentions-legales"
+          element={<LegalNotice />}
         />
         <Route
           path="/profil"
