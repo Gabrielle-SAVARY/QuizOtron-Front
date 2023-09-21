@@ -78,7 +78,6 @@
       &-pseudo {
         font-size: 2rem;
       }
-
     }
 
     &__score {
@@ -143,9 +142,8 @@
 
       @include mixin.breakpoint(desktop) {
         width: 85%;
-        min-width: 230px;
+        min-width: 250px;
         max-width: 650px;
-
       }
     }
 

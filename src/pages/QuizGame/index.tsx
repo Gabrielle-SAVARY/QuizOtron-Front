@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button, Stack } from '@mui/material';
+import { useParams, NavLink } from 'react-router-dom';
+import { Stack } from '@mui/material';
 import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
@@ -10,12 +10,13 @@ import { IScoreHistory } from '../../@types/quizHistory';
 interface QuizGameProps {
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
-  quizHistory: IScoreHistory[];
   setQuizHistory: (quizHistory: IScoreHistory[]) => void;
+  successMessage: string;
+  setSuccessMessage: (successMessage: string) => void;
 }
 
 function QuizGame({
-  oneQuiz, getQuizDetails, quizHistory, setQuizHistory,
+  oneQuiz, getQuizDetails, setQuizHistory, successMessage, setSuccessMessage,
 }: QuizGameProps) {
   //* STATE
   // Stocke les infos Quiz affiché
@@ -51,7 +52,7 @@ function QuizGame({
     if (oneQuiz) {
       setCurrentQuiz(oneQuiz);
     }
-  }, [currentQuiz, currentQuiz?.id, oneQuiz, quizHistory]);
+  }, [currentQuiz, currentQuiz?.id, oneQuiz]);
 
   //* QUIZ GAME
   const handleAnswerClicked = (answerId: number) => {
@@ -93,8 +94,9 @@ function QuizGame({
       }
       // Récupère les données de la réponse
       const { data } = response;
-      // Mise à jour du state avec les données inversées de la réponse
-      setQuizHistory(data);
+      // Mise à jour du state
+      setQuizHistory(data.data);
+      setSuccessMessage(data.message);
     } catch (error) {
       console.log(error);
     }
@@ -186,9 +188,15 @@ function QuizGame({
                   </div>
                   <img className="quizgame__end-img" src={currentQuiz.thumbnail} alt="Quiz" />
                 </div>
+                {successMessage !== ''
+                  && (
+                    <div className="success-message">
+                      {successMessage}
+                    </div>
+                  )}
                 <div className="quizgame__redirectionBtn">
-                  <Button variant="contained" component={Link} to="/">Accueil</Button>
-                  <Button variant="contained" component={Link} to="/quiz">Liste des quiz</Button>
+                  <NavLink to="/" className="navigation-link">Accueil</NavLink>
+                  <NavLink to="/liste-quiz" className="navigation-link">Liste des quiz</NavLink>
                 </div>
               </>
             )}

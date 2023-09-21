@@ -6,6 +6,7 @@ import jwtDecode from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { checkIsLogged, findUser } from '../../store/reducers/user';
 import { axiosInstance } from '../../utils/axios';
+import { handleAxiosErrors } from '../../utils/axiosError';
 import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
 import Layout from '../Layout';
@@ -31,7 +32,6 @@ import { ITag } from '../../@types/tag';
 import { IQuizList } from '../../@types/quizList';
 import { IAxiosError } from '../../@types/error';
 import './styles.scss';
-import { handleAxiosErrors } from '../../utils/axiosError';
 
 function App() {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ function App() {
   // Stocke l'historique des quiz joués par l'utilisateur connecté
   const [quizHistory, setQuizHistory] = useState<IScoreHistory[]>([]);
 
-  // Stocke le score global de l'utilisateur connecté
+  // Stocke le score moyen de l'utilisateur connecté
   const [userAverageScore, setUserAverageScore] = useState<number | null>(null);
 
   //* Maintient de la connexion utilisateur au refresh de la page
@@ -231,6 +231,7 @@ function App() {
         const { data } = response;
         // Mise à jour du state avec les données inversées de la réponse
         setQuizHistory(data);
+        // console.log('FETCH quizHistory', quizHistory);
       } catch (error) {
         const errorAxios = handleAxiosErrors(error as IAxiosError);
         setErrorMessage(errorAxios);
@@ -244,30 +245,31 @@ function App() {
     }
   }, [isLogged]);
 
-  // useEffect(() => {
-  //   //* Appel API: récupère la moyenne des scores aux quiz joué par l'utilisateur connecté
-  //   const fetchAverageScore = async () => {
-  //     try {
-  //       const response = await axiosInstance.get('/profile/score');
-  //       // Si pas de réponse 200 envoi erreur
-  //       if (response.status !== 200) {
-  //         throw new Error();
-  //       }
-  //       const { data } = response;
-  //       const averageNumber = Number(data[0].averageScore);
-  //       setUserAverageScore(averageNumber);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
-  //   if (isLogged) {
-  //     // TODO: à revoir avec state reducer
-  //     fetchAverageScore();
-  //   } else {
-  //     setUserAverageScore(null);
-  //   }
-  // }, [isLogged, quizHistory]);
+  useEffect(() => {
+    //* Appel API: récupère la moyenne des scores aux quiz joué par l'utilisateur connecté
+    const fetchAverageScore = async () => {
+      try {
+        const response = await axiosInstance.get('/profile/score');
+        // Si pas de réponse 200 envoi erreur
+        if (response.status !== 200) {
+          throw new Error();
+        }
+        const { data } = response;
+        const averageNumber = Number(data[0].averageScore);
+        console.log('averageNumber', averageNumber);
+        setUserAverageScore(averageNumber);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
+    if (isLogged) {
+      // TODO: à revoir avec state reducer
+      fetchAverageScore();
+    } else {
+      setUserAverageScore(null);
+    }
+  }, [isLogged, quizHistory]);
 
   return (
     <Layout
@@ -307,8 +309,9 @@ function App() {
             <QuizGame
               getQuizDetails={getQuizDetails}
               oneQuiz={oneQuiz}
-              quizHistory={quizHistory}
               setQuizHistory={setQuizHistory}
+              successMessage={successMessage}
+              setSuccessMessage={setSuccessMessage}
             />
           )}
         />

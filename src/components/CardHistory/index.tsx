@@ -1,3 +1,4 @@
+import { BsEmojiSmile } from 'react-icons/bs';
 import { ITag } from '../../@types/tag';
 import './styles.scss';
 
@@ -31,7 +32,8 @@ function CardHistory({
           <span className="cardhistory__body__cardTags-level">{cardLevel}</span>
         </div>
         <p className="cardhistory__body__author">
-          {`auteur: ${cardAuthor}`}
+          <BsEmojiSmile style={{ fontSize: '24px', color: '#003051' }} />
+          {cardAuthor}
         </p>
       </div>
       <div className="cardhistory__footer">
