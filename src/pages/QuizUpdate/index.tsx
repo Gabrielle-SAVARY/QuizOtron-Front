@@ -20,7 +20,7 @@ import { ILevel } from '../../@types/level';
 import { IOneQuiz } from '../../@types/quiz';
 import { ITag } from '../../@types/tag';
 import { QuestionUp, QuizUp } from '../../@types/quizUpdate';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
 import QuestionUpdate from './QuestionUpdate';
@@ -320,7 +320,7 @@ function QuizUpdate({
         <>
           <div className="quiz-update__header">
             <div className="quiz-update__header-main">
-              <BtnExit redirectionLink="/profil/quiz" />
+              <LinkExit redirectionLink="/profil/quiz" />
               <h2 className="quiz-update__header-main__title">Mise à jour du quiz</h2>
             </div>
             <p>tous les champs sont obligatoires</p>

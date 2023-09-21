@@ -21,7 +21,7 @@ import { IAxiosError, IerrorFormNewQuiz } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import QuestionCreate from './QuestionCreate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
@@ -243,7 +243,7 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <div className="quiz-create__header-main">
-          <BtnExit redirectionLink="/profil/quiz" />
+          <LinkExit redirectionLink="/profil/quiz" />
           <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>

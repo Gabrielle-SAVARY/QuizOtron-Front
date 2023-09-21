@@ -16,7 +16,7 @@ import {
   updatePassword,
   deleteUser,
 } from '../../store/reducers/user';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesPasswordUpdate, validationRulesUserUpdate } from '../../utils/validationsRules';
 import { IerrorFormUserUpdate } from '../../@types/error';
@@ -142,7 +142,7 @@ function ProfileSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <BtnExit redirectionLink="/profil" />
+        <LinkExit redirectionLink="/profil" />
         <h2 className="profil-settings__header-title profile-page-title">Paramètres du compte</h2>
       </div>
       <form

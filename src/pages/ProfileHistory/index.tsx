@@ -1,5 +1,5 @@
 import { IScoreHistory } from '../../@types/quizHistory';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import CardHistory from '../../components/CardHistory';
 import './styles.scss';
 
@@ -12,7 +12,7 @@ function ProfileHistory({ quizHistory }: ProfileHistoryProps) {
 
     <div className="profile-history">
       <div className="profile-history__header">
-        <BtnExit redirectionLink="/profil" />
+        <LinkExit redirectionLink="/profil" />
         <h1 className="profile-history__header-title profile-page-title">Historique des scores</h1>
       </div>
       <h2 className="profile-history__header-subtitle">Liste des scores des 10 derniers quiz joués</h2>

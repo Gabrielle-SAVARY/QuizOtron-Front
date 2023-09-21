@@ -19,7 +19,7 @@ import Card from '../../components/Card';
 import { IQuizList } from '../../@types/quizList';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 
 interface ProfileQuizProps {
   quizList: IQuizList[]
@@ -83,7 +83,7 @@ function ProfileQuiz({
   return (
     <div className="quiz__management">
       <div className="quiz__management__header">
-        <BtnExit redirectionLink="/profil" />
+        <LinkExit redirectionLink="/profil" />
         <h1 className="quiz__management__header-title profile-page-title">Gérer mes Quiz</h1>
       </div>
       <div className="quiz__management__add-Btn">
@@ -99,9 +99,7 @@ function ProfileQuiz({
       </div>
 
       <div>
-        <h2 className="quiz__management__subtitle">Liste de mes quiz</h2>
         {userQuiz && (
-
         <div className="quiz__content-list">
           {userQuiz.map((quiz) => (
             <div className="card-wrapper" key={quiz.id}>
