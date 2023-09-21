@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Footer from '../Footer';
 import Header from '../Header';
 import './styles.scss';
@@ -15,36 +16,70 @@ interface LayoutProps {
 function Layout({
   errorMessage, setErrorMessage, successMessage, setSuccessMessage, children,
 }: LayoutProps) {
+  // Récupère le message de succès de la requête backend
+  const userSuccessMessage = useAppSelector((state) => state.user.successMessage);
+  const userErrorMessage = useAppSelector((state) => state.user.errorMessages);
   useEffect(() => {
     if (errorMessage) {
       toast.error(errorMessage, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
+        position: 'top-center',
+        autoClose: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light',
+        theme: 'colored',
       });
       setErrorMessage('');
     }
   }, [errorMessage, setErrorMessage]);
+
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage, {
-        position: 'top-right',
+        position: 'top-center',
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light',
+        theme: 'colored',
       });
       setSuccessMessage('');
     }
   }, [successMessage, setSuccessMessage]);
+
+  useEffect(() => {
+    if (userSuccessMessage) {
+      toast.success(userSuccessMessage, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    }
+  }, [userSuccessMessage]);
+
+  useEffect(() => {
+    if (userErrorMessage) {
+      toast.error(userErrorMessage, {
+        position: 'top-center',
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    }
+  }, [userErrorMessage]);
 
   return (
     <div className="app__container">

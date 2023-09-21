@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Button,
   Dialog,
@@ -32,10 +31,6 @@ function ProfileSettings() {
   const password = useAppSelector((state) => state.user.updateCredentials.password);
   const oldPassword = useAppSelector((state) => state.user.updateCredentials.oldPassword);
   const passwordConfirm = useAppSelector((state) => state.user.updateCredentials.passwordConfirm);
-  // Récupère les messages d'erreur suite requête au backend
-  const errorMessages = useAppSelector((state) => state.user.errorMessages);
-  // Récupère le message de succès de la requête backend
-  const successMessage = useAppSelector((state) => state.user.successMessage);
   // Toggle: pour afficher le formulaire pour changer de mot de passe
   const [isVisible, setIsVisible] = useState(false);
 
@@ -50,7 +45,6 @@ function ProfileSettings() {
 
   // Ouvre et ferme la modale pour la confirmation de suppression d'un compte utilisateur
   const [showModalAccount, setShowModalAccount] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   //* Ouvre la modale de confirmation pour la suppression d'un compte utilisateur
   const handleOpenModalAccount = () => {
@@ -92,10 +86,8 @@ function ProfileSettings() {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
     const dataToValidate = { emailUpdate, pseudoUpdate };
-    console.log('dataToValidate', dataToValidate);
     // Résultat de la validation des champs du formulaire
     const errors = validateTextFields(dataToValidate, validationRulesUserUpdate);
-    console.log('errors', errors.errors);
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorsUserUpdate((prevState) => ({
       ...prevState,
@@ -104,7 +96,6 @@ function ProfileSettings() {
     }));
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
-    console.log('isAllowToSubmit', isAllowToSubmit);
     if (isAllowToSubmit) {
       handleUpdate();
     }
@@ -154,12 +145,6 @@ function ProfileSettings() {
         <BtnExit redirectionLink="/profil" />
         <h2 className="profil-settings__header-title profile-page-title">Paramètres du compte</h2>
       </div>
-      {successMessage !== ''
-        && (
-        <div className="success-message">
-          {successMessage}
-        </div>
-        )}
       <form
         action="submit"
         className="profil-settings__form"
@@ -261,12 +246,6 @@ function ProfileSettings() {
           </div>
         )}
       </form>
-      {errorMessages !== ''
-       && (
-       <div className="error-message">
-         {errorMessages}
-       </div>
-       )}
 
       <button
         type="button"

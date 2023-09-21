@@ -284,7 +284,9 @@ const userReducer = createReducer(initialState, (builder) => {
     //* addCase updatePassword
     .addCase(updatePassword.fulfilled, (state) => {
       // Réinitialisation des states
-      state.updateCredentials = initialState.updateCredentials;
+      state.updateCredentials.oldPassword = '';
+      state.updateCredentials.password = '';
+      state.updateCredentials.passwordConfirm = '';
       // Message de succès
       state.successMessage = 'Votre mot de passe a bien été mis à jour';
     })

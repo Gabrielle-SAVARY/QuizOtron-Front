@@ -1,6 +1,6 @@
 import { IoSettingsSharp } from 'react-icons/io5';
 import { BsFillEmojiSmileFill } from 'react-icons/bs';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logout } from '../../store/reducers/user';
@@ -35,9 +35,9 @@ function Profile({ userAverageScore }: ProfileProps) {
               <BsFillEmojiSmileFill style={{ fontSize: '66px', color: '#003051' }} />
 
               <h2 className="profile__header__user-pseudo">{pseudo}</h2>
-              <NavLink to="/profil/parametres" className="profile__update" title="paramètres">
+              <Link to="/profil/parametres" className="profile__update" title="paramètres">
                 <IoSettingsSharp style={{ fontSize: '36px', color: '#0d72da' }} />
-              </NavLink>
+              </Link>
             </div>
             <div className="profile__header__score">
               <p>
@@ -50,15 +50,15 @@ function Profile({ userAverageScore }: ProfileProps) {
             </div>
           </div>
           <div className="profile__navigation">
-            <NavLink to="/profil/quiz" className="profile__navigation-link">
+            <Link to="/profil/quiz" className="profile__navigation-link">
               Gérer mes quiz
-            </NavLink>
-            <NavLink to="/profil/favoris" className="profile__navigation-link">
+            </Link>
+            <Link to="/profil/favoris" className="profile__navigation-link">
               Mes quiz favoris
-            </NavLink>
-            <NavLink to="/profil/historique" className="profile__navigation-link">
+            </Link>
+            <Link to="/profil/historique" className="profile__navigation-link">
               Historique des scores
-            </NavLink>
+            </Link>
             <button type="button" className="profile__navigation__btn-log-out" onClick={handleLogout}>
               Déconnexion
             </button>

@@ -310,7 +310,6 @@ function App() {
               getQuizDetails={getQuizDetails}
               oneQuiz={oneQuiz}
               setQuizHistory={setQuizHistory}
-              successMessage={successMessage}
               setSuccessMessage={setSuccessMessage}
             />
           )}
@@ -387,6 +386,8 @@ function App() {
                 getQuizDetails={getQuizDetails}
                 oneQuiz={oneQuiz}
                 fetchQuizList={fetchQuizList}
+                setSuccessMessage={setSuccessMessage}
+                setErrorMessage={setErrorMessage}
               />
             </ProtectedRoute>
           )}

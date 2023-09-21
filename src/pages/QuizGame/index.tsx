@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
@@ -11,12 +11,11 @@ interface QuizGameProps {
   oneQuiz: IOneQuiz
   getQuizDetails: (id: number) => void
   setQuizHistory: (quizHistory: IScoreHistory[]) => void;
-  successMessage: string;
   setSuccessMessage: (successMessage: string) => void;
 }
 
 function QuizGame({
-  oneQuiz, getQuizDetails, setQuizHistory, successMessage, setSuccessMessage,
+  oneQuiz, getQuizDetails, setQuizHistory, setSuccessMessage,
 }: QuizGameProps) {
   //* STATE
   // Stocke les infos Quiz affiché
@@ -188,15 +187,9 @@ function QuizGame({
                   </div>
                   <img className="quizgame__end-img" src={currentQuiz.thumbnail} alt="Quiz" />
                 </div>
-                {successMessage !== ''
-                  && (
-                    <div className="success-message">
-                      {successMessage}
-                    </div>
-                  )}
                 <div className="quizgame__redirectionBtn">
-                  <NavLink to="/" className="navigation-link">Accueil</NavLink>
-                  <NavLink to="/liste-quiz" className="navigation-link">Liste des quiz</NavLink>
+                  <Link to="/" className="navigation-link">Accueil</Link>
+                  <Link to="/liste-quiz" className="navigation-link">Liste des quiz</Link>
                 </div>
               </>
             )}
