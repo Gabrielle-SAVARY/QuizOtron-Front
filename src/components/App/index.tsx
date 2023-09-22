@@ -199,8 +199,6 @@ function App() {
     } catch (error) {
       const errorAxios = handleAxiosErrors(error as IAxiosError);
       setErrorMessage(errorAxios);
-      // setErrorMessage('une erreur est survenue, impossible d\'ajouter le quiz à vos favoris');
-      // setErrorMessage(detailsError.response.data.message);
     }
   };
 
@@ -256,10 +254,10 @@ function App() {
         }
         const { data } = response;
         const averageNumber = Number(data[0].averageScore);
-        console.log('averageNumber', averageNumber);
         setUserAverageScore(averageNumber);
       } catch (error) {
-        console.error(error);
+        const errorAxios = handleAxiosErrors(error as IAxiosError);
+        setErrorMessage(errorAxios);
       }
     };
     // Excecute l'appel API si l'utilisateur est connecté sinon vide le state
@@ -360,6 +358,8 @@ function App() {
                 userFavoritesQuiz={userFavoritesQuiz}
                 addQuizToFavorite={addQuizToFavorite}
                 deleteQuizToFavorite={deleteQuizToFavorite}
+                setSuccessMessage={setSuccessMessage}
+                setErrorMessage={setErrorMessage}
               />
             </ProtectedRoute>
           )}
@@ -372,6 +372,8 @@ function App() {
                 tagsList={tagsList}
                 levelsList={levelsList}
                 fetchQuizList={fetchQuizList}
+                setSuccessMessage={setSuccessMessage}
+                setErrorMessage={setErrorMessage}
               />
             </ProtectedRoute>
           )}
