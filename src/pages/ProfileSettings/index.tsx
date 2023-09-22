@@ -26,6 +26,8 @@ import './styles.scss';
 function ProfileSettings() {
   const dispatch = useAppDispatch();
   //* STATE
+  const firstname = useAppSelector((state) => state.user.credentials.firstname);
+  const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const emailUpdate = useAppSelector((state) => state.user.updateCredentials.emailUpdate);
   const pseudoUpdate = useAppSelector((state) => state.user.updateCredentials.pseudoUpdate);
   const password = useAppSelector((state) => state.user.updateCredentials.password);
@@ -144,6 +146,17 @@ function ProfileSettings() {
       <div className="profil-settings__header">
         <LinkExit redirectionLink="/profil" />
         <h2 className="profil-settings__header-title profile-page-title">Paramètres du compte</h2>
+      </div>
+      <div className="profil-settings__other-personal-info">
+        <div className="profil-settings__other-personal-info__detail">
+          <span className="profil-settings__other-personal-info__detail-label">Prénom:</span>
+          <span className="profil-settings__other-personal-info__detail-data">{firstname}</span>
+        </div>
+        <div className="profil-settings__other-personal-info__detail">
+          <span className="profil-settings__other-personal-info__detail-label">Nom:</span>
+          <span className="profil-settings__other-personal-info__detail-data">{lastname}</span>
+        </div>
+
       </div>
       <form
         action="submit"
