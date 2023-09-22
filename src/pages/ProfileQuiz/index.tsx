@@ -122,6 +122,7 @@ function ProfileQuiz({
                   open={showModal}
                   onClose={handleCloseModal}
                   aria-describedby="alert-dialog-slide-description"
+                  sx={{ backgroundColor: 'white' }}
                 >
                   <DialogTitle>Voulez-vous vraiment supprimer ce Quiz?</DialogTitle>
                   <DialogContent>
