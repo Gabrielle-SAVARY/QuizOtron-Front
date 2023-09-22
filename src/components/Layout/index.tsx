@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 import Footer from '../Footer';
 import Header from '../Header';
 import './styles.scss';
