@@ -30,6 +30,7 @@ function Layout({
         draggable: true,
         progress: undefined,
         theme: 'colored',
+        className: 'toast-message',
       });
       setErrorMessage('');
     }
@@ -40,12 +41,13 @@ function Layout({
       toast.success(successMessage, {
         position: 'top-center',
         autoClose: 5000,
-        hideProgressBar: true,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: 'colored',
+        className: 'toast-message',
       });
       setSuccessMessage('');
     }
@@ -56,12 +58,13 @@ function Layout({
       toast.success(userSuccessMessage, {
         position: 'top-center',
         autoClose: 5000,
-        hideProgressBar: true,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: 'colored',
+        className: 'toast-message',
       });
     }
   }, [userSuccessMessage]);
@@ -77,6 +80,7 @@ function Layout({
         draggable: true,
         progress: undefined,
         theme: 'colored',
+        className: 'toast-message',
       });
     }
   }, [userErrorMessage]);
