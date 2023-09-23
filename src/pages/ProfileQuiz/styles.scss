@@ -30,16 +30,6 @@
     justify-content: center;
     padding: 2rem 0;
   }
-  &__subtitle {
-    font-size: 1.25rem;
-    padding: 1.5rem;
-    color: vars.$main-primary-color;
-    text-align: center;
-    @include mixin.breakpoint(desktop) {
-      font-size: 1.5rem;
-      padding: 1.5rem 0;
-     }
-  }
 }
 .quiz__content-list{
   display: flex;
@@ -57,9 +47,9 @@
   width: 330px;
   height: 530px;
   margin: 1rem auto;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(2px);
--webkit-backdrop-filter: blur(2px);
+  background-color: rgba(255, 177, 22,0.2);
+  backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   color:#ffebc4;
   border-radius: 8px;

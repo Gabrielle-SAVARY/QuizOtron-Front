@@ -21,7 +21,7 @@ import { IAxiosError, IerrorFormNewQuiz } from '../../@types/error';
 import { ILevel } from '../../@types/level';
 import { ITag } from '../../@types/tag';
 import { Question, Quiz } from '../../@types/newQuiz';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import QuestionCreate from './QuestionCreate';
 import QuizInfoTextInput from '../../components/QuizTextInput';
 import QuizMenuDropDown from '../../components/QuizMenuDropDown';
@@ -32,18 +32,16 @@ interface QuizCreateProps {
   tagsList: ITag[]
   levelsList: ILevel[]
   fetchQuizList: () => void
+  setSuccessMessage: (successMessage: string) => void;
+  setErrorMessage: (value: string) => void;
 }
 
 function QuizCreate({
-  tagsList, levelsList, fetchQuizList,
+  tagsList, levelsList, fetchQuizList, setSuccessMessage, setErrorMessage,
 }: QuizCreateProps) {
   //* STATE
   // Récupère l'id de l'utilisateur dans le reducer user
   const userId = useAppSelector((state) => state.user.userId);
-  // Alerte présence d'erreur avant envoi ou erreur 400 du backend
-  const [errorWarnCreateQuiz, setErrorWarnCreateQuiz] = useState<string>('');
-  // Stocke le message de succès de mise à jour du quiz
-  const [successCreateQuiz, setSuccessCreateQuiz] = useState<string>('');
 
   // Stock les informations générale du quiz
   const [newQuiz, setNewQuiz] = useState<Quiz>({
@@ -179,10 +177,10 @@ function QuizCreate({
       fetchQuizList();
       // Message de succès: création du quiz
       const newSuccessMsg: string = response.data.message;
-      setSuccessCreateQuiz(newSuccessMsg);
+      setSuccessMessage(newSuccessMsg);
     } catch (error) {
       const errorAxios = handleAxiosErrors(error as IAxiosError);
-      setErrorWarnCreateQuiz(errorAxios);
+      setErrorMessage(errorAxios);
     }
   };
 
@@ -190,8 +188,8 @@ function QuizCreate({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //* Vide le state du message de succès + state alerte des erreurs
-    setSuccessCreateQuiz('');
-    setErrorWarnCreateQuiz('');
+    setSuccessMessage('');
+    setErrorMessage('');
     //* Récupération des erreurs du formulaire à partir des states
     // partie informations du quiz: state newQuiz
     // Erreurs des champs texte
@@ -235,7 +233,7 @@ function QuizCreate({
     if (isAllowToSubmit) {
       handleFormSubmit();
     } else {
-      setErrorWarnCreateQuiz('Des erreurs empêchent la soumission du formulaire. Veuillez corriger les erreurs indiquées en rouge.');
+      setErrorMessage('Des erreurs empêchent la soumission du formulaire. Veuillez corriger les erreurs indiquées en rouge.');
     }
   };
 
@@ -243,7 +241,7 @@ function QuizCreate({
     <div className="quiz-create">
       <div className="quiz-create__header">
         <div className="quiz-create__header-main">
-          <BtnExit redirectionLink="/profil/quiz" />
+          <LinkExit redirectionLink="/profil/quiz" />
           <h2 className="quiz-create__header-main__title">Créer un quiz</h2>
         </div>
         <p>tous les champs sont obligatoires</p>
@@ -319,22 +317,12 @@ function QuizCreate({
             />
           ))}
         </fieldset>
-        <button type="submit" className="quiz-create__btn-submit">Créer le Quiz</button>
-        {errorWarnCreateQuiz !== ''
-          && (
-          <div className="error-message">
-            {errorWarnCreateQuiz}
-          </div>
-          )}
-        {successCreateQuiz !== ''
-        && (
-        <div className="success-message">
-          {successCreateQuiz}
-          <Link to="/profil/quiz">
-            Retour à la gestion des quiz.
-          </Link>
-        </div>
-        )}
+        <button type="submit" className="quiz-create__btn-submit">
+          Créer le Quiz
+        </button>
+        <Link to="/profil/quiz" className="navigation-link">
+          Retour à la gestion des quiz
+        </Link>
       </form>
     </div>
   );

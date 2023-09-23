@@ -2,60 +2,102 @@
 @use '../../styles/vars';
 
 .about {
-  &__quizotron {
+  padding: 2rem;  
+  @include mixin.breakpoint(desktop) {
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 1rem;
-  }
-  &__textcontainer {
-    background-color: white;
-    border-radius: 1rem;
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 1.5rem vars.$headerHeight;  
   }
   &__title {
     font-size: 1.5rem;
-    padding: 1rem;
-    border-radius: 1rem;
-    color: white;
-    background-color: vars.$main-primary-color;
+    font-weight: 500;   
+    line-height: 1.75rem;
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
   }
+
   &__text {
-    padding: 1rem;
-    text-justify: auto;
+    line-height: 1.2;
+    font-size: 0.9rem;
+    text-align: justify;
   }
-  &__stack {
+
+  &-project {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 1rem;
-  }
-  &__team {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
     padding: 1rem;
-    gap: 1.1rem;
+    gap: 2rem;
+
+    &__subtitle {
+      color:vars.$main-primary-color;
+      font-size: 1.2rem;
+      font-weight: 500;
+      padding-bottom: 0.25rem;
+    }
+
+    &__presentation {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap:0.5rem;
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+    &__stack {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+      margin-bottom: 2rem;  
+
+      &-container {
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+
+        @include mixin.breakpoint(desktop) {
+          flex-flow: row wrap;
+          justify-content: center;
+          align-items: center;
+          gap: 2rem;
+        }
+      }
+    }
+    &__team {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1rem;
+      gap: 1.1rem;
+
+      &__card-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        padding: 1rem;
+        @include mixin.breakpoint(desktop) {
+          flex-flow: row wrap;
+          justify-content: center;
+          align-items: center;
+          gap: 2rem;
+        }
+      }
+    }
   }
 }
 
-.about__team-card-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  padding: 1rem;
-  @include mixin.breakpoint(desktop) {
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-  }
-}

@@ -1,5 +1,5 @@
 // typage UserState: reducer user
-interface UserState {
+export interface UserState {
   isLogged: boolean;
   token: string;
   isRegistered: boolean
@@ -41,4 +41,8 @@ export interface IAuthentification {
   newPassword: string;
 }
 
-
+// typage data retournée par requête axios: "/signup"
+export interface IRegister {
+  isRegistered: boolean
+  message: string
+}

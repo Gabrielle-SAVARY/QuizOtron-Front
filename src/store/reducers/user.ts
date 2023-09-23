@@ -3,10 +3,11 @@ import {
 } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from '../../utils/redux';
 import { axiosInstance } from '../../utils/axios';
-import { IAxiosError } from '../../@types/error';
+import { IAxiosError, IError } from '../../@types/error';
 import { handleAxiosErrors, handleReducerErrors } from '../../utils/axiosError';
 import {
   IAuthentification,
+  IRegister,
   UserState,
 } from '../../@types/user';
 
@@ -123,8 +124,6 @@ export const login = createAppAsyncThunk(
 export const findUser = createAppAsyncThunk(
   'user/FIND_USER',
   async () => {
-    // const { data } = await axiosInstance.get('/profile');
-    // return data as IAuthentification;
     try {
       // Appel API avec envoie des données du formulaire
       const { data } = await axiosInstance.get('/profile');
@@ -172,7 +171,6 @@ export const updatePassword = createAppAsyncThunk(
 );
 
 // ACTION: supprimer utilisateur
-// TODO feedback user à faire
 export const deleteUser = createAppAsyncThunk(
   'user/DELETE',
   async () => {
@@ -203,6 +201,8 @@ const userReducer = createReducer(initialState, (builder) => {
       // Réinitialisation des states (vider les champs du formulaire login/register)
       state.credentials = initialState.credentials;
       state.errorMessages = '';
+      // Permet de désactiver la redirection de la page d'incription vers connexion
+      state.isRegistered = false;
     })
     //* addCase update (formulaires updateProfil et updatePassword)
     .addCase(updateProfilField, (state, action) => {
@@ -222,13 +222,14 @@ const userReducer = createReducer(initialState, (builder) => {
       state.successMessage = 'Votre compte a bien été mis à jour';
     })
     .addCase(update.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase register
     .addCase(register.fulfilled, (state, action) => {
-      const payload = action.payload as IAuthentification;
+      const payload = action.payload as IRegister;
       state.isRegistered = payload.isRegistered;
+      state.successMessage = payload.message;
       // Réinitialisation des state des mots de passe
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
@@ -237,7 +238,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isRegistered = false;
     })
     .addCase(register.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
 
@@ -257,7 +258,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isRegistered = false;
     })
     .addCase(login.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
 
@@ -278,7 +279,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.updateCredentials.pseudoUpdate = payload.pseudo;
     })
     .addCase(findUser.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase logout
@@ -286,12 +287,14 @@ const userReducer = createReducer(initialState, (builder) => {
     //* addCase updatePassword
     .addCase(updatePassword.fulfilled, (state) => {
       // Réinitialisation des states
-      state.updateCredentials = initialState.updateCredentials;
+      state.updateCredentials.oldPassword = '';
+      state.updateCredentials.password = '';
+      state.updateCredentials.passwordConfirm = '';
       // Message de succès
       state.successMessage = 'Votre mot de passe a bien été mis à jour';
     })
     .addCase(updatePassword.rejected, (state, action) => {
-      const message = action.payload as string;
+      const { message } = action.payload as IError;
       state.errorMessages = message;
     })
     //* addCase deleteUser

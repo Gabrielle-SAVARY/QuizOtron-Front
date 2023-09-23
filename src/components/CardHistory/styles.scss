@@ -1,19 +1,124 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
 
+
 .cardhistory {
-  display: flex;
-  justify-content: space-between;
+  display: flex; 
+  flex-direction: column;
   align-items: center;
-  background-color: white;
-  margin: 1rem;
+  background-color: #fff;
+  margin-bottom: 1rem;
   padding: 1rem;
-  border: 1px solid black;
+  box-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.3);
   border-radius: 1rem;
-  gap: 2rem;
+  gap: 0.3rem;
+  min-width: 250px;
+  width: 250px;
+
+  @include mixin.breakpoint(tablet) {
+    flex-direction: row;
+    min-width: 400px;
+    width: 70%;
+  }
+
+  @include mixin.breakpoint(desktop) {
+    min-width: 600px;
+    width: 60%;
+  }
 
   &__img {
-    width: 50px;
+    width: 200px;
     height: auto;
+
+    @include mixin.breakpoint(tablet) {
+      width: 200px;
+      height: auto; 
+    }
+
+    @include mixin.breakpoint(desktop) {
+      width: 300px;
+      height: auto; 
+    }
+  }
+
+  &__body {
+    flex-grow: 1;
+
+    &__title {
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: vars.$main-primary-color;      
+      margin: 1rem 0 0.8rem ;
+
+      @include mixin.breakpoint(tablet) {
+        font-size: 1.2rem;
+      }
+    }
+
+    &__cardTags{
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+            
+      &-tag {
+        background: linear-gradient(to bottom,
+            vars.$main-primary-color,
+            vars.$primary-light-color );
+        color: white;
+        border-radius: 1rem;
+        padding: 0.3rem;
+        text-transform: capitalize;
+        font-size: 0.8rem;
+ 
+        @include mixin.breakpoint(tablet) {
+          font-size: 1rem;
+        }
+      }
+  
+      &-level {
+        background: linear-gradient(to bottom,
+            vars.$main-secondary-color,
+            vars.$secondary-light-color );
+        color: white;
+        border-radius: 1rem;
+        padding: 0.3rem;
+        text-transform: capitalize;
+        font-size: 0.8rem;
+
+        @include mixin.breakpoint(tablet) {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    &__author {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: vars.$primary-dark-color;
+      padding: 0.5rem 0;
+
+      @include mixin.breakpoint(tablet) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &__footer{
+    &__score{
+      font-family: vars.$secondaryFont;
+      color: vars.$main-third-color;
+      font-weight: 500;
+      padding: 1rem;
+
+      @include mixin.breakpoint(tablet) {
+        font-size: 1.5rem;
+      }
+    }
   }
 }

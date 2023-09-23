@@ -27,13 +27,12 @@ function Home({
     title: '',
     description: '',
     thumbnail: '',
-    level_id: 0,
-    user_id: 0,
     level: {
-      name: '',
       id: 0,
+      name: '',
     },
     author: {
+      id: 0,
       pseudo: '',
     },
     tags: [],

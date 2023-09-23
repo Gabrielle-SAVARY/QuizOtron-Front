@@ -1,3 +1,5 @@
+import { ITag } from './tag';
+
 // Type résultat requête des quiz joués"
 export interface IScoreHistory {
   user_id: number
@@ -11,4 +13,7 @@ export interface IQuizHistory {
   title: string
   description: string
   thumbnail: string
+  level: ILevel
+  author: IAuthor
+  tags: ITag[]
 }

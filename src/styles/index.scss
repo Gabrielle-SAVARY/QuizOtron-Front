@@ -22,6 +22,31 @@ button {
   font-weight: 700;
 }
 
+.navigation-link{
+  display: block;
+  padding: 15px 25px;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  background-color: vars.$main-primary-color;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
+
+}
+
+.profile-page-title{
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  color: vars.$main-secondary-color;
+}
+
 .error-message {
   padding: 0.5rem;
   margin: 0.5rem 0;
@@ -72,15 +97,30 @@ button {
   text-decoration: underline;
 }
 
+.redirect-link {
+  padding: 15px 25px;
+  border-radius: 0.5rem;
+  background-color: vars.$main-primary-color;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.5s;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
+}
+
 .btn-primary {
   outline: 0;
   border: 0;
-  padding: 6px 1rem;
+  font-family: vars.$mainFont;
   background: vars.$main-primary-color;
-  border-radius: 4px;
+  padding: 15px 15px;
+  border-radius: 0.5rem;
   color: #fff;
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1rem;
   text-align: center;
   cursor: pointer;

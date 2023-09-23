@@ -7,6 +7,11 @@
   text-align: center;
   flex-direction: column;
   justify-content: center;
+  padding: 1.5rem;
+  
+  @include mixin.breakpoint(desktop) {
+    padding: 1.5rem vars.$headerHeight;
+  }
 }
 
 .page404__title {
@@ -15,5 +20,5 @@
 }
 
 .page404__text {
-  font-size: 2rem;
+  font-size: 1.75rem;
 }

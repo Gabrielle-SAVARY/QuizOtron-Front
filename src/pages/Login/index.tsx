@@ -24,8 +24,6 @@ function Login() {
   const email = useAppSelector((state) => state.user.credentials.email);
   const password = useAppSelector((state) => state.user.credentials.password);
   const isLogged = useAppSelector((state) => state.user.isLogged);
-  // Récupère les messages d'erreur suite requête POST du backend
-  const errorMessages = useAppSelector((state) => state.user.errorMessages);
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
   const [errorsLogin, setErrorsLogin] = useState<IerrorFormLogin>({
     email: '',
@@ -134,8 +132,6 @@ function Login() {
             <button type="submit" className="form-login__button">
               Connexion
             </button>
-            {errorMessages !== '' && <div className="error-message">{errorMessages}</div>}
-
             <p className="form__message">
               Pas encore de compte?
               <NavLink to="/inscription" className="form__inscription">

@@ -4,7 +4,7 @@
 .header__link-btn{
   &-text{
     display: none;    
-    font-weight: bold;
+    font-weight: 500;
 
     @include mixin.breakpoint(desktop) {
       display: block;

@@ -1,29 +1,38 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfUpdateCredentials,
   updateProfilField,
   update,
   updatePassword,
+  deleteUser,
 } from '../../store/reducers/user';
-import BtnExit from '../../components/BtnExit';
+import LinkExit from '../../components/LinkExit';
 import { validateTextFields } from '../../utils/validateFormField';
 import { validationRulesPasswordUpdate, validationRulesUserUpdate } from '../../utils/validationsRules';
 import { IerrorFormUserUpdate } from '../../@types/error';
+
 import './styles.scss';
 
 function ProfileSettings() {
   const dispatch = useAppDispatch();
   //* STATE
+  const firstname = useAppSelector((state) => state.user.credentials.firstname);
+  const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const emailUpdate = useAppSelector((state) => state.user.updateCredentials.emailUpdate);
   const pseudoUpdate = useAppSelector((state) => state.user.updateCredentials.pseudoUpdate);
   const password = useAppSelector((state) => state.user.updateCredentials.password);
   const oldPassword = useAppSelector((state) => state.user.updateCredentials.oldPassword);
   const passwordConfirm = useAppSelector((state) => state.user.updateCredentials.passwordConfirm);
-  // Récupère les messages d'erreur suite requête au backend
-  const errorMessages = useAppSelector((state) => state.user.errorMessages);
-  // Récupère le message de succès de la requête backend
-  const successMessage = useAppSelector((state) => state.user.successMessage);
   // Toggle: pour afficher le formulaire pour changer de mot de passe
   const [isVisible, setIsVisible] = useState(false);
 
@@ -35,6 +44,23 @@ function ProfileSettings() {
     password: '',
     passwordConfirm: '',
   });
+
+  // Ouvre et ferme la modale pour la confirmation de suppression d'un compte utilisateur
+  const [showModalAccount, setShowModalAccount] = useState<boolean>(false);
+
+  //* Ouvre la modale de confirmation pour la suppression d'un compte utilisateur
+  const handleOpenModalAccount = () => {
+    setShowModalAccount(true);
+  };
+
+  //* Ferme la modale de confirmation pour la suppression d'un quiz
+  const handleCloseModalAccount = () => {
+    setShowModalAccount(false);
+  };
+    //* Supprime le compte utilisateur
+  const handleDeleteUser = () => {
+    dispatch(deleteUser());
+  };
 
   //* Met à jour le state avec la valeur des inputs pour les 2 formulaires
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -62,10 +88,8 @@ function ProfileSettings() {
     event.preventDefault();
     // Données du state à valider avant envoi au backend
     const dataToValidate = { emailUpdate, pseudoUpdate };
-    console.log('dataToValidate', dataToValidate);
     // Résultat de la validation des champs du formulaire
     const errors = validateTextFields(dataToValidate, validationRulesUserUpdate);
-    console.log('errors', errors.errors);
     // Mise à jour du state avec les messages d'erreurs (asynchrone): affichage des erreurs frontend
     setErrorsUserUpdate((prevState) => ({
       ...prevState,
@@ -74,8 +98,6 @@ function ProfileSettings() {
     }));
     // Autorisation de soumission du formulaire
     const isAllowToSubmit = !errors.hasError;
-    console.log('isAllowToSubmit', isAllowToSubmit);
-    handleUpdate();
     if (isAllowToSubmit) {
       handleUpdate();
     }
@@ -122,15 +144,20 @@ function ProfileSettings() {
   return (
     <div className="profil-settings">
       <div className="profil-settings__header">
-        <BtnExit redirectionLink="/profil" />
-        <h2 className="profil-settings__header-title">Mise à jour du profil</h2>
+        <LinkExit redirectionLink="/profil" />
+        <h2 className="profil-settings__header-title profile-page-title">Paramètres du compte</h2>
       </div>
-      {successMessage !== ''
-        && (
-        <div className="success-message">
-          {successMessage}
+      <div className="profil-settings__other-personal-info">
+        <div className="profil-settings__other-personal-info__detail">
+          <span className="profil-settings__other-personal-info__detail-label">Prénom:</span>
+          <span className="profil-settings__other-personal-info__detail-data">{firstname}</span>
         </div>
-        )}
+        <div className="profil-settings__other-personal-info__detail">
+          <span className="profil-settings__other-personal-info__detail-label">Nom:</span>
+          <span className="profil-settings__other-personal-info__detail-data">{lastname}</span>
+        </div>
+
+      </div>
       <form
         action="submit"
         className="profil-settings__form"
@@ -232,12 +259,38 @@ function ProfileSettings() {
           </div>
         )}
       </form>
-      {errorMessages !== ''
-       && (
-       <div className="error-message">
-         {errorMessages}
-       </div>
-       )}
+
+      <button
+        type="button"
+        className="profil-settings__btn-delete-account"
+        onClick={handleOpenModalAccount}
+      >
+        Supprimer mon compte
+      </button>
+      <Dialog
+        open={showModalAccount}
+        onClose={handleCloseModalAccount}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Voulez-vous vraiment supprimer votre compte ?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description2">
+            Attention cette action est irréversible
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModalAccount} variant="contained">Annuler</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            onClick={handleDeleteUser}
+            variant="contained"
+            color="error"
+          >
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
   );
 }

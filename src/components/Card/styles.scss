@@ -39,6 +39,7 @@
     font-size: 1.5rem;
     padding: 1rem 0;
     height: 75px;
+    color: vars.$primary-dark-color;
   }
 
   &__tag {
@@ -60,7 +61,7 @@
     text-transform: capitalize;
   }
 
-  &__difficulty {
+  &__level {
     background: linear-gradient(
       to bottom,
       vars.$main-secondary-color,
@@ -82,6 +83,8 @@
   &__autor {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
+    color: vars.$primary-dark-color;
   }
 
   &__btn-favoris {

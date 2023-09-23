@@ -152,8 +152,15 @@
   &__redirectionBtn {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    flex-flow: column  nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     margin: 1rem;
+
+    @include mixin.breakpoint(desktop) {
+      flex-flow: row wrap;
+    }
   }
 }
 

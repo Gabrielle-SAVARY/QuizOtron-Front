@@ -27,6 +27,32 @@
       }
     }
   }
+  
+  &__other-personal-info{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1.5rem 0;
+    border-bottom: 2px solid vars.$main-primary-color;
+
+    @include mixin.breakpoint(tablet) {
+    width: 70%;
+    }
+
+    &__detail{
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 0.5rem;
+
+      &-data{
+        color: vars.$main-secondary-color;  
+      }
+
+    }
+  }
   &__form{
     margin-bottom: 0 auto 2rem;
     width: 100%;
@@ -101,5 +127,16 @@
       @include mixin.breakpoint(desktopXL) {
         width: 25%;
       }
+  }
+  &__btn-delete-account{
+    border:none;
+    background: vars.$wrong-answer-color;    
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    padding: 15px 25px;
+    margin: 2rem 0;
+    cursor: pointer;
+
   }
 }

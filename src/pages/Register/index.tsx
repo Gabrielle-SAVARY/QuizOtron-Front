@@ -1,5 +1,7 @@
-import { NavLink } from 'react-router-dom';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  ChangeEvent, FormEvent, useState, useEffect,
+} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   KeysOfCredentials,
@@ -14,6 +16,7 @@ import logoQuizotron from '../../assets/img/logoQuizotron.png';
 import './styles.scss';
 
 function Register() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   //* STATE
   // Récupère les infos de l'utilisateur stocké dans les states du reducer user
@@ -36,6 +39,13 @@ function Register() {
     password: '',
     passwordConfirm: '',
   });
+
+  // //* Redirection vers la page connexion, si inscription réussie
+  useEffect(() => {
+    if (isRegistered) {
+      navigate('/connexion');
+    }
+  }, [isRegistered, navigate]);
 
   //* Met à jour le state avec la valeur des inputs du formulaire
   const handleChangeField = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -94,18 +104,6 @@ function Register() {
 
   return (
     <div className="register-page">
-      {isRegistered && (
-      <div className="register-page__isLogged">
-        <p className="success-message">Vous êtes inscrit, veuillez vous connecter.</p>
-        <p className="form__message">
-          Vous avez déjà un compte?
-          <NavLink to="/connexion" className="form__inscription">
-            Connexion
-          </NavLink>
-        </p>
-      </div>
-      )}
-      {!isRegistered && (
       <div className="register-page__wrapper">
         <form
           action="submit"
@@ -207,12 +205,6 @@ function Register() {
           <button type="submit" className="form__button">
             Inscription
           </button>
-          {errorMessages !== ''
-            && (
-            <div className="error-message ">
-              {errorMessages}
-            </div>
-            )}
           <p className="form__message">
             Déjà un compte?
             <NavLink to="/connexion" className="form__inscription">
@@ -221,7 +213,7 @@ function Register() {
           </p>
         </form>
       </div>
-      )}
+
     </div>
   );
 }

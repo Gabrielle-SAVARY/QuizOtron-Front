@@ -57,8 +57,8 @@ function Footer() {
             <NavLink to="/mentions-legales" className="footer-dark__mention-item">
               Mentions Légales
             </NavLink>
-            <NavLink to="/donnees-personnelles" className="footer-dark__mention-item">
-              Données personnelles
+            <NavLink to="/politique-confidentialite" className="footer-dark__mention-item">
+              Politique de confidentialité
             </NavLink>
           </div>
           <div className="footer-dark__mentions-copyright">

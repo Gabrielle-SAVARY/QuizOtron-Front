@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MdFavoriteBorder, MdFavorite, MdFace } from 'react-icons/md';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+import { BsEmojiSmile } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
-import { IQuizList, TagQList } from '../../@types/quizList';
+import { ITag } from '../../@types/tag';
+import { IQuizList } from '../../@types/quizList';
 import './styles.scss';
 
 interface CardProps {
@@ -11,7 +13,7 @@ interface CardProps {
   thumbnail: string;
   level: string;
   author: string;
-  tags: TagQList[];
+  tags: ITag[];
   userFavoritesQuiz: IQuizList[];
   addQuizToFavorite: (quizId: number) => void;
   deleteQuizToFavorite: (quizId: number) => void;
@@ -78,7 +80,7 @@ function Card({
             title="Ajouter aux favoris"
             onClick={(event) => handleAddFavorite(event, id)}
           >
-            <MdFavoriteBorder size={36} />
+            <MdFavoriteBorder color="#003051" size={36} />
           </button>
         );
       }
@@ -104,12 +106,12 @@ function Card({
                 ))}
               </span>
               )}
-              <span className="card-body__difficulty">{level}</span>
+              <span className="card-body__level">{level}</span>
             </div>
             <div className="card-body__tag2">
               <div className="card-body__autor">
                 <span className="autor__img">
-                  <MdFace size={36} stroke="#fff" strokeWidth="1" />
+                  <BsEmojiSmile size={24} color="#003051" strokeWidth="0" />
                 </span>
                 <span className="autor__name">{author}</span>
               </div>

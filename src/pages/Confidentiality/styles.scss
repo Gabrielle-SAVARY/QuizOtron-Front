@@ -1,0 +1,67 @@
+@use '../../styles/mixin';
+@use '../../styles/vars';
+
+.confidentiality {
+  padding: 2rem;  
+  @include mixin.breakpoint(desktop) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem vars.$headerHeight;  
+  }
+  
+  &__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.2rem;
+    width: 100%;
+    @include mixin.breakpoint(desktop) {
+      width: 70%; 
+    }
+  }
+
+  &__title{
+    font-size: 1.5rem;
+    font-weight: 500;   
+    line-height: 1.75rem;
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+    color: vars.$primary-dark-color;
+    text-align: center;
+  }
+
+  &__subtitle{
+    color:vars.$main-primary-color;
+    font-size: 1.2rem;
+    padding-bottom: 0.25rem;
+  }
+
+  &__text{
+    line-height: 1.2;
+    font-size: 0.9rem;
+    text-align: justify;
+
+    &-subtitle{
+      font-weight: 500;
+      padding-top: 0.5rem;
+    }
+  }
+  &__list{
+    list-style-type: disc;
+    padding: 0.25rem 0 0.5rem 2rem;
+  }
+
+  &__editor__contact-mail-link{
+    color:vars.$main-secondary-color;
+    line-height: 1.2;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+
+}
+
+
