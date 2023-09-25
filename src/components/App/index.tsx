@@ -313,24 +313,24 @@ function App() {
           )}
         />
         <Route
-          path="/connexion"
-          element={<Login />}
-        />
-        <Route
-          path="/inscription"
-          element={<Register />}
-        />
-        <Route
-          path="/apropos"
-          element={<About />}
-        />
-        <Route
           path="/mentions-legales"
           element={<LegalNotice />}
         />
         <Route
           path="/politique-confidentialite"
           element={<Confidentiality />}
+        />
+        <Route
+          path="/inscription"
+          element={<Register />}
+        />
+        <Route
+          path="/connexion"
+          element={<Login />}
+        />
+        <Route
+          path="/a-propos"
+          element={<About />}
         />
         <Route
           path="/profil"

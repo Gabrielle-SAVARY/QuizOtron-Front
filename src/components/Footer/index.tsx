@@ -24,7 +24,7 @@ function Footer() {
         <div className="footer-dark__site-map">
           <ul className="footer-dark__nav-list">
             <li>
-              <NavLink to="/apropos" className="footer-dark__nav-item">
+              <NavLink to="/a-propos" className="footer-dark__nav-item">
                 À propos
               </NavLink>
             </li>
