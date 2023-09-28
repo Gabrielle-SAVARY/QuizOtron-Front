@@ -4,7 +4,7 @@ import {
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
 import { handleAxiosErrors } from '../../utils/axiosError';
@@ -39,6 +39,7 @@ interface QuizUpdateProps {
 function QuizUpdate({
   tagsList, levelsList, oneQuiz, getQuizDetails, fetchQuizList, setSuccessMessage, setErrorMessage,
 }: QuizUpdateProps) {
+  const navigate = useNavigate();
   //* Récupère l'id du quiz sur lequel on a cliqué
   const { id } = useParams();
   const pageId = Number(id);
@@ -80,8 +81,13 @@ function QuizUpdate({
 
   //* Appel API: on récupère les infos d'un quiz + mise à jour du state oneQuiz
   useEffect(() => {
-    getQuizDetails(quizId);
-  }, [quizId, getQuizDetails]);
+    if (!quizId || Number.isNaN(quizId)) {
+      navigate('/404');
+      setErrorMessage('Ce quiz n\'existe pas');
+    } else {
+      getQuizDetails(quizId);
+    }
+  }, [quizId, getQuizDetails, setErrorMessage, navigate]);
 
   //* Au chargement de la page après la récupérations des données du quiz
   useEffect(() => {

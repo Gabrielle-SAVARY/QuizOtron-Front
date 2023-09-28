@@ -157,9 +157,9 @@ function App() {
       const response = await axiosInstance.get(`/quiz/${id}`);
       setOneQuiz(response.data);
     } catch (error) {
+      navigate('/404');
       const errorAxios = handleAxiosErrors(error as IAxiosError);
       setErrorMessage(errorAxios);
-      navigate('/404');
     }
   }, [navigate]);
 
@@ -309,6 +309,7 @@ function App() {
               oneQuiz={oneQuiz}
               setQuizHistory={setQuizHistory}
               setSuccessMessage={setSuccessMessage}
+              setErrorMessage={setErrorMessage}
             />
           )}
         />
