@@ -52,7 +52,7 @@ function About() {
             imgProfil={profilRomain}
             imgAlt={profilRomain}
             name="Romain ANDINÉ"
-            teamRole="Développeur Front-End"
+            teamRole="Lead Développeur Front-End"
             otherRole="Git Master"
             linkLinkedin="https://www.linkedin.com/in/romain-andin%C3%A9/"
             linkPortfolio="https://romain-andine-portfolio.vercel.app/"

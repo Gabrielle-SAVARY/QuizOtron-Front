@@ -11,14 +11,23 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer__contact">
-        <Logo logoContainerClassName="footer__contact-logo" logoName={logoQuizotronWhite} logoClassName="footer__contact-logo-img" />
-        <div>
-          <h3 className="footer__contact-title">Contact</h3>
-          <div className="footer__contact-mail">
+        <div className="footer__contact-seo">
+          <Logo
+            logoContainerClassName="footer__contact-seo__logo"
+            logoName={logoQuizotronWhite}
+            logoClassName="footer__contact-seo__logo-img"
+          />
+          <p className="footer__contact-seo__text">Amusez-vous en répondant à nos quiz ou en créant vos propres quiz !</p>
+        </div>
+
+        <div className="footer__contact-mail">
+          <h3 className="footer__contact-mail__title">Contact</h3>
+          <div className="footer__contact-mail__email">
             <MdEmail />
             <a href="mailto:contact@quizotron.com" className="footer__contact-mail-text">contact@quizotron.com</a>
           </div>
         </div>
+
       </div>
       <div className="footer-dark">
         <div className="footer-dark__site-map">
