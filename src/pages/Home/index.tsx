@@ -59,17 +59,31 @@ function Home({
       <div className="home__hero">
         <div className="home__hero__description">
           <h1 className="home__hero__description__title">
-            Prenez une pause, faite un quiz sur Quiz&apos;O&apos;Tron!
+            Bienvenue sur
+            <span className="home__hero__description__title-main-color">Quiz</span>
+            <span className="home__hero__description__title-secondary-color">O</span>
+            <span className="home__hero__description__title-primary-dark-color">Tron</span>
           </h1>
+          <h2 className="home__hero__description__subtitle">
+            Le site de quiz où l’on se pose
+            {' '}
+            <span className="home__hero__description__subtitle-secondary-color">toujours plus de questions</span>
+            {' '}
+            !
+          </h2>
           <p className="home__hero__description__text">
-            Bienvenue sur Quiz&apos;O&apos;Tron, l&apos;endroit idéal pour mettre à
+            QuizOTron, c&apos;est l&apos;endroit idéal pour mettre à
             l&apos;épreuve vos connaissances et vous divertir !
           </p>
           <p className="home__hero__description__text">
-            Que vous soyez un passionné de trivia,
-            un amateur de culture générale ou vous avez simplement
-            envi de combler l&apos;ennui, relevez le défi de répondre à nos quiz.
+            Que vous soyez un amateur de culture générale ou que vous ayez simplement
+            envi de combler l&apos;ennui,
           </p>
+          <h3 className="home__hero__description__strong">
+            Lancez-vous dès mainenant et défiez la communauté en devenant
+            {' '}
+            <span className="home__hero__description__strong-secondary-color">auteur de vos propres quiz</span>
+          </h3>
         </div>
         <section className="home__hero__random-quiz">
           <div className="home__hero__random-quiz__container">

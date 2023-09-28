@@ -35,7 +35,7 @@
       padding: 0.3rem;
       text-align: center;
       background-color: vars.$primary-dark-color;
-      color: vars.$main-third-color;
+      color: vars.$secondary-dark-color;
       font-family: vars.$secondaryFont;
     }
   }
@@ -137,7 +137,7 @@
         font-size: 1.3rem;
         text-transform: uppercase;
         font-weight: 500;
-        color: vars.$main-third-color;
+        color: vars.$secondary-dark-color;
         display: inline;
       }
     }
