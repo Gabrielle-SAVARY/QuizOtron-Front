@@ -3,7 +3,7 @@
 
 .quiz-favoris{
   padding: 1.5rem;
-  @include mixin.breakpoint(desktop) {
+  @include mixin.breakpoint(tablet) {
    padding: 1.5rem vars.$headerHeight;
   }
   &__header{
@@ -30,7 +30,7 @@
     flex-direction: column; 
     justify-content: center;
     align-items: center;
-    @include mixin.breakpoint(desktop) {
+    @include mixin.breakpoint(tablet) {
       flex-flow: row wrap;
       gap: 2rem;
     }

@@ -157,9 +157,9 @@ function App() {
       const response = await axiosInstance.get(`/quiz/${id}`);
       setOneQuiz(response.data);
     } catch (error) {
+      navigate('/404');
       const errorAxios = handleAxiosErrors(error as IAxiosError);
       setErrorMessage(errorAxios);
-      navigate('/404');
     }
   }, [navigate]);
 
@@ -309,20 +309,9 @@ function App() {
               oneQuiz={oneQuiz}
               setQuizHistory={setQuizHistory}
               setSuccessMessage={setSuccessMessage}
+              setErrorMessage={setErrorMessage}
             />
           )}
-        />
-        <Route
-          path="/connexion"
-          element={<Login />}
-        />
-        <Route
-          path="/inscription"
-          element={<Register />}
-        />
-        <Route
-          path="/apropos"
-          element={<About />}
         />
         <Route
           path="/mentions-legales"
@@ -331,6 +320,18 @@ function App() {
         <Route
           path="/politique-confidentialite"
           element={<Confidentiality />}
+        />
+        <Route
+          path="/inscription"
+          element={<Register />}
+        />
+        <Route
+          path="/connexion"
+          element={<Login />}
+        />
+        <Route
+          path="/a-propos"
+          element={<About />}
         />
         <Route
           path="/profil"

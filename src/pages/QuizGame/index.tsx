@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import classnames from 'classnames';
 import { IOneQuiz } from '../../@types/quiz';
@@ -12,11 +12,13 @@ interface QuizGameProps {
   getQuizDetails: (id: number) => void
   setQuizHistory: (quizHistory: IScoreHistory[]) => void;
   setSuccessMessage: (successMessage: string) => void;
+  setErrorMessage: (value: string) => void;
 }
 
 function QuizGame({
-  oneQuiz, getQuizDetails, setQuizHistory, setSuccessMessage,
+  oneQuiz, getQuizDetails, setQuizHistory, setSuccessMessage, setErrorMessage,
 }: QuizGameProps) {
+  const navigate = useNavigate();
   //* STATE
   // Stocke les infos Quiz affiché
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
@@ -43,8 +45,13 @@ function QuizGame({
 
   //* Récupère les infos du quiz sélectionné
   useEffect(() => {
-    getQuizDetails(quizId);
-  }, [quizId, getQuizDetails]);
+    if (!quizId || Number.isNaN(quizId)) {
+      navigate('/404');
+      setErrorMessage('Ce quiz n\'existe pas');
+    } else {
+      getQuizDetails(quizId);
+    }
+  }, [quizId, getQuizDetails, navigate, setErrorMessage]);
 
   useEffect(() => {
     //* Stocke les infos du quiz sélectionné dans un nouveau state
