@@ -9,7 +9,7 @@ import Card from '../../components/Card';
 import SearchBar from './SearchBar';
 import './styles.scss';
 
-interface QuizProps {
+interface QuizListProps {
   quizList: IQuizList[]
   tagsList: ITag[]
   levelsList: ILevel[]
@@ -18,9 +18,9 @@ interface QuizProps {
   deleteQuizToFavorite: (quizId: number) => void;
 }
 
-function Quiz({
+function QuizList({
   quizList, tagsList, levelsList, userFavoritesQuiz, addQuizToFavorite, deleteQuizToFavorite,
-}: QuizProps) {
+}: QuizListProps) {
   //* STATE
   // Toggle l'affichage des filtres (au click du bouton)
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
@@ -228,4 +228,4 @@ function Quiz({
   );
 }
 
-export default Quiz;
+export default QuizList;

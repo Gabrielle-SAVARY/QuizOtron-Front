@@ -22,7 +22,7 @@ import ProtectedRoute from '../ProtectedRoute';
 import ProfileSettings from '../../pages/ProfileSettings';
 import ProfileQuiz from '../../pages/ProfileQuiz';
 import Register from '../../pages/Register';
-import Quiz from '../../pages/QuizList';
+import QuizList from '../../pages/QuizList';
 import QuizGame from '../../pages/QuizGame';
 import QuizUpdate from '../../pages/QuizUpdate';
 import { IScoreHistory } from '../../@types/quizHistory';
@@ -95,6 +95,8 @@ function App() {
     };
     // On calcule le timestamp de la date et heure actuelle
     const now = Math.floor(Date.now() / 1000);
+    console.log('exp', exp);
+    console.log('now', now);
 
     // Si le token est expiré: déconnexion utilisateur + on supprime le token du localStorage
     if (now >= exp) {
@@ -291,7 +293,7 @@ function App() {
         <Route
           path="/liste-quiz"
           element={(
-            <Quiz
+            <QuizList
               quizList={quizList}
               tagsList={tagsList}
               levelsList={levelsList}
