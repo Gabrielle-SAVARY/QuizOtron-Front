@@ -2,7 +2,7 @@ import axios from 'axios';
 import { IAxiosError } from '../@types/error';
 
 interface IThunkApi {
-  rejectWithValue: (textValu: string) => any;
+  rejectWithValue: (textValue: string) => any;
 }
 
 // Fonction pour gérer les erreurs des requêtes axios du reducer

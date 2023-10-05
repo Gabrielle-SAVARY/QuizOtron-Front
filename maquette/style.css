@@ -272,8 +272,6 @@ padding-top: 0.5rem;
 
 /*==================== MEDIA QUERIES ========================*/
 
-
-
 @media screen and (min-width: 768px) {
   .quiz__card-day {
     max-width: 70%;

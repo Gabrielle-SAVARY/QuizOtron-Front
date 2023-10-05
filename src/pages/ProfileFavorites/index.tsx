@@ -17,26 +17,26 @@ function ProfileFavorites({
         <LinkExit redirectionLink="/profil" />
         <h1 className="quiz-favoris__header-title profile-page-title">Mes quiz favoris</h1>
       </div>
-      <div>
-        {userFavoritesQuiz && (
-          <div className="quiz-favoris__content-list">
-            {userFavoritesQuiz.map((quiz) => (
-              <Card
-                key={quiz.id}
-                id={quiz.id}
-                title={quiz.title}
-                thumbnail={quiz.thumbnail}
-                author={quiz.author.pseudo}
-                level={quiz.level.name}
-                tags={quiz.tags}
-                addQuizToFavorite={addQuizToFavorite}
-                userFavoritesQuiz={userFavoritesQuiz}
-                deleteQuizToFavorite={deleteQuizToFavorite}
-              />
-            ))}
-          </div>
-        )}
+
+      {userFavoritesQuiz && (
+      <div className="quiz-favoris__content-list">
+        {userFavoritesQuiz.map((quiz) => (
+          <Card
+            key={quiz.id}
+            id={quiz.id}
+            title={quiz.title}
+            thumbnail={quiz.thumbnail}
+            author={quiz.author.pseudo}
+            level={quiz.level.name}
+            tags={quiz.tags}
+            addQuizToFavorite={addQuizToFavorite}
+            userFavoritesQuiz={userFavoritesQuiz}
+            deleteQuizToFavorite={deleteQuizToFavorite}
+          />
+        ))}
       </div>
+      )}
+
     </div>
   );
 }

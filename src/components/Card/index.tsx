@@ -89,38 +89,36 @@ function Card({
   };
 
   return (
-    <div>
-      <article className="card">
-        <Link to={`/quiz/${id}`}>
-          <div className="card-header">
-            <img className="card-header__img" src={thumbnail} alt="Quiz" />
-          </div>
+    <article className="card">
+      <Link to={`/quiz/${id}`}>
+        <div className="card-header">
+          <img className="card-header__img" src={thumbnail} alt="Quiz" />
+        </div>
 
-          <div className="card-body">
-            <h4 className="card-body__title">{title}</h4>
-            <div className="card-body__tag">
-              {tags && (
+        <div className="card-body">
+          <h4 className="card-body__title">{title}</h4>
+          <div className="card-body__tag">
+            {tags && (
               <span className="card-body__categorie">
                 {tags.map((tag) => (
                   <span key={tag.name}>{tag.name}</span>
                 ))}
               </span>
-              )}
-              <span className="card-body__level">{level}</span>
-            </div>
-            <div className="card-body__tag2">
-              <div className="card-body__autor">
-                <span className="autor__img">
-                  <BsEmojiSmile size={24} color="#003051" strokeWidth="0" />
-                </span>
-                <span className="autor__name">{author}</span>
-              </div>
-              { handleFavoriteBtn()}
-            </div>
+            )}
+            <span className="card-body__level">{level}</span>
           </div>
-        </Link>
-      </article>
-    </div>
+          <div className="card-body__tag2">
+            <div className="card-body__autor">
+              <span className="autor__img">
+                <BsEmojiSmile size={24} color="#003051" strokeWidth="0" />
+              </span>
+              <span className="autor__name">{author}</span>
+            </div>
+            { handleFavoriteBtn()}
+          </div>
+        </div>
+      </Link>
+    </article>
   );
 }
 

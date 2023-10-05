@@ -83,7 +83,7 @@ function Layout({
         className: 'toast-message',
       });
     }
-  }, [userErrorMessage]);
+  }, [errorMessage, userErrorMessage]);
 
   return (
     <div className="app__container">

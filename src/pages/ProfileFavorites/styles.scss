@@ -30,6 +30,8 @@
     flex-direction: column; 
     justify-content: center;
     align-items: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0.5rem 1rem;
     @include mixin.breakpoint(tablet) {
       flex-flow: row wrap;
       gap: 2rem;
