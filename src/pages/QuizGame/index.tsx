@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import classnames from 'classnames';
+import { useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
+import { handleAxiosErrors } from '../../utils/axiosError';
+import { IAxiosError } from '../../@types/error';
+import { IScoreHistory } from '../../@types/quizHistory';
 import { IOneQuiz } from '../../@types/quiz';
 import './styles.scss';
-import { axiosInstance } from '../../utils/axios';
-import { IScoreHistory } from '../../@types/quizHistory';
 
 interface QuizGameProps {
   oneQuiz: IOneQuiz
@@ -20,6 +23,8 @@ function QuizGame({
 }: QuizGameProps) {
   const navigate = useNavigate();
   //* STATE
+  // Vérifie si l'utilisateur est connecté
+  const isLogged = useAppSelector((state) => state.user.isLogged);
   // Stocke les infos Quiz affiché
   const [currentQuiz, setCurrentQuiz] = useState<IOneQuiz>();
   // Score du joueur
@@ -104,7 +109,8 @@ function QuizGame({
       setQuizHistory(data.data);
       setSuccessMessage(data.message);
     } catch (error) {
-      console.log(error);
+      const errorAxios = handleAxiosErrors(error as IAxiosError);
+      setErrorMessage(errorAxios);
     }
   };
   //* Affiche la question suivante + réinitialise le state: sélection d'une réponse
@@ -113,7 +119,7 @@ function QuizGame({
     setQuestionIndex((prevQuestion) => prevQuestion + 1);
 
     setIsAnswerSubmit(false);
-    if (isLastQuestionValidated) {
+    if (isLastQuestionValidated && isLogged) {
       addQuizToHistory(quizId, score);
     }
   };

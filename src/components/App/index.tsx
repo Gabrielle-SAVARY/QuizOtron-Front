@@ -4,8 +4,8 @@ import {
 import { useEffect, useState, useCallback } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { checkIsLogged, findUser } from '../../store/reducers/user';
-import { axiosInstance } from '../../utils/axios';
+import { checkIsLogged, findUser, logout } from '../../store/reducers/user';
+import { axiosInstance, interceptorNotAuthorized } from '../../utils/axios';
 import { handleAxiosErrors } from '../../utils/axiosError';
 import QuizCreate from '../../pages/QuizCreate';
 import Home from '../../pages/Home';
@@ -36,23 +36,19 @@ import './styles.scss';
 function App() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   // * STATE
   // Vérifie si l'utilisateur est connecté
   const isLogged = useAppSelector((state) => state.user.isLogged);
-
   // Stocke message d'erreur
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-
   // Liste des quiz (informations pour une Card)
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
-
   // Liste des tags/catégories d'un quiz
   const [tagsList, setTagsList] = useState<ITag[]>([]);
-
   // Liste des levels/niveaux d'un quiz
   const [levelsList, setLevelsList] = useState<ILevel[]>([]);
-
   // Stocke un quiz selon son id
   const [oneQuiz, setOneQuiz] = useState<IOneQuiz>({
     id: 0,
@@ -73,42 +69,45 @@ function App() {
 
   // Stocke la liste des quiz favoris de l'utilisateur connecté
   const [userFavoritesQuiz, setUserFavoritesQuiz] = useState<IQuizList[]>([]);
-
   // Stocke l'historique des quiz joués par l'utilisateur connecté
   const [quizHistory, setQuizHistory] = useState<IScoreHistory[]>([]);
-
   // Stocke le score moyen de l'utilisateur connecté
   const [userAverageScore, setUserAverageScore] = useState<number | null>(null);
+
+  //* Vérifie la validité du token
+  const checkIsTokenValid = useCallback(() => {
+    // On initialise les intercepteurs d'axios
+    interceptorNotAuthorized(navigate);
+
+    const tokenDataStr = localStorage.getItem('token');
+    if (tokenDataStr) {
+      // On recherche dans le local storage si un token existe
+      const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
+      const { exp } = jwtDecode(tokenData) as {
+        exp: number;
+      };
+        // On calcule le timestamp de la date et heure actuelle
+      const now = Math.floor(Date.now() / 1000);
+
+      // Si le token est expiré: déconnexion de l'utilisateur
+      if (now >= exp) {
+        dispatch(logout());
+        setErrorMessage('Session expirée, veuillez vous connecter');
+        navigate('/connexion');
+      } else {
+        // Si le token est valide: on passe isLogged à true
+        // on cherche l'utilisateur et on met à jour les states de l'utilsiateur
+        dispatch(checkIsLogged(true));
+        dispatch(findUser());
+      }
+    }
+  }, [dispatch, navigate]);
 
   //* Maintient de la connexion utilisateur au refresh de la page
   // Au rechargement de la page on doit vérifier si un token éxiste déjà et sa validité
   useEffect(() => {
-    // On recherche dans le local storage si un token existe
-    const tokenDataStr = localStorage.getItem('token');
-    const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
-    if (!tokenData) {
-      dispatch(checkIsLogged(false));
-      return;
-    }
-    const { exp } = jwtDecode(tokenData) as {
-      exp: number;
-    };
-    // On calcule le timestamp de la date et heure actuelle
-    const now = Math.floor(Date.now() / 1000);
-    console.log('exp', exp);
-    console.log('now', now);
-
-    // Si le token est expiré: déconnexion utilisateur + on supprime le token du localStorage
-    if (now >= exp) {
-      dispatch(checkIsLogged(false));
-      localStorage.removeItem('token');
-    } else {
-      // Si le token est valide: on passe isLogged à true
-      // on cherche l'utilisateur et on met à jour les states de l'utilsiateur
-      dispatch(checkIsLogged(true));
-      dispatch(findUser());
-    }
-  }, [dispatch, isLogged]);
+    checkIsTokenValid();
+  }, [checkIsTokenValid, dispatch, isLogged]);
 
   //* Appel API: récupère la liste des quiz (informations afficher les Card)
   const fetchQuizList = useCallback(async () => {

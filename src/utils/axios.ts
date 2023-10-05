@@ -16,3 +16,13 @@ axiosInstance.interceptors.request.use((config) => {
 
   return config;
 });
+
+export const interceptorNotAuthorized = (navigate: (path: string) => void) => {
+  axiosInstance.interceptors.response.use((response) => response, (error) => {
+    if (error.response.status === 401) {
+      navigate('/connexion');
+    }
+
+    return Promise.reject(error);
+  });
+};
