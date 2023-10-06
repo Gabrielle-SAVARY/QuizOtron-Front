@@ -80,7 +80,10 @@ function App() {
     interceptorNotAuthorized(navigate);
 
     const tokenDataStr = localStorage.getItem('token');
-    if (tokenDataStr) {
+    if (!tokenDataStr) {
+      // Si le token n'existe pas (visiteur)
+      dispatch(checkIsLogged(false));
+    } else if (tokenDataStr) {
       // On recherche dans le local storage si un token existe
       const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
       const { exp } = jwtDecode(tokenData) as {

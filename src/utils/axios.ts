@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// redirection vers la page de connexion si le token est invalide - erreurs 401
 export const interceptorNotAuthorized = (navigate: (path: string) => void) => {
   axiosInstance.interceptors.response.use((response) => response, (error) => {
     if (error.response.status === 401) {
