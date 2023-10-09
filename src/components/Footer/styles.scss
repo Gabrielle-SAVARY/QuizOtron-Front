@@ -39,7 +39,7 @@
         }
       }
       &__text{
-        font-size:0.7rem;
+        font-size:0.75rem;
         margin-top: 0.5rem;
         margin-bottom: 1rem;
         text-align: center;
@@ -95,6 +95,10 @@
   &__nav-item {
     color: #fff;
     text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    min-width: 48px;
 
     &:hover {
       color: vars.$main-secondary-color;

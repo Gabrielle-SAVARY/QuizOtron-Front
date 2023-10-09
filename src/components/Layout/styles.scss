@@ -1,14 +1,10 @@
 @use '../../styles/mixin';
 @use '../../styles/vars';
-//TODO recalculer la min height app content
 
 .app__container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-
-  
-
 }
 .app__content {
   display: flex;

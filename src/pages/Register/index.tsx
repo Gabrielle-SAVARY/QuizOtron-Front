@@ -88,8 +88,8 @@ function Register() {
     if (password !== passwordConfirm) {
       setErrorsRegister((prevState) => ({
         ...prevState,
-        password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
-        passwordConfirm: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
+        password: 'Le mot de passe et sa confirmation ne sont pas identiques',
+        passwordConfirm: 'Le mot de passe et sa confirmation ne sont pas identiques',
       }));
       registerForm.hasError = true;
     }
