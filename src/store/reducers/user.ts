@@ -14,7 +14,6 @@ import {
 export const initialState: UserState = {
   isRegistered: false,
   isLogged: false,
-  token: '',
   userId: 0,
   credentials: {
     firstname: '',
@@ -45,7 +44,6 @@ function resetState(state : UserState) {
   state.credentials = { ...initialState.credentials };
   state.updateCredentials = { ...initialState.updateCredentials };
   state.isLogged = false;
-  state.token = '';
   state.userId = 0;
   state.isRegistered = false;
   state.errorMessages = '';
@@ -247,7 +245,6 @@ const userReducer = createReducer(initialState, (builder) => {
       // Récupère les informations retournées par l'API
       const payload = action.payload as IAuthentification;
       state.isLogged = payload.isLogged;
-      state.token = payload.token;
       state.userId = payload.id;
       state.credentials.pseudo = payload.pseudo;
       state.credentials.firstname = payload.firstname;

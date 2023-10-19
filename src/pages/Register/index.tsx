@@ -27,8 +27,6 @@ function Register() {
   const firstname = useAppSelector((state) => state.user.credentials.firstname);
   const lastname = useAppSelector((state) => state.user.credentials.lastname);
   const isRegistered = useAppSelector((state) => state.user.isRegistered);
-  // Récupère les messages d'erreur suite requête au backend
-  const errorMessages = useAppSelector((state) => state.user.errorMessages);
 
   // Stocke les messages d'erreur des inputs du formulaire suite aux vérifications frontend
   const [errorsRegister, setErrorsRegister] = useState<IerrorFormRegister>({
@@ -90,8 +88,8 @@ function Register() {
     if (password !== passwordConfirm) {
       setErrorsRegister((prevState) => ({
         ...prevState,
-        password: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
-        passwordConfirm: 'Le nouveau mot de passe et sa confirmation ne sont pas identiques',
+        password: 'Le mot de passe et sa confirmation ne sont pas identiques',
+        passwordConfirm: 'Le mot de passe et sa confirmation ne sont pas identiques',
       }));
       registerForm.hasError = true;
     }

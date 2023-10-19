@@ -76,11 +76,12 @@ function App() {
 
   //* Vérifie la validité du token
   const checkIsTokenValid = useCallback(() => {
-    // On initialise les intercepteurs d'axios
+    // Intercepteurs d'axios pour statut code 401 (non autorisé)
     interceptorNotAuthorized(navigate);
-
     const tokenDataStr = localStorage.getItem('token');
-    if (tokenDataStr) {
+    if (!tokenDataStr) {
+      // Si le token n'existe pas (visiteur)
+    } else if (tokenDataStr) {
       // On recherche dans le local storage si un token existe
       const tokenData = tokenDataStr ? (JSON.parse(tokenDataStr)) : null;
       const { exp } = jwtDecode(tokenData) as {

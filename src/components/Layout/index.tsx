@@ -16,7 +16,7 @@ interface LayoutProps {
 function Layout({
   errorMessage, setErrorMessage, successMessage, setSuccessMessage, children,
 }: LayoutProps) {
-  // Récupère le message de succès de la requête backend
+  // State suite à des requêtes backend
   const userSuccessMessage = useAppSelector((state) => state.user.successMessage);
   const userErrorMessage = useAppSelector((state) => state.user.errorMessages);
   useEffect(() => {

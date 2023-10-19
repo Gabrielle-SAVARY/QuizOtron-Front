@@ -1,7 +1,6 @@
 // typage UserState: reducer user
 export interface UserState {
   isLogged: boolean;
-  token: string;
   isRegistered: boolean
   userId: number
   errorMessages: string
@@ -28,7 +27,6 @@ export interface IUserReducerUpdateCredentials {
 // typage data retournée par requête axios: "/login"
 export interface IAuthentification {
   isLogged: boolean
-  token: string
   id: number
   isRegistered: boolean
   firstname: string

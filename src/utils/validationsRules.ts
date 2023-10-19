@@ -37,7 +37,7 @@ const validateFirstName = (value: string): string => {
     return 'Le champs "prénom" ne peut pas être vide.';
   }
   if (value.length < 3 || value.length > 30) {
-    return 'Le champs "prénom" doit comporter entre 6 et 30 caractères.';
+    return 'Le champs "prénom" doit comporter entre 3 et 30 caractères.';
   }
   return '';
 };
@@ -47,7 +47,7 @@ const validateLastName = (value: string): string => {
     return 'Le champs "nom" ne peut pas être vide.';
   }
   if (value.length < 3 || value.length > 30) {
-    return 'Le champs "nom" doit comporter entre 6 et 30 caractères.';
+    return 'Le champs "nom" doit comporter entre 3 et 30 caractères.';
   }
   return '';
 };
@@ -57,7 +57,7 @@ const validatePseudo = (value: string): string => {
     return 'Le champs "pseudo" ne peut pas être vide.';
   }
   if (value.length < 3 || value.length > 30) {
-    return 'Le champs "pseudo" doit comporter entre 6 et 30 caractères.';
+    return 'Le champs "pseudo" doit comporter entre 3 et 30 caractères.';
   }
   return '';
 };
