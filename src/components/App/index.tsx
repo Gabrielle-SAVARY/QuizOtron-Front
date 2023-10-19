@@ -76,9 +76,8 @@ function App() {
 
   //* Vérifie la validité du token
   const checkIsTokenValid = useCallback(() => {
-    // On initialise les intercepteurs d'axios
+    // Intercepteurs d'axios pour statut code 401 (non autorisé)
     interceptorNotAuthorized(navigate);
-
     const tokenDataStr = localStorage.getItem('token');
     if (!tokenDataStr) {
       // Si le token n'existe pas (visiteur)

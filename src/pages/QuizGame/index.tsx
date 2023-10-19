@@ -41,7 +41,7 @@ function QuizGame({
   const [isAnswerSubmit, setIsAnswerSubmit] = useState<boolean>(false);
   // Vérifie si la réponse du joueur est la bonne réponse (réponse valide/correcte)
   const [isSelectAnswerValid, setIsSelectAnswerValid] = useState<boolean | null>(null);
-
+  // Vérifie si la dernière question a été validée
   const [isLastQuestionValidated, setIsLastQuestionValidated] = useState<boolean>(false);
 
   //* Récupère l'id du quiz sur lequel on a cliqué
